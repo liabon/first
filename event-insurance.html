@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>행사보험 - 행사주최자배상책임보험 | 배상온 대리점</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --kb-yellow: #FFCD00;
+            --kb-gold: #FFB800;
+            --kb-dark: #1a1a1a;
+            --kb-gray: #666;
+            --kb-light-gray: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--kb-dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .kb-logo {
+            height: 50px;
+            width: auto;
+        }
+
+        .divider {
+            height: 40px;
+            width: 1px;
+            background: #ddd;
+        }
+
+        .agency-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--kb-dark);
+        }
+
+        .back-btn {
+            background: var(--kb-gold);
+            color: #fff;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--kb-yellow);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Info Section */
+        .info-section {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .info-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .info-card h2 {
+            color: var(--kb-gold);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-card li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .info-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--kb-gold);
+            font-weight: bold;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe6cc 100%);
+            border-left: 4px solid var(--kb-gold);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--kb-gold);
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Form Section */
+        .form-section {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .form-container {
+            background: #fff;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .form-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--kb-dark);
+        }
+
+        .form-header p {
+            color: var(--kb-gray);
+            font-size: 1.1rem;
+        }
+
+        .form-section-title {
+            background: var(--kb-gold);
+            color: #fff;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 700;
+            margin: 2rem 0 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--kb-dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--kb-gold);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            font-weight: 400;
+        }
+
+        .file-upload {
+            border: 2px dashed var(--kb-gold);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #fafafa;
+        }
+
+        .file-upload:hover {
+            background: #fff5e6;
+            border-color: var(--kb-yellow);
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        .file-upload-label {
+            cursor: pointer;
+            color: var(--kb-gray);
+        }
+
+        .file-upload-label strong {
+            color: var(--kb-gold);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.5rem;
+            background: var(--kb-gold);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 2rem;
+        }
+
+        .submit-btn:hover {
+            background: var(--kb-yellow);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 184, 0, 0.4);
+        }
+
+        .helper-text {
+            font-size: 0.9rem;
+            color: var(--kb-gray);
+            margin-top: 0.5rem;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--kb-dark);
+            color: #fff;
+            padding: 3rem 2rem 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-info {
+            margin-bottom: 2rem;
+        }
+
+        .footer-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--kb-gold);
+        }
+
+        .footer-info p {
+            color: #aaa;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .logo-section {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .divider {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="kb-logo.png" alt="KB손해보험" class="kb-logo">
+                <div class="divider"></div>
+                <div class="agency-name">배상온 대리점</div>
+            </div>
+            <a href="/" class="back-btn">← 홈으로</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">KB손해보험 행사주최자배상책임보험</div>
+            <h1>행사보험</h1>
+            <p>안전한 행사 진행을 위한 필수 보험<br>빠르고 정확한 견적 상담</p>
+        </div>
+    </section>
+
+    <!-- Info Section -->
+    <section class="info-section">
+        <div class="info-card">
+            <h2>🎪 행사주최자배상책임보험이란?</h2>
+            <p>행사 중 발생할 수 있는 각종 사고로 인해 참가자나 제3자에게 손해를 끼쳤을 때, 법적 배상 책임을 보장하는 보험입니다.</p>
+            <ul>
+                <li>행사장 내 안전사고로 인한 배상책임 보장</li>
+                <li>참가자 및 관람객의 신체 상해 보장</li>
+                <li>행사 진행 중 발생한 재산 피해 보장</li>
+                <li>법률비용 및 소송비용 보장</li>
+            </ul>
+        </div>
+
+        <div class="info-card">
+            <h2>⚡ 빠른 처리를 위한 TIP</h2>
+            <div class="highlight-box">
+                <strong>📄 사업자등록증 & 행사개요서 첨부 시 더욱 빠른 회신이 가능합니다!</strong>
+                <p>아래 질문서와 함께 사업자등록증과 행사개요서(또는 행사 계획서)를 첨부해주시면, 보다 정확하고 신속한 견적 안내가 가능합니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <section class="form-section">
+        <div class="form-container">
+            <div class="form-header">
+                <h2>행사보험 견적 신청</h2>
+                <p>아래 질문서를 작성해주시면 맞춤 견적을 안내해드립니다</p>
+            </div>
+
+            <form id="eventInsuranceForm">
+                <!-- 계약자/피보험자 정보 -->
+                <div class="form-section-title">Ⅰ. 계약자 / 피보험자 사항</div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>회사명/단체명 (국문) <span class="required">*</span></label>
+                        <input type="text" name="companyName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>사업자번호</label>
+                        <input type="text" name="businessNumber" placeholder="000-00-00000">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>주소 <span class="required">*</span></label>
+                    <input type="text" name="address" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>행사기간 <span class="required">*</span></label>
+                        <input type="text" name="eventPeriod" placeholder="예: 2026.03.01 ~ 2026.03.03" required>
+                    </div>
+                    <div class="form-group">
+                        <label>기업형태</label>
+                        <select name="businessType">
+                            <option value="">선택하세요</option>
+                            <option value="개인">개인</option>
+                            <option value="조합">조합</option>
+                            <option value="법인">법인</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 행사 내용 -->
+                <div class="form-section-title">Ⅱ. 행사 내용</div>
+                
+                <div class="form-group">
+                    <label>행사명 <span class="required">*</span></label>
+                    <input type="text" name="eventName" required>
+                </div>
+
+                <div class="form-group">
+                    <label>행사 소재지 <span class="required">*</span></label>
+                    <input type="text" name="eventLocation" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>1회당 예상 참여 인원수 <span class="required">*</span></label>
+                        <input type="number" name="participantsPerEvent" placeholder="명" required>
+                        <p class="helper-text">※ 행사 주최측 인원(임직원, 스탭, 전문공연자 등)은 제외</p>
+                    </div>
+                    <div class="form-group">
+                        <label>보험기간 전체 예상 참여 인원수 <span class="required">*</span></label>
+                        <input type="number" name="totalParticipants" placeholder="명" required>
+                        <p class="helper-text">예: 1회 예상참여인원 × 행사 횟수</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>행사 상세정보 <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="sportsGame" id="sportsGame">
+                            <label for="sportsGame">운동경기 포함</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="physicalActivity" id="physicalActivity">
+                            <label for="physicalActivity">체육활동 포함</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="fireworks" id="fireworks">
+                            <label for="fireworks">불꽃놀이 포함</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="waterActivity" id="waterActivity">
+                            <label for="waterActivity">수상위험 포함</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="makingExperience" id="makingExperience">
+                            <label for="makingExperience">만들기 체험 포함</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="airBounce" id="airBounce">
+                            <label for="airBounce">에어바운스/놀이기구 탑승</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="bicycle" id="bicycle">
+                            <label for="bicycle">자전거/킥보드/인라인 탑승</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="electricCart" id="electricCart">
+                            <label for="electricCart">구내용 전동카트/열차 탑승</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>행사 내용 (간략하게) <span class="required">*</span></label>
+                    <textarea name="eventDescription" required placeholder="행사의 주요 내용을 간략하게 설명해주세요"></textarea>
+                </div>
+
+                <!-- 과거 사고 관련 사항 -->
+                <div class="form-section-title">Ⅲ. 과거 사고 관련 사항</div>
+                
+                <div class="form-group">
+                    <label>과거 5년간 손해배상액 (합의금 포함) 및 소송비용</label>
+                    <textarea name="pastAccidents" placeholder="없는 경우 '없음'으로 기재해주세요"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>향후 손해배상청구가 일어날 수 있는 사고 사실 여부</label>
+                    <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="radio" name="futureClaimPossibility" value="예"> 예
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="radio" name="futureClaimPossibility" value="아니오" checked> 아니오
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 첨부서류 안내 -->
+                <div class="form-section-title">📎 첨부서류 안내</div>
+                
+                <div class="highlight-box">
+                    <strong>📄 사업자등록증 & 행사개요서</strong>
+                    <p>견적 신청 후, 아래 이메일로 사업자등록증과 행사개요서(또는 행사 계획서)를 보내주시면 더욱 정확하고 빠른 견적이 가능합니다.</p>
+                    <p style="margin-top: 10px;"><strong>이메일:</strong> liab.on.ins@gmail.com</p>
+                </div>
+
+                <!-- 연락처 정보 -->
+                <div class="form-section-title">📞 연락처 정보</div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>담당자 성함 <span class="required">*</span></label>
+                        <input type="text" name="contactName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>연락처 <span class="required">*</span></label>
+                        <input type="tel" name="contactPhone" required placeholder="010-0000-0000">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>이메일 <span class="required">*</span></label>
+                    <input type="email" name="contactEmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label>기타 문의사항</label>
+                    <textarea name="additionalNotes" placeholder="추가로 문의하실 내용이 있으시면 입력해주세요"></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">견적 신청하기</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3>배상온 대리점</h3>
+                <p>📧 이메일: liab.on.ins@gmail.com</p>
+                <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
+                <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
+                <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Form submission
+        document.getElementById('eventInsuranceForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            try {
+                const response = await fetch('/api/event-insurance', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    alert('견적 신청이 완료되었습니다.\n\n빠른 시일 내에 맞춤 견적을 안내해드리겠습니다.\n\n※ 사업자등록증과 행사개요서를 이메일(liab.on.ins@gmail.com)로 보내주시면 더욱 빠른 회신이 가능합니다.');
+                    e.target.reset();
+                } else {
+                    alert('전송 중 오류가 발생했습니다. 다시 시도해주세요.');
+                }
+            } catch (error) {
+                alert('전송 중 오류가 발생했습니다.\n\n이메일로 직접 연락 주시기 바랍니다:\nliab.on.ins@gmail.com');
+            }
+        });
+    </script>
+</body>
+</html>

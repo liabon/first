@@ -1,0 +1,17 @@
+{
+  "routes": [
+    {
+      "src": "/event-insurance",
+      "dest": "/event-insurance.html"
+    },
+    {
+      "src": "/drone-insurance",
+      "dest": "/drone-insurance.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "cleanUrls": true
+}

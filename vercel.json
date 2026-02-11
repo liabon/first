@@ -1,16 +1,12 @@
 {
-  "routes": [
+  "rewrites": [
     {
-      "src": "/event-insurance",
-      "dest": "/event-insurance.html"
+      "source": "/event-insurance",
+      "destination": "/event-insurance.html"
     },
     {
-      "src": "/drone-insurance",
-      "dest": "/drone-insurance.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/drone-insurance",
+      "destination": "/drone-insurance.html"
     }
   ],
   "cleanUrls": true

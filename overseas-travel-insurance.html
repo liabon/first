@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KB손해보험 해외여행자보험 - 배상온 대리점</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --kb-yellow: #FFCD00;
+            --kb-gold: #FFB800;
+            --kb-dark: #1a1a1a;
+            --kb-gray: #666;
+            --kb-light-gray: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--kb-dark);
+            line-height: 1.6;
+            background: #fff;
+        }
+
+        /* Header */
+        header {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .kb-logo {
+            height: 50px;
+            width: auto;
+        }
+
+        .divider {
+            height: 40px;
+            width: 1px;
+            background: #ddd;
+        }
+
+        .agency-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--kb-dark);
+        }
+
+        .home-btn {
+            background: var(--kb-gray);
+            color: #fff;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .home-btn:hover {
+            background: var(--kb-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 5rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .product-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.95;
+        }
+
+        .age-badge {
+            display: inline-block;
+            background: var(--kb-gold);
+            color: var(--kb-dark);
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 20px rgba(255, 184, 0, 0.4);
+        }
+
+        /* Form Section */
+        .form-section {
+            max-width: 700px;
+            margin: -50px auto 5rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .form-container {
+            background: #fff;
+            border-radius: 25px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            border: 3px solid var(--kb-gold);
+        }
+
+        .form-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--kb-dark);
+        }
+
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+            color: var(--kb-dark);
+            font-size: 1.05rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Noto Sans KR', sans-serif;
+            transition: all 0.3s;
+            background: #fafafa;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--kb-gold);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(255, 184, 0, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--kb-gold) 0%, var(--kb-yellow) 100%);
+            color: var(--kb-dark);
+            border: none;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(255, 184, 0, 0.3);
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 184, 0, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Features Section */
+        .features {
+            background: var(--kb-light-gray);
+            padding: 5rem 2rem;
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 3rem;
+            color: var(--kb-dark);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: #fff;
+            padding: 2.5rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--kb-dark);
+        }
+
+        .feature-card p {
+            color: var(--kb-gray);
+            line-height: 1.6;
+        }
+
+        /* Notice Section */
+        .notice {
+            max-width: 1200px;
+            margin: 5rem auto;
+            padding: 0 2rem;
+        }
+
+        .notice-box {
+            background: #fff9e6;
+            border-left: 5px solid var(--kb-gold);
+            padding: 2rem 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .notice-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--kb-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .notice-content {
+            color: var(--kb-gray);
+            line-height: 1.8;
+        }
+
+        .notice-content ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .notice-content li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .notice-content li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--kb-gold);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--kb-dark);
+            color: #fff;
+            padding: 3rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-content p {
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+
+        .footer-content a {
+            color: var(--kb-yellow);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .logo-section {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .divider {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .form-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="kb-logo.png" alt="KB손해보험" class="kb-logo">
+                <div class="divider"></div>
+                <div class="agency-name">배상온 대리점</div>
+            </div>
+            <a href="/" class="home-btn">홈으로</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="product-badge">보장은 하나하나 꼼꼼하게!</div>
+            <h1>KB손해보험<br>해외여행자보험</h1>
+            <p>다치거나 질병은 든든하게 보장받고</p>
+            <p>크고 작은 사고도 빈틈없이 대비하세요</p>
+            <div class="age-badge">0세 ~ 100세까지 가입가능</div>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <section class="form-section">
+        <div class="form-container">
+            <h2 class="form-title">✈️ 해외여행보험 상담 신청</h2>
+            <form id="travelForm">
+                <input type="hidden" name="insurance_type" value="해외여행보험">
+                
+                <div class="form-group">
+                    <label>이름 *</label>
+                    <input type="text" name="name" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>연락처 *</label>
+                        <input type="tel" name="phone" placeholder="010-0000-0000" required>
+                    </div>
+                    <div class="form-group">
+                        <label>이메일</label>
+                        <input type="email" name="email" placeholder="example@email.com">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>출발일 *</label>
+                        <input type="date" name="departure_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>도착일 *</label>
+                        <input type="date" name="arrival_date" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>여행 국가 *</label>
+                    <input type="text" name="destination" placeholder="예: 일본, 미국, 태국 등" required>
+                </div>
+
+                <div class="form-group">
+                    <label>여행 목적</label>
+                    <select name="travel_purpose">
+                        <option value="">선택하세요</option>
+                        <option value="여행/관광">여행/관광</option>
+                        <option value="업무/출장">업무/출장</option>
+                        <option value="유학/연수">유학/연수</option>
+                        <option value="워킹홀리데이">워킹홀리데이</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>인원 수</label>
+                    <input type="number" name="travelers" min="1" value="1" placeholder="여행 인원">
+                </div>
+
+                <div class="form-group">
+                    <label>추가 문의사항</label>
+                    <textarea name="message" placeholder="문의하실 내용을 입력해주세요"></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">상담 신청하기</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="features-container">
+            <h2 class="section-title">KB손해보험 해외여행보험 특징</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🏥</div>
+                    <h3>상해/질병 보장</h3>
+                    <p>해외에서 발생한 상해나 질병 치료비를 든든하게 보장합니다</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💼</div>
+                    <h3>휴대품 손해보장</h3>
+                    <p>여행 중 휴대품 파손, 도난 등의 손해를 보상합니다</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✈️</div>
+                    <h3>항공기 지연보장</h3>
+                    <p>출발/도착 지연 시 발생하는 추가 비용을 보상합니다</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🆘</div>
+                    <h3>긴급의료지원</h3>
+                    <p>24시간 긴급 의료 상담 및 지원 서비스를 제공합니다</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Notice Section -->
+    <section class="notice">
+        <div class="notice-box">
+            <div class="notice-title">
+                <span>⚠️</span>
+                <span>여행자보험 가입 전 확인사항</span>
+            </div>
+            <div class="notice-content">
+                <ul>
+                    <li>외교부가 지정하는 여행경보 적색경보(철수권고), 흑색경보(여행금지), 특별여행주의보 지역은 보험가입 및 보상이 불가능합니다</li>
+                    <li>보험계약 체결 전 상품설명서 및 약관을 반드시 읽어보시기 바랍니다</li>
+                    <li>지급한도, 면책사항 등에 따라 보험금 지급이 제한될 수 있습니다</li>
+                    <li>보험계약자는 보험증권을 받은 날로부터 15일 이내에 청약을 철회할 수 있습니다</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <h3 style="margin-bottom: 1rem;">배상온 대리점</h3>
+            <p>📧 이메일: liab.on.ins@gmail.com</p>
+            <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
+            <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
+            <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
+            <p style="margin-top: 1.5rem; opacity: 0.6;">© 2026 배상온 대리점. All rights reserved. | KB손해보험 공식 대리점</p>
+        </div>
+    </footer>
+
+    <script>
+        // Form submission
+        document.getElementById('travelForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    alert('상담 신청이 완료되었습니다. 빠른 시일 내에 연락드리겠습니다.');
+                    e.target.reset();
+                } else {
+                    alert('전송 중 오류가 발생했습니다. 다시 시도해주세요.');
+                }
+            } catch (error) {
+                alert('전송 중 오류가 발생했습니다. 이메일로 직접 연락 주시기 바랍니다: liab.on.ins@gmail.com');
+            }
+        });
+
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.querySelector('input[name="departure_date"]').setAttribute('min', today);
+        document.querySelector('input[name="arrival_date"]').setAttribute('min', today);
+
+        // Validate arrival date is after departure date
+        document.querySelector('input[name="arrival_date"]').addEventListener('change', function() {
+            const departureDate = document.querySelector('input[name="departure_date"]').value;
+            const arrivalDate = this.value;
+            
+            if (departureDate && arrivalDate && new Date(arrivalDate) < new Date(departureDate)) {
+                alert('도착일은 출발일 이후여야 합니다.');
+                this.value = '';
+            }
+        });
+    </script>
+</body>
+</html>

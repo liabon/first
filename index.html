@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>배상온 대리점 - KB손해보험 전문 보험 대리점</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --kb-yellow: #FFCD00;
@@ -25,7 +21,6 @@
             line-height: 1.6;
         }
 
-        /* Header */
         header {
             background: #fff;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
@@ -49,10 +44,7 @@
             gap: 1.5rem;
         }
 
-        .kb-logo {
-            height: 50px;
-            width: auto;
-        }
+        .kb-logo { height: 50px; width: auto; }
 
         .divider {
             height: 40px;
@@ -83,17 +75,13 @@
             box-shadow: 0 6px 20px rgba(255, 184, 0, 0.4);
         }
 
-        /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             padding: 6rem 2rem;
             text-align: center;
         }
 
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+        .hero-content { max-width: 800px; margin: 0 auto; }
 
         .hero h1 {
             font-size: 3rem;
@@ -119,7 +107,6 @@
             margin-bottom: 2rem;
         }
 
-        /* Products Section */
         .products {
             max-width: 1200px;
             margin: 0 auto;
@@ -191,11 +178,8 @@
             gap: 0.5rem;
         }
 
-        .product-card .learn-more:hover {
-            gap: 1rem;
-        }
+        .product-card .learn-more:hover { gap: 1rem; }
 
-        /* Contact Form Section */
         .contact-section {
             background: var(--kb-light-gray);
             padding: 5rem 2rem;
@@ -210,9 +194,7 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.08);
         }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
+        .form-group { margin-bottom: 1.5rem; }
 
         .form-group label {
             display: block;
@@ -237,10 +219,7 @@
             border-color: var(--kb-gold);
         }
 
-        .form-group textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
+        .form-group textarea { resize: vertical; min-height: 120px; }
 
         .submit-btn {
             width: 100%;
@@ -261,21 +240,15 @@
             box-shadow: 0 6px 20px rgba(255, 184, 0, 0.4);
         }
 
-        /* Footer */
         footer {
             background: var(--kb-dark);
             color: #fff;
             padding: 3rem 2rem 1.5rem;
         }
 
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .footer-content { max-width: 1200px; margin: 0 auto; }
 
-        .footer-info {
-            margin-bottom: 2rem;
-        }
+        .footer-info { margin-bottom: 2rem; }
 
         .footer-info h3 {
             font-size: 1.3rem;
@@ -288,6 +261,9 @@
             margin-bottom: 0.5rem;
             font-size: 0.95rem;
         }
+
+        .footer-info a { color: #aaa; text-decoration: underline; }
+        .footer-info a:hover { color: var(--kb-gold); }
 
         .footer-links {
             display: flex;
@@ -303,9 +279,7 @@
             transition: color 0.3s;
         }
 
-        .footer-links a:hover {
-            color: var(--kb-gold);
-        }
+        .footer-links a:hover { color: var(--kb-gold); }
 
         .footer-bottom {
             text-align: center;
@@ -316,7 +290,6 @@
             font-size: 0.9rem;
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -350,9 +323,7 @@
             cursor: pointer;
         }
 
-        .close:hover {
-            color: var(--kb-dark);
-        }
+        .close:hover { color: var(--kb-dark); }
 
         .modal h2 {
             color: var(--kb-dark);
@@ -373,46 +344,19 @@
             color: #333;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .logo-section {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .divider {
-                display: none;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-links {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .modal-content {
-                margin: 10% 1rem;
-                padding: 2rem 1.5rem;
-            }
+            .header-content { flex-direction: column; gap: 1rem; }
+            .logo-section { flex-direction: column; gap: 0.5rem; }
+            .divider { display: none; }
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1.1rem; }
+            .products-grid { grid-template-columns: 1fr; }
+            .footer-links { flex-direction: column; gap: 1rem; }
+            .modal-content { margin: 10% 1rem; padding: 2rem 1.5rem; }
         }
     </style>
 </head>
+
 <body>
     <!-- Header -->
     <header>
@@ -497,15 +441,20 @@
         <div class="footer-content">
             <div class="footer-info">
                 <h3>배상온 대리점</h3>
-                <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="eb87828a89c58485c5828598ab8c868a8287c5888486">[email&#160;protected]</a></p>
+
+                <!-- ✅ Cloudflare Email Protection 제거 + mailto로 교체 -->
+                <p>📧 이메일: <a href="mailto:liab.on.ins@gmail.com">liab.on.ins@gmail.com</a></p>
+
                 <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
                 <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
                 <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
             </div>
+
             <div class="footer-links">
                 <a href="#" onclick="openModal('privacy'); return false;">개인정보 처리방침</a>
                 <a href="#" onclick="openModal('terms'); return false;">이용약관</a>
             </div>
+
             <div class="footer-bottom">
                 <p>© 2026 배상온 대리점. All rights reserved. | KB손해보험 공식 대리점</p>
             </div>
@@ -517,32 +466,35 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal('privacy')">&times;</span>
             <h2>개인정보 처리방침</h2>
+
             <p>바이인(BuyInn)(이하 "회사")는 바이인 서비스(이하 "서비스")를 제공함에 있어 서비스의 기획부터 종료까지 정보통신망 이용촉진 및 정보보호 등에 관한 법률(이하 '정보통신망법'), 개인정보보호법 등 국내의 개인정보 보호 법령을 철저히 준수하며, 관련 법규에 의거한 개인정보취급방침을 정하여 고객 권익 보호에 최선을 다하고 있습니다.</p>
-            
+
             <h3>1. 수집하는 개인정보의 항목</h3>
             <p>회사는 고객이 입력한 정보를 기반으로 회원가입, 서비스의 제공, 원활한 고객상담 등을 위하여 다음과 같은 정보를 수집합니다.</p>
             <p><strong>보험제휴 서비스를 위한 수집항목:</strong> 개인식별정보 (성명, 생년월일, 주소, 성별, 직업, 전화번호, 휴대전화번호, 전자우편주소, 기타개인식별정보), 보험계약정보, 보험금지급정보</p>
-            
+
             <h3>2. 개인정보의 이용 목적</h3>
             <p>• 보험 상품의 제휴서비스를 위한 상품 소개 및 판매<br>
             • 보험회사의 상품판매와 관련하여 상담·체결·유지·관리·비교견적을 위한 조회<br>
             • 보험 회사의 상품·서비스 소개 및 가입권유<br>
             • 고객 관리, 서비스 관련 문의 및 불만사항 처리</p>
-            
+
             <h3>3. 개인정보 보유 및 이용 기간</h3>
             <p>개인정보는 고객의 서비스의 이용 기간에만 활용되며, 회원 탈퇴 시 지체 없이 파기합니다. 단, 관련 법령에서 일정 기간 정보보관 의무를 부과하는 경우에는 해당 기간 동안 개인정보를 안전하게 보관합니다.</p>
-            
+
             <h3>4. 개인정보의 제3자 제공</h3>
             <p><strong>제공받는 자:</strong> KB손해보험<br>
             <strong>제공목적:</strong> 보험계약체결·유지·관리·이행<br>
             <strong>제공항목:</strong> 개인식별정보, 보험계약정보, 보험금지급정보<br>
             <strong>보유·이용기간:</strong> 제공동의일로부터 개인(신용)정보의 제공목적을 달성할때까지</p>
-            
+
             <h3>5. 개인정보관리책임자</h3>
             <p>이름: 김리하<br>
             소속: 바이인(BuyInn)<br>
             직위: 대표<br>
-            이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="600c0901024e0f0e4e090e1320070d01090c4e030f0d">[email&#160;protected]</a></p>
+
+            <!-- ✅ 여기도 Cloudflare Email Protection 제거 + mailto로 교체 -->
+            이메일: <a href="mailto:liab.on.ins@gmail.com">liab.on.ins@gmail.com</a></p>
         </div>
     </div>
 
@@ -551,10 +503,10 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal('terms')">&times;</span>
             <h2>이용약관</h2>
-            
+
             <h3>제 1조 (목적)</h3>
             <p>이 약관은 바이인(이하 "바이인"이라 한다)가 제휴사와 함께 제공하는 보험서비스 등을(이하 "서비스"라 칭한다)이용함에 있어 바이인와 회원의 권리․의무 및 책임사항을 규정함을 목적으로 합니다.</p>
-            
+
             <h3>제 4조 (서비스의 내용)</h3>
             <p>"바이인"가 제공하는 서비스는 다음과 같습니다.<br>
             가. 보험상품정보 제공<br>
@@ -562,37 +514,35 @@
             다. 보험 상담<br>
             라. 보험 가입<br>
             마. 기타 금융정보 제공</p>
-            
+
             <h3>제 5조 (단체보험 가입)</h3>
             <p>"바이인"는 "바이인"가 제공하는 서비스와 관련하여, 계약자로서 "회원"을 피보험자로 하는 단체보험계약을 체결할 수 있습니다. 보험계약에 관한 세부내용은 보험사가 제공하는 보험약관에 따르며, 보험약관이 정한 바가 본 약관에 우선합니다.</p>
-            
+
             <h3>제 11조 (환불 규정 내용)</h3>
             <p>회원은 회사에 환불을 요구할 수 있습니다. 환불은 회사가 안내하는 정책 및 방법에 따라 진행됩니다.<br>
             가. 보험 개시 전 취소 회원: 보험 개시 전 환불은 전액 환불로 진행됩니다. 단, 일부 결제 수수료가 차감될 수 있습니다.<br>
             나. 보험 개시 후 취소 회원: 보험 개시 후 환불은 각 보험사의 규정에 따라 미경과된 보험료를 산출하며 산출된 금액에 따라 환불 처리됩니다.</p>
-            
+
             <h3>제 12조 (분쟁의 해결)</h3>
             <p>"바이인"와 이용자는 서비스와 관련하여 분쟁이 발생한 경우에 이를 원만하게 해결하기 위하여 노력합니다. 당사자간 분쟁으로 인하여 소송이 제기될 경우 서울중앙지방법원을 관할법원으로 합니다.</p>
         </div>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script>
         // Form submission
         document.getElementById('contactForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
-            
+
             try {
                 const response = await fetch('/api/contact', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-                
+
                 if (response.ok) {
                     alert('상담 신청이 완료되었습니다. 빠른 시일 내에 연락드리겠습니다.');
                     e.target.reset();
@@ -617,3 +567,22 @@
             if (type === 'privacy') {
                 document.getElementById('privacyModal').style.display = 'none';
             } else if (type === 'terms') {
+                document.getElementById('termsModal').style.display = 'none';
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const privacyModal = document.getElementById('privacyModal');
+            const termsModal = document.getElementById('termsModal');
+
+            if (event.target === privacyModal) privacyModal.style.display = 'none';
+            if (event.target === termsModal) termsModal.style.display = 'none';
+        }
+    </script>
+
+    <!-- ✅ Cloudflare email-decode 스크립트 제거 (아래 라인 삭제 완료)
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    -->
+</body>
+</html>

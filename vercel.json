@@ -7,6 +7,14 @@
     {
       "source": "/drone-insurance",
       "destination": "/drone-insurance.html"
+    },
+    {
+      "source": "/overseas-travel-insurance",
+      "destination": "/overseas-travel-insurance.html"
+    },
+    {
+      "source": "/domestic-travel-insurance",
+      "destination": "/domestic-travel-insurance.html"
     }
   ],
   "cleanUrls": true

@@ -626,7 +626,7 @@
                                 <div class="plan-coverage-item">• 대인배상: 5천만원</div>
                                 <div class="plan-coverage-item">• 대물배상: 5천만원</div>
                                 <div class="plan-coverage-item">• 인당/사고당</div>
-                                <div class="plan-coverage-item">• 기본충실</div>
+                                <div class="plan-coverage-item">• 자기부담금: 10만원</div>
                             </div>
                             <div class="plan-price">49,900<span>원/년/대</span></div>
                         </label>
@@ -636,8 +636,8 @@
                             <div class="plan-coverage">
                                 <div class="plan-coverage-item">• 대인배상: 1억원</div>
                                 <div class="plan-coverage-item">• 대물배상: 1억원</div>
-                                <div class="plan-coverage-item">• 인당/사고당</div>
                                 <div class="plan-coverage-item">• 누구나운전 포함</div>
+                                <div class="plan-coverage-item">• 자기부담금: 10만원</div>
                             </div>
                             <div class="plan-price">69,900<span>원/년/대</span></div>
                         </label>
@@ -647,8 +647,8 @@
                             <div class="plan-coverage">
                                 <div class="plan-coverage-item">• 대인배상: 5억원</div>
                                 <div class="plan-coverage-item">• 대물배상: 5억원</div>
-                                <div class="plan-coverage-item">• 인당/사고당</div>
                                 <div class="plan-coverage-item">• 누구나운전 + 구조비용</div>
+                                <div class="plan-coverage-item">• 자기부담금: 10만원</div>
                             </div>
                             <div class="plan-price">99,900<span>원/년/대</span></div>
                         </label>
@@ -665,6 +665,7 @@
                                 <div class="plan-coverage-item">• 대인배상: 5천만원</div>
                                 <div class="plan-coverage-item">• 대물배상: 5천만원</div>
                                 <div class="plan-coverage-item">• 드론경기중 보장</div>
+                                <div class="plan-coverage-item">• 자기부담금: 10만원</div>
                             </div>
                             <div class="plan-price">59,900<span>원/년/대</span></div>
                         </label>
@@ -675,6 +676,7 @@
                                 <div class="plan-coverage-item">• 대인배상: 1억원</div>
                                 <div class="plan-coverage-item">• 대물배상: 1억원</div>
                                 <div class="plan-coverage-item">• 경기중 + 누구나운전</div>
+                                <div class="plan-coverage-item">• 자기부담금: 10만원</div>
                             </div>
                             <div class="plan-price">79,900<span>원/년/대</span></div>
                         </label>
@@ -685,6 +687,7 @@
                                 <div class="plan-coverage-item">• 대인배상: 5억원</div>
                                 <div class="plan-coverage-item">• 대물배상: 5억원</div>
                                 <div class="plan-coverage-item">• 경기중 + 누구나 + 구조비</div>
+                                <div class="plan-coverage-item">• 자기부담금: 10만원</div>
                             </div>
                             <div class="plan-price">109,900<span>원/년/대</span></div>
                         </label>
@@ -701,6 +704,7 @@
                                 <div class="plan-coverage-item">• 대인배상: 5천만원</div>
                                 <div class="plan-coverage-item">• 대물배상: 5천만원</div>
                                 <div class="plan-coverage-item">• 기본 보장</div>
+                                <div class="plan-coverage-item">• 자기부담금: 10만원</div>
                             </div>
                             <div class="plan-price">49,900<span>원/년/대</span></div>
                         </label>
@@ -711,6 +715,7 @@
                                 <div class="plan-coverage-item">• 대인배상: 1억원</div>
                                 <div class="plan-coverage-item">• 대물배상: 1억원</div>
                                 <div class="plan-coverage-item">• 누구나운전 포함</div>
+                                <div class="plan-coverage-item">• 자기부담금: 10만원</div>
                             </div>
                             <div class="plan-price">69,900<span>원/년/대</span></div>
                         </label>
@@ -721,6 +726,7 @@
                                 <div class="plan-coverage-item">• 대인배상: 5억원</div>
                                 <div class="plan-coverage-item">• 대물배상: 5억원</div>
                                 <div class="plan-coverage-item">• 누구나운전 + 구조비용</div>
+                                <div class="plan-coverage-item">• 자기부담금: 10만원</div>
                             </div>
                             <div class="plan-price">99,900<span>원/년/대</span></div>
                         </label>
@@ -796,13 +802,13 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>드론 자체중량 (g) *</label>
-                            <input type="number" name="drone_weight_${index}" placeholder="예: 249" min="1" required>
+                            <label>드론 자체중량 (kg) *</label>
+                            <input type="number" name="drone_weight_${index}" placeholder="예: 10" min="0.01" step="0.01" required>
                             <small>배터리 제외 기체 무게</small>
                         </div>
                         <div class="form-group">
-                            <label>드론 최대이륙중량 (g) *</label>
-                            <input type="number" name="drone_max_weight_${index}" placeholder="예: 289" min="1" required>
+                            <label>드론 최대이륙중량 (kg) *</label>
+                            <input type="number" name="drone_max_weight_${index}" placeholder="예: 10" min="0.01" step="0.01" required>
                             <small>이륙 시 최대 중량</small>
                         </div>
                     </div>

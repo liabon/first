@@ -18,17 +18,15 @@
             --kb-dark: #1a1a1a;
             --kb-gray: #666;
             --kb-light-gray: #f8f9fa;
-            --kb-blue: #0066CC;
         }
 
         body {
             font-family: 'Noto Sans KR', sans-serif;
             color: var(--kb-dark);
             line-height: 1.6;
-            background: #f8f9fa;
+            background: var(--kb-light-gray);
         }
 
-        /* Header */
         header {
             background: #fff;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
@@ -67,7 +65,6 @@
             font-weight: 700;
         }
 
-        /* Progress Bar */
         .progress-section {
             background: #fff;
             padding: 2rem;
@@ -82,13 +79,11 @@
         .progress-steps {
             display: flex;
             justify-content: space-between;
-            position: relative;
         }
 
         .progress-step {
             text-align: center;
             flex: 1;
-            position: relative;
         }
 
         .step-circle {
@@ -111,7 +106,7 @@
         }
 
         .progress-step.completed .step-circle {
-            background: var(--kb-blue);
+            background: var(--kb-gold);
             color: #fff;
         }
 
@@ -125,7 +120,6 @@
             font-weight: 600;
         }
 
-        /* Main Content */
         .main-content {
             max-width: 1000px;
             margin: 3rem auto;
@@ -160,7 +154,8 @@
         }
 
         .form-group input,
-        .form-group select {
+        .form-group select,
+        .form-group textarea {
             width: 100%;
             padding: 1rem;
             border: 2px solid #e0e0e0;
@@ -171,10 +166,18 @@
         }
 
         .form-group input:focus,
-        .form-group select:focus {
+        .form-group select:focus,
+        .form-group textarea:focus {
             outline: none;
             border-color: var(--kb-gold);
             box-shadow: 0 0 0 3px rgba(255, 184, 0, 0.1);
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 0.5rem;
+            color: var(--kb-gray);
+            font-size: 0.9rem;
         }
 
         .form-row {
@@ -183,7 +186,79 @@
             gap: 1.5rem;
         }
 
-        /* Drone Type Selection */
+        .drone-info-section {
+            border: 2px solid var(--kb-gold);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            background: #fffbf0;
+        }
+
+        .drone-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .drone-number {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--kb-gold);
+        }
+
+        .remove-drone-btn {
+            padding: 0.5rem 1rem;
+            background: #ff6b6b;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .remove-drone-btn:hover {
+            background: #ff5252;
+        }
+
+        .add-drone-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #fff;
+            border: 2px dashed var(--kb-gold);
+            border-radius: 12px;
+            color: var(--kb-gold);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 2rem;
+        }
+
+        .add-drone-btn:hover {
+            background: #fffbf0;
+        }
+
+        .notice-box {
+            background: #fff9e6;
+            border-left: 4px solid var(--kb-gold);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .notice-box strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--kb-dark);
+        }
+
+        .notice-box p {
+            margin: 0.3rem 0;
+            font-size: 0.95rem;
+            color: var(--kb-gray);
+        }
+
         .drone-type-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -225,12 +300,6 @@
             margin-bottom: 0.5rem;
         }
 
-        .drone-type-desc {
-            font-size: 0.9rem;
-            color: var(--kb-gray);
-        }
-
-        /* Plan Selection */
         .plan-category {
             margin-bottom: 3rem;
         }
@@ -239,7 +308,7 @@
             font-size: 1.5rem;
             font-weight: 700;
             margin-bottom: 1.5rem;
-            color: var(--kb-blue);
+            color: var(--kb-gold);
         }
 
         .plan-grid {
@@ -254,7 +323,6 @@
             padding: 2rem;
             cursor: pointer;
             transition: all 0.3s;
-            position: relative;
         }
 
         .plan-card:hover {
@@ -276,7 +344,7 @@
             font-size: 1.3rem;
             font-weight: 700;
             margin-bottom: 1rem;
-            color: var(--kb-blue);
+            color: var(--kb-gold);
         }
 
         .plan-coverage {
@@ -302,7 +370,6 @@
             font-weight: 400;
         }
 
-        /* Buttons */
         .button-group {
             display: flex;
             gap: 1rem;
@@ -346,7 +413,6 @@
             box-shadow: none;
         }
 
-        /* Footer */
         footer {
             background: var(--kb-dark);
             color: #fff;
@@ -366,7 +432,6 @@
             font-size: 0.95rem;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .section-card {
                 padding: 2rem 1.5rem;
@@ -392,7 +457,6 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="header-content">
             <div class="logo-section">
@@ -403,7 +467,6 @@
         </div>
     </header>
 
-    <!-- Progress Bar -->
     <div class="progress-section">
         <div class="progress-container">
             <div class="progress-steps">
@@ -427,7 +490,6 @@
         </div>
     </div>
 
-    <!-- Main Content -->
     <div class="main-content">
         <form id="droneForm">
             <!-- Customer Info -->
@@ -466,50 +528,87 @@
                 </div>
             </div>
 
-            <!-- Drone Info -->
+            <!-- Insurance Period -->
+            <div class="section-card">
+                <h2 class="section-title">보험기간</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>보험시작일 *</label>
+                        <input type="date" name="insurance_start" id="insuranceStart" required>
+                        <small>내일부터 선택 가능합니다 (시작시간 00:00)</small>
+                    </div>
+                    <div class="form-group">
+                        <label>보험종료일 *</label>
+                        <input type="date" name="insurance_end" id="insuranceEnd" required>
+                        <small>자동으로 1년 후로 설정됩니다 (종료시간 00:00)</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>보험가입 소재지</label>
+                    <input type="text" value="전국일원 (보험담보지역: 대한민국)" readonly style="background: #f8f9fa;">
+                </div>
+
+                <div class="notice-box">
+                    <strong>📌 보험기간 안내</strong>
+                    <p>• 드론보험기간은 1년입니다</p>
+                    <p>• 보험시작일은 내일부터 선택 가능합니다</p>
+                    <p>• 시작시간: 00:00 / 종료시간: 00:00 (고정)</p>
+                </div>
+            </div>
+
+            <!-- Drone Count -->
+            <div class="section-card">
+                <h2 class="section-title">드론 대수</h2>
+                
+                <div class="form-group">
+                    <label>보험 가입할 드론 대수 *</label>
+                    <input type="number" name="drone_count" id="droneCount" min="1" max="10" value="1" required>
+                    <small>최대 10대까지 가입 가능합니다</small>
+                </div>
+            </div>
+
+            <!-- Drone Details -->
             <div class="section-card">
                 <h2 class="section-title">드론 정보</h2>
                 
-                <div class="form-group">
-                    <label>드론 대수 *</label>
-                    <input type="number" name="drone_count" id="droneCount" min="1" value="1" placeholder="보유하신 드론 대수" required>
-                    <small style="color: var(--kb-gray); display: block; margin-top: 0.5rem;">* 보험료는 드론 대수에 따라 자동 계산됩니다</small>
+                <div class="notice-box">
+                    <strong>⚠️ 필수 확인사항</strong>
+                    <p>• 기체이륙중량은 이륙 시 최대중량입니다</p>
+                    <p>• 시리얼번호, 무게정보는 반드시 확인해주세요</p>
                 </div>
 
-                <div class="form-group">
-                    <label>드론 시리얼 번호 *</label>
-                    <input type="text" name="drone_serial" placeholder="드론 기체 하단의 시리얼 번호를 입력하세요" required>
-                    <small style="color: var(--kb-gray); display: block; margin-top: 0.5rem;">* 여러 대인 경우 대표 1대의 시리얼 번호를 입력하세요</small>
+                <div id="dronesContainer">
+                    <!-- 드론 정보 섹션이 여기에 동적으로 추가됨 -->
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label>가입물건 선택 *</label>
-                    <div class="drone-type-grid">
-                        <label class="drone-type-card">
-                            <input type="radio" name="drone_type" value="camera" required>
-                            <div class="drone-type-icon">📷</div>
-                            <div class="drone-type-name">촬영용 센서드론</div>
-                            <div class="drone-type-desc">DJI, Autel 등</div>
-                        </label>
-                        <label class="drone-type-card">
-                            <input type="radio" name="drone_type" value="fpv" required>
-                            <div class="drone-type-icon">🎮</div>
-                            <div class="drone-type-name">FPV/레이싱 드론</div>
-                            <div class="drone-type-desc">프리스타일, 레이싱</div>
-                        </label>
-                        <label class="drone-type-card">
-                            <input type="radio" name="drone_type" value="toy" required>
-                            <div class="drone-type-icon">🎯</div>
-                            <div class="drone-type-name">완구형 드론</div>
-                            <div class="drone-type-desc">교육/학습용</div>
-                        </label>
-                        <label class="drone-type-card">
-                            <input type="radio" name="drone_type" value="other" required>
-                            <div class="drone-type-icon">🚁</div>
-                            <div class="drone-type-name">기타</div>
-                            <div class="drone-type-desc">취미/레저형</div>
-                        </label>
-                    </div>
+            <!-- Drone Type Selection -->
+            <div class="section-card">
+                <h2 class="section-title">가입물건 선택</h2>
+                
+                <div class="drone-type-grid">
+                    <label class="drone-type-card">
+                        <input type="radio" name="drone_type" value="camera" required>
+                        <div class="drone-type-icon">📷</div>
+                        <div class="drone-type-name">촬영용 센서드론</div>
+                    </label>
+                    <label class="drone-type-card">
+                        <input type="radio" name="drone_type" value="fpv" required>
+                        <div class="drone-type-icon">🎮</div>
+                        <div class="drone-type-name">FPV/레이싱 드론</div>
+                    </label>
+                    <label class="drone-type-card">
+                        <input type="radio" name="drone_type" value="toy" required>
+                        <div class="drone-type-icon">🎯</div>
+                        <div class="drone-type-name">완구형 드론</div>
+                    </label>
+                    <label class="drone-type-card">
+                        <input type="radio" name="drone_type" value="other" required>
+                        <div class="drone-type-icon">🚁</div>
+                        <div class="drone-type-name">기타</div>
+                    </label>
                 </div>
             </div>
 
@@ -517,7 +616,6 @@
             <div class="section-card">
                 <h2 class="section-title">보험 플랜 선택</h2>
                 
-                <!-- 촬영용/일반드론 Plans -->
                 <div class="plan-category" id="cameraDronePlans" style="display:none;">
                     <h3>📷 촬영용/일반드론</h3>
                     <div class="plan-grid">
@@ -557,7 +655,6 @@
                     </div>
                 </div>
 
-                <!-- FPV 드론 Plans -->
                 <div class="plan-category" id="fpvDronePlans" style="display:none;">
                     <h3>🎮 FPV드론, 프리스타일, 레이싱 드론</h3>
                     <div class="plan-grid">
@@ -594,7 +691,6 @@
                     </div>
                 </div>
 
-                <!-- Other Drone Types Plans -->
                 <div class="plan-category" id="otherDronePlans" style="display:none;">
                     <h3>🚁 완구형/기타 드론</h3>
                     <div class="plan-grid">
@@ -632,7 +728,6 @@
                 </div>
             </div>
 
-            <!-- Buttons -->
             <div class="button-group">
                 <button type="button" class="btn btn-secondary" onclick="history.back()">이전</button>
                 <button type="submit" class="btn btn-primary" id="submitBtn" disabled>다음 단계로</button>
@@ -640,7 +735,6 @@
         </form>
     </div>
 
-    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <h3 style="margin-bottom: 1rem;">배상온 대리점</h3>
@@ -653,7 +747,91 @@
     </footer>
 
     <script>
-        // Drone type card selection
+        // 보험기간 설정
+        function setupInsuranceDates() {
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            const startInput = document.getElementById('insuranceStart');
+            const endInput = document.getElementById('insuranceEnd');
+            
+            // 최소 날짜를 내일로 설정
+            startInput.min = tomorrow.toISOString().split('T')[0];
+            startInput.value = tomorrow.toISOString().split('T')[0];
+            
+            // 종료일을 1년 후로 자동 설정
+            const oneYearLater = new Date(tomorrow);
+            oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+            endInput.value = oneYearLater.toISOString().split('T')[0];
+            
+            // 시작일 변경 시 종료일 자동 업데이트
+            startInput.addEventListener('change', function() {
+                const startDate = new Date(this.value);
+                const endDate = new Date(startDate);
+                endDate.setFullYear(endDate.getFullYear() + 1);
+                endInput.value = endDate.toISOString().split('T')[0];
+            });
+        }
+
+        // 드론 정보 섹션 생성
+        function createDroneSection(index) {
+            return `
+                <div class="drone-info-section" data-drone-index="${index}">
+                    <div class="drone-info-header">
+                        <span class="drone-number">드론 ${index + 1}</span>
+                        ${index > 0 ? '<button type="button" class="remove-drone-btn" onclick="removeDroneSection(' + index + ')">삭제</button>' : ''}
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>드론 모델명 *</label>
+                        <input type="text" name="drone_model_${index}" placeholder="예: DJI Mini 3 Pro" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>제작번호 (시리얼번호) *</label>
+                        <input type="text" name="drone_serial_${index}" placeholder="드론 기체 하단의 시리얼 번호" required>
+                        <small>시리얼번호를 반드시 확인해주세요</small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>드론 자체중량 (g) *</label>
+                            <input type="number" name="drone_weight_${index}" placeholder="예: 249" min="1" required>
+                            <small>배터리 제외 기체 무게</small>
+                        </div>
+                        <div class="form-group">
+                            <label>드론 최대이륙중량 (g) *</label>
+                            <input type="number" name="drone_max_weight_${index}" placeholder="예: 289" min="1" required>
+                            <small>이륙 시 최대 중량</small>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 드론 섹션 업데이트
+        function updateDroneSections() {
+            const count = parseInt(document.getElementById('droneCount').value) || 1;
+            const container = document.getElementById('dronesContainer');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < count; i++) {
+                container.innerHTML += createDroneSection(i);
+            }
+            checkFormValidity();
+        }
+
+        // 드론 대수 변경 이벤트
+        document.getElementById('droneCount').addEventListener('change', function() {
+            const count = parseInt(this.value);
+            if (count < 1) this.value = 1;
+            if (count > 10) this.value = 10;
+            updateDroneSections();
+            updateTotalPrice();
+        });
+
+        // 드론 타입 카드 선택
         document.querySelectorAll('.drone-type-card').forEach(card => {
             card.addEventListener('click', function() {
                 document.querySelectorAll('.drone-type-card').forEach(c => c.classList.remove('selected'));
@@ -665,7 +843,7 @@
             });
         });
 
-        // Plan card selection
+        // 플랜 카드 선택
         document.querySelectorAll('.plan-card').forEach(card => {
             card.addEventListener('click', function() {
                 document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
@@ -675,38 +853,12 @@
             });
         });
 
-        // Drone count change listener
-        document.getElementById('droneCount').addEventListener('input', function() {
-            updateTotalPrice();
-        });
-
-        // Update total price based on drone count
-        function updateTotalPrice() {
-            const droneCount = parseInt(document.getElementById('droneCount').value) || 1;
-            const selectedPlan = document.querySelector('input[name="plan"]:checked');
-            
-            if (selectedPlan) {
-                const basePrice = parseInt(selectedPlan.getAttribute('data-price'));
-                const totalPrice = basePrice * droneCount;
-                
-                const planCard = selectedPlan.closest('.plan-card');
-                const priceElement = planCard.querySelector('.plan-price');
-                
-                if (droneCount > 1) {
-                    priceElement.innerHTML = `${basePrice.toLocaleString()}<span>원/년/대</span><br><span style="font-size: 1rem; color: var(--kb-blue);">총 ${totalPrice.toLocaleString()}원 (${droneCount}대)</span>`;
-                } else {
-                    priceElement.innerHTML = `${basePrice.toLocaleString()}<span>원/년/대</span>`;
-                }
-            }
-        }
-
-        // Show plans based on drone type
+        // 드론 타입별 플랜 표시
         function showPlansForDroneType(type) {
             document.getElementById('cameraDronePlans').style.display = 'none';
             document.getElementById('fpvDronePlans').style.display = 'none';
             document.getElementById('otherDronePlans').style.display = 'none';
 
-            // Clear all plan selections
             document.querySelectorAll('input[name="plan"]').forEach(input => {
                 input.checked = false;
             });
@@ -723,7 +875,27 @@
             }
         }
 
-        // Check form validity
+        // 총 보험료 업데이트
+        function updateTotalPrice() {
+            const droneCount = parseInt(document.getElementById('droneCount').value) || 1;
+            const selectedPlan = document.querySelector('input[name="plan"]:checked');
+            
+            if (selectedPlan) {
+                const basePrice = parseInt(selectedPlan.getAttribute('data-price'));
+                const totalPrice = basePrice * droneCount;
+                
+                const planCard = selectedPlan.closest('.plan-card');
+                const priceElement = planCard.querySelector('.plan-price');
+                
+                if (droneCount > 1) {
+                    priceElement.innerHTML = `${basePrice.toLocaleString()}<span>원/년/대</span><br><span style="font-size: 1rem; color: var(--kb-gold);">총 ${totalPrice.toLocaleString()}원 (${droneCount}대)</span>`;
+                } else {
+                    priceElement.innerHTML = `${basePrice.toLocaleString()}<span>원/년/대</span>`;
+                }
+            }
+        }
+
+        // 폼 유효성 검사
         function checkFormValidity() {
             const form = document.getElementById('droneForm');
             const submitBtn = document.getElementById('submitBtn');
@@ -737,37 +909,51 @@
             }
         }
 
-        // Form input listeners
+        // 모든 입력 필드 감지
         document.querySelectorAll('input, select').forEach(element => {
             element.addEventListener('input', checkFormValidity);
             element.addEventListener('change', checkFormValidity);
         });
 
-        // Form submission
+        // 폼 제출
         document.getElementById('droneForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Store form data in sessionStorage
             const formData = new FormData(this);
             const data = Object.fromEntries(formData.entries());
             
-            // Get selected plan details
+            // 드론 정보 수집
+            const droneCount = parseInt(data.drone_count);
+            data.drones = [];
+            
+            for (let i = 0; i < droneCount; i++) {
+                data.drones.push({
+                    model: data[`drone_model_${i}`],
+                    serial: data[`drone_serial_${i}`],
+                    weight: data[`drone_weight_${i}`],
+                    max_weight: data[`drone_max_weight_${i}`]
+                });
+            }
+            
+            // 플랜 정보
             const selectedPlan = document.querySelector('input[name="plan"]:checked');
             const planCard = selectedPlan.closest('.plan-card');
             const planName = planCard.querySelector('.plan-name').textContent;
             const basePrice = parseInt(selectedPlan.getAttribute('data-price'));
-            const droneCount = parseInt(data.drone_count);
             const totalPrice = basePrice * droneCount;
             
             data.plan_name = planName;
             data.plan_price_per_drone = basePrice;
             data.plan_total_price = totalPrice;
-            data.drone_count = droneCount;
             
             sessionStorage.setItem('droneInsuranceData', JSON.stringify(data));
-            
-            // Navigate to terms page
             window.location.href = '/personal-drone-insurance-terms';
+        });
+
+        // 페이지 로드 시 초기화
+        window.addEventListener('DOMContentLoaded', function() {
+            setupInsuranceDates();
+            updateDroneSections();
         });
     </script>
 </body>

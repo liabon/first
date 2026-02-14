@@ -378,7 +378,7 @@
                     <li>개인 배상책임 보장</li>
                 </ul>
 
-                <a href="#contact" class="select-btn">개인용 보험 상담하기</a>
+                <a href="/personal-drone-insurance" class="select-btn">개인용 보험 가입하기</a>
             </div>
         </div>
 
@@ -429,7 +429,7 @@
         <div class="footer-content">
             <div class="footer-info">
                 <h3>배상온 대리점</h3>
-                <p>📧 이메일: liab.on.ins@gmail.com</p>
+                <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7b17121a19551415551215083b1c161a121755181416">[email&#160;protected]</a></p>
                 <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
                 <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
                 <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
@@ -437,7 +437,7 @@
         </div>
     </footer>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // Form submission
         document.getElementById('droneContactForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -446,7 +446,7 @@
             const data = Object.fromEntries(formData.entries());
             
             try {
-                const response = await fetch('/api/drone-insurance', {
+                const response = await fetch('/api/contact', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -459,11 +459,3 @@
                     e.target.reset();
                 } else {
                     alert('전송 중 오류가 발생했습니다. 다시 시도해주세요.');
-                }
-            } catch (error) {
-                alert('전송 중 오류가 발생했습니다.\n이메일로 직접 연락 주시기 바랍니다:\nliab.on.ins@gmail.com');
-            }
-        });
-    </script>
-</body>
-</html>

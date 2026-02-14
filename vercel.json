@@ -15,6 +15,22 @@
     {
       "source": "/domestic-travel-insurance",
       "destination": "/domestic-travel-insurance.html"
+    },
+    {
+      "source": "/personal-drone-insurance",
+      "destination": "/personal-drone-insurance.html"
+    },
+    {
+      "source": "/personal-drone-insurance-form",
+      "destination": "/personal-drone-insurance-form.html"
+    },
+    {
+      "source": "/personal-drone-insurance-terms",
+      "destination": "/personal-drone-insurance-terms.html"
+    },
+    {
+      "source": "/personal-drone-insurance-complete",
+      "destination": "/personal-drone-insurance-complete.html"
     }
   ],
   "cleanUrls": true

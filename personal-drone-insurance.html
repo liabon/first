@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>드론플레이 전용 개인용 드론보험 - KB손해보험</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --kb-gold: #FFB800;
+            --kb-yellow: #FFCD00;
+            --kb-dark: #1a1a1a;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            color: var(--kb-dark);
+            line-height: 1.6;
+            background: #fff;
+        }
+
+        /* Header */
+        header {
+            background: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .logo-img {
+            height: 45px;
+        }
+
+        .logo-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--kb-dark);
+        }
+
+        .home-link {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(180deg, #fff 0%, #fafafa 100%);
+            padding: 3rem 1.5rem 4rem;
+            text-align: center;
+        }
+
+        .product-tag {
+            display: inline-block;
+            background: var(--kb-gold);
+            color: var(--kb-dark);
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            line-height: 1.4;
+            color: var(--kb-dark);
+            margin-bottom: 0.8rem;
+        }
+
+        .hero-title .highlight {
+            color: var(--kb-gold);
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 1.5rem 3rem;
+        }
+
+        .check-card {
+            background: #fff;
+            border: 1px solid #e8e8e8;
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .check-card:hover {
+            border-color: var(--kb-gold);
+            box-shadow: 0 4px 20px rgba(255, 184, 0, 0.1);
+        }
+
+        .check-question {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--kb-dark);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .radio-options {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .radio-label {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem;
+            border: 2px solid #e8e8e8;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .radio-label input {
+            display: none;
+        }
+
+        .radio-label:hover {
+            border-color: var(--kb-gold);
+        }
+
+        .radio-label input:checked + span {
+            color: var(--kb-dark);
+        }
+
+        .radio-label:has(input:checked) {
+            background: var(--kb-gold);
+            border-color: var(--kb-gold);
+            color: var(--kb-dark);
+        }
+
+        /* Error Message */
+        .error-box {
+            background: #fff5f5;
+            border: 1px solid #ffcccc;
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            display: none;
+        }
+
+        .error-box.show {
+            display: block;
+        }
+
+        .error-box p {
+            color: #d63031;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Next Button */
+        .btn-next {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--kb-gold);
+            color: var(--kb-dark);
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            background: var(--kb-yellow);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 184, 0, 0.3);
+        }
+
+        .btn-next:disabled {
+            background: #e0e0e0;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        /* Info Section */
+        .info-box {
+            background: #f9f9f9;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .info-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #999;
+            margin-bottom: 0.8rem;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.2rem 0;
+        }
+
+        .info-list li {
+            font-size: 0.85rem;
+            color: #999;
+            padding: 0.3rem 0;
+        }
+
+        .btn-obligation {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #666;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-obligation:hover {
+            background: var(--kb-dark);
+        }
+
+        /* Footer */
+        footer {
+            background: #f9f9f9;
+            border-top: 1px solid #e8e8e8;
+            padding: 2rem 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-company {
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        .footer-info {
+            font-size: 0.75rem;
+            color: #999;
+            line-height: 1.6;
+        }
+
+        .footer-info p {
+            margin: 0.3rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 1.5rem;
+            }
+
+            .check-card {
+                padding: 1.5rem 1.2rem;
+            }
+
+            .check-question {
+                font-size: 0.9rem;
+            }
+
+            .radio-label {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <img src="kb-logo.png" alt="KB손해보험" class="logo-img">
+                <span class="logo-text">배상온 대리점</span>
+            </div>
+            <a href="/" class="home-link">홈으로</a>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="product-tag">드론플레이 전용</div>
+        <h1 class="hero-title">
+            <span class="highlight">KB손해보험</span><br>
+            개인용 드론보험
+        </h1>
+        <p class="hero-subtitle">취미·레저 드론 사용자를 위한 맞춤 보험</p>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Question 1 -->
+        <div class="check-card">
+            <p class="check-question">
+                당 상품은 비의무가입자인 취미, 레저로 드론을 사용하는 개인(또는 개인사업자)를 대상으로 합니다. 위 내용을 확인하셨습니까?
+            </p>
+            <div class="radio-options">
+                <label class="radio-label">
+                    <input type="radio" name="q1" value="yes">
+                    <span>예</span>
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="q1" value="no">
+                    <span>아니오</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="check-card">
+            <p class="check-question">
+                당 상품은 드론플레이 회원만 가입이 가능합니다. 회원이 맞으십니까?
+            </p>
+            <div class="radio-options">
+                <label class="radio-label">
+                    <input type="radio" name="q2" value="yes">
+                    <span>예</span>
+                </label>
+                <label class="radio-label">
+                    <input type="radio" name="q2" value="no">
+                    <span>아니오</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        <div class="error-box" id="errorBox">
+            <p>⚠️ 가입 대상이 아닙니다</p>
+        </div>
+
+        <!-- Next Button -->
+        <button class="btn-next" id="btnNext" disabled>다음 단계로</button>
+
+        <!-- Info Section -->
+        <div class="info-box">
+            <p class="info-title">[의무보험가입대상]</p>
+            <ul class="info-list">
+                <li>국가, 지방자치단체, 공공기관</li>
+                <li>초경량비행장치(드론)을 사용한 영리사업</li>
+            </ul>
+            <a href="/drone-insurance" class="btn-obligation">의무보험 드론배상 가입하기</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-company">배상온 대리점</div>
+            <div class="footer-info">
+                <p>📧 liab.on.ins@gmail.com</p>
+                <p>📍 서울특별시 동대문구 천호대로 301, 1706호</p>
+                <p>사업자등록번호 501-63-18916 | 대리점등록번호 제2026010037호</p>
+                <p style="margin-top: 0.5rem;">© 2026 배상온 대리점. KB손해보험 공식 대리점</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const radios = document.querySelectorAll('input[type="radio"]');
+        const btnNext = document.getElementById('btnNext');
+        const errorBox = document.getElementById('errorBox');
+
+        function checkAnswers() {
+            const q1 = document.querySelector('input[name="q1"]:checked');
+            const q2 = document.querySelector('input[name="q2"]:checked');
+
+            errorBox.classList.remove('show');
+
+            if (q1 && q2) {
+                if (q1.value === 'yes' && q2.value === 'yes') {
+                    btnNext.disabled = false;
+                } else {
+                    btnNext.disabled = true;
+                    errorBox.classList.add('show');
+                }
+            } else {
+                btnNext.disabled = true;
+            }
+        }
+
+        radios.forEach(radio => {
+            radio.addEventListener('change', checkAnswers);
+        });
+
+        btnNext.addEventListener('click', () => {
+            window.location.href = '/personal-drone-insurance-form';
+        });
+    </script>
+</body>
+</html>

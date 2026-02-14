@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>가입 완료 - KB손해보험 개인용 드론보험</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --kb-yellow: #FFCD00;
+            --kb-gold: #FFB800;
+            --kb-dark: #1a1a1a;
+            --kb-gray: #666;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            color: var(--kb-dark);
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .kb-logo {
+            height: 50px;
+        }
+
+        .divider {
+            height: 40px;
+            width: 1px;
+            background: #ddd;
+        }
+
+        .agency-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+        }
+
+        .complete-card {
+            background: #fff;
+            border-radius: 30px;
+            padding: 4rem 3rem;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--kb-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            font-size: 3rem;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .complete-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: var(--kb-dark);
+        }
+
+        .complete-subtitle {
+            font-size: 1.2rem;
+            color: var(--kb-gray);
+            margin-bottom: 3rem;
+        }
+
+        .info-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--kb-gray);
+        }
+
+        .info-value {
+            font-weight: 700;
+            color: var(--kb-dark);
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            padding: 1.2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-pdf {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        .btn-pdf:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .btn-email {
+            background: var(--kb-gold);
+            color: var(--kb-dark);
+        }
+
+        .btn-email:hover {
+            background: var(--kb-yellow);
+            transform: translateY(-2px);
+        }
+
+        .btn-home {
+            width: 100%;
+            background: var(--kb-dark);
+            color: #fff;
+        }
+
+        .btn-home:hover {
+            background: #000;
+            transform: translateY(-2px);
+        }
+
+        .notice {
+            background: #fff9e6;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            font-size: 0.95rem;
+            color: var(--kb-gray);
+            text-align: left;
+        }
+
+        .notice strong {
+            color: var(--kb-dark);
+        }
+
+        footer {
+            background: var(--kb-dark);
+            color: #fff;
+            padding: 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .complete-card {
+                padding: 3rem 2rem;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="kb-logo.png" alt="KB손해보험" class="kb-logo">
+                <div class="divider"></div>
+                <div class="agency-name">배상온 대리점</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="complete-card">
+            <div class="success-icon">📋</div>
+            <h1 class="complete-title">견적서 확인</h1>
+            <p class="complete-subtitle">입력하신 정보를 확인하시고 견적서를 다운로드하거나 이메일로 받아보세요</p>
+
+            <div class="info-section" id="insuranceInfo">
+                <!-- JavaScript로 채워질 예정 -->
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-pdf" onclick="downloadPDF()">
+                    📄 PDF 다운로드
+                </button>
+                <button class="btn btn-email" onclick="sendEmail()">
+                    📧 이메일 전송
+                </button>
+            </div>
+
+            <button class="btn btn-home" onclick="location.href='/'">
+                홈으로 돌아가기
+            </button>
+
+            <div class="notice">
+                <strong>안내사항</strong><br>
+                • 견적서를 다운로드하거나 이메일로 받아보실 수 있습니다.<br>
+                • 가입을 원하시면 담당자에게 연락 주시기 바랍니다.<br>
+                • 견적서는 참고용이며, 최종 보험료는 심사 후 확정됩니다.<br>
+                • 문의사항: liab.on.ins@gmail.com
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 배상온 대리점. All rights reserved. | KB손해보험 공식 대리점</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        let insuranceData = null;
+
+        // Load data on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedData = sessionStorage.getItem('droneInsuranceData');
+            if (!savedData) {
+                alert('저장된 정보가 없습니다.');
+                window.location.href = '/personal-drone-insurance';
+                return;
+            }
+
+            insuranceData = JSON.parse(savedData);
+            displayInfo();
+        });
+
+        // Display insurance info
+        function displayInfo() {
+            const container = document.getElementById('insuranceInfo');
+            
+            // Get drone type name
+            const droneTypes = {
+                'camera': '촬영용 센서드론',
+                'fpv': 'FPV/레이싱 드론',
+                'toy': '완구형 드론',
+                'other': '기타 드론'
+            };
+
+            const html = `
+                <div class="info-row">
+                    <span class="info-label">가입자명</span>
+                    <span class="info-value">${insuranceData.name}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">연락처</span>
+                    <span class="info-value">${insuranceData.phone}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">이메일</span>
+                    <span class="info-value">${insuranceData.email}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">드론 종류</span>
+                    <span class="info-value">${droneTypes[insuranceData.drone_type]}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">드론 대수</span>
+                    <span class="info-value">${insuranceData.drone_count}대</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">선택 플랜</span>
+                    <span class="info-value">${insuranceData.plan_name}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">보험료(1대당)</span>
+                    <span class="info-value">${parseInt(insuranceData.plan_price_per_drone).toLocaleString()}원/년</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">총 보험료</span>
+                    <span class="info-value" style="color: #e74c3c; font-size: 1.5rem; font-weight: 900;">${parseInt(insuranceData.plan_total_price).toLocaleString()}원</span>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        // Download PDF
+        async function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Add Korean font support (simplified version)
+            doc.setFont('helvetica');
+            
+            const today = new Date();
+            const dateStr = `${today.getFullYear()}.${String(today.getMonth()+1).padStart(2,'0')}.${String(today.getDate()).padStart(2,'0')}`;
+            const timeStr = `${String(today.getHours()).padStart(2,'0')}:${String(today.getMinutes()).padStart(2,'0')}`;
+
+            // Header
+            doc.setFontSize(20);
+            doc.text('KB Personal Drone Insurance', 105, 20, { align: 'center' });
+            
+            doc.setFontSize(16);
+            doc.text('Quote Estimate', 105, 30, { align: 'center' });
+
+            // Company info
+            doc.setFontSize(10);
+            doc.text('Baesangon Agency', 20, 50);
+            doc.text(`Date: ${dateStr} ${timeStr}`, 20, 60);
+
+            // Customer info
+            doc.setFontSize(12);
+            doc.text('Customer Information', 20, 80);
+            doc.setFontSize(10);
+            doc.text(`Name: ${insuranceData.name}`, 20, 90);
+            doc.text(`Phone: ${insuranceData.phone}`, 20, 97);
+            doc.text(`Email: ${insuranceData.email}`, 20, 104);
+            doc.text(`Birth Date: ${insuranceData.birth_date}`, 20, 111);
+
+            // Insurance info
+            doc.setFontSize(12);
+            doc.text('Insurance Details', 20, 130);
+            doc.setFontSize(10);
+            doc.text(`Insurance Type: Personal Drone Insurance`, 20, 140);
+            doc.text(`Drone Serial: ${insuranceData.drone_serial}`, 20, 147);
+            doc.text(`Drone Count: ${insuranceData.drone_count} units`, 20, 154);
+            doc.text(`Plan: ${insuranceData.plan_name}`, 20, 161);
+
+            // Premium
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text(`Premium per Drone: ${parseInt(insuranceData.plan_price_per_drone).toLocaleString()} KRW/year`, 20, 180);
+            doc.setFontSize(16);
+            doc.text(`Total Annual Premium: ${parseInt(insuranceData.plan_total_price).toLocaleString()} KRW`, 20, 190);
+
+            // Coverage details based on plan
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(10);
+            doc.text('Coverage:', 20, 205);
+            
+            if (insuranceData.plan.includes('slim')) {
+                doc.text('- Bodily Injury: 50,000,000 KRW', 25, 212);
+                doc.text('- Property Damage: 50,000,000 KRW', 25, 219);
+            } else if (insuranceData.plan.includes('standard')) {
+                doc.text('- Bodily Injury: 100,000,000 KRW', 25, 212);
+                doc.text('- Property Damage: 100,000,000 KRW', 25, 219);
+                doc.text('- Anyone Can Fly Coverage', 25, 226);
+            } else if (insuranceData.plan.includes('premium')) {
+                doc.text('- Bodily Injury: 500,000,000 KRW', 25, 212);
+                doc.text('- Property Damage: 500,000,000 KRW', 25, 219);
+                doc.text('- Anyone Can Fly Coverage', 25, 226);
+                doc.text('- Rescue Cost Coverage', 25, 233);
+            }
+
+            // Footer
+            doc.setFontSize(8);
+            doc.text('Baesangon Agency | KB Insurance Official Agent', 105, 270, { align: 'center' });
+            doc.text('Email: liab.on.ins@gmail.com', 105, 275, { align: 'center' });
+            doc.text('Address: 301, 1706, Cheonho-daero, Dongdaemun-gu, Seoul', 105, 280, { align: 'center' });
+
+            // Save PDF
+            doc.save(`KB_Drone_Insurance_Quote_${insuranceData.name}_${dateStr}.pdf`);
+        }
+
+        // Send email
+        async function sendEmail() {
+            const emailData = {
+                ...insuranceData,
+                request_type: 'email_quote'
+            };
+
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(emailData)
+                });
+
+                if (response.ok) {
+                    alert('견적서가 이메일로 전송되었습니다.');
+                } else {
+                    alert('이메일 전송 중 오류가 발생했습니다.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('이메일 전송 중 오류가 발생했습니다.');
+            }
+        }
+    </script>
+</body>
+</html>

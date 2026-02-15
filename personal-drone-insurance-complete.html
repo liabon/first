@@ -406,12 +406,12 @@
             let dronesHTML = '';
             if (insuranceData.drones && insuranceData.drones.length > 0) {
                 dronesHTML = insuranceData.drones.map((drone, i) => `
-                    <div style="border-left: 3px solid #FFB800; padding-left: 12px; margin: 10px 0;">
-                        <p style="margin: 5px 0; font-size: 12px; font-weight: 700;">드론 ${i + 1}:</p>
-                        <p style="margin: 3px 0; font-size: 11px;">모델명: ${drone.model || '미입력'}</p>
-                        <p style="margin: 3px 0; font-size: 11px;">시리얼번호: ${drone.serial || '미입력'}</p>
-                        <p style="margin: 3px 0; font-size: 11px;">자체중량: ${drone.weight || '미입력'}kg</p>
-                        <p style="margin: 3px 0; font-size: 11px;">최대이륙중량: ${drone.max_weight || '미입력'}kg</p>
+                    <div style="border-left: 4px solid #FFB800; padding-left: 15px; margin: 15px 0; background: #fff;">
+                        <p style="margin: 6px 0; font-size: 14px; font-weight: 700; color: #1a1a1a;">드론 ${i + 1}:</p>
+                        <p style="margin: 5px 0; font-size: 13px; color: #333;">모델명: ${drone.model || '미입력'}</p>
+                        <p style="margin: 5px 0; font-size: 13px; color: #333;">시리얼번호: ${drone.serial || '미입력'}</p>
+                        <p style="margin: 5px 0; font-size: 13px; color: #333;">자체중량: ${drone.weight || '미입력'}kg</p>
+                        <p style="margin: 5px 0; font-size: 13px; color: #333;">최대이륙중량: ${drone.max_weight || '미입력'}kg</p>
                     </div>
                 `).join('');
             }
@@ -422,65 +422,68 @@
             // PDF용 HTML 엘리먼트 생성
             const element = document.createElement('div');
             element.style.width = '210mm';
+            element.style.minHeight = '297mm';
             element.style.background = '#fff';
             element.style.fontFamily = "'Noto Sans KR', sans-serif";
+            element.style.margin = '0';
+            element.style.padding = '0';
             
             element.innerHTML = `
-                <div style="background: linear-gradient(135deg, #FFB800 0%, #FFCD00 100%); padding: 30px; text-align: center;">
-                    <h1 style="color: #1a1a1a; margin: 0; font-size: 24px; font-weight: 900;">KB손해보험 개인용 드론보험</h1>
-                    <h2 style="color: #1a1a1a; margin: 8px 0 0 0; font-size: 18px; font-weight: 700;">견적서</h2>
+                <div style="background: linear-gradient(135deg, #FFB800 0%, #FFCD00 100%); padding: 25px 40px; text-align: center;">
+                    <h1 style="color: #1a1a1a; margin: 0; font-size: 26px; font-weight: 900; line-height: 1.2;">KB손해보험 개인용 드론보험</h1>
+                    <h2 style="color: #1a1a1a; margin: 8px 0 0 0; font-size: 20px; font-weight: 700;">견적서</h2>
                 </div>
                 
-                <div style="padding: 20px 30px;">
-                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                        <h3 style="color: #FFB800; font-size: 14px; font-weight: 700; margin: 0 0 10px 0;">📋 견적 정보</h3>
-                        <p style="margin: 4px 0; font-size: 12px;"><strong>견적일자:</strong> ${dateStr}</p>
-                        <p style="margin: 4px 0; font-size: 12px;"><strong>보험기간:</strong> ${insuranceData.insurance_start} ~ ${insuranceData.insurance_end}</p>
-                        <p style="margin: 4px 0; font-size: 12px;"><strong>상품명:</strong> KB손해보험 개인용 드론보험</p>
+                <div style="padding: 40px 50px;">
+                    <div style="background: #f8f9fa; padding: 25px; border-radius: 10px; margin-bottom: 30px;">
+                        <h3 style="color: #FFB800; font-size: 18px; font-weight: 700; margin: 0 0 15px 0;">📋 견적 정보</h3>
+                        <p style="margin: 8px 0; font-size: 15px; line-height: 1.6; color: #1a1a1a;"><strong>견적일자:</strong> ${dateStr}</p>
+                        <p style="margin: 8px 0; font-size: 15px; line-height: 1.6; color: #1a1a1a;"><strong>보험기간:</strong> ${insuranceData.insurance_start} ~ ${insuranceData.insurance_end}</p>
+                        <p style="margin: 8px 0; font-size: 15px; line-height: 1.6; color: #1a1a1a;"><strong>상품명:</strong> KB손해보험 개인용 드론보험</p>
                     </div>
                     
-                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                        <h3 style="color: #FFB800; font-size: 14px; font-weight: 700; margin: 0 0 10px 0;">👤 고객 정보</h3>
-                        <p style="margin: 4px 0; font-size: 12px;"><strong>이름:</strong> ${insuranceData.name}</p>
-                        <p style="margin: 4px 0; font-size: 12px;"><strong>연락처:</strong> ${insuranceData.phone}</p>
-                        <p style="margin: 4px 0; font-size: 12px;"><strong>이메일:</strong> ${insuranceData.email}</p>
+                    <div style="background: #f8f9fa; padding: 25px; border-radius: 10px; margin-bottom: 30px;">
+                        <h3 style="color: #FFB800; font-size: 18px; font-weight: 700; margin: 0 0 15px 0;">👤 고객 정보</h3>
+                        <p style="margin: 8px 0; font-size: 15px; line-height: 1.6; color: #1a1a1a;"><strong>이름:</strong> ${insuranceData.name}</p>
+                        <p style="margin: 8px 0; font-size: 15px; line-height: 1.6; color: #1a1a1a;"><strong>연락처:</strong> ${insuranceData.phone}</p>
+                        <p style="margin: 8px 0; font-size: 15px; line-height: 1.6; color: #1a1a1a;"><strong>이메일:</strong> ${insuranceData.email}</p>
                     </div>
                     
-                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                        <h3 style="color: #FFB800; font-size: 14px; font-weight: 700; margin: 0 0 10px 0;">🚁 드론 정보</h3>
-                        <p style="margin: 4px 0; font-size: 12px;"><strong>드론 종류:</strong> ${droneTypes[insuranceData.drone_type]}</p>
-                        <p style="margin: 4px 0; font-size: 12px;"><strong>드론 대수:</strong> ${insuranceData.drone_count}대</p>
+                    <div style="background: #f8f9fa; padding: 25px; border-radius: 10px; margin-bottom: 30px;">
+                        <h3 style="color: #FFB800; font-size: 18px; font-weight: 700; margin: 0 0 15px 0;">🚁 드론 정보</h3>
+                        <p style="margin: 8px 0; font-size: 15px; line-height: 1.6; color: #1a1a1a;"><strong>드론 종류:</strong> ${droneTypes[insuranceData.drone_type]}</p>
+                        <p style="margin: 8px 0; font-size: 15px; line-height: 1.6; color: #1a1a1a;"><strong>드론 대수:</strong> ${insuranceData.drone_count}대</p>
                         ${dronesHTML}
                     </div>
                     
-                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                        <h3 style="color: #FFB800; font-size: 14px; font-weight: 700; margin: 0 0 10px 0;">💰 보장 내용</h3>
-                        <p style="margin: 4px 0 10px 0; font-size: 12px;"><strong>선택 플랜:</strong> ${insuranceData.plan_name}</p>
-                        <div style="border-left: 3px solid #FFB800; padding-left: 12px; margin: 10px 0;">
-                            <p style="margin: 4px 0; font-size: 12px;"><strong>대인배상:</strong> ${coverage.personal}</p>
-                            <p style="margin: 4px 0; font-size: 12px;"><strong>대물배상:</strong> ${coverage.property}</p>
-                            <p style="margin: 4px 0; font-size: 12px;"><strong>기본보장:</strong> ${coverage.additional}</p>
+                    <div style="background: #f8f9fa; padding: 25px; border-radius: 10px; margin-bottom: 30px;">
+                        <h3 style="color: #FFB800; font-size: 18px; font-weight: 700; margin: 0 0 15px 0;">💰 보장 내용</h3>
+                        <p style="margin: 8px 0 15px 0; font-size: 15px; line-height: 1.6; color: #1a1a1a;"><strong>선택 플랜:</strong> ${insuranceData.plan_name}</p>
+                        <div style="border-left: 4px solid #FFB800; padding-left: 15px; margin: 15px 0; background: #fff;">
+                            <p style="margin: 8px 0; font-size: 15px; line-height: 1.6; color: #1a1a1a;"><strong>대인배상:</strong> ${coverage.personal}</p>
+                            <p style="margin: 8px 0; font-size: 15px; line-height: 1.6; color: #1a1a1a;"><strong>대물배상:</strong> ${coverage.property}</p>
+                            <p style="margin: 8px 0; font-size: 15px; line-height: 1.6; color: #1a1a1a;"><strong>기본보장:</strong> ${coverage.additional}</p>
                         </div>
-                        <p style="margin: 10px 0 4px 0; font-size: 12px;"><strong>자기부담금:</strong> 100,000원</p>
+                        <p style="margin: 15px 0 8px 0; font-size: 15px; line-height: 1.6; color: #1a1a1a;"><strong>자기부담금:</strong> 100,000원</p>
                     </div>
                     
-                    <div style="background: #FFB800; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 15px;">
-                        <p style="margin: 0 0 6px 0; font-size: 13px; font-weight: 600;">연간 보험료</p>
-                        <p style="margin: 0; font-size: 32px; font-weight: 900;">${parseInt(insuranceData.plan_total_price).toLocaleString()}원</p>
-                        <p style="margin: 6px 0 0 0; font-size: 13px;">1대당 ${parseInt(insuranceData.plan_price_per_drone).toLocaleString()}원</p>
+                    <div style="background: linear-gradient(135deg, #FFB800 0%, #FFCD00 100%); padding: 35px 30px; border-radius: 15px; text-align: center; margin-bottom: 30px;">
+                        <p style="margin: 0 0 10px 0; font-size: 16px; font-weight: 600; color: #1a1a1a;">연간 보험료</p>
+                        <p style="margin: 0; font-size: 48px; font-weight: 900; color: #1a1a1a; line-height: 1.1;">${parseInt(insuranceData.plan_total_price).toLocaleString()}원</p>
+                        <p style="margin: 10px 0 0 0; font-size: 16px; font-weight: 500; color: #1a1a1a;">1대당 ${parseInt(insuranceData.plan_price_per_drone).toLocaleString()}원</p>
                     </div>
                     
-                    <div style="background: #fff9e6; padding: 12px; border-radius: 8px; font-size: 11px; margin-bottom: 0;">
-                        <p style="margin: 0 0 4px 0; font-weight: 700;">유의사항</p>
-                        <p style="margin: 3px 0;">※ 구체적인 보장/면책 및 보험금 지급은 약관에 따릅니다.</p>
-                        <p style="margin: 3px 0;">※ 본 견적서는 참고용이며, 최종 보험료는 심사 후 확정됩니다.</p>
+                    <div style="background: #fff9e6; padding: 20px; border-radius: 10px; font-size: 14px; color: #666; line-height: 1.8; margin-bottom: 0;">
+                        <p style="margin: 0 0 8px 0; font-weight: 700; color: #1a1a1a; font-size: 15px;">유의사항</p>
+                        <p style="margin: 5px 0;">※ 구체적인 보장/면책 및 보험금 지급은 약관에 따릅니다.</p>
+                        <p style="margin: 5px 0;">※ 본 견적서는 참고용이며, 최종 보험료는 심사 후 확정됩니다.</p>
                     </div>
                 </div>
                 
-                <div style="background: #1a1a1a; color: #fff; padding: 20px; text-align: center;">
-                    <p style="margin: 0; font-size: 14px; font-weight: 700;">배상온 대리점</p>
-                    <p style="margin: 6px 0; font-size: 12px;">📧 liab.on.ins@gmail.com | 🌐 www.liab.co.kr</p>
-                    <p style="margin: 6px 0 0 0; font-size: 11px; opacity: 0.7;">KB손해보험 공식 대리점</p>
+                <div style="background: #1a1a1a; color: #fff; padding: 35px 30px; text-align: center;">
+                    <p style="margin: 0; font-size: 18px; font-weight: 700; line-height: 1.4;">배상온 대리점</p>
+                    <p style="margin: 10px 0; font-size: 15px; line-height: 1.5;">📧 liab.on.ins@gmail.com | 🌐 www.liab.co.kr</p>
+                    <p style="margin: 10px 0 0 0; font-size: 14px; opacity: 0.7; line-height: 1.4;">KB손해보험 공식 대리점</p>
                 </div>
             `;
 
@@ -491,7 +494,9 @@
                 html2canvas: { 
                     scale: 2,
                     useCORS: true,
-                    letterRendering: true
+                    letterRendering: true,
+                    scrollY: 0,
+                    scrollX: 0
                 },
                 jsPDF: { 
                     unit: 'mm', 

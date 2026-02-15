@@ -326,8 +326,8 @@
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script></script>
     <script>
         let insuranceData = null;
 
@@ -393,12 +393,6 @@
         }
 
         async function downloadPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            const today = new Date();
-            const dateStr = `${today.getFullYear()}.${String(today.getMonth()+1).padStart(2,'0')}.${String(today.getDate()).padStart(2,'0')}`;
-
             const droneTypes = {
                 'camera': '촬영용 센서드론',
                 'fpv': 'FPV/레이싱 드론',
@@ -406,129 +400,112 @@
                 'other': '기타 드론'
             };
 
-            let yPos = 20;
+            const today = new Date();
+            const dateStr = `${today.getFullYear()}. ${String(today.getMonth()+1)}. ${String(today.getDate())}.`;
 
-            // 제목
-            doc.setFontSize(20);
-            doc.setFont(undefined, 'bold');
-            doc.text('KB Personal Drone Insurance', 105, yPos, { align: 'center' });
-            yPos += 10;
-            doc.setFontSize(16);
-            doc.text('Quote Estimate', 105, yPos, { align: 'center' });
-            yPos += 15;
+            // PDF용 HTML 생성
+            const pdfContent = `
+                <div style="font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif; max-width: 700px; margin: 0; padding: 0; background: #fff;">
+                    <!-- 헤더 -->
+                    <div style="background: linear-gradient(135deg, #FFB800 0%, #FFCD00 100%); padding: 40px 30px; text-align: center;">
+                        <h1 style="color: #1a1a1a; margin: 0; font-size: 28px; font-weight: 900;">KB손해보험 개인용 드론보험</h1>
+                        <h2 style="color: #1a1a1a; margin: 10px 0 0 0; font-size: 20px; font-weight: 700;">견적서</h2>
+                    </div>
 
-            // 견적 정보
-            doc.setFontSize(12);
-            doc.setFont(undefined, 'bold');
-            doc.text('Quote Information', 20, yPos);
-            yPos += 7;
-            doc.setFontSize(10);
-            doc.setFont(undefined, 'normal');
-            doc.text(`Quote Date: ${dateStr}`, 20, yPos);
-            yPos += 5;
-            doc.text(`Insurance Period: ${insuranceData.insurance_start || ''} ~ ${insuranceData.insurance_end || ''}`, 20, yPos);
-            yPos += 5;
-            doc.text(`Product: KB Personal Drone Insurance`, 20, yPos);
-            yPos += 10;
+                    <div style="padding: 30px;">
+                        <!-- 견적 정보 -->
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                            <h3 style="color: #FFB800; margin: 0 0 15px 0; font-size: 16px; font-weight: 700;">📋 견적 정보</h3>
+                            <p style="margin: 5px 0; font-size: 14px;"><strong>견적일자:</strong> ${dateStr}</p>
+                            <p style="margin: 5px 0; font-size: 14px;"><strong>보험기간:</strong> ${insuranceData.insurance_start || '미입력'} ~ ${insuranceData.insurance_end || '미입력'}</p>
+                            <p style="margin: 5px 0; font-size: 14px;"><strong>상품명:</strong> KB손해보험 개인용 드론보험</p>
+                        </div>
 
-            // 고객 정보
-            doc.setFontSize(12);
-            doc.setFont(undefined, 'bold');
-            doc.text('Customer Information', 20, yPos);
-            yPos += 7;
-            doc.setFontSize(10);
-            doc.setFont(undefined, 'normal');
-            doc.text(`Name: ${insuranceData.name}`, 20, yPos);
-            yPos += 5;
-            doc.text(`Phone: ${insuranceData.phone}`, 20, yPos);
-            yPos += 5;
-            doc.text(`Email: ${insuranceData.email}`, 20, yPos);
-            yPos += 10;
+                        <!-- 고객 정보 -->
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                            <h3 style="color: #FFB800; margin: 0 0 15px 0; font-size: 16px; font-weight: 700;">👤 고객 정보</h3>
+                            <p style="margin: 5px 0; font-size: 14px;"><strong>이름:</strong> ${insuranceData.name}</p>
+                            <p style="margin: 5px 0; font-size: 14px;"><strong>연락처:</strong> ${insuranceData.phone}</p>
+                            <p style="margin: 5px 0; font-size: 14px;"><strong>이메일:</strong> ${insuranceData.email}</p>
+                        </div>
 
-            // 드론 정보
-            doc.setFontSize(12);
-            doc.setFont(undefined, 'bold');
-            doc.text('Drone Information', 20, yPos);
-            yPos += 7;
-            doc.setFontSize(10);
-            doc.setFont(undefined, 'normal');
-            doc.text(`Drone Type: ${droneTypes[insuranceData.drone_type]}`, 20, yPos);
-            yPos += 5;
-            doc.text(`Drone Count: ${insuranceData.drone_count} unit(s)`, 20, yPos);
-            yPos += 7;
+                        <!-- 드론 정보 -->
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                            <h3 style="color: #FFB800; margin: 0 0 15px 0; font-size: 16px; font-weight: 700;">🚁 드론 정보</h3>
+                            <p style="margin: 5px 0; font-size: 14px;"><strong>드론 종류:</strong> ${droneTypes[insuranceData.drone_type] || '미입력'}</p>
+                            <p style="margin: 5px 0; font-size: 14px;"><strong>드론 대수:</strong> ${insuranceData.drone_count || 1}대</p>
+                            ${insuranceData.drones && insuranceData.drones.length > 0 ? insuranceData.drones.map((drone, i) => `
+                                <div style="border-left: 3px solid #FFB800; padding-left: 15px; margin: 15px 0 15px 10px;">
+                                    <p style="margin: 5px 0; font-size: 14px; font-weight: 700;">드론 ${i + 1}:</p>
+                                    <p style="margin: 5px 0; font-size: 13px;">모델명: ${drone.model || '미입력'}</p>
+                                    <p style="margin: 5px 0; font-size: 13px;">시리얼번호: ${drone.serial || '미입력'}</p>
+                                    <p style="margin: 5px 0; font-size: 13px;">자체중량: ${drone.weight || '미입력'}kg</p>
+                                    <p style="margin: 5px 0; font-size: 13px;">최대이륙중량: ${drone.max_weight || '미입력'}kg</p>
+                                </div>
+                            `).join('') : ''}
+                        </div>
 
-            // 각 드론 상세정보
-            if (insuranceData.drones && insuranceData.drones.length > 0) {
-                for (let i = 0; i < insuranceData.drones.length; i++) {
-                    const drone = insuranceData.drones[i];
-                    
-                    if (yPos > 250) {
-                        doc.addPage();
-                        yPos = 20;
-                    }
-                    
-                    doc.setFont(undefined, 'bold');
-                    doc.text(`Drone ${i + 1}:`, 25, yPos);
-                    yPos += 5;
-                    doc.setFont(undefined, 'normal');
-                    doc.text(`  Model: ${drone.model || 'N/A'}`, 25, yPos);
-                    yPos += 5;
-                    doc.text(`  Serial: ${drone.serial || 'N/A'}`, 25, yPos);
-                    yPos += 5;
-                    doc.text(`  Weight: ${drone.weight || 'N/A'}kg`, 25, yPos);
-                    yPos += 5;
-                    doc.text(`  Max Weight: ${drone.max_weight || 'N/A'}kg`, 25, yPos);
-                    yPos += 7;
+                        <!-- 보장 내용 -->
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                            <h3 style="color: #FFB800; margin: 0 0 15px 0; font-size: 16px; font-weight: 700;">💰 보장 내용</h3>
+                            <p style="margin: 5px 0 15px 0; font-size: 14px;"><strong>선택 플랜:</strong> ${insuranceData.plan_name || '미입력'}</p>
+                            ${getCoverageHTML(insuranceData.plan)}
+                            <p style="margin: 15px 0 5px 0; font-size: 14px;"><strong>자기부담금:</strong> 100,000원</p>
+                        </div>
+
+                        <!-- 보험료 -->
+                        <div style="background: #FFB800; padding: 25px 20px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
+                            <p style="margin: 0 0 10px 0; color: #1a1a1a; font-size: 14px; font-weight: 600;">연간 보험료</p>
+                            <p style="margin: 0; color: #1a1a1a; font-size: 32px; font-weight: 900;">${insuranceData.plan_total_price ? parseInt(insuranceData.plan_total_price).toLocaleString() : '0'}원</p>
+                            <p style="margin: 10px 0 0 0; color: #1a1a1a; font-size: 14px;">1대당 ${insuranceData.plan_price_per_drone ? parseInt(insuranceData.plan_price_per_drone).toLocaleString() : '0'}원</p>
+                        </div>
+
+                        <!-- 유의사항 -->
+                        <div style="background: #fff9e6; padding: 15px; border-radius: 8px; font-size: 13px; color: #666; margin-bottom: 20px;">
+                            <p style="margin: 0 0 5px 0; font-weight: 700;">유의사항</p>
+                            <p style="margin: 5px 0;">※ 구체적인 보장/면책 및 보험금 지급은 약관에 따릅니다.</p>
+                            <p style="margin: 5px 0 0 0;">※ 본 견적서는 참고용이며, 최종 보험료는 심사 후 확정됩니다.</p>
+                        </div>
+                    </div>
+
+                    <!-- 푸터 -->
+                    <div style="background: #1a1a1a; padding: 25px 20px; text-align: center; color: #fff;">
+                        <p style="margin: 0; font-size: 16px; font-weight: 700;">배상온 대리점</p>
+                        <p style="margin: 8px 0; font-size: 13px;">📧 liab.on.ins@gmail.com | 🌐 www.liab.co.kr</p>
+                        <p style="margin: 8px 0 0 0; font-size: 12px; opacity: 0.7;">KB손해보험 공식 대리점</p>
+                    </div>
+                </div>
+            `;
+
+            // PDF 생성 옵션
+            const opt = {
+                margin: 0,
+                filename: `KB_드론보험_견적서_${insuranceData.name}_${today.getFullYear()}${String(today.getMonth()+1).padStart(2,'0')}${String(today.getDate()).padStart(2,'0')}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2,
+                    useCORS: true,
+                    letterRendering: true
+                },
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: 'a4', 
+                    orientation: 'portrait'
                 }
-            }
-            yPos += 3;
+            };
 
-            // 보장 내용
-            doc.setFontSize(12);
-            doc.setFont(undefined, 'bold');
-            doc.text('Coverage', 20, yPos);
-            yPos += 7;
-            doc.setFontSize(10);
-            doc.setFont(undefined, 'normal');
-            doc.text(`Plan: ${insuranceData.plan_name}`, 20, yPos);
-            yPos += 5;
-
-            const coverage = getCoverageInfo(insuranceData.plan);
-            doc.text(`Personal Injury: ${coverage.personal}`, 20, yPos);
-            yPos += 5;
-            doc.text(`Property Damage: ${coverage.property}`, 20, yPos);
-            yPos += 5;
-            doc.text(`Additional Coverage: ${coverage.additional}`, 20, yPos);
-            yPos += 5;
-            doc.text(`Deductible: 100,000 KRW`, 20, yPos);
-            yPos += 10;
-
-            // 보험료
-            doc.setFontSize(14);
-            doc.setFont(undefined, 'bold');
-            doc.text(`Premium per Drone: ${parseInt(insuranceData.plan_price_per_drone).toLocaleString()} KRW/year`, 20, yPos);
-            yPos += 8;
-            doc.setFontSize(16);
-            doc.text(`Total Annual Premium: ${parseInt(insuranceData.plan_total_price).toLocaleString()} KRW`, 20, yPos);
-            yPos += 15;
-
-            // 유의사항
-            doc.setFontSize(9);
-            doc.setFont(undefined, 'normal');
-            doc.text('* Specific coverage/exclusions and insurance payments are subject to the terms and conditions.', 20, yPos);
-            yPos += 5;
-            doc.text('* This quote is for reference only. Final premium will be confirmed after underwriting.', 20, yPos);
-
-            // 하단 정보
-            doc.setFontSize(8);
-            doc.text('Baesangon Agency | KB Insurance Official Agent', 105, 280, { align: 'center' });
-            doc.text('Email: liab.on.ins@gmail.com | Website: www.liab.co.kr', 105, 285, { align: 'center' });
-
-            doc.save(`KB_Drone_Insurance_Quote_${insuranceData.name}_${dateStr}.pdf`);
+            // HTML을 PDF로 변환
+            const element = document.createElement('div');
+            element.innerHTML = pdfContent;
+            document.body.appendChild(element);
+            
+            await html2pdf().set(opt).from(element).save();
+            
+            document.body.removeChild(element);
         }
 
-        function getCoverageInfo(plan) {
-            if (!plan) return { personal: 'N/A', property: 'N/A', additional: 'N/A' };
+        function getCoverageHTML(plan) {
+            if (!plan) return '<p style="margin: 5px 0; font-size: 13px;">플랜 정보 없음</p>';
             
             let coverage = {
                 personal: '',
@@ -537,43 +514,49 @@
             };
 
             if (plan.includes('slim')) {
-                coverage.personal = '50,000,000 KRW';
-                coverage.property = '50,000,000 KRW';
+                coverage.personal = '50,000,000원';
+                coverage.property = '50,000,000원';
             } else if (plan.includes('standard')) {
-                coverage.personal = '100,000,000 KRW';
-                coverage.property = '100,000,000 KRW';
+                coverage.personal = '100,000,000원';
+                coverage.property = '100,000,000원';
             } else if (plan.includes('premium')) {
-                coverage.personal = '500,000,000 KRW';
-                coverage.property = '500,000,000 KRW';
+                coverage.personal = '500,000,000원';
+                coverage.property = '500,000,000원';
             }
 
             if (plan.includes('camera')) {
                 if (plan.includes('slim')) {
-                    coverage.additional = 'Basic Coverage';
+                    coverage.additional = '기본충실';
                 } else if (plan.includes('standard')) {
-                    coverage.additional = 'Anyone Can Fly';
+                    coverage.additional = '누구나운전 포함';
                 } else if (plan.includes('premium')) {
-                    coverage.additional = 'Anyone Can Fly + Rescue Cost';
+                    coverage.additional = '누구나운전 + 구조비용';
                 }
             } else if (plan.includes('fpv')) {
                 if (plan.includes('slim')) {
-                    coverage.additional = 'Competition Coverage';
+                    coverage.additional = '드론경기중 보장';
                 } else if (plan.includes('standard')) {
-                    coverage.additional = 'Competition + Anyone Can Fly';
+                    coverage.additional = '드론경기중 + 누구나운전';
                 } else if (plan.includes('premium')) {
-                    coverage.additional = 'Competition + Anyone Can Fly + Rescue';
+                    coverage.additional = '드론경기중 + 누구나운전 + 구조비용';
                 }
             } else {
                 if (plan.includes('slim')) {
-                    coverage.additional = 'Basic Coverage';
+                    coverage.additional = '기본 보장';
                 } else if (plan.includes('standard')) {
-                    coverage.additional = 'Anyone Can Fly';
+                    coverage.additional = '누구나운전 포함';
                 } else if (plan.includes('premium')) {
-                    coverage.additional = 'Anyone Can Fly + Rescue Cost';
+                    coverage.additional = '누구나운전 + 구조비용';
                 }
             }
 
-            return coverage;
+            return `
+                <div style="border-left: 3px solid #FFB800; padding-left: 15px; margin: 10px 0 10px 10px;">
+                    <p style="margin: 5px 0; font-size: 13px;"><strong>대인배상:</strong> ${coverage.personal}</p>
+                    <p style="margin: 5px 0; font-size: 13px;"><strong>대물배상:</strong> ${coverage.property}</p>
+                    <p style="margin: 5px 0; font-size: 13px;"><strong>기본보장:</strong> ${coverage.additional}</p>
+                </div>
+            `;
         }
 
         async function sendEmail() {

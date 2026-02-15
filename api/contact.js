@@ -35,7 +35,12 @@ module.exports = async (req, res) => {
       plan,
       plan_name,
       plan_price_per_drone,
-      plan_total_price
+      plan_total_price,
+      insurance_start,
+      insurance_end,
+      drones,
+      send_to_customer,
+      request_type
     } = req.body;
 
     // 환경 변수 확인
@@ -191,8 +196,92 @@ module.exports = async (req, res) => {
     // 이메일 전송
     await transporter.sendMail(mailOptions);
 
+    // 고객에게 견적서 전송 (개인용 드론보험 & send_to_customer 플래그가 있을 때)
+    if (send_to_customer && email && insurance_type === '개인용 드론보험') {
+      const droneTypes = {
+        'camera': '촬영용 센서드론',
+        'fpv': 'FPV/레이싱 드론',
+        'toy': '완구형 드론',
+        'other': '기타 드론'
+      };
+
+      // 고객용 견적서 이메일
+      const customerEmailBody = `
+        <div style="font-family: 'Noto Sans KR', sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="background: linear-gradient(135deg, #FFB800 0%, #FFCD00 100%); padding: 30px; text-align: center;">
+            <h1 style="color: #1a1a1a; margin: 0;">KB손해보험 개인용 드론보험</h1>
+            <h2 style="color: #1a1a1a; margin: 10px 0 0 0; font-size: 1.2rem;">견적서</h2>
+          </div>
+
+          <div style="padding: 30px; background: #fff;">
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+              <h3 style="color: #FFB800; margin-top: 0;">📋 견적 정보</h3>
+              <p><strong>견적일자:</strong> ${new Date().toLocaleDateString('ko-KR')}</p>
+              <p><strong>보험기간:</strong> ${insurance_start || '미입력'} ~ ${insurance_end || '미입력'}</p>
+              <p><strong>상품명:</strong> KB손해보험 개인용 드론보험</p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+              <h3 style="color: #FFB800; margin-top: 0;">👤 고객 정보</h3>
+              <p><strong>이름:</strong> ${name}</p>
+              <p><strong>연락처:</strong> ${phone}</p>
+              <p><strong>이메일:</strong> ${email}</p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+              <h3 style="color: #FFB800; margin-top: 0;">🚁 드론 정보</h3>
+              <p><strong>드론 종류:</strong> ${droneTypes[drone_type] || '미입력'}</p>
+              <p><strong>드론 대수:</strong> ${drone_count || 1}대</p>
+              ${drones && drones.length > 0 ? drones.map((drone, i) => `
+                <div style="border-left: 3px solid #FFB800; padding-left: 15px; margin: 15px 0;">
+                  <p style="margin: 5px 0;"><strong>드론 ${i + 1}:</strong></p>
+                  <p style="margin: 5px 0;">모델명: ${drone.model || '미입력'}</p>
+                  <p style="margin: 5px 0;">시리얼번호: ${drone.serial || '미입력'}</p>
+                  <p style="margin: 5px 0;">자체중량: ${drone.weight || '미입력'}kg</p>
+                  <p style="margin: 5px 0;">최대이륙중량: ${drone.max_weight || '미입력'}kg</p>
+                </div>
+              `).join('') : ''}
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+              <h3 style="color: #FFB800; margin-top: 0;">💰 보장 내용</h3>
+              <p><strong>선택 플랜:</strong> ${plan_name || '미입력'}</p>
+              <p><strong>자기부담금:</strong> 10만원</p>
+            </div>
+
+            <div style="background: #FFB800; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
+              <p style="margin: 0 0 10px 0; color: #1a1a1a; font-size: 1rem;">연간 보험료</p>
+              <p style="margin: 0; color: #1a1a1a; font-size: 2rem; font-weight: bold;">${plan_total_price ? parseInt(plan_total_price).toLocaleString() : '0'}원</p>
+              <p style="margin: 10px 0 0 0; color: #1a1a1a; font-size: 0.9rem;">1대당 ${plan_price_per_drone ? parseInt(plan_price_per_drone).toLocaleString() : '0'}원</p>
+            </div>
+
+            <div style="background: #fff9e6; padding: 15px; border-radius: 8px; font-size: 0.9rem; color: #666;">
+              <p style="margin: 0;"><strong>유의사항</strong></p>
+              <p style="margin: 5px 0 0 0;">※ 구체적인 보장/면책 및 보험금 지급은 약관에 따릅니다.</p>
+              <p style="margin: 5px 0 0 0;">※ 본 견적서는 참고용이며, 최종 보험료는 심사 후 확정됩니다.</p>
+            </div>
+          </div>
+
+          <div style="background: #1a1a1a; padding: 20px; text-align: center; color: #fff;">
+            <p style="margin: 0; font-size: 0.9rem;">배상온 대리점</p>
+            <p style="margin: 5px 0; font-size: 0.85rem;">📧 liab.on.ins@gmail.com | 🌐 www.liab.co.kr</p>
+            <p style="margin: 5px 0 0 0; font-size: 0.8rem; opacity: 0.7;">KB손해보험 공식 대리점</p>
+          </div>
+        </div>
+      `;
+
+      const customerMailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: `[배상온 대리점] KB손해보험 개인용 드론보험 견적서 - ${name}님`,
+        html: customerEmailBody
+      };
+
+      await transporter.sendMail(customerMailOptions);
+    }
+
     return res.status(200).json({ 
-      message: '상담 신청이 완료되었습니다.' 
+      message: send_to_customer ? '상담 신청이 완료되었으며, 견적서가 이메일로 전송되었습니다.' : '상담 신청이 완료되었습니다.'
     });
 
   } catch (error) {

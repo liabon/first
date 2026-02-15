@@ -396,88 +396,184 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
-            // 한글 폰트 설정을 위한 우회 방법 (기본 폰트 사용)
             const today = new Date();
             const dateStr = `${today.getFullYear()}.${String(today.getMonth()+1).padStart(2,'0')}.${String(today.getDate()).padStart(2,'0')}`;
-            const timeStr = `${String(today.getHours()).padStart(2,'0')}:${String(today.getMinutes()).padStart(2,'0')}`;
 
-            // 타이틀
-            doc.setFontSize(18);
-            doc.text('Baesangon Agency Quote', 105, 20, { align: 'center' });
-            doc.setFontSize(14);
-            doc.text('KB Personal Drone Insurance', 105, 28, { align: 'center' });
+            const droneTypes = {
+                'camera': '촬영용 센서드론',
+                'fpv': 'FPV/레이싱 드론',
+                'toy': '완구형 드론',
+                'other': '기타 드론'
+            };
 
-            // 기본 정보
+            let yPos = 20;
+
+            // 제목
+            doc.setFontSize(20);
+            doc.setFont(undefined, 'bold');
+            doc.text('KB Personal Drone Insurance', 105, yPos, { align: 'center' });
+            yPos += 10;
+            doc.setFontSize(16);
+            doc.text('Quote Estimate', 105, yPos, { align: 'center' });
+            yPos += 15;
+
+            // 견적 정보
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'bold');
+            doc.text('Quote Information', 20, yPos);
+            yPos += 7;
             doc.setFontSize(10);
-            doc.text(`Quote Date: ${dateStr} ${timeStr}`, 20, 45);
-            doc.text(`Insurance Period: ${insuranceData.insurance_start} ~ ${insuranceData.insurance_end}`, 20, 52);
-            doc.text(`Product: Personal Drone Insurance`, 20, 59);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Quote Date: ${dateStr}`, 20, yPos);
+            yPos += 5;
+            doc.text(`Insurance Period: ${insuranceData.insurance_start || ''} ~ ${insuranceData.insurance_end || ''}`, 20, yPos);
+            yPos += 5;
+            doc.text(`Product: KB Personal Drone Insurance`, 20, yPos);
+            yPos += 10;
 
             // 고객 정보
             doc.setFontSize(12);
             doc.setFont(undefined, 'bold');
-            doc.text('Customer Information', 20, 75);
-            doc.setFont(undefined, 'normal');
+            doc.text('Customer Information', 20, yPos);
+            yPos += 7;
             doc.setFontSize(10);
-            doc.text(`Name: ${insuranceData.name}`, 20, 83);
-            doc.text(`Phone: ${insuranceData.phone}`, 20, 90);
-            doc.text(`Email: ${insuranceData.email}`, 20, 97);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Name: ${insuranceData.name}`, 20, yPos);
+            yPos += 5;
+            doc.text(`Phone: ${insuranceData.phone}`, 20, yPos);
+            yPos += 5;
+            doc.text(`Email: ${insuranceData.email}`, 20, yPos);
+            yPos += 10;
 
             // 드론 정보
             doc.setFontSize(12);
             doc.setFont(undefined, 'bold');
-            doc.text('Drone Information', 20, 113);
-            doc.setFont(undefined, 'normal');
+            doc.text('Drone Information', 20, yPos);
+            yPos += 7;
             doc.setFontSize(10);
-            doc.text(`Drone Count: ${insuranceData.drone_count} unit(s)`, 20, 121);
-            
-            let yPos = 128;
-            for (let i = 0; i < insuranceData.drones.length; i++) {
-                const drone = insuranceData.drones[i];
-                doc.text(`Drone ${i + 1}:`, 20, yPos);
-                doc.text(`  Model: ${drone.model}`, 25, yPos + 7);
-                doc.text(`  Serial: ${drone.serial}`, 25, yPos + 14);
-                doc.text(`  Weight: ${drone.weight}kg / Max: ${drone.max_weight}kg`, 25, yPos + 21);
-                yPos += 35;
-            }
+            doc.setFont(undefined, 'normal');
+            doc.text(`Drone Type: ${droneTypes[insuranceData.drone_type]}`, 20, yPos);
+            yPos += 5;
+            doc.text(`Drone Count: ${insuranceData.drone_count} unit(s)`, 20, yPos);
+            yPos += 7;
 
-            // 보장 내역
+            // 각 드론 상세정보
+            if (insuranceData.drones && insuranceData.drones.length > 0) {
+                for (let i = 0; i < insuranceData.drones.length; i++) {
+                    const drone = insuranceData.drones[i];
+                    
+                    if (yPos > 250) {
+                        doc.addPage();
+                        yPos = 20;
+                    }
+                    
+                    doc.setFont(undefined, 'bold');
+                    doc.text(`Drone ${i + 1}:`, 25, yPos);
+                    yPos += 5;
+                    doc.setFont(undefined, 'normal');
+                    doc.text(`  Model: ${drone.model || 'N/A'}`, 25, yPos);
+                    yPos += 5;
+                    doc.text(`  Serial: ${drone.serial || 'N/A'}`, 25, yPos);
+                    yPos += 5;
+                    doc.text(`  Weight: ${drone.weight || 'N/A'}kg`, 25, yPos);
+                    yPos += 5;
+                    doc.text(`  Max Weight: ${drone.max_weight || 'N/A'}kg`, 25, yPos);
+                    yPos += 7;
+                }
+            }
+            yPos += 3;
+
+            // 보장 내용
             doc.setFontSize(12);
             doc.setFont(undefined, 'bold');
-            doc.text('Coverage', 20, yPos + 10);
-            doc.setFont(undefined, 'normal');
+            doc.text('Coverage', 20, yPos);
+            yPos += 7;
             doc.setFontSize(10);
-            
-            const planInfo = getPlanCoverage(insuranceData.plan);
-            doc.text(`Plan: ${insuranceData.plan_name}`, 20, yPos + 18);
-            doc.text(`Personal Injury: ${planInfo.personal}`, 20, yPos + 25);
-            doc.text(`Property Damage: ${planInfo.property}`, 20, yPos + 32);
-            doc.text(`Deductible: 100,000 KRW`, 20, yPos + 39);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Plan: ${insuranceData.plan_name}`, 20, yPos);
+            yPos += 5;
+
+            const coverage = getCoverageInfo(insuranceData.plan);
+            doc.text(`Personal Injury: ${coverage.personal}`, 20, yPos);
+            yPos += 5;
+            doc.text(`Property Damage: ${coverage.property}`, 20, yPos);
+            yPos += 5;
+            doc.text(`Additional Coverage: ${coverage.additional}`, 20, yPos);
+            yPos += 5;
+            doc.text(`Deductible: 100,000 KRW`, 20, yPos);
+            yPos += 10;
 
             // 보험료
             doc.setFontSize(14);
             doc.setFont(undefined, 'bold');
-            doc.text(`Premium per Drone: ${parseInt(insuranceData.plan_price_per_drone).toLocaleString()} KRW/year`, 20, yPos + 55);
+            doc.text(`Premium per Drone: ${parseInt(insuranceData.plan_price_per_drone).toLocaleString()} KRW/year`, 20, yPos);
+            yPos += 8;
             doc.setFontSize(16);
-            doc.text(`Total Annual Premium: ${parseInt(insuranceData.plan_total_price).toLocaleString()} KRW`, 20, yPos + 65);
+            doc.text(`Total Annual Premium: ${parseInt(insuranceData.plan_total_price).toLocaleString()} KRW`, 20, yPos);
+            yPos += 15;
+
+            // 유의사항
+            doc.setFontSize(9);
+            doc.setFont(undefined, 'normal');
+            doc.text('* Specific coverage/exclusions and insurance payments are subject to the terms and conditions.', 20, yPos);
+            yPos += 5;
+            doc.text('* This quote is for reference only. Final premium will be confirmed after underwriting.', 20, yPos);
 
             // 하단 정보
             doc.setFontSize(8);
-            doc.setFont(undefined, 'normal');
             doc.text('Baesangon Agency | KB Insurance Official Agent', 105, 280, { align: 'center' });
-            doc.text('Email: liab.on.ins@gmail.com', 105, 285, { align: 'center' });
+            doc.text('Email: liab.on.ins@gmail.com | Website: www.liab.co.kr', 105, 285, { align: 'center' });
 
             doc.save(`KB_Drone_Insurance_Quote_${insuranceData.name}_${dateStr}.pdf`);
         }
 
-        function getPlanCoverage(plan) {
+        function getCoverageInfo(plan) {
+            if (!plan) return { personal: 'N/A', property: 'N/A', additional: 'N/A' };
+            
+            let coverage = {
+                personal: '',
+                property: '',
+                additional: ''
+            };
+
             if (plan.includes('slim')) {
-                return { personal: '50,000,000 KRW', property: '50,000,000 KRW' };
+                coverage.personal = '50,000,000 KRW';
+                coverage.property = '50,000,000 KRW';
             } else if (plan.includes('standard')) {
-                return { personal: '100,000,000 KRW', property: '100,000,000 KRW' };
-            } else {
-                return { personal: '500,000,000 KRW', property: '500,000,000 KRW' };
+                coverage.personal = '100,000,000 KRW';
+                coverage.property = '100,000,000 KRW';
+            } else if (plan.includes('premium')) {
+                coverage.personal = '500,000,000 KRW';
+                coverage.property = '500,000,000 KRW';
             }
+
+            if (plan.includes('camera')) {
+                if (plan.includes('slim')) {
+                    coverage.additional = 'Basic Coverage';
+                } else if (plan.includes('standard')) {
+                    coverage.additional = 'Anyone Can Fly';
+                } else if (plan.includes('premium')) {
+                    coverage.additional = 'Anyone Can Fly + Rescue Cost';
+                }
+            } else if (plan.includes('fpv')) {
+                if (plan.includes('slim')) {
+                    coverage.additional = 'Competition Coverage';
+                } else if (plan.includes('standard')) {
+                    coverage.additional = 'Competition + Anyone Can Fly';
+                } else if (plan.includes('premium')) {
+                    coverage.additional = 'Competition + Anyone Can Fly + Rescue';
+                }
+            } else {
+                if (plan.includes('slim')) {
+                    coverage.additional = 'Basic Coverage';
+                } else if (plan.includes('standard')) {
+                    coverage.additional = 'Anyone Can Fly';
+                } else if (plan.includes('premium')) {
+                    coverage.additional = 'Anyone Can Fly + Rescue Cost';
+                }
+            }
+
+            return coverage;
         }
 
         async function sendEmail() {

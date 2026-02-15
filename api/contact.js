@@ -1,5 +1,63 @@
 const nodemailer = require('nodemailer');
 
+// 플랜별 보장내용 반환 함수
+function getCoverageDetails(plan) {
+  if (!plan) return '<p>플랜 정보 없음</p>';
+  
+  let coverage = {
+    personal: '',
+    property: '',
+    additional: ''
+  };
+
+  // 대인/대물 설정
+  if (plan.includes('slim')) {
+    coverage.personal = '50,000,000원';
+    coverage.property = '50,000,000원';
+  } else if (plan.includes('standard')) {
+    coverage.personal = '100,000,000원';
+    coverage.property = '100,000,000원';
+  } else if (plan.includes('premium')) {
+    coverage.personal = '500,000,000원';
+    coverage.property = '500,000,000원';
+  }
+
+  // 추가 보장 설정
+  if (plan.includes('camera')) {
+    if (plan.includes('slim')) {
+      coverage.additional = '기본충실';
+    } else if (plan.includes('standard')) {
+      coverage.additional = '누구나운전 포함';
+    } else if (plan.includes('premium')) {
+      coverage.additional = '누구나운전 + 구조비용';
+    }
+  } else if (plan.includes('fpv')) {
+    if (plan.includes('slim')) {
+      coverage.additional = '드론경기중 보장';
+    } else if (plan.includes('standard')) {
+      coverage.additional = '드론경기중 + 누구나운전';
+    } else if (plan.includes('premium')) {
+      coverage.additional = '드론경기중 + 누구나운전 + 구조비용';
+    }
+  } else {
+    if (plan.includes('slim')) {
+      coverage.additional = '기본 보장';
+    } else if (plan.includes('standard')) {
+      coverage.additional = '누구나운전 포함';
+    } else if (plan.includes('premium')) {
+      coverage.additional = '누구나운전 + 구조비용';
+    }
+  }
+
+  return `
+    <div style="border-left: 3px solid #FFB800; padding-left: 15px; margin: 15px 0;">
+      <p style="margin: 5px 0;"><strong>대인배상:</strong> ${coverage.personal}</p>
+      <p style="margin: 5px 0;"><strong>대물배상:</strong> ${coverage.property}</p>
+      <p style="margin: 5px 0;"><strong>기본보장:</strong> ${coverage.additional}</p>
+    </div>
+  `;
+}
+
 module.exports = async (req, res) => {
   // CORS 설정
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -246,7 +304,8 @@ module.exports = async (req, res) => {
             <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
               <h3 style="color: #FFB800; margin-top: 0;">💰 보장 내용</h3>
               <p><strong>선택 플랜:</strong> ${plan_name || '미입력'}</p>
-              <p><strong>자기부담금:</strong> 10만원</p>
+              ${getCoverageDetails(plan)}
+              <p><strong>자기부담금:</strong> 100,000원</p>
             </div>
 
             <div style="background: #FFB800; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 20px;">

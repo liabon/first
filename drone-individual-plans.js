@@ -121,6 +121,11 @@ window.togglePlanSelectionMode = function() {
         
         generateIndividualDroneSections();
     }
+    
+    // 모드 전환 시 폼 유효성 검사
+    if (typeof checkFormValidity === 'function') {
+        checkFormValidity();
+    }
 };
 
 // 통합 모드에서 선택된 가입물건의 플랜만 표시
@@ -265,12 +270,22 @@ window.updateIndividualDronePlans = function(droneIndex) {
             radio.dispatchEvent(new Event('change'));
         });
     });
+    
+    // 가입물건 선택 시 폼 유효성 검사
+    if (typeof checkFormValidity === 'function') {
+        checkFormValidity();
+    }
 };
 
 // 플랜 카드 선택 상태 업데이트
 window.updatePlanCardSelection = function(droneIndex) {
     console.log(`드론 ${droneIndex + 1} 플랜 선택됨`);
     updateTotalPrice();
+    
+    // 폼 유효성 검사 (버튼 활성화)
+    if (typeof checkFormValidity === 'function') {
+        checkFormValidity();
+    }
 };
 
 // 총 보험료 업데이트

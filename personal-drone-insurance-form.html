@@ -554,15 +554,20 @@
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>보험시작일 *</label>
-                        <input type="date" name="insurance_start" id="insuranceStart" required>
-                        <small>내일부터 선택 가능합니다 (시작시간 00:00)</small>
+                        <label>보험시작일시 *</label>
+                        <input type="datetime-local" name="insurance_start" id="insuranceStart" required>
+                        <small>현재시간 기준 30분 후부터 선택 가능합니다</small>
                     </div>
                     <div class="form-group">
-                        <label>보험종료일 *</label>
-                        <input type="date" name="insurance_end" id="insuranceEnd" required>
-                        <small>자동으로 1년 후로 설정됩니다 (종료시간 00:00)</small>
+                        <label>보험종료일시 *</label>
+                        <input type="datetime-local" name="insurance_end" id="insuranceEnd" required>
+                        <small>자동으로 1년 후 24:00으로 설정됩니다 (수정 가능)</small>
                     </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>가입 기간</label>
+                    <input type="text" id="insuranceDuration" value="" readonly style="background: #f8f9fa; font-weight: 700; color: #FFB800;">
                 </div>
 
                 <div class="form-group">
@@ -572,7 +577,7 @@
 
                 <div class="notice-box">
                     <strong>📌 보험기간 안내</strong>
-                    <p>• 드론보험기간은 1년입니다</p>
+                    <p>• 드론보험기간은 1년을 초과할 수 없습니다</p>
                     <p>• 보험시작일은 내일부터 선택 가능합니다</p>
                     <p>• 시작시간: 00:00 / 종료시간: 00:00 (고정)</p>
                 </div>
@@ -775,29 +780,113 @@
     <script>
         // 보험기간 설정
         function setupInsuranceDates() {
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            
             const startInput = document.getElementById('insuranceStart');
             const endInput = document.getElementById('insuranceEnd');
+            const durationInput = document.getElementById('insuranceDuration');
             
-            // 최소 날짜를 내일로 설정
-            startInput.min = tomorrow.toISOString().split('T')[0];
-            startInput.value = tomorrow.toISOString().split('T')[0];
+            // 현재 시간 + 30분
+            const now = new Date();
+            const startTime = new Date(now.getTime() + 30 * 60000); // 30분 후
             
-            // 종료일을 1년 후로 자동 설정
-            const oneYearLater = new Date(tomorrow);
-            oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
-            endInput.value = oneYearLater.toISOString().split('T')[0];
+            // 시작일시: 현재 + 30분
+            const startMin = startTime.toISOString().slice(0, 16);
+            startInput.min = startMin;
+            startInput.value = startMin;
             
-            // 시작일 변경 시 종료일 자동 업데이트
+            // 종료일시: 시작 + 1년, 시간은 23:59
+            const endTime = new Date(startTime);
+            endTime.setFullYear(endTime.getFullYear() + 1);
+            endTime.setHours(23, 59, 0, 0);
+            endInput.value = endTime.toISOString().slice(0, 16);
+            
+            // 가입 기간 계산 함수
+            function calculateDuration() {
+                const start = new Date(startInput.value);
+                const end = new Date(endInput.value);
+                
+                if (!start || !end || end <= start) {
+                    durationInput.value = '';
+                    return;
+                }
+                
+                const diffTime = end - start;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                const diffMonths = Math.floor(diffDays / 30);
+                const remainDays = diffDays % 30;
+                
+                let durationText = '';
+                if (diffMonths > 0) {
+                    durationText = `${diffMonths}개월 ${remainDays}일`;
+                } else {
+                    durationText = `${diffDays}일`;
+                }
+                durationText += ` (${diffDays}일)`;
+                
+                durationInput.value = durationText;
+            }
+            
+            // 시작일 변경 시
             startInput.addEventListener('change', function() {
                 const startDate = new Date(this.value);
+                
+                // 최소 시간 체크
+                const minTime = new Date(now.getTime() + 30 * 60000);
+                if (startDate < minTime) {
+                    alert('⚠️ 보험 시작일시는 현재 시간 기준 30분 후부터 선택 가능합니다.');
+                    this.value = startMin;
+                    return;
+                }
+                
+                // 종료일 자동 설정 (1년 후 23:59)
                 const endDate = new Date(startDate);
                 endDate.setFullYear(endDate.getFullYear() + 1);
-                endInput.value = endDate.toISOString().split('T')[0];
+                endDate.setHours(23, 59, 0, 0);
+                endInput.value = endDate.toISOString().slice(0, 16);
+                
+                // 종료일 최대값 설정 (시작일 + 1년)
+                endInput.max = endDate.toISOString().slice(0, 16);
+                
+                calculateDuration();
             });
+            
+            // 종료일 변경 시
+            endInput.addEventListener('change', function() {
+                const startDate = new Date(startInput.value);
+                const endDate = new Date(this.value);
+                
+                // 시작일보다 이전 체크
+                if (endDate <= startDate) {
+                    alert('⚠️ 보험 종료일시는 시작일시보다 이후여야 합니다.');
+                    const defaultEnd = new Date(startDate);
+                    defaultEnd.setFullYear(defaultEnd.getFullYear() + 1);
+                    defaultEnd.setHours(23, 59, 0, 0);
+                    this.value = defaultEnd.toISOString().slice(0, 16);
+                    return;
+                }
+                
+                // 1년 초과 체크
+                const oneYearLater = new Date(startDate);
+                oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
+                oneYearLater.setHours(23, 59, 59, 999);
+                
+                if (endDate > oneYearLater) {
+                    alert('⚠️ 보험 기간은 1년을 초과할 수 없습니다.');
+                    oneYearLater.setHours(23, 59, 0, 0);
+                    this.value = oneYearLater.toISOString().slice(0, 16);
+                    return;
+                }
+                
+                calculateDuration();
+            });
+            
+            // 초기 종료일 최대값 설정
+            const maxEndDate = new Date(startTime);
+            maxEndDate.setFullYear(maxEndDate.getFullYear() + 1);
+            maxEndDate.setHours(23, 59, 0, 0);
+            endInput.max = maxEndDate.toISOString().slice(0, 16);
+            
+            // 초기 가입 기간 계산
+            calculateDuration();
         }
 
         // 드론 정보 섹션 생성
@@ -816,8 +905,8 @@
 
                     <div class="form-group">
                         <label>제작번호 (시리얼번호) *</label>
-                        <input type="text" name="drone_serial_${index}" placeholder="드론 기체 하단의 시리얼 번호" required>
-                        <small>시리얼번호를 반드시 확인해주세요</small>
+                        <input type="text" name="drone_serial_${index}" placeholder="시리얼번호 또는 '없음'" required>
+                        <small>시리얼번호가 없는 경우 '없음'으로 기재해주시기 바랍니다</small>
                     </div>
 
                     <div class="form-row">

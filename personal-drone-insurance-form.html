@@ -925,14 +925,37 @@
         function checkFormValidity() {
             const form = document.getElementById('droneForm');
             const submitBtn = document.getElementById('submitBtn');
-            const droneTypeSelected = document.querySelector('input[name="drone_type"]:checked');
-            const planSelected = document.querySelector('input[name="plan"]:checked');
+            const mode = document.querySelector('input[name="plan_selection_type"]:checked')?.value || 'unified';
+            const droneCount = parseInt(document.getElementById('droneCount').value) || 1;
             
-            if (form.checkValidity() && droneTypeSelected && planSelected) {
-                submitBtn.disabled = false;
-            } else {
+            // 기본 폼 유효성 확인
+            if (!form.checkValidity()) {
                 submitBtn.disabled = true;
+                return;
             }
+            
+            let allValid = false;
+            
+            if (mode === 'unified') {
+                // 통합 모드: 가입물건 1개 + 플랜 1개
+                const droneTypeSelected = document.querySelector('input[name="drone_type"]:checked');
+                const planSelected = document.querySelector('input[name="plan"]:checked');
+                allValid = droneTypeSelected && planSelected;
+            } else {
+                // 개별 모드: 각 드론마다 가입물건 + 플랜 확인
+                allValid = true;
+                for (let i = 0; i < droneCount; i++) {
+                    const droneTypeSelected = document.querySelector(`input[name="drone_type_${i}"]:checked`);
+                    const planSelected = document.querySelector(`input[name="plan_drone_${i}"]:checked`);
+                    
+                    if (!droneTypeSelected || !planSelected) {
+                        allValid = false;
+                        break;
+                    }
+                }
+            }
+            
+            submitBtn.disabled = !allValid;
         }
 
         // 모든 입력 필드 감지

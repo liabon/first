@@ -547,7 +547,7 @@
                 <img src="kb-logo.png" alt="KB손해보험" class="logo-img">
                 <span class="logo-text">배상온 대리점</span>
             </div>
-            <a href="/personal-drone-insurance" class="home-btn">🏠 홈으로</a>
+            <a href="/" class="home-btn">🏠 홈으로</a>
         </div>
     </header>
 
@@ -823,29 +823,6 @@
 
             errorBox.classList.remove('show');
 
-            // 1번 질문에서 "아니오" 선택 시 개인용 페이지로 즉시 이동
-            if (q1 && q1.value === 'no') {
-                setTimeout(() => {
-                    if (confirm('개인용 드론보험으로 안내합니다.\n개인용 페이지로 이동하시겠습니까?')) {
-                        window.location.href = 'https://www.liab.co.kr/personal-drone-insurance';
-                    } else {
-                        // 취소하면 선택 해제
-                        document.querySelector('input[name="q1"][value="no"]').checked = false;
-                    }
-                }, 100);
-                return;
-            }
-
-            // 2~5번 질문에서 "예" 선택 시 견적 의뢰 팝업 표시
-            if ((q2 && q2.value === 'yes') || 
-                (q3 && q3.value === 'yes') || 
-                (q4 && q4.value === 'yes') || 
-                (q5 && q5.value === 'yes')) {
-                openQuoteModal();
-                btnNext.disabled = true;
-                return;
-            }
-
             // 모든 질문에 답변했는지 확인
             if (q1 && q2 && q3 && q4 && q5) {
                 // 정답: 1번=예, 2,3,4,5번=아니오
@@ -866,7 +843,29 @@
         }
 
         radios.forEach(radio => {
-            radio.addEventListener('change', checkAnswers);
+            radio.addEventListener('change', function() {
+                const name = this.name;
+                const value = this.value;
+
+                // 1번에서 "아니오" 선택 시
+                if (name === 'q1' && value === 'no') {
+                    if (confirm('개인용 드론보험으로 안내합니다.\n개인용 페이지로 이동하시겠습니까?')) {
+                        window.location.href = 'https://www.liab.co.kr/personal-drone-insurance';
+                    } else {
+                        this.checked = false;
+                    }
+                    return;
+                }
+
+                // 2~5번에서 "예" 선택 시
+                if ((name === 'q2' || name === 'q3' || name === 'q4' || name === 'q5') && value === 'yes') {
+                    openQuoteModal();
+                    return;
+                }
+
+                // 일반 체크
+                checkAnswers();
+            });
         });
 
         btnNext.addEventListener('click', function() {

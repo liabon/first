@@ -947,9 +947,10 @@
             
             // 유효성 검사
             const form = this;
-            const formData = new FormData(form);
+            const droneCount = parseInt(document.getElementById('droneCount').value);
+            const mode = document.querySelector('input[name="plan_selection_type"]:checked')?.value || 'unified';
             
-            // 필수 필드 확인
+            // 1단계: 기본 정보 확인
             const requiredFields = [
                 { name: 'name', label: '이름', element: form.querySelector('[name="name"]') },
                 { name: 'birth_date', label: '생년월일', element: form.querySelector('[name="birth_date"]') },
@@ -959,7 +960,6 @@
             ];
             
             // 드론 정보 필드 확인
-            const droneCount = parseInt(document.getElementById('droneCount').value);
             for (let i = 0; i < droneCount; i++) {
                 requiredFields.push(
                     { name: `drone_model_${i}`, label: `드론 ${i+1} 모델명`, element: form.querySelector(`[name="drone_model_${i}"]`) },
@@ -984,22 +984,6 @@
                 }
             }
             
-            // 드론 종류 확인
-            const droneTypeSelected = document.querySelector('input[name="drone_type"]:checked');
-            if (!droneTypeSelected) {
-                alert('⚠️ 가입물건(드론 종류)을 선택해주세요.');
-                document.querySelector('.drone-type-grid').scrollIntoView({ behavior: 'smooth', block: 'center' });
-                return;
-            }
-            
-            // 플랜 선택 확인
-            const planSelected = document.querySelector('input[name="plan"]:checked');
-            if (!planSelected) {
-                alert('⚠️ 보험 플랜을 선택해주세요.');
-                document.querySelector('#cameraDronePlans, #fpvDronePlans, #otherDronePlans').scrollIntoView({ behavior: 'smooth', block: 'center' });
-                return;
-            }
-            
             // 미입력 필드가 있으면 알림 및 이동
             if (firstEmptyField) {
                 alert(`⚠️ ${firstEmptyField.label}을(를) 입력해주세요.`);
@@ -1008,10 +992,81 @@
                 return;
             }
             
-            // 드론별 플랜 데이터 수집 (새로운 함수 사용)
-            const data = collectFormDataWithIndividualPlans();
-            if (!data) return;
+            // 2단계: 가입물건 & 플랜 선택 확인
+            if (mode === 'unified') {
+                // 통합 모드: 가입물건 1개 + 플랜 1개
+                const droneTypeSelected = document.querySelector('input[name="drone_type"]:checked');
+                if (!droneTypeSelected) {
+                    alert('⚠️ 가입물건(드론 종류)을 선택해주세요.');
+                    const droneTypeGrid = document.querySelector('.drone-type-grid');
+                    if (droneTypeGrid) {
+                        droneTypeGrid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    return;
+                }
+                
+                const planSelected = document.querySelector('input[name="plan"]:checked');
+                if (!planSelected) {
+                    alert('⚠️ 보험 플랜을 선택해주세요.');
+                    const planSection = document.querySelector('#unifiedPlanContainer');
+                    if (planSection) {
+                        planSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    return;
+                }
+            } else {
+                // 개별 모드: 각 드론마다 가입물건 + 플랜 확인
+                for (let i = 0; i < droneCount; i++) {
+                    const droneTypeSelected = document.querySelector(`input[name="drone_type_${i}"]:checked`);
+                    if (!droneTypeSelected) {
+                        alert(`⚠️ 드론 ${i + 1}의 가입물건(드론 종류)을 선택해주세요.`);
+                        const droneSection = document.querySelector(`.individual-drone-section:nth-child(${i + 1})`);
+                        if (droneSection) {
+                            droneSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            // 가입물건 선택 영역 강조
+                            const droneTypeOptions = droneSection.querySelectorAll('.drone-type-option');
+                            droneTypeOptions.forEach(opt => {
+                                opt.style.border = '3px solid #e74c3c';
+                            });
+                            setTimeout(() => {
+                                droneTypeOptions.forEach(opt => {
+                                    opt.style.border = '2px solid #e0e0e0';
+                                });
+                            }, 3000);
+                        }
+                        return;
+                    }
+                    
+                    const planSelected = document.querySelector(`input[name="plan_drone_${i}"]:checked`);
+                    if (!planSelected) {
+                        alert(`⚠️ 드론 ${i + 1}의 보험 플랜을 선택해주세요.`);
+                        const planGrid = document.getElementById(`drone_${i}_plan_grid`);
+                        if (planGrid) {
+                            planGrid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            // 플랜 카드 강조
+                            const planCards = planGrid.querySelectorAll('.individual-plan-card');
+                            planCards.forEach(card => {
+                                card.style.border = '3px solid #e74c3c';
+                            });
+                            setTimeout(() => {
+                                planCards.forEach(card => {
+                                    card.style.border = '2px solid #e0e0e0';
+                                });
+                            }, 3000);
+                        }
+                        return;
+                    }
+                }
+            }
             
+            // 3단계: 모든 검증 통과 - 데이터 수집
+            const data = collectFormDataWithIndividualPlans();
+            if (!data) {
+                alert('⚠️ 데이터 수집 중 오류가 발생했습니다. 모든 항목을 확인해주세요.');
+                return;
+            }
+            
+            // 4단계: 다음 페이지로 이동
             sessionStorage.setItem('droneInsuranceData', JSON.stringify(data));
             window.location.href = '/personal-drone-insurance-terms';
         });

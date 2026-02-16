@@ -64,6 +64,25 @@
             color: var(--kb-dark);
         }
 
+        .home-btn {
+            padding: 0.7rem 1.3rem;
+            background: var(--kb-gold);
+            color: var(--kb-dark);
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.95rem;
+        }
+
+        .home-btn:hover {
+            background: var(--kb-yellow);
+            transform: translateY(-2px);
+        }
+
         .main-content {
             flex: 1;
             display: flex;
@@ -275,6 +294,7 @@
                 <div class="divider"></div>
                 <div class="agency-name">배상온 대리점</div>
             </div>
+            <a href="/personal-drone-insurance" class="home-btn">🏠 홈으로</a>
         </div>
     </header>
 

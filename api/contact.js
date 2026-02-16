@@ -265,16 +265,17 @@ module.exports = async (req, res) => {
       `;
     }
 
-    // 관리자에게 보낼 이메일 설정
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: process.env.ADMIN_EMAIL,
-      subject: emailSubject,
-      html: emailBody
-    };
-
-    // 이메일 전송
-    await transporter.sendMail(mailOptions);
+    // 관리자에게 이메일 전송 (개인용 드론보험의 고객 견적서 전송 제외)
+    if (!(send_to_customer && insurance_type === '개인용 드론보험')) {
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: process.env.ADMIN_EMAIL,
+        subject: emailSubject,
+        html: emailBody
+      };
+      
+      await transporter.sendMail(mailOptions);
+    }
 
     // 고객에게 견적서 전송 (개인용 드론보험 & send_to_customer 플래그가 있을 때)
     if (send_to_customer && email && insurance_type === '개인용 드론보험') {
@@ -289,7 +290,7 @@ module.exports = async (req, res) => {
       const customerEmailBody = `
         <div style="font-family: 'Noto Sans KR', sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background: linear-gradient(135deg, #FFB800 0%, #FFCD00 100%); padding: 30px; text-align: center;">
-            <h1 style="color: #1a1a1a; margin: 0;">KB손해보험 개인용 드론보험</h1>
+            <h1 style="color: #1a1a1a; margin: 0;">배상온 개인용 드론보험</h1>
             <h2 style="color: #1a1a1a; margin: 10px 0 0 0; font-size: 1.2rem;">견적서</h2>
           </div>
 

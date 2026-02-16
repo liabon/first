@@ -169,6 +169,11 @@
             font-size: 0.95rem;
         }
 
+        .radio-label.recommended {
+            border: 1px solid #FFB800;
+            background: #fffbf0;
+        }
+
         .radio-label input {
             display: none;
         }
@@ -328,6 +333,211 @@
             }
         }
     </style>
+
+    <style>
+        /* 견적 의뢰 팝업 모달 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #fff;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            margin: 2rem auto;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #FFB800 0%, #FFCD00 100%);
+            padding: 1.5rem;
+            border-radius: 15px 15px 0 0;
+            position: relative;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #1a1a1a;
+            line-height: 1;
+            padding: 0.5rem;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .alert-box {
+            background: #fff9e6;
+            border-left: 4px solid #FFB800;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+        }
+
+        .alert-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .alert-text {
+            color: #666;
+            line-height: 1.6;
+            margin: 0.5rem 0;
+        }
+
+        .contact-info {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .contact-info strong {
+            color: #FFB800;
+        }
+
+        .form-section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 1.5rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #FFB800;
+        }
+
+        .modal-form-group {
+            margin-bottom: 1rem;
+        }
+
+        .modal-form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .modal-form-group input,
+        .modal-form-group select,
+        .modal-form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .modal-form-group input:focus,
+        .modal-form-group select:focus,
+        .modal-form-group textarea:focus {
+            border-color: #FFB800;
+            outline: none;
+        }
+
+        .modal-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .drone-count-input {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .drone-count-input input {
+            flex: 1;
+        }
+
+        .privacy-agreement {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #e0e0e0;
+        }
+
+        .privacy-agreement p {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .agreement-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .agreement-checkbox input {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-submit-quote {
+            width: 100%;
+            padding: 1rem;
+            background: #FFB800;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit-quote:hover {
+            background: #FFCD00;
+            transform: translateY(-2px);
+        }
+
+        .btn-submit-quote:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .modal-form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -356,10 +566,20 @@
         <!-- Question 1 -->
         <div class="check-card">
             <p class="check-question">
-                당 상품은 비의무가입자인 취미, 레저로 드론을 사용하는 개인(또는 개인사업자)를 대상으로 합니다. 위 내용을 확인하셨습니까?
+                <strong>1. 아래 의무가입 대상만 가입이 가능함을 확인하셨습니까?</strong>
             </p>
+            <div class="mandatory-info" style="background: #fff9e6; padding: 1rem; border-radius: 8px; margin: 1rem 0; border-left: 4px solid #FFB800;">
+                <p style="margin: 0.5rem 0; font-weight: 600;">• 국가, 지방자치단체, 공공기관</p>
+                <p style="margin: 0.5rem 0; font-weight: 600;">• 초경량비행장치(드론)을 사용한 영리사업</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem; color: #666;">
+                    <strong>영리사업이란?</strong><br>
+                    항공사업법 제2조에 따른 초경량비행장치사용사업에 사용되는 경우<br>
+                    (타인의 요청에 따라 유상으로 방제, 사진촬영, 측량, 탐사, 조종교육 등에 해당되는 업무)를 말합니다.<br>
+                    <span style="color: #e74c3c;">유상운송, 대여업, 레저스포츠 등은 가입이 제한됩니다.</span>
+                </p>
+            </div>
             <div class="radio-options">
-                <label class="radio-label">
+                <label class="radio-label recommended">
                     <input type="radio" name="q1" value="yes">
                     <span>예</span>
                 </label>
@@ -373,15 +593,66 @@
         <!-- Question 2 -->
         <div class="check-card">
             <p class="check-question">
-                당 상품은 드론플레이 회원만 가입이 가능합니다. 회원이 맞으십니까?
+                <strong>2. 수상용 드론입니까?</strong>
             </p>
             <div class="radio-options">
                 <label class="radio-label">
                     <input type="radio" name="q2" value="yes">
                     <span>예</span>
                 </label>
-                <label class="radio-label">
+                <label class="radio-label recommended">
                     <input type="radio" name="q2" value="no">
+                    <span>아니오</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="check-card">
+            <p class="check-question">
+                <strong>3. 최근 3년간 귀사가 부담한 손해배상액(합의금포함)이 있습니까?</strong>
+            </p>
+            <div class="radio-options">
+                <label class="radio-label">
+                    <input type="radio" name="q3" value="yes">
+                    <span>예</span>
+                </label>
+                <label class="radio-label recommended">
+                    <input type="radio" name="q3" value="no">
+                    <span>아니오</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="check-card">
+            <p class="check-question">
+                <strong>4. 드론조종 자격자가 10명 이상인가요?</strong>
+            </p>
+            <div class="radio-options">
+                <label class="radio-label">
+                    <input type="radio" name="q4" value="yes">
+                    <span>예</span>
+                </label>
+                <label class="radio-label recommended">
+                    <input type="radio" name="q4" value="no">
+                    <span>아니오</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="check-card">
+            <p class="check-question">
+                <strong>5. 드론운항사업을 시작한 기간이 11년 이상인가요?</strong>
+            </p>
+            <div class="radio-options">
+                <label class="radio-label">
+                    <input type="radio" name="q5" value="yes">
+                    <span>예</span>
+                </label>
+                <label class="radio-label recommended">
+                    <input type="radio" name="q5" value="no">
                     <span>아니오</span>
                 </label>
             </div>
@@ -419,19 +690,178 @@
         </div>
     </footer>
 
+    <!-- 견적 의뢰 팝업 모달 -->
+    <div class="modal-overlay" id="quoteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">견적 의뢰</h2>
+                <button class="modal-close" onclick="closeQuoteModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert-box">
+                    <div class="alert-title">알림</div>
+                    <p class="alert-text">고객님 죄송합니다.</p>
+                    <p class="alert-text">군집드론 및 해당 자격으로는 온라인으로 가입이 불가하며, 별도의 심사를 통해 견적을 산출해야합니다.</p>
+                    <p class="alert-text">가입을 희망하시는 경우, 아래 견적 신청을 작성하여 보내주시기 바랍니다.</p>
+                </div>
+
+                <div class="contact-info">
+                    <h3 style="margin: 0 0 0.5rem 0; font-size: 1rem;">상담문의</h3>
+                    <p style="margin: 0;"><strong>이메일:</strong> liab.on.ins@gmail.com</p>
+                </div>
+
+                <div class="form-section-title">온라인 견적신청</div>
+
+                <form id="quoteForm">
+                    <div class="modal-form-group">
+                        <label>가입대상자 *</label>
+                        <select name="customer_type" required>
+                            <option value="">선택하세요</option>
+                            <option value="corporation">법인사업자</option>
+                            <option value="individual">개인사업자</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label>회사명</label>
+                        <input type="text" name="company_name" placeholder="회사/단체명을 입력해주세요">
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label>드론중량 25kg 미만</label>
+                        <div class="drone-count-input">
+                            <input type="number" name="drone_under_25kg" min="0" placeholder="대수를 입력해주세요">
+                            <span>대</span>
+                        </div>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label>드론중량 25kg ~ 100kg 미만</label>
+                        <div class="drone-count-input">
+                            <input type="number" name="drone_25_100kg" min="0" placeholder="대수를 입력해주세요">
+                            <span>대</span>
+                        </div>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label>드론중량 100kg 이상</label>
+                        <div class="drone-count-input">
+                            <input type="number" name="drone_over_100kg" min="0" placeholder="대수를 입력해주세요">
+                            <span>대</span>
+                        </div>
+                    </div>
+
+                    <div class="modal-form-row">
+                        <div class="modal-form-group">
+                            <label>담당자명 *</label>
+                            <input type="text" name="manager_name" required>
+                        </div>
+                        <div class="modal-form-group">
+                            <label>담당자연락처 *</label>
+                            <input type="tel" name="manager_phone" placeholder="010-0000-0000" required>
+                        </div>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label>담당자이메일 *</label>
+                        <input type="email" name="manager_email" required>
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label>보험상품</label>
+                        <input type="text" value="드론배상책임보험" readonly style="background: #f8f9fa;">
+                    </div>
+
+                    <div class="modal-form-group">
+                        <label>문의사항</label>
+                        <textarea name="inquiry" rows="4" placeholder="문의하실 내용을 입력해주세요"></textarea>
+                    </div>
+
+                    <div class="privacy-agreement">
+                        <p><strong>개인정보 수집 및 이용에 대한 안내</strong></p>
+                        <p>1. 바이인 및 배상온은 "정보통신망 이용촉진 및 정보보호"에 관한 법률을 준수하고 있습니다.</p>
+                        <p>2. 수집회사 : 바이인, 배상온</p>
+                        <p>3. 수집목적 : 보험상품 문의에 따른 안내</p>
+                        <p>4. 수집항목 : 회사명, 성명, 연락처, 이메일, 접속ip</p>
+                        <p>5. 보존기간 : 5년</p>
+                        <p>6. 보존근거 : 전자상거래 등에서의 소비자보호에 관한법률/신용정보의 이용 및 보호에 관한 법률</p>
+                        <p>7. 개인정보 수집 및 이용에 대한 미동의 시 온라인, 오프라인 보험상담이 제한됩니다.</p>
+                    </div>
+
+                    <div class="agreement-checkbox">
+                        <input type="checkbox" id="privacyAgree" required>
+                        <label for="privacyAgree">"위의 개인정보 수집 및 이용"에 동의합니다</label>
+                    </div>
+
+                    <button type="submit" class="btn-submit-quote">가입의뢰하기</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         const radios = document.querySelectorAll('input[type="radio"]');
         const btnNext = document.getElementById('btnNext');
         const errorBox = document.getElementById('errorBox');
+        const quoteModal = document.getElementById('quoteModal');
+
+        // 견적 의뢰 팝업 열기
+        function openQuoteModal() {
+            quoteModal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 견적 의뢰 팝업 닫기
+        window.closeQuoteModal = function() {
+            quoteModal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        // 팝업 배경 클릭 시 닫기
+        quoteModal.addEventListener('click', function(e) {
+            if (e.target === quoteModal) {
+                closeQuoteModal();
+            }
+        });
 
         function checkAnswers() {
             const q1 = document.querySelector('input[name="q1"]:checked');
             const q2 = document.querySelector('input[name="q2"]:checked');
+            const q3 = document.querySelector('input[name="q3"]:checked');
+            const q4 = document.querySelector('input[name="q4"]:checked');
+            const q5 = document.querySelector('input[name="q5"]:checked');
 
             errorBox.classList.remove('show');
 
-            if (q1 && q2) {
-                if (q1.value === 'yes' && q2.value === 'yes') {
+            // 1번 질문에서 "아니오" 선택 시 개인용 페이지로 이동
+            if (q1 && q1.value === 'no') {
+                alert('개인용 드론보험으로 안내합니다.');
+                window.location.href = '/personal-drone-insurance';
+                return;
+            }
+
+            // 2~5번 질문에서 "예" 선택 시 견적 의뢰 팝업 표시
+            if ((q2 && q2.value === 'yes') || 
+                (q3 && q3.value === 'yes') || 
+                (q4 && q4.value === 'yes') || 
+                (q5 && q5.value === 'yes')) {
+                openQuoteModal();
+                // 해당 질문의 선택을 취소하여 다시 선택할 수 있게 함
+                if (q2 && q2.value === 'yes') document.querySelector('input[name="q2"]:checked').checked = false;
+                if (q3 && q3.value === 'yes') document.querySelector('input[name="q3"]:checked').checked = false;
+                if (q4 && q4.value === 'yes') document.querySelector('input[name="q4"]:checked').checked = false;
+                if (q5 && q5.value === 'yes') document.querySelector('input[name="q5"]:checked').checked = false;
+                return;
+            }
+
+            // 모든 질문에 답변했는지 확인
+            if (q1 && q2 && q3 && q4 && q5) {
+                // 정답: 1번=예, 2,3,4,5번=아니오
+                if (q1.value === 'yes' && 
+                    q2.value === 'no' && 
+                    q3.value === 'no' && 
+                    q4.value === 'no' && 
+                    q5.value === 'no') {
                     btnNext.disabled = false;
                 } else {
                     btnNext.disabled = true;
@@ -443,4 +873,53 @@
         }
 
         radios.forEach(radio => {
-  
+            radio.addEventListener('change', checkAnswers);
+        });
+
+        btnNext.addEventListener('click', function() {
+            window.location.href = '/business-drone-insurance-form';
+        });
+
+        // 견적 의뢰 폼 제출
+        document.getElementById('quoteForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = {
+                customer_type: formData.get('customer_type'),
+                company_name: formData.get('company_name'),
+                drone_under_25kg: formData.get('drone_under_25kg'),
+                drone_25_100kg: formData.get('drone_25_100kg'),
+                drone_over_100kg: formData.get('drone_over_100kg'),
+                manager_name: formData.get('manager_name'),
+                manager_phone: formData.get('manager_phone'),
+                manager_email: formData.get('manager_email'),
+                inquiry: formData.get('inquiry'),
+                insurance_type: '업무용 드론보험 (견적 의뢰)',
+                request_type: 'business_quote'
+            };
+
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert('견적 의뢰가 성공적으로 전송되었습니다.\n담당자가 확인 후 연락드리겠습니다.');
+                    closeQuoteModal();
+                    this.reset();
+                } else {
+                    alert('전송 중 오류가 발생했습니다. 다시 시도해주세요.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('전송 중 오류가 발생했습니다. 이메일(liab.on.ins@gmail.com)로 직접 문의해주세요.');
+            }
+        });
+    </script>
+</body>
+</html>

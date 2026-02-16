@@ -250,6 +250,62 @@ module.exports = async (req, res) => {
         <hr style="margin: 30px 0; border: none; border-top: 2px solid #e0e0e0;">
         <p style="color: #999; font-size: 14px;">배상온 대리점 웹사이트에서 전송됨</p>
       `;
+    } else if (request_type === 'business_quote') {
+      // 업무용 드론보험 견적 의뢰
+      const manager_name = req.body.manager_name || name;
+      const manager_phone = req.body.manager_phone || phone;
+      const manager_email = req.body.manager_email || email;
+      const customer_type = req.body.customer_type;
+      const company_name = req.body.company_name;
+      const drone_under_25kg = req.body.drone_under_25kg || 0;
+      const drone_25_100kg = req.body.drone_25_100kg || 0;
+      const drone_over_100kg = req.body.drone_over_100kg || 0;
+      const inquiry = req.body.inquiry;
+
+      emailSubject = `[드론배상 문의] ${manager_name}님의 상담 신청`;
+      emailBody = `
+        <h2>🚁 업무용 드론보험 견적 의뢰</h2>
+        
+        <div style="background: #fff9e6; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #FFB800;">
+          <p style="margin: 0; font-weight: 600;">군집드론 또는 특수 자격으로 인한 별도 심사 건입니다.</p>
+        </div>
+
+        <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0;">
+          <h3 style="color: #1e3c72; margin-top: 0;">사업자 정보</h3>
+          <p><strong>가입대상자:</strong> ${customer_type === 'corporation' ? '법인사업자' : customer_type === 'individual' ? '개인사업자' : '미입력'}</p>
+          <p><strong>회사명:</strong> ${company_name || '미입력'}</p>
+        </div>
+
+        <div style="background: #e3f2fd; padding: 20px; border-radius: 10px; margin: 20px 0;">
+          <h3 style="color: #1e3c72; margin-top: 0;">드론 정보</h3>
+          <p><strong>드론중량 25kg 미만:</strong> ${drone_under_25kg}대</p>
+          <p><strong>드론중량 25kg~100kg 미만:</strong> ${drone_25_100kg}대</p>
+          <p><strong>드론중량 100kg 이상:</strong> ${drone_over_100kg}대</p>
+          <p><strong>총 드론 대수:</strong> ${parseInt(drone_under_25kg) + parseInt(drone_25_100kg) + parseInt(drone_over_100kg)}대</p>
+        </div>
+
+        <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0;">
+          <h3 style="color: #1e3c72; margin-top: 0;">담당자 정보</h3>
+          <p><strong>담당자명:</strong> ${manager_name}</p>
+          <p><strong>담당자 연락처:</strong> ${manager_phone}</p>
+          <p><strong>담당자 이메일:</strong> ${manager_email}</p>
+        </div>
+
+        <div style="background: #fff9e6; padding: 20px; border-radius: 10px; margin: 20px 0;">
+          <h3 style="color: #FFB800; margin-top: 0;">보험상품</h3>
+          <p><strong>상품명:</strong> 드론배상책임보험</p>
+        </div>
+
+        ${inquiry ? `
+        <div style="background: #f0f0f0; padding: 20px; border-radius: 10px; margin: 20px 0;">
+          <h3 style="color: #1e3c72; margin-top: 0;">문의사항</h3>
+          <p>${inquiry}</p>
+        </div>
+        ` : ''}
+
+        <hr style="margin: 30px 0; border: none; border-top: 2px solid #e0e0e0;">
+        <p style="color: #999; font-size: 14px;">배상온 대리점 웹사이트에서 전송됨</p>
+      `;
     } else {
       // 일반 문의 (행사보험, 드론보험 등)
       emailSubject = `[KB손해보험 문의] ${name}님의 상담 신청`;

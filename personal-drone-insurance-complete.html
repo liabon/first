@@ -405,15 +405,26 @@
             // 드론 정보 HTML 생성
             let dronesHTML = '';
             if (insuranceData.drones && insuranceData.drones.length > 0) {
-                dronesHTML = insuranceData.drones.map((drone, i) => `
-                    <div style="border-left: 3px solid #FFB800; padding-left: 8px; margin: 6px 0;">
+                dronesHTML = insuranceData.drones.map((drone, i) => {
+                    const dronePlan = insuranceData.drone_plans && insuranceData.drone_plans[i] 
+                        ? insuranceData.drone_plans[i] 
+                        : null;
+                    
+                    return `
+                    <div style="border-left: 3px solid #FFB800; padding-left: 8px; margin: 6px 0; background: #fff; padding: 10px; border-radius: 6px;">
                         <p style="margin: 3px 0; font-size: 10px; font-weight: 700; color: #1a1a1a;">드론 ${i + 1}:</p>
                         <p style="margin: 2px 0; font-size: 9px; color: #333;">모델명: ${drone.model || '미입력'}</p>
                         <p style="margin: 2px 0; font-size: 9px; color: #333;">시리얼번호: ${drone.serial || '미입력'}</p>
                         <p style="margin: 2px 0; font-size: 9px; color: #333;">자체중량: ${drone.weight || '미입력'}kg</p>
                         <p style="margin: 2px 0; font-size: 9px; color: #333;">최대이륙중량: ${drone.max_weight || '미입력'}kg</p>
+                        ${dronePlan ? `
+                        <div style="margin-top: 6px; padding-top: 6px; border-top: 1px solid #e0e0e0;">
+                            <p style="margin: 2px 0; font-size: 9px; color: #FFB800; font-weight: 700;">플랜: ${dronePlan.plan_name}</p>
+                            <p style="margin: 2px 0; font-size: 9px; color: #333;">보험료: ${parseInt(dronePlan.price).toLocaleString()}원/년</p>
+                        </div>
+                        ` : ''}
                     </div>
-                `).join('');
+                `}).join('');
             }
 
             // 보장내용 가져오기

@@ -823,10 +823,16 @@
 
             errorBox.classList.remove('show');
 
-            // 1번 질문에서 "아니오" 선택 시 개인용 페이지로 이동
+            // 1번 질문에서 "아니오" 선택 시 개인용 페이지로 즉시 이동
             if (q1 && q1.value === 'no') {
-                alert('개인용 드론보험으로 안내합니다.');
-                window.location.href = '/personal-drone-insurance';
+                setTimeout(() => {
+                    if (confirm('개인용 드론보험으로 안내합니다.\n개인용 페이지로 이동하시겠습니까?')) {
+                        window.location.href = 'https://www.liab.co.kr/personal-drone-insurance';
+                    } else {
+                        // 취소하면 선택 해제
+                        document.querySelector('input[name="q1"][value="no"]').checked = false;
+                    }
+                }, 100);
                 return;
             }
 
@@ -836,11 +842,7 @@
                 (q4 && q4.value === 'yes') || 
                 (q5 && q5.value === 'yes')) {
                 openQuoteModal();
-                // 해당 질문의 선택을 취소하여 다시 선택할 수 있게 함
-                if (q2 && q2.value === 'yes') document.querySelector('input[name="q2"]:checked').checked = false;
-                if (q3 && q3.value === 'yes') document.querySelector('input[name="q3"]:checked').checked = false;
-                if (q4 && q4.value === 'yes') document.querySelector('input[name="q4"]:checked').checked = false;
-                if (q5 && q5.value === 'yes') document.querySelector('input[name="q5"]:checked').checked = false;
+                btnNext.disabled = true;
                 return;
             }
 
@@ -853,6 +855,7 @@
                     q4.value === 'no' && 
                     q5.value === 'no') {
                     btnNext.disabled = false;
+                    errorBox.classList.remove('show');
                 } else {
                     btnNext.disabled = true;
                     errorBox.classList.add('show');

@@ -789,100 +789,118 @@
         </div>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        const radios = document.querySelectorAll('input[type="radio"]');
-        const btnNext = document.getElementById('btnNext');
-        const errorBox = document.getElementById('errorBox');
-        const quoteModal = document.getElementById('quoteModal');
-
-        // 견적 의뢰 팝업 열기
-        function openQuoteModal() {
+    <script>
+// business-drone-insurance.html 전용 스크립트
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('페이지 로드 완료');
+    
+    const btnNext = document.getElementById('btnNext');
+    const errorBox = document.getElementById('errorBox');
+    const quoteModal = document.getElementById('quoteModal');
+    
+    window.openQuoteModal = function() {
+        console.log('팝업 열기');
+        if (quoteModal) {
             quoteModal.classList.add('show');
             document.body.style.overflow = 'hidden';
         }
-
-        // 견적 의뢰 팝업 닫기
-        window.closeQuoteModal = function() {
+    };
+    
+    window.closeQuoteModal = function() {
+        console.log('팝업 닫기');
+        if (quoteModal) {
             quoteModal.classList.remove('show');
             document.body.style.overflow = 'auto';
         }
-
-        // 팝업 배경 클릭 시 닫기
-        quoteModal.addEventListener('click', function(e) {
-            if (e.target === quoteModal) {
-                closeQuoteModal();
-            }
+    };
+    
+    function checkAnswers() {
+        const q1 = document.querySelector('input[name="q1"]:checked');
+        const q2 = document.querySelector('input[name="q2"]:checked');
+        const q3 = document.querySelector('input[name="q3"]:checked');
+        const q4 = document.querySelector('input[name="q4"]:checked');
+        const q5 = document.querySelector('input[name="q5"]:checked');
+        
+        console.log('답변 체크:', {
+            q1: q1?.value, q2: q2?.value, q3: q3?.value, q4: q4?.value, q5: q5?.value
         });
-
-        function checkAnswers() {
-            const q1 = document.querySelector('input[name="q1"]:checked');
-            const q2 = document.querySelector('input[name="q2"]:checked');
-            const q3 = document.querySelector('input[name="q3"]:checked');
-            const q4 = document.querySelector('input[name="q4"]:checked');
-            const q5 = document.querySelector('input[name="q5"]:checked');
-
-            errorBox.classList.remove('show');
-
-            // 모든 질문에 답변했는지 확인
-            if (q1 && q2 && q3 && q4 && q5) {
-                // 정답: 1번=예, 2,3,4,5번=아니오
-                if (q1.value === 'yes' && 
-                    q2.value === 'no' && 
-                    q3.value === 'no' && 
-                    q4.value === 'no' && 
-                    q5.value === 'no') {
-                    btnNext.disabled = false;
-                    errorBox.classList.remove('show');
-                } else {
-                    btnNext.disabled = true;
-                    errorBox.classList.add('show');
-                }
+        
+        if (errorBox) errorBox.classList.remove('show');
+        
+        if (q1 && q2 && q3 && q4 && q5) {
+            if (q1.value === 'yes' && q2.value === 'no' && q3.value === 'no' && q4.value === 'no' && q5.value === 'no') {
+                console.log('정답! 버튼 활성화');
+                if (btnNext) btnNext.disabled = false;
+                if (errorBox) errorBox.classList.remove('show');
             } else {
-                btnNext.disabled = true;
+                console.log('오답');
+                if (btnNext) btnNext.disabled = true;
+                if (errorBox) errorBox.classList.add('show');
             }
+        } else {
+            console.log('모든 질문에 답하지 않음');
+            if (btnNext) btnNext.disabled = true;
         }
-
-        radios.forEach(radio => {
-            radio.addEventListener('change', function() {
-                const name = this.name;
-                const value = this.value;
-
-                // 1번에서 "아니오" 선택 시
-                if (name === 'q1' && value === 'no') {
-                    if (confirm('개인용 드론보험으로 안내합니다.\n개인용 페이지로 이동하시겠습니까?')) {
-                        window.location.href = 'https://www.liab.co.kr/personal-drone-insurance';
-                    } else {
-                        this.checked = false;
-                    }
+    }
+    
+    document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            console.log('라디오 변경:', this.name, this.value);
+            
+            // Q1에서 "아니오" 선택 시
+            if (this.name === 'q1' && this.value === 'no') {
+                console.log('Q1 아니오 - 개인용으로 이동');
+                if (confirm('개인용 드론보험으로 안내합니다.\n개인용 페이지로 이동하시겠습니까?')) {
+                    window.location.href = 'https://www.liab.co.kr/personal-drone-insurance';
+                    return;
+                } else {
+                    this.checked = false;
                     return;
                 }
-
-                // 2~5번에서 "예" 선택 시
-                if ((name === 'q2' || name === 'q3' || name === 'q4' || name === 'q5') && value === 'yes') {
-                    openQuoteModal();
-                    return;
-                }
-
-                // 일반 체크
-                checkAnswers();
-            });
+            }
+            
+            // Q2-5에서 "예" 선택 시
+            if ((this.name === 'q2' || this.name === 'q3' || this.name === 'q4' || this.name === 'q5') && this.value === 'yes') {
+                console.log('Q2-5 예 - 팝업 표시');
+                window.openQuoteModal();
+                return;
+            }
+            
+            // 일반 답변 체크
+            checkAnswers();
         });
-
+    });
+    
+    // 다음 버튼 클릭
+    if (btnNext) {
         btnNext.addEventListener('click', function() {
+            console.log('다음 단계로 이동');
             window.location.href = '/business-drone-insurance-form';
         });
-
-        // 견적 의뢰 폼 제출
-        document.getElementById('quoteForm').addEventListener('submit', async function(e) {
+    }
+    
+    // 팝업 배경 클릭 시 닫기
+    if (quoteModal) {
+        quoteModal.addEventListener('click', function(e) {
+            if (e.target === quoteModal) {
+                window.closeQuoteModal();
+            }
+        });
+    }
+    
+    // 견적 의뢰 폼 제출
+    const quoteForm = document.getElementById('quoteForm');
+    if (quoteForm) {
+        quoteForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const formData = new FormData(this);
             const data = {
                 customer_type: formData.get('customer_type'),
                 company_name: formData.get('company_name'),
-                drone_under_25kg: formData.get('drone_under_25kg'),
-                drone_25_100kg: formData.get('drone_25_100kg'),
-                drone_over_100kg: formData.get('drone_over_100kg'),
+                drone_under_25kg: formData.get('drone_under_25kg') || 0,
+                drone_25_100kg: formData.get('drone_25_100kg') || 0,
+                drone_over_100kg: formData.get('drone_over_100kg') || 0,
                 manager_name: formData.get('manager_name'),
                 manager_phone: formData.get('manager_phone'),
                 manager_email: formData.get('manager_email'),
@@ -902,9 +920,18 @@
 
                 if (response.ok) {
                     alert('견적 의뢰가 성공적으로 전송되었습니다.\n담당자가 확인 후 연락드리겠습니다.');
-                    closeQuoteModal();
+                    window.closeQuoteModal();
                     this.reset();
                 } else {
                     alert('전송 중 오류가 발생했습니다. 다시 시도해주세요.');
                 }
             } catch (error) {
+                console.error('Error:', error);
+                alert('전송 중 오류가 발생했습니다. 이메일(liab.on.ins@gmail.com)로 직접 문의해주세요.');
+            }
+        });
+    }
+});
+    </script>
+</body>
+</html>

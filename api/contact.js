@@ -97,6 +97,8 @@ module.exports = async (req, res) => {
       insurance_start,
       insurance_end,
       drones,
+      drone_plans,
+      plan_selection_type,
       send_to_customer,
       request_type
     } = req.body;
@@ -205,17 +207,37 @@ module.exports = async (req, res) => {
         
         <div style="background: #e3f2fd; padding: 20px; border-radius: 10px; margin: 20px 0;">
           <h3 style="color: #1e3c72; margin-top: 0;">드론 정보</h3>
-          <p><strong>드론 시리얼 번호:</strong> ${drone_serial || '미입력'}</p>
           <p><strong>드론 종류:</strong> ${droneTypes[drone_type] || '미입력'}</p>
           <p><strong>드론 대수:</strong> ${drone_count || 1}대</p>
+          ${drones && drones.length > 0 ? drones.map((drone, i) => {
+            const dronePlan = drone_plans && drone_plans[i] ? drone_plans[i] : null;
+            return `
+            <div style="background: #fff; padding: 15px; margin: 10px 0; border-left: 4px solid #FFB800; border-radius: 6px;">
+              <p style="margin: 5px 0; font-weight: bold; color: #FFB800;">드론 ${i + 1}</p>
+              <p style="margin: 5px 0;"><strong>모델명:</strong> ${drone.model || '미입력'}</p>
+              <p style="margin: 5px 0;"><strong>시리얼번호:</strong> ${drone.serial || '미입력'}</p>
+              <p style="margin: 5px 0;"><strong>자체중량:</strong> ${drone.weight || '미입력'}kg</p>
+              <p style="margin: 5px 0;"><strong>최대이륙중량:</strong> ${drone.max_weight || '미입력'}kg</p>
+              ${dronePlan ? `
+              <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #e0e0e0;">
+                <p style="margin: 5px 0; color: #FFB800; font-weight: bold;">선택 플랜: ${dronePlan.plan_name}</p>
+                <p style="margin: 5px 0;">보험료: ${parseInt(dronePlan.price).toLocaleString()}원/년</p>
+              </div>
+              ` : ''}
+            </div>
+            `;
+          }).join('') : ''}
         </div>
         
         <div style="background: #fff9e6; padding: 20px; border-radius: 10px; margin: 20px 0;">
-          <h3 style="color: #FFB800; margin-top: 0;">선택 플랜</h3>
-          <p><strong>플랜명:</strong> ${plan_name || '미입력'}</p>
+          <h3 style="color: #FFB800; margin-top: 0;">보험료 정보</h3>
+          <p><strong>총 보험료:</strong> <span style="color: #e74c3c; font-size: 24px; font-weight: bold;">${plan_total_price ? parseInt(plan_total_price).toLocaleString() : '0'}원/년</span></p>
+          ${plan_selection_type === 'unified' ? `
+          <p><strong>플랜명:</strong> ${plan_name || '미입력'} (전체 동일)</p>
           <p><strong>보험료(1대당):</strong> ${plan_price_per_drone ? parseInt(plan_price_per_drone).toLocaleString() : '0'}원/년</p>
-          <p><strong>총 보험료:</strong> <span style="color: #e74c3c; font-size: 20px; font-weight: bold;">${plan_total_price ? parseInt(plan_total_price).toLocaleString() : '0'}원</span></p>
-          <p><strong>플랜 코드:</strong> ${plan || '미입력'}</p>
+          ` : `
+          <p><strong>플랜 선택:</strong> 드론별 개별 플랜</p>
+          `}
         </div>
         
         ${message ? `
@@ -290,28 +312,42 @@ module.exports = async (req, res) => {
               <h3 style="color: #FFB800; margin-top: 0;">🚁 드론 정보</h3>
               <p><strong>드론 종류:</strong> ${droneTypes[drone_type] || '미입력'}</p>
               <p><strong>드론 대수:</strong> ${drone_count || 1}대</p>
-              ${drones && drones.length > 0 ? drones.map((drone, i) => `
-                <div style="border-left: 3px solid #FFB800; padding-left: 15px; margin: 15px 0;">
-                  <p style="margin: 5px 0;"><strong>드론 ${i + 1}:</strong></p>
+              ${drones && drones.length > 0 ? drones.map((drone, i) => {
+                const dronePlan = drone_plans && drone_plans[i] ? drone_plans[i] : null;
+                return `
+                <div style="border-left: 3px solid #FFB800; padding-left: 15px; padding: 12px; margin: 15px 0; background: #fff; border-radius: 6px;">
+                  <p style="margin: 5px 0; font-weight: bold; color: #FFB800;">드론 ${i + 1}</p>
                   <p style="margin: 5px 0;">모델명: ${drone.model || '미입력'}</p>
                   <p style="margin: 5px 0;">시리얼번호: ${drone.serial || '미입력'}</p>
                   <p style="margin: 5px 0;">자체중량: ${drone.weight || '미입력'}kg</p>
                   <p style="margin: 5px 0;">최대이륙중량: ${drone.max_weight || '미입력'}kg</p>
+                  ${dronePlan ? `
+                  <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #e0e0e0;">
+                    <p style="margin: 5px 0; color: #FFB800; font-weight: bold;">플랜: ${dronePlan.plan_name}</p>
+                    <p style="margin: 5px 0;">보험료: ${parseInt(dronePlan.price).toLocaleString()}원/년</p>
+                    ${getCoverageDetails(dronePlan.plan || plan)}
+                  </div>
+                  ` : ''}
                 </div>
-              `).join('') : ''}
+                `;
+              }).join('') : ''}
             </div>
 
+            ${plan_selection_type !== 'individual' ? `
             <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-              <h3 style="color: #FFB800; margin-top: 0;">💰 보장 내용</h3>
+              <h3 style="color: #FFB800; margin-top: 0;">💰 보장 내용 (전체 동일)</h3>
               <p><strong>선택 플랜:</strong> ${plan_name || '미입력'}</p>
               ${getCoverageDetails(plan)}
               <p><strong>자기부담금:</strong> 100,000원</p>
             </div>
+            ` : ''}
 
             <div style="background: #FFB800; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
               <p style="margin: 0 0 10px 0; color: #1a1a1a; font-size: 1rem;">연간 보험료</p>
               <p style="margin: 0; color: #1a1a1a; font-size: 2rem; font-weight: bold;">${plan_total_price ? parseInt(plan_total_price).toLocaleString() : '0'}원</p>
-              <p style="margin: 10px 0 0 0; color: #1a1a1a; font-size: 0.9rem;">1대당 ${plan_price_per_drone ? parseInt(plan_price_per_drone).toLocaleString() : '0'}원</p>
+              ${plan_selection_type !== 'individual' && plan_price_per_drone ? `
+              <p style="margin: 10px 0 0 0; color: #1a1a1a; font-size: 0.9rem;">1대당 ${parseInt(plan_price_per_drone).toLocaleString()}원</p>
+              ` : ''}
             </div>
 
             <div style="background: #fff9e6; padding: 15px; border-radius: 8px; font-size: 0.9rem; color: #666;">

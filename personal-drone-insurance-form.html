@@ -77,6 +77,7 @@
             text-decoration: none;
             display: inline-block;
             font-size: 0.95rem;
+            white-space: nowrap;
         }
 
         .home-btn:hover {
@@ -452,6 +453,27 @@
         }
 
         @media (max-width: 768px) {
+            .header-content {
+                padding: 0.8rem 1rem;
+            }
+
+            .kb-logo {
+                height: 32px;
+            }
+
+            .divider {
+                height: 24px;
+            }
+
+            .agency-name {
+                font-size: 1rem;
+            }
+
+            .home-btn {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
             .section-card {
                 padding: 2rem 1.5rem;
             }
@@ -471,6 +493,21 @@
 
             .btn {
                 width: 100%;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .agency-name {
+                font-size: 0.85rem;
+            }
+
+            .home-btn {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.75rem;
+            }
+
+            .kb-logo {
+                height: 26px;
             }
         }
     </style>
@@ -524,7 +561,8 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>생년월일 *</label>
-                        <input type="date" name="birth_date" required>
+                        <input type="text" name="birth_date" id="birthDate" placeholder="YYMMDD (예: 901225)" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" required>
+                        <small>숫자 6자리 입력 (예: 901225)</small>
                     </div>
                     <div class="form-group">
                         <label>성별 *</label>
@@ -556,12 +594,12 @@
                     <div class="form-group">
                         <label>보험시작일시 *</label>
                         <input type="datetime-local" name="insurance_start" id="insuranceStart" required>
-                        <small>현재시간 기준 30분 후부터 선택 가능합니다</small>
+                        <small>보험시작일은 30분 단위로 선택 가능합니다</small>
                     </div>
                     <div class="form-group">
                         <label>보험종료일시 *</label>
                         <input type="datetime-local" name="insurance_end" id="insuranceEnd" required>
-                        <small>자동으로 1년 후 24:00으로 설정됩니다 (수정 가능)</small>
+                        <small>자동으로 1년 후로 설정됩니다 (수정 가능)</small>
                     </div>
                 </div>
                 
@@ -577,9 +615,7 @@
 
                 <div class="notice-box">
                     <strong>📌 보험기간 안내</strong>
-                    <p>• 드론보험기간은 1년을 초과할 수 없습니다</p>
-                    <p>• 보험시작일은 내일부터 선택 가능합니다</p>
-                    <p>• 시작시간: 00:00 / 종료시간: 00:00 (고정)</p>
+                    <p>• 드론보험기간은 1년을 초과할 수 없습니다.</p>
                 </div>
             </div>
 
@@ -783,109 +819,113 @@
             const startInput = document.getElementById('insuranceStart');
             const endInput = document.getElementById('insuranceEnd');
             const durationInput = document.getElementById('insuranceDuration');
-            
-            // 현재 시간 + 30분
+
+            // 로컬 시간 기준으로 datetime-local 포맷 변환
+            function toLocalInput(date) {
+                const pad = n => String(n).padStart(2, '0');
+                return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+            }
+
+            // 30분 단위로 올림
+            function roundUp30min(date) {
+                const ms = 30 * 60 * 1000;
+                return new Date(Math.ceil(date.getTime() / ms) * ms);
+            }
+
+            // 정확히 1년 후 계산 (시분초 동일하게)
+            function addOneYear(date) {
+                const result = new Date(date);
+                result.setFullYear(result.getFullYear() + 1);
+                return result;
+            }
+
+            // 초기 시작 시간: 현재 + 30분, 30분 단위로 올림
             const now = new Date();
-            const startTime = new Date(now.getTime() + 30 * 60000); // 30분 후
-            
-            // 시작일시: 현재 + 30분
-            const startMin = startTime.toISOString().slice(0, 16);
-            startInput.min = startMin;
-            startInput.value = startMin;
-            
-            // 종료일시: 시작 + 1년, 시간은 23:59
-            const endTime = new Date(startTime);
-            endTime.setFullYear(endTime.getFullYear() + 1);
-            endTime.setHours(23, 59, 0, 0);
-            endInput.value = endTime.toISOString().slice(0, 16);
-            
-            // 가입 기간 계산 함수
+            const minStart = roundUp30min(new Date(now.getTime() + 30 * 60 * 1000));
+
+            startInput.min = toLocalInput(minStart);
+            startInput.value = toLocalInput(minStart);
+
+            // 종료일: 시작일 기준 정확히 1년 후
+            const initEnd = addOneYear(minStart);
+            endInput.value = toLocalInput(initEnd);
+            endInput.min = toLocalInput(minStart);
+            endInput.max = toLocalInput(initEnd);
+
+            // 가입 기간: 일수만 표시
             function calculateDuration() {
-                const start = new Date(startInput.value);
-                const end = new Date(endInput.value);
-                
-                if (!start || !end || end <= start) {
+                if (!startInput.value || !endInput.value) {
                     durationInput.value = '';
                     return;
                 }
-                
-                const diffTime = end - start;
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                const diffMonths = Math.floor(diffDays / 30);
-                const remainDays = diffDays % 30;
-                
-                let durationText = '';
-                if (diffMonths > 0) {
-                    durationText = `${diffMonths}개월 ${remainDays}일`;
-                } else {
-                    durationText = `${diffDays}일`;
+                const start = new Date(startInput.value);
+                const end = new Date(endInput.value);
+                if (end <= start) {
+                    durationInput.value = '';
+                    return;
                 }
-                durationText += ` (${diffDays}일)`;
-                
-                durationInput.value = durationText;
+                const diffMs = end - start;
+                const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+                durationInput.value = `${diffDays}일`;
             }
-            
-            // 시작일 변경 시
+
+            // 시작일 변경
             startInput.addEventListener('change', function() {
-                const startDate = new Date(this.value);
-                
-                // 최소 시간 체크
-                const minTime = new Date(now.getTime() + 30 * 60000);
-                if (startDate < minTime) {
+                const selected = new Date(this.value);
+
+                // 30분 단위로 맞추기
+                const rounded = roundUp30min(selected);
+
+                // 최소 시간 체크 (현재 + 30분)
+                const currentMin = roundUp30min(new Date(new Date().getTime() + 30 * 60 * 1000));
+                if (rounded < currentMin) {
                     alert('⚠️ 보험 시작일시는 현재 시간 기준 30분 후부터 선택 가능합니다.');
-                    this.value = startMin;
+                    this.value = toLocalInput(currentMin);
                     return;
                 }
-                
-                // 종료일 자동 설정 (1년 후 23:59)
-                const endDate = new Date(startDate);
-                endDate.setFullYear(endDate.getFullYear() + 1);
-                endDate.setHours(23, 59, 0, 0);
-                endInput.value = endDate.toISOString().slice(0, 16);
-                
-                // 종료일 최대값 설정 (시작일 + 1년)
-                endInput.max = endDate.toISOString().slice(0, 16);
-                
+
+                this.value = toLocalInput(rounded);
+
+                // 종료일 자동 업데이트 (정확히 1년 후)
+                const newEnd = addOneYear(rounded);
+                endInput.value = toLocalInput(newEnd);
+                endInput.min = toLocalInput(rounded);
+                endInput.max = toLocalInput(newEnd);
+
                 calculateDuration();
             });
-            
-            // 종료일 변경 시
+
+            // 종료일 변경
             endInput.addEventListener('change', function() {
-                const startDate = new Date(startInput.value);
-                const endDate = new Date(this.value);
-                
+                const start = new Date(startInput.value);
+                const selected = new Date(this.value);
+
+                // 30분 단위로 맞추기
+                const rounded = roundUp30min(selected);
+
                 // 시작일보다 이전 체크
-                if (endDate <= startDate) {
+                if (rounded <= start) {
                     alert('⚠️ 보험 종료일시는 시작일시보다 이후여야 합니다.');
-                    const defaultEnd = new Date(startDate);
-                    defaultEnd.setFullYear(defaultEnd.getFullYear() + 1);
-                    defaultEnd.setHours(23, 59, 0, 0);
-                    this.value = defaultEnd.toISOString().slice(0, 16);
+                    const defaultEnd = addOneYear(start);
+                    this.value = toLocalInput(defaultEnd);
+                    calculateDuration();
                     return;
                 }
-                
-                // 1년 초과 체크
-                const oneYearLater = new Date(startDate);
-                oneYearLater.setFullYear(oneYearLater.getFullYear() + 1);
-                oneYearLater.setHours(23, 59, 59, 999);
-                
-                if (endDate > oneYearLater) {
-                    alert('⚠️ 보험 기간은 1년을 초과할 수 없습니다.');
-                    oneYearLater.setHours(23, 59, 0, 0);
-                    this.value = oneYearLater.toISOString().slice(0, 16);
+
+                // 1년 초과 체크 (정확히 1년 후보다 늦으면 불가)
+                const maxEnd = addOneYear(start);
+                if (rounded > maxEnd) {
+                    alert('⚠️ 보험 기간은 1년을 초과할 수 없습니다.\n최대 종료일시로 자동 설정됩니다.');
+                    this.value = toLocalInput(maxEnd);
+                    calculateDuration();
                     return;
                 }
-                
+
+                this.value = toLocalInput(rounded);
                 calculateDuration();
             });
-            
-            // 초기 종료일 최대값 설정
-            const maxEndDate = new Date(startTime);
-            maxEndDate.setFullYear(maxEndDate.getFullYear() + 1);
-            maxEndDate.setHours(23, 59, 0, 0);
-            endInput.max = maxEndDate.toISOString().slice(0, 16);
-            
-            // 초기 가입 기간 계산
+
+            // 초기 기간 표시
             calculateDuration();
         }
 
@@ -1186,6 +1226,20 @@
         // 페이지 로드 시 초기화
         window.addEventListener('DOMContentLoaded', function() {
             setupInsuranceDates();
+
+            // 생년월일 숫자만 입력
+            const birthDateInput = document.getElementById('birthDate');
+            if (birthDateInput) {
+                birthDateInput.addEventListener('input', function() {
+                    // 숫자만 남기기
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                });
+                birthDateInput.addEventListener('keypress', function(e) {
+                    if (!/[0-9]/.test(e.key)) {
+                        e.preventDefault();
+                    }
+                });
+            }
             updateDroneSections();
         });
     </script>

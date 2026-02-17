@@ -773,7 +773,7 @@
                 <h2 class="section-title">드론 대수</h2>
                 <div class="form-group">
                     <label>보험 가입할 드론 대수 *</label>
-                    <input type="number" name="drone_count" id="droneCount" min="1" max="10" value="1" required>
+                    <input type="number" name="drone_count" id="droneCount" min="1" max="10" value="1" required oninput="updateDroneFields()">
                     <small>최대 10대까지 가입 가능합니다</small>
                 </div>
             </div>
@@ -783,8 +783,9 @@
                 <h2 class="section-title">드론 정보</h2>
                 <div class="notice-box">
                     <strong>⚠️ 필수 확인사항</strong>
-                    <p>• 기체이륙중량은 이륙 시 최대중량입니다</p>
-                    <p>• 시리얼번호, 무게정보는 반드시 확인해주세요</p>
+                    <p>• 드론자체중량은 배터리 제외 무게입니다</p>
+                    <p>• 드론최대이륙중량은 이륙 시 최대중량입니다</p>
+                    <p>• 시리얼번호, 신고번호는 정확히 입력해주세요</p>
                 </div>
                 <div id="dronesContainer"></div>
             </div>
@@ -866,7 +867,7 @@
                     <p>가입을 희망하시는 경우 아래 견적 신청을 작성하여 보내주시기 바랍니다.</p>
                 </div>
                 <div class="modal-contact">
-                    <strong>상담문의</strong>&nbsp;&nbsp;이메일: liab.on.ins@gmail.com
+                    <strong>상담문의</strong>&nbsp;&nbsp;이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9bf7f2faf9b5f4f5b5f2f5e8dbfcf6faf2f7b5f8f4f6">[email&#160;protected]</a>
                 </div>
 
                 <div class="modal-section-title">온라인 견적신청</div>
@@ -950,7 +951,7 @@
     <footer>
         <div class="footer-content">
             <h3 style="margin-bottom:1rem;">배상온 대리점</h3>
-            <p>📧 이메일: liab.on.ins@gmail.com</p>
+            <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c4a8ada5a6eaabaaeaadaab784a3a9a5ada8eaa7aba9">[email&#160;protected]</a></p>
             <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
             <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
             <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
@@ -958,7 +959,49 @@
         </div>
     </footer>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // ── 드론 정보 동적 생성 ───────────────────────────────
+    function makeDroneField(i) {
+        const label = i === 0 ? '' : `<div class="drone-info-header"><span class="drone-number">드론 ${i+1}</span></div>`;
+        return `
+        <div class="drone-info-section" id="droneSection_${i}">
+            ${i > 0 ? `<div class="drone-info-header"><span class="drone-number">드론 ${i+1}</span></div>` : ''}
+            <div class="form-row">
+                <div class="form-group">
+                    <label>드론 모델명 ${i===0?'*':''}</label>
+                    <input type="text" name="drone_model_${i}" placeholder="예: DJI Mini 3 Pro" ${i===0?'required':''}>
+                </div>
+                <div class="form-group">
+                    <label>제작번호(시리얼번호) ${i===0?'*':''}</label>
+                    <input type="text" name="drone_serial_${i}" placeholder="시리얼번호를 입력해주세요" ${i===0?'required':''}>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>드론 신고번호</label>
+                    <input type="text" name="drone_reg_${i}" placeholder="드론 신고번호를 입력해주세요">
+                </div>
+                <div class="form-group">
+                    <label>드론 자체중량 (kg) ${i===0?'*':''}</label>
+                    <input type="number" name="drone_weight_${i}" placeholder="예: 0.895" step="0.001" min="0" ${i===0?'required':''}>
+                </div>
+            </div>
+            <div class="form-group" style="max-width:50%">
+                <label>드론 최대이륙중량 (kg) ${i===0?'*':''}</label>
+                <input type="number" name="drone_mtow_${i}" placeholder="예: 1.2" step="0.001" min="0" ${i===0?'required':''}>
+            </div>
+        </div>`;
+    }
+
+    function updateDroneFields() {
+        const count = parseInt(document.getElementById('droneCount').value) || 1;
+        const container = document.getElementById('dronesContainer');
+        container.innerHTML = '';
+        for (let i = 0; i < count; i++) {
+            container.insertAdjacentHTML('beforeend', makeDroneField(i));
+        }
+    }
+
     // ── 고객 유형 전환 ──────────────────────────────────
     let currentType = 'personal';
 
@@ -1179,6 +1222,7 @@
 
     // ── 초기화 ───────────────────────────────────────────
     setupInsuranceDates();
+    updateDroneFields();
     </script>
 </body>
 </html>

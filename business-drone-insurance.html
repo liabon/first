@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>드론플레이 전용 업무용 드론보험 - KB손해보험</title>
+    <title>KB손해보험 업무용 드론보험 가입 - 배상온 대리점</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         * {
@@ -13,22 +13,23 @@
         }
 
         :root {
-            --kb-gold: #FFB800;
             --kb-yellow: #FFCD00;
+            --kb-gold: #FFB800;
             --kb-dark: #1a1a1a;
+            --kb-gray: #666;
+            --kb-light-gray: #f8f9fa;
         }
 
         body {
             font-family: 'Noto Sans KR', sans-serif;
             color: var(--kb-dark);
             line-height: 1.6;
-            background: #fff;
+            background: var(--kb-light-gray);
         }
 
-        /* Header */
         header {
             background: #fff;
-            border-bottom: 1px solid #e8e8e8;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -37,33 +38,31 @@
         .header-content {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1.2rem 1.5rem;
+            padding: 1.5rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .logo {
+        .logo-section {
             display: flex;
             align-items: center;
-            gap: 0.8rem;
+            gap: 1.5rem;
         }
 
-        .logo-img {
-            height: 45px;
+        .kb-logo {
+            height: 50px;
         }
 
-        .logo-text {
-            font-size: 1.1rem;
+        .divider {
+            height: 40px;
+            width: 1px;
+            background: #ddd;
+        }
+
+        .agency-name {
+            font-size: 1.5rem;
             font-weight: 700;
-            color: var(--kb-dark);
-        }
-
-        .home-link {
-            color: #666;
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
         }
 
         .home-btn {
@@ -85,689 +84,850 @@
             transform: translateY(-2px);
         }
 
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(180deg, #fff 0%, #fafafa 100%);
-            padding: 3rem 1.5rem 4rem;
-            text-align: center;
+        .progress-section {
+            background: #fff;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
-        .product-tag {
-            display: inline-block;
+        .progress-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-step {
+            text-align: center;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #ddd;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin: 0 auto 0.5rem;
+        }
+
+        .progress-step.active .step-circle {
             background: var(--kb-gold);
             color: var(--kb-dark);
-            padding: 0.4rem 1.2rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
         }
 
-        .hero-title {
-            font-size: 1.8rem;
-            font-weight: 900;
-            line-height: 1.4;
+        .progress-step.completed .step-circle {
+            background: var(--kb-gold);
+            color: #fff;
+        }
+
+        .step-label {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        .progress-step.active .step-label {
             color: var(--kb-dark);
-            margin-bottom: 0.8rem;
+            font-weight: 600;
         }
 
-        .hero-title .highlight {
-            color: var(--kb-gold);
+        .main-content {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 2rem;
         }
 
-        .hero-subtitle {
-            font-size: 1rem;
-            color: #666;
+        .section-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--kb-gold);
+        }
+
+        .form-group {
             margin-bottom: 2rem;
         }
 
-        /* Main Content */
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 0 1.5rem 3rem;
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+            font-size: 1.05rem;
         }
 
-        .check-card {
-            background: #fff;
-            border: 1px solid #e8e8e8;
-            border-radius: 16px;
-            padding: 2rem 1.5rem;
-            margin-bottom: 1rem;
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Noto Sans KR', sans-serif;
             transition: all 0.3s;
         }
 
-        .check-card:hover {
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
             border-color: var(--kb-gold);
-            box-shadow: 0 4px 20px rgba(255, 184, 0, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 184, 0, 0.1);
         }
 
-        .check-question {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--kb-dark);
-            margin-bottom: 1rem;
-            line-height: 1.5;
+        .form-group small {
+            display: block;
+            margin-top: 0.5rem;
+            color: var(--kb-gray);
+            font-size: 0.9rem;
         }
 
-        .radio-options {
-            display: flex;
-            gap: 0.8rem;
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
         }
 
-        .radio-label {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.8rem;
-            border: 2px solid #e8e8e8;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .radio-label.recommended {
-            border: 1px solid #FFB800;
+        .drone-info-section {
+            border: 2px solid var(--kb-gold);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
             background: #fffbf0;
         }
 
-        .radio-label input {
-            display: none;
+        .drone-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
         }
 
-        .radio-label:hover {
-            border-color: var(--kb-gold);
-        }
-
-        .radio-label input:checked + span {
-            color: var(--kb-dark);
-        }
-
-        .radio-label:has(input:checked) {
-            background: var(--kb-gold);
-            border-color: var(--kb-gold);
-            color: var(--kb-dark);
-        }
-
-        /* Error Message */
-        .error-box {
-            background: #fff5f5;
-            border: 1px solid #ffcccc;
-            border-radius: 12px;
-            padding: 1rem;
-            margin: 1.5rem 0;
-            text-align: center;
-            display: none;
-        }
-
-        .error-box.show {
-            display: block;
-        }
-
-        .error-box p {
-            color: #d63031;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        /* Next Button */
-        .btn-next {
-            width: 100%;
-            padding: 1.2rem;
-            background: var(--kb-gold);
-            color: var(--kb-dark);
-            border: none;
-            border-radius: 12px;
-            font-size: 1.05rem;
+        .drone-number {
+            font-size: 1.3rem;
             font-weight: 800;
-            cursor: pointer;
-            margin-top: 1.5rem;
-            transition: all 0.3s;
+            color: var(--kb-gold);
         }
 
-        .btn-next:hover:not(:disabled) {
-            background: var(--kb-yellow);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 184, 0, 0.3);
-        }
-
-        .btn-next:disabled {
-            background: #e0e0e0;
-            color: #999;
-            cursor: not-allowed;
-        }
-
-        /* Info Section */
-        .info-box {
-            background: #f9f9f9;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-            text-align: center;
-        }
-
-        .info-title {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #999;
-            margin-bottom: 0.8rem;
-        }
-
-        .info-list {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 1.2rem 0;
-        }
-
-        .info-list li {
-            font-size: 0.85rem;
-            color: #999;
-            padding: 0.3rem 0;
-        }
-
-        .btn-obligation {
-            display: inline-block;
-            padding: 0.8rem 1.5rem;
-            background: #666;
+        .remove-drone-btn {
+            padding: 0.5rem 1rem;
+            background: #ff6b6b;
             color: #fff;
-            text-decoration: none;
+            border: none;
             border-radius: 8px;
+            cursor: pointer;
             font-size: 0.9rem;
             font-weight: 600;
+        }
+
+        .remove-drone-btn:hover {
+            background: #ff5252;
+        }
+
+        .add-drone-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #fff;
+            border: 2px dashed var(--kb-gold);
+            border-radius: 12px;
+            color: var(--kb-gold);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 2rem;
+        }
+
+        .add-drone-btn:hover {
+            background: #fffbf0;
+        }
+
+        /* 고객 타입 탭 */
+        .customer-type-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e8e8e8;
+            padding-bottom: 0;
+        }
+
+        .type-tab {
+            flex: 1;
+            padding: 0.9rem 1rem;
+            border: 2px solid #e8e8e8;
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+            background: #f8f9fa;
+            color: #999;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .type-tab.active {
+            background: #FFB800;
+            color: #1a1a1a;
+            border-color: #FFB800;
+            position: relative;
+            bottom: -2px;
+        }
+
+        .type-tab:hover:not(.active) {
+            background: #fff9e6;
+            color: #1a1a1a;
+            border-color: #FFB800;
+        }
+
+        .notice-box {
+            background: #fff9e6;
+            border-left: 4px solid var(--kb-gold);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .notice-box strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--kb-dark);
+        }
+
+        .notice-box p {
+            margin: 0.3rem 0;
+            font-size: 0.95rem;
+            color: var(--kb-gray);
+        }
+
+        .drone-type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .drone-type-card {
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
             transition: all 0.3s;
         }
 
-        .btn-obligation:hover {
-            background: var(--kb-dark);
+        .drone-type-card:hover {
+            border-color: var(--kb-gold);
+            transform: translateY(-5px);
         }
 
-        /* Footer */
-        footer {
-            background: #f9f9f9;
-            border-top: 1px solid #e8e8e8;
-            padding: 2rem 1.5rem;
+        .drone-type-card.selected {
+            border-color: var(--kb-gold);
+            background: #fff9e6;
+        }
+
+        .drone-type-card input[type="radio"] {
+            display: none;
+        }
+
+        .drone-type-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .drone-type-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-category {
+            margin-bottom: 3rem;
+        }
+
+        .plan-category h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--kb-gold);
+        }
+
+        .plan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .plan-card {
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .plan-card:hover {
+            border-color: var(--kb-gold);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .plan-card.selected {
+            border-color: var(--kb-gold);
+            background: #fff9e6;
+        }
+
+        .plan-card input[type="radio"] {
+            display: none;
+        }
+
+        .plan-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--kb-gold);
+        }
+
+        .plan-coverage {
+            margin-bottom: 1rem;
+        }
+
+        .plan-coverage-item {
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
+            color: var(--kb-gray);
+        }
+
+        .plan-price {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--kb-dark);
+            margin-top: 1.5rem;
+            text-align: right;
+        }
+
+        .plan-price span {
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
             margin-top: 3rem;
         }
 
+        .btn {
+            padding: 1.2rem 3rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: var(--kb-dark);
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-primary {
+            background: var(--kb-gold);
+            color: var(--kb-dark);
+            box-shadow: 0 8px 25px rgba(255, 184, 0, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 184, 0, 0.4);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        footer {
+            background: var(--kb-dark);
+            color: #fff;
+            padding: 3rem 2rem;
+            margin-top: 5rem;
+        }
+
         .footer-content {
-            max-width: 600px;
+            max-width: 1200px;
             margin: 0 auto;
             text-align: center;
         }
 
-        .footer-company {
-            font-weight: 700;
-            margin-bottom: 0.8rem;
+        .footer-content p {
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
             font-size: 0.95rem;
         }
 
-        .footer-info {
-            font-size: 0.75rem;
-            color: #999;
-            line-height: 1.6;
-        }
-
-        .footer-info p {
-            margin: 0.3rem 0;
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
-            .hero-title {
-                font-size: 1.5rem;
+            .section-card {
+                padding: 2rem 1.5rem;
             }
 
-            .check-card {
-                padding: 1.5rem 1.2rem;
+            .form-row {
+                grid-template-columns: 1fr;
             }
 
-            .check-question {
-                font-size: 0.9rem;
+            .drone-type-grid,
+            .plan-grid {
+                grid-template-columns: 1fr;
             }
 
-            .radio-label {
-                font-size: 0.9rem;
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
             }
         }
     </style>
-
     <style>
-        /* 견적 의뢰 팝업 모달 */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            overflow-y: auto;
-        }
-
-        .modal-overlay.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: #fff;
-            width: 90%;
-            max-width: 600px;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            margin: 2rem auto;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            background: linear-gradient(135deg, #FFB800 0%, #FFCD00 100%);
-            padding: 1.5rem;
-            border-radius: 15px 15px 0 0;
-            position: relative;
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin: 0;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 2rem;
-            cursor: pointer;
-            color: #1a1a1a;
-            line-height: 1;
-            padding: 0.5rem;
-        }
-
-        .modal-body {
-            padding: 2rem;
-        }
-
-        .alert-box {
-            background: #fff9e6;
-            border-left: 4px solid #FFB800;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border-radius: 8px;
-        }
-
-        .alert-title {
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-            color: #1a1a1a;
-        }
-
-        .alert-text {
-            color: #666;
-            line-height: 1.6;
-            margin: 0.5rem 0;
-        }
-
-        .contact-info {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 8px;
-            margin: 1rem 0;
-        }
-
-        .contact-info strong {
-            color: #FFB800;
-        }
-
-        .form-section-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin: 1.5rem 0 1rem 0;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #FFB800;
-        }
-
-        .modal-form-group {
-            margin-bottom: 1rem;
-        }
-
-        .modal-form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #1a1a1a;
-        }
-
-        .modal-form-group input,
-        .modal-form-group select,
-        .modal-form-group textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 0.95rem;
-        }
-
-        .modal-form-group input:focus,
-        .modal-form-group select:focus,
-        .modal-form-group textarea:focus {
-            border-color: #FFB800;
-            outline: none;
-        }
-
-        .modal-form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .drone-count-input {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .drone-count-input input {
-            flex: 1;
-        }
-
-        .privacy-agreement {
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin: 1.5rem 0;
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid #e0e0e0;
-        }
-
-        .privacy-agreement p {
-            margin: 0.5rem 0;
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .agreement-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin: 1rem 0;
-        }
-
-        .agreement-checkbox input {
-            width: 20px;
-            height: 20px;
-        }
-
-        .btn-submit-quote {
-            width: 100%;
-            padding: 1rem;
-            background: #FFB800;
-            color: #1a1a1a;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-submit-quote:hover {
-            background: #FFCD00;
-            transform: translateY(-2px);
-        }
-
-        .btn-submit-quote:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
+        /* 헤더 모바일 최적화 */
+        .home-btn { white-space: nowrap; }
         @media (max-width: 768px) {
-            .modal-form-row {
-                grid-template-columns: 1fr;
-            }
+            .header-content { padding: 0.8rem 1rem; }
+            .kb-logo { height: 32px; }
+            .divider { height: 24px; }
+            .agency-name { font-size: 1rem; }
+            .home-btn { padding: 0.5rem 0.8rem; font-size: 0.8rem; }
+        }
+        @media (max-width: 400px) {
+            .agency-name { font-size: 0.85rem; }
+            .home-btn { padding: 0.4rem 0.6rem; font-size: 0.75rem; }
+            .kb-logo { height: 26px; }
+        }
+
+        /* 고객 타입 탭 */
+        .customer-type-tabs { display:flex; gap:0.5rem; margin-bottom:1.5rem; border-bottom:2px solid #e8e8e8; }
+        .type-tab {
+            flex:1; padding:0.9rem 1rem; border:2px solid #e8e8e8; border-bottom:none;
+            border-radius:10px 10px 0 0; background:#f8f9fa; color:#999;
+            font-size:0.95rem; font-weight:600; cursor:pointer; transition:all 0.2s;
+            font-family:'Noto Sans KR',sans-serif;
+        }
+        .type-tab.active { background:#FFB800; color:#1a1a1a; border-color:#FFB800; position:relative; bottom:-2px; }
+        .type-tab:hover:not(.active) { background:#fff9e6; color:#1a1a1a; border-color:#FFB800; }
+
+        /* 가입물건 중량 카드 */
+        .weight-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1.5rem; }
+        .weight-card {
+            border:2px solid #e8e8e8; border-radius:12px; padding:1.2rem 1rem;
+            cursor:pointer; text-align:center; transition:all 0.2s; background:#fff;
+        }
+        .weight-card:hover { border-color:#FFB800; background:#fff9e6; }
+        .weight-card.selected { border-color:#FFB800; background:#FFB800; }
+        .weight-card input[type="radio"] { display:none; }
+        .weight-icon { font-size:2rem; margin-bottom:0.5rem; }
+        .weight-label { font-weight:700; font-size:0.9rem; color:#1a1a1a; line-height:1.4; }
+        .weight-sub { font-size:0.75rem; color:#666; margin-top:0.3rem; }
+        .weight-card.selected .weight-sub { color:#555; }
+
+        /* 드론 유형 체크 */
+        .drone-flag-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+        .flag-card {
+            border:2px solid #e8e8e8; border-radius:12px; padding:1rem;
+            cursor:pointer; text-align:center; transition:all 0.2s; background:#fff;
+        }
+        .flag-card:hover { border-color:#FFB800; background:#fff9e6; }
+        .flag-card.selected { border-color:#FFB800; background:#FFB800; }
+        .flag-card input[type="radio"] { display:none; }
+        .flag-icon { font-size:1.5rem; margin-bottom:0.4rem; }
+        .flag-label { font-weight:700; font-size:0.85rem; color:#1a1a1a; line-height:1.3; }
+
+        /* 견적 필요 안내 */
+        .quote-needed-box {
+            display:none; background:#fff3cd; border:2px solid #FFB800;
+            border-radius:12px; padding:1.5rem; margin-top:1.5rem; text-align:center;
+        }
+        .quote-needed-box.show { display:block; }
+        .quote-needed-box p { color:#856404; margin-bottom:1rem; font-weight:600; line-height:1.6; }
+        .btn-quote-request {
+            background:#FFB800; color:#1a1a1a; border:none; border-radius:8px;
+            padding:0.8rem 2rem; font-size:1rem; font-weight:700; cursor:pointer;
+            font-family:'Noto Sans KR',sans-serif; transition:all 0.2s;
+        }
+        .btn-quote-request:hover { background:#FFCD00; transform:translateY(-2px); }
+
+        /* 견적 의뢰 모달 */
+        .modal-overlay {
+            display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.7); z-index:9999;
+            overflow-y:auto; padding:2rem 1rem;
+        }
+        .modal-overlay.show { display:block; }
+        .modal-box {
+            background:#fff; width:100%; max-width:560px; border-radius:16px;
+            box-shadow:0 10px 40px rgba(0,0,0,0.3); margin:0 auto;
+        }
+        .modal-head {
+            background:linear-gradient(135deg,#FFB800,#FFCD00); padding:1.4rem 1.5rem;
+            border-radius:16px 16px 0 0; display:flex; justify-content:space-between; align-items:center;
+        }
+        .modal-head h2 { font-size:1.3rem; font-weight:700; color:#1a1a1a; margin:0; }
+        .modal-close-btn { background:none; border:none; font-size:1.8rem; cursor:pointer; color:#1a1a1a; line-height:1; padding:0; }
+        .modal-body { padding:1.5rem; }
+        .modal-alert { background:#fff9e6; border-left:4px solid #FFB800; padding:1rem 1.2rem; border-radius:8px; margin-bottom:1rem; }
+        .modal-alert p { margin:0.3rem 0; color:#555; font-size:0.88rem; line-height:1.6; }
+        .modal-contact { background:#f8f9fa; padding:0.7rem 1rem; border-radius:8px; margin-bottom:1rem; font-size:0.88rem; color:#444; }
+        .modal-section-title { font-weight:700; font-size:0.95rem; color:#1a1a1a; border-bottom:2px solid #FFB800; padding-bottom:0.4rem; margin:1rem 0 0.7rem; }
+        .modal-form-group { margin-bottom:0.8rem; }
+        .modal-form-group label { display:block; font-weight:600; font-size:0.88rem; margin-bottom:0.3rem; }
+        .modal-form-group input, .modal-form-group select, .modal-form-group textarea {
+            width:100%; padding:0.65rem 0.8rem; border:1.5px solid #ddd;
+            border-radius:8px; font-size:0.88rem; font-family:'Noto Sans KR',sans-serif;
+        }
+        .modal-form-group input:focus, .modal-form-group select:focus { border-color:#FFB800; outline:none; }
+        .modal-form-row { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; }
+        .drone-count-row { display:flex; align-items:center; gap:0.5rem; }
+        .drone-count-row input { flex:1; }
+        .privacy-scroll {
+            background:#f8f9fa; border:1px solid #ddd; border-radius:8px;
+            padding:0.8rem 1rem; max-height:130px; overflow-y:auto;
+            font-size:0.8rem; color:#666; line-height:1.7; margin-bottom:0.8rem;
+        }
+        .privacy-scroll p { margin:0.15rem 0; }
+        .agree-row { display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem; }
+        .agree-row input[type="checkbox"] { width:18px; height:18px; cursor:pointer; }
+        .agree-row label { font-size:0.87rem; font-weight:600; cursor:pointer; }
+        .btn-submit-modal {
+            width:100%; padding:1rem; background:#FFB800; color:#1a1a1a;
+            border:none; border-radius:8px; font-size:1rem; font-weight:700;
+            cursor:pointer; font-family:'Noto Sans KR',sans-serif; transition:all 0.2s;
+        }
+        .btn-submit-modal:hover { background:#FFCD00; }
+
+        @media (max-width:480px) {
+            .modal-form-row { grid-template-columns:1fr; }
+            .weight-grid { grid-template-columns:1fr; }
+            .drone-flag-grid { grid-template-columns:1fr; }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="header-content">
-            <div class="logo">
-                <img src="kb-logo.png" alt="KB손해보험" class="logo-img">
-                <span class="logo-text">배상온 대리점</span>
+            <div class="logo-section">
+                <img src="kb-logo.png" alt="KB손해보험" class="kb-logo">
+                <div class="divider"></div>
+                <div class="agency-name">배상온 대리점</div>
             </div>
             <a href="/" class="home-btn">🏠 홈으로</a>
         </div>
     </header>
 
-    <!-- Hero -->
-    <section class="hero">
-        <div class="product-tag">드론플레이 전용</div>
-        <h1 class="hero-title">
-            <span class="highlight">KB손해보험</span><br>
-            업무용 드론보험
-        </h1>
-        <p class="hero-subtitle">사업자 · 영리 목적 드론 운영을 위한 필수 의무보험</p>
-    </section>
-
-    <!-- Main Content -->
-    <main class="container">
-        <!-- Question 1 -->
-        <div class="check-card">
-            <p class="check-question">
-                <strong>1. 아래 의무가입 대상만 가입이 가능함을 확인하셨습니까?</strong>
-            </p>
-            <div class="mandatory-info" style="background: #fff9e6; padding: 1rem; border-radius: 8px; margin: 1rem 0; border-left: 4px solid #FFB800;">
-                <p style="margin: 0.5rem 0; font-weight: 600;">• 국가, 지방자치단체, 공공기관</p>
-                <p style="margin: 0.5rem 0; font-weight: 600;">• 초경량비행장치(드론)을 사용한 영리사업</p>
-                <p style="margin: 0.5rem 0; font-size: 0.9rem; color: #666;">
-                    <strong>영리사업이란?</strong><br>
-                    항공사업법 제2조에 따른 초경량비행장치사용사업에 사용되는 경우<br>
-                    (타인의 요청에 따라 유상으로 방제, 사진촬영, 측량, 탐사, 조종교육 등에 해당되는 업무)를 말합니다.<br>
-                    <span style="color: #e74c3c;">유상운송, 대여업, 레저스포츠 등은 가입이 제한됩니다.</span>
-                </p>
-            </div>
-            <div class="radio-options">
-                <label class="radio-label recommended">
-                    <input type="radio" name="q1" value="yes">
-                    <span>예</span>
-                </label>
-                <label class="radio-label">
-                    <input type="radio" name="q1" value="no">
-                    <span>아니오</span>
-                </label>
+    <div class="progress-section">
+        <div class="progress-container">
+            <div class="progress-steps">
+                <div class="progress-step completed">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">의무확인</div>
+                </div>
+                <div class="progress-step active">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">정보입력</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">약관동의</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">완료</div>
+                </div>
             </div>
         </div>
+    </div>
 
-        <!-- Question 2 -->
-        <div class="check-card">
-            <p class="check-question">
-                <strong>2. 수상용 드론입니까?</strong>
-            </p>
-            <div class="radio-options">
-                <label class="radio-label">
-                    <input type="radio" name="q2" value="yes">
-                    <span>예</span>
-                </label>
-                <label class="radio-label recommended">
-                    <input type="radio" name="q2" value="no">
-                    <span>아니오</span>
-                </label>
+    <div class="main-content">
+        <form id="droneForm">
+
+            <!-- 고객정보 -->
+            <div class="section-card">
+                <h2 class="section-title" id="customerSectionTitle">고객정보 입력</h2>
+                <div class="customer-type-tabs">
+                    <button type="button" class="type-tab active" id="tabPersonal" onclick="switchType('personal')">👤 개인 / 개인사업자</button>
+                    <button type="button" class="type-tab" id="tabCorporate" onclick="switchType('corporate')">🏢 법인</button>
+                </div>
+
+                <!-- 개인 -->
+                <div id="personalFields">
+                    <div class="form-group">
+                        <label>이름 *</label>
+                        <input type="text" name="name" id="personalName" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>생년월일 *</label>
+                            <input type="text" name="birth_date" id="birthDate" placeholder="YYMMDD (예: 901225)" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" required>
+                            <small>숫자 6자리 입력 (예: 901225)</small>
+                        </div>
+                        <div class="form-group">
+                            <label>성별 *</label>
+                            <select name="gender" id="personalGender" required>
+                                <option value="">선택하세요</option>
+                                <option value="male">남성</option>
+                                <option value="female">여성</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>연락처 *</label>
+                            <input type="tel" name="phone" id="personalPhone" placeholder="010-0000-0000" required>
+                        </div>
+                        <div class="form-group">
+                            <label>이메일 *</label>
+                            <input type="email" name="email" id="personalEmail" placeholder="example@email.com" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 법인 -->
+                <div id="corporateFields" style="display:none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>사업자등록번호 *</label>
+                            <input type="text" name="corp_number" id="corpNumber" placeholder="000-00-00000">
+                            <small>하이픈(-)을 포함하여 입력해주세요</small>
+                        </div>
+                        <div class="form-group">
+                            <label>회사명 *</label>
+                            <input type="text" name="corp_name" id="corpName" placeholder="회사명">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>담당자 연락처 *</label>
+                            <input type="tel" name="corp_phone" id="corpPhone" placeholder="010-0000-0000">
+                        </div>
+                        <div class="form-group">
+                            <label>담당자 이메일 *</label>
+                            <input type="email" name="corp_email" id="corpEmail" placeholder="example@email.com">
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <!-- Question 3 -->
-        <div class="check-card">
-            <p class="check-question">
-                <strong>3. 최근 3년간 귀사가 부담한 손해배상액(합의금포함)이 있습니까?</strong>
-            </p>
-            <div class="radio-options">
-                <label class="radio-label">
-                    <input type="radio" name="q3" value="yes">
-                    <span>예</span>
-                </label>
-                <label class="radio-label recommended">
-                    <input type="radio" name="q3" value="no">
-                    <span>아니오</span>
-                </label>
+            <!-- 보험기간 -->
+            <div class="section-card">
+                <h2 class="section-title">보험기간</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>보험시작일시 *</label>
+                        <input type="datetime-local" name="insurance_start" id="insuranceStart" required>
+                        <small>보험시작일은 30분 단위로 선택 가능합니다</small>
+                    </div>
+                    <div class="form-group">
+                        <label>보험종료일시 *</label>
+                        <input type="datetime-local" name="insurance_end" id="insuranceEnd" required>
+                        <small>자동으로 1년 후로 설정됩니다 (수정 가능)</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>가입 기간</label>
+                    <input type="text" id="insuranceDuration" readonly style="background:#f8f9fa;font-weight:700;color:#FFB800;">
+                </div>
+                <div class="form-group">
+                    <label>보험가입 소재지</label>
+                    <input type="text" value="전국일원 (보험담보지역: 대한민국)" readonly style="background:#f8f9fa;">
+                </div>
+                <div class="notice-box">
+                    <strong>📌 보험기간 안내</strong>
+                    <p>• 드론보험기간은 1년을 초과할 수 없습니다.</p>
+                </div>
             </div>
-        </div>
 
-        <!-- Question 4 -->
-        <div class="check-card">
-            <p class="check-question">
-                <strong>4. 드론조종 자격자가 10명 이상인가요?</strong>
-            </p>
-            <div class="radio-options">
-                <label class="radio-label">
-                    <input type="radio" name="q4" value="yes">
-                    <span>예</span>
-                </label>
-                <label class="radio-label recommended">
-                    <input type="radio" name="q4" value="no">
-                    <span>아니오</span>
-                </label>
+            <!-- 드론 대수 -->
+            <div class="section-card">
+                <h2 class="section-title">드론 대수</h2>
+                <div class="form-group">
+                    <label>보험 가입할 드론 대수 *</label>
+                    <input type="number" name="drone_count" id="droneCount" min="1" max="10" value="1" required>
+                    <small>최대 10대까지 가입 가능합니다</small>
+                </div>
             </div>
-        </div>
 
-        <!-- Question 5 -->
-        <div class="check-card">
-            <p class="check-question">
-                <strong>5. 드론운항사업을 시작한 기간이 11년 이상인가요?</strong>
-            </p>
-            <div class="radio-options">
-                <label class="radio-label">
-                    <input type="radio" name="q5" value="yes">
-                    <span>예</span>
-                </label>
-                <label class="radio-label recommended">
-                    <input type="radio" name="q5" value="no">
-                    <span>아니오</span>
-                </label>
+            <!-- 드론 정보 -->
+            <div class="section-card">
+                <h2 class="section-title">드론 정보</h2>
+                <div class="notice-box">
+                    <strong>⚠️ 필수 확인사항</strong>
+                    <p>• 기체이륙중량은 이륙 시 최대중량입니다</p>
+                    <p>• 시리얼번호, 무게정보는 반드시 확인해주세요</p>
+                </div>
+                <div id="dronesContainer"></div>
             </div>
-        </div>
 
-        <!-- Error Message -->
-        <div class="error-box" id="errorBox">
-            <p>⚠️ 가입 대상이 아닙니다</p>
-        </div>
+            <!-- 가입물건 선택 -->
+            <div class="section-card">
+                <h2 class="section-title">가입물건 선택</h2>
 
-        <!-- Next Button -->
-        <button class="btn-next" id="btnNext" disabled>다음 단계로</button>
-    </main>
+                <div class="form-group">
+                    <label>자체중량 선택 *</label>
+                    <div class="weight-grid">
+                        <label class="weight-card" onclick="selectWeight(this,'under_25kg')">
+                            <input type="radio" name="drone_weight" value="under_25kg">
+                            <div class="weight-icon">🚁</div>
+                            <div class="weight-label">25kg 미만</div>
+                            <div class="weight-sub">의무/업무/영리</div>
+                        </label>
+                        <label class="weight-card" onclick="selectWeight(this,'25_100kg')">
+                            <input type="radio" name="drone_weight" value="25_100kg">
+                            <div class="weight-icon">🚁</div>
+                            <div class="weight-label">25kg 이상<br>100kg 미만</div>
+                            <div class="weight-sub">의무/업무/영리</div>
+                        </label>
+                        <label class="weight-card" onclick="selectWeight(this,'over_100kg')">
+                            <input type="radio" name="drone_weight" value="over_100kg">
+                            <div class="weight-icon">🚁</div>
+                            <div class="weight-label">100kg 이상</div>
+                            <div class="weight-sub">의무/업무/영리</div>
+                        </label>
+                    </div>
+                </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-company">배상온 대리점</div>
-            <div class="footer-info">
-                <p>📧 liab.on.ins@gmail.com</p>
-                <p>📍 서울특별시 동대문구 천호대로 301, 1706호</p>
-                <p>사업자등록번호 501-63-18916 | 대리점등록번호 제2026010037호</p>
-                <p style="margin-top: 0.5rem;">© 2026 배상온 대리점. KB손해보험 공식 대리점</p>
+                <div class="form-group">
+                    <label>드론 유형 *</label>
+                    <div class="drone-flag-grid">
+                        <label class="flag-card" onclick="selectFlag(this,'swarm')">
+                            <input type="radio" name="drone_flag" value="swarm">
+                            <div class="flag-icon">🐝</div>
+                            <div class="flag-label">군집드론</div>
+                        </label>
+                        <label class="flag-card" onclick="selectFlag(this,'rental')">
+                            <input type="radio" name="drone_flag" value="rental">
+                            <div class="flag-icon">🏭</div>
+                            <div class="flag-label">임대사업자 드론</div>
+                        </label>
+                        <label class="flag-card" onclick="selectFlag(this,'none')">
+                            <input type="radio" name="drone_flag" value="none">
+                            <div class="flag-icon">✅</div>
+                            <div class="flag-label">해당없음</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 견적 필요 안내 -->
+                <div class="quote-needed-box" id="quoteNeededBox">
+                    <p id="quoteNeededMsg">개별 견적이 필요합니다.<br>아래 버튼을 눌러 견적/가입 의뢰를 신청해주세요.</p>
+                    <button type="button" class="btn-quote-request" onclick="openQuoteModal()">📋 견적/가입 의뢰하기</button>
+                </div>
             </div>
-        </div>
-    </footer>
 
-    <!-- 견적 의뢰 팝업 모달 -->
+            <div class="button-group">
+                <button type="button" class="btn btn-secondary" onclick="history.back()">이전</button>
+                <button type="submit" class="btn btn-primary" id="submitBtn" disabled>다음 단계로</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- 견적 의뢰 모달 -->
     <div class="modal-overlay" id="quoteModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">견적 의뢰</h2>
-                <button class="modal-close" onclick="closeQuoteModal()">&times;</button>
+        <div class="modal-box">
+            <div class="modal-head">
+                <h2>📋 견적 의뢰</h2>
+                <button class="modal-close-btn" onclick="closeQuoteModal()">×</button>
             </div>
             <div class="modal-body">
-                <div class="alert-box">
-                    <div class="alert-title">알림</div>
-                    <p class="alert-text">고객님 죄송합니다.</p>
-                    <p class="alert-text">군집드론 및 해당 자격으로는 온라인으로 가입이 불가하며, 별도의 심사를 통해 견적을 산출해야합니다.</p>
-                    <p class="alert-text">가입을 희망하시는 경우, 아래 견적 신청을 작성하여 보내주시기 바랍니다.</p>
+                <div class="modal-alert">
+                    <p><strong>고객님 죄송합니다.</strong></p>
+                    <p>군집드론 · 임대사업자드론 · 100kg 이상 드론은 온라인 가입이 불가하며, 별도 심사를 통해 견적을 산출해야 합니다.</p>
+                    <p>가입을 희망하시는 경우 아래 견적 신청을 작성하여 보내주시기 바랍니다.</p>
+                </div>
+                <div class="modal-contact">
+                    <strong>상담문의</strong>&nbsp;&nbsp;이메일: liab.on.ins@gmail.com
                 </div>
 
-                <div class="contact-info">
-                    <h3 style="margin: 0 0 0.5rem 0; font-size: 1rem;">상담문의</h3>
-                    <p style="margin: 0;"><strong>이메일:</strong> liab.on.ins@gmail.com</p>
-                </div>
-
-                <div class="form-section-title">온라인 견적신청</div>
-
-                <form id="quoteForm">
+                <div class="modal-section-title">온라인 견적신청</div>
+                <form id="quoteForm" onsubmit="submitQuote(event)">
                     <div class="modal-form-group">
                         <label>가입대상자 *</label>
-                        <select name="customer_type" required>
+                        <select name="q_customer_type" required>
                             <option value="">선택하세요</option>
                             <option value="corporation">법인사업자</option>
                             <option value="individual">개인사업자</option>
                         </select>
                     </div>
-
                     <div class="modal-form-group">
                         <label>회사명</label>
-                        <input type="text" name="company_name" placeholder="회사/단체명을 입력해주세요">
+                        <input type="text" name="q_company" placeholder="회사/단체명을 입력해주세요">
                     </div>
-
                     <div class="modal-form-group">
                         <label>드론중량 25kg 미만</label>
-                        <div class="drone-count-input">
-                            <input type="number" name="drone_under_25kg" min="0" placeholder="대수를 입력해주세요">
+                        <div class="drone-count-row">
+                            <input type="number" name="q_under25" min="0" placeholder="대수">
                             <span>대</span>
                         </div>
                     </div>
-
                     <div class="modal-form-group">
                         <label>드론중량 25kg ~ 100kg 미만</label>
-                        <div class="drone-count-input">
-                            <input type="number" name="drone_25_100kg" min="0" placeholder="대수를 입력해주세요">
+                        <div class="drone-count-row">
+                            <input type="number" name="q_25_100" min="0" placeholder="대수">
                             <span>대</span>
                         </div>
                     </div>
-
                     <div class="modal-form-group">
                         <label>드론중량 100kg 이상</label>
-                        <div class="drone-count-input">
-                            <input type="number" name="drone_over_100kg" min="0" placeholder="대수를 입력해주세요">
+                        <div class="drone-count-row">
+                            <input type="number" name="q_over100" min="0" placeholder="대수">
                             <span>대</span>
                         </div>
                     </div>
-
                     <div class="modal-form-row">
                         <div class="modal-form-group">
                             <label>담당자명 *</label>
-                            <input type="text" name="manager_name" required>
+                            <input type="text" name="q_manager" required>
                         </div>
                         <div class="modal-form-group">
-                            <label>담당자연락처 *</label>
-                            <input type="tel" name="manager_phone" placeholder="010-0000-0000" required>
+                            <label>담당자 연락처 *</label>
+                            <input type="tel" name="q_phone" placeholder="010-0000-0000" required>
                         </div>
                     </div>
-
                     <div class="modal-form-group">
-                        <label>담당자이메일 *</label>
-                        <input type="email" name="manager_email" required>
+                        <label>담당자 이메일 *</label>
+                        <input type="email" name="q_email" required>
                     </div>
-
                     <div class="modal-form-group">
                         <label>보험상품</label>
-                        <input type="text" value="드론배상책임보험" readonly style="background: #f8f9fa;">
+                        <input type="text" value="드론배상책임보험" readonly style="background:#f8f9fa;">
                     </div>
-
                     <div class="modal-form-group">
                         <label>문의사항</label>
-                        <textarea name="inquiry" rows="4" placeholder="문의하실 내용을 입력해주세요"></textarea>
+                        <textarea name="q_inquiry" rows="3" placeholder="문의하실 내용을 입력해주세요"></textarea>
                     </div>
 
-                    <div class="privacy-agreement">
+                    <div class="privacy-scroll">
                         <p><strong>개인정보 수집 및 이용에 대한 안내</strong></p>
                         <p>1. 바이인 및 배상온은 "정보통신망 이용촉진 및 정보보호"에 관한 법률을 준수하고 있습니다.</p>
                         <p>2. 수집회사 : 바이인, 배상온</p>
@@ -777,161 +937,248 @@
                         <p>6. 보존근거 : 전자상거래 등에서의 소비자보호에 관한법률/신용정보의 이용 및 보호에 관한 법률</p>
                         <p>7. 개인정보 수집 및 이용에 대한 미동의 시 온라인, 오프라인 보험상담이 제한됩니다.</p>
                     </div>
-
-                    <div class="agreement-checkbox">
-                        <input type="checkbox" id="privacyAgree" required>
-                        <label for="privacyAgree">"위의 개인정보 수집 및 이용"에 동의합니다</label>
+                    <div class="agree-row">
+                        <input type="checkbox" id="quoteAgree" required>
+                        <label for="quoteAgree">"위의 개인정보 수집 및 이용"에 동의합니다</label>
                     </div>
-
-                    <button type="submit" class="btn-submit-quote">가입의뢰하기</button>
+                    <button type="submit" class="btn-submit-modal">가입의뢰하기</button>
                 </form>
             </div>
         </div>
     </div>
 
+    <footer>
+        <div class="footer-content">
+            <h3 style="margin-bottom:1rem;">배상온 대리점</h3>
+            <p>📧 이메일: liab.on.ins@gmail.com</p>
+            <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
+            <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
+            <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
+            <p style="margin-top:1.5rem;opacity:0.6;">© 2026 배상온 대리점. All rights reserved. | KB손해보험 공식 대리점</p>
+        </div>
+    </footer>
+
     <script>
-// business-drone-insurance.html 전용 스크립트
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('페이지 로드 완료');
-    
-    const btnNext = document.getElementById('btnNext');
-    const errorBox = document.getElementById('errorBox');
-    const quoteModal = document.getElementById('quoteModal');
-    
-    window.openQuoteModal = function() {
-        console.log('팝업 열기');
-        if (quoteModal) {
-            quoteModal.classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
-    };
-    
-    window.closeQuoteModal = function() {
-        console.log('팝업 닫기');
-        if (quoteModal) {
-            quoteModal.classList.remove('show');
-            document.body.style.overflow = 'auto';
-        }
-    };
-    
-    function checkAnswers() {
-        const q1 = document.querySelector('input[name="q1"]:checked');
-        const q2 = document.querySelector('input[name="q2"]:checked');
-        const q3 = document.querySelector('input[name="q3"]:checked');
-        const q4 = document.querySelector('input[name="q4"]:checked');
-        const q5 = document.querySelector('input[name="q5"]:checked');
-        
-        console.log('답변 체크:', {
-            q1: q1?.value, q2: q2?.value, q3: q3?.value, q4: q4?.value, q5: q5?.value
-        });
-        
-        if (errorBox) errorBox.classList.remove('show');
-        
-        if (q1 && q2 && q3 && q4 && q5) {
-            if (q1.value === 'yes' && q2.value === 'no' && q3.value === 'no' && q4.value === 'no' && q5.value === 'no') {
-                console.log('정답! 버튼 활성화');
-                if (btnNext) btnNext.disabled = false;
-                if (errorBox) errorBox.classList.remove('show');
-            } else {
-                console.log('오답');
-                if (btnNext) btnNext.disabled = true;
-                if (errorBox) errorBox.classList.add('show');
-            }
+    // ── 고객 유형 전환 ──────────────────────────────────
+    let currentType = 'personal';
+
+    function switchType(type) {
+        currentType = type;
+        const pFields = document.getElementById('personalFields');
+        const cFields = document.getElementById('corporateFields');
+        const tabP = document.getElementById('tabPersonal');
+        const tabC = document.getElementById('tabCorporate');
+        const title = document.getElementById('customerSectionTitle');
+
+        const personalIds = ['personalName','birthDate','personalGender','personalPhone','personalEmail'];
+        const corpIds = ['corpNumber','corpName','corpPhone','corpEmail'];
+
+        if (type === 'personal') {
+            pFields.style.display = 'block';
+            cFields.style.display = 'none';
+            tabP.classList.add('active'); tabC.classList.remove('active');
+            title.textContent = '고객정보 입력';
+            personalIds.forEach(id => { const el = document.getElementById(id); if(el) el.setAttribute('required',''); });
+            corpIds.forEach(id => { const el = document.getElementById(id); if(el) el.removeAttribute('required'); });
         } else {
-            console.log('모든 질문에 답하지 않음');
-            if (btnNext) btnNext.disabled = true;
+            pFields.style.display = 'none';
+            cFields.style.display = 'block';
+            tabP.classList.remove('active'); tabC.classList.add('active');
+            title.textContent = '사업자정보 입력';
+            corpIds.forEach(id => { const el = document.getElementById(id); if(el) el.setAttribute('required',''); });
+            personalIds.forEach(id => { const el = document.getElementById(id); if(el) el.removeAttribute('required'); });
         }
     }
-    
-    document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
-        radio.addEventListener('change', function() {
-            console.log('라디오 변경:', this.name, this.value);
-            
-            // Q1에서 "아니오" 선택 시
-            if (this.name === 'q1' && this.value === 'no') {
-                console.log('Q1 아니오 - 개인용으로 이동');
-                if (confirm('개인용 드론보험으로 안내합니다.\n개인용 페이지로 이동하시겠습니까?')) {
-                    window.location.href = 'https://www.liab.co.kr/personal-drone-insurance';
-                    return;
-                } else {
-                    this.checked = false;
-                    return;
-                }
+
+    // ── 생년월일 숫자만 입력 ─────────────────────────────
+    document.addEventListener('DOMContentLoaded', function() {
+        const bd = document.getElementById('birthDate');
+        if (bd) {
+            bd.addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
+            bd.addEventListener('keypress', function(e) { if(!/[0-9]/.test(e.key)) e.preventDefault(); });
+        }
+    });
+
+    // ── 보험기간 설정 ─────────────────────────────────────
+    function setupInsuranceDates() {
+        const startEl = document.getElementById('insuranceStart');
+        const endEl   = document.getElementById('insuranceEnd');
+        const durEl   = document.getElementById('insuranceDuration');
+
+        function pad(n) { return String(n).padStart(2,'0'); }
+        function toLocal(d) {
+            return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())
+                +'T'+pad(d.getHours())+':'+pad(d.getMinutes());
+        }
+        function round30(d) {
+            const ms = 30*60*1000;
+            return new Date(Math.ceil(d.getTime()/ms)*ms);
+        }
+        function addYear(d) {
+            const r = new Date(d);
+            r.setFullYear(r.getFullYear()+1);
+            return r;
+        }
+        function calcDur() {
+            if (!startEl.value || !endEl.value) { durEl.value=''; return; }
+            const s = new Date(startEl.value), e = new Date(endEl.value);
+            if (e<=s) { durEl.value=''; return; }
+            durEl.value = Math.round((e-s)/(1000*60*60*24)) + '일';
+        }
+
+        const minStart = round30(new Date(Date.now() + 30*60*1000));
+        startEl.min   = toLocal(minStart);
+        startEl.value = toLocal(minStart);
+        const initEnd = addYear(minStart);
+        endEl.value = toLocal(initEnd);
+        endEl.min   = toLocal(minStart);
+        endEl.max   = toLocal(initEnd);
+        calcDur();
+
+        startEl.addEventListener('change', function() {
+            const sel = new Date(this.value);
+            const rounded = round30(sel);
+            const curMin = round30(new Date(Date.now()+30*60*1000));
+            if (rounded < curMin) {
+                alert('⚠️ 보험 시작일시는 현재 시간 기준 30분 후부터 선택 가능합니다.');
+                this.value = toLocal(curMin); return;
             }
-            
-            // Q2-5에서 "예" 선택 시
-            if ((this.name === 'q2' || this.name === 'q3' || this.name === 'q4' || this.name === 'q5') && this.value === 'yes') {
-                console.log('Q2-5 예 - 팝업 표시');
-                window.openQuoteModal();
-                return;
+            this.value = toLocal(rounded);
+            const ne = addYear(rounded);
+            endEl.value = toLocal(ne); endEl.min = toLocal(rounded); endEl.max = toLocal(ne);
+            calcDur();
+        });
+
+        endEl.addEventListener('change', function() {
+            const s = new Date(startEl.value);
+            const rounded = round30(new Date(this.value));
+            const maxEnd = addYear(s);
+            if (rounded <= s) {
+                alert('⚠️ 종료일시는 시작일시보다 이후여야 합니다.');
+                this.value = toLocal(maxEnd); calcDur(); return;
             }
-            
-            // 일반 답변 체크
-            checkAnswers();
+            if (rounded > maxEnd) {
+                alert('⚠️ 보험 기간은 1년을 초과할 수 없습니다.\n최대 종료일시로 자동 설정됩니다.');
+                this.value = toLocal(maxEnd); calcDur(); return;
+            }
+            this.value = toLocal(rounded);
+            calcDur();
+        });
+    }
+
+    // ── 가입물건 선택 ─────────────────────────────────────
+    let selectedWeight = '';
+    let selectedFlag   = '';
+
+    function selectWeight(el, val) {
+        document.querySelectorAll('.weight-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        el.querySelector('input').checked = true;
+        selectedWeight = val;
+        checkQuoteNeeded();
+    }
+
+    function selectFlag(el, val) {
+        document.querySelectorAll('.flag-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        el.querySelector('input').checked = true;
+        selectedFlag = val;
+        checkQuoteNeeded();
+    }
+
+    function checkQuoteNeeded() {
+        const box = document.getElementById('quoteNeededBox');
+        const msg = document.getElementById('quoteNeededMsg');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // 견적 필요 조건: 군집/임대 드론 OR 100kg 이상
+        const needQuote = (selectedFlag === 'swarm' || selectedFlag === 'rental' || selectedWeight === 'over_100kg');
+
+        if (needQuote) {
+            let reason = '';
+            if (selectedFlag === 'swarm') reason = '군집드론은';
+            else if (selectedFlag === 'rental') reason = '임대사업자 드론은';
+            else reason = '100kg 이상 드론은';
+            msg.innerHTML = `<strong>${reason} 온라인 가입이 불가합니다.</strong><br>별도 심사를 통해 견적을 산출해야 합니다.<br>아래 버튼을 눌러 견적/가입 의뢰를 신청해주세요.`;
+            box.classList.add('show');
+            submitBtn.disabled = true;
+        } else {
+            box.classList.remove('show');
+            // 모든 필드 입력 완료 시 활성화 (기존 checkFormValidity 재사용)
+            if (selectedWeight && selectedFlag) submitBtn.disabled = false;
+        }
+    }
+
+    // ── 모달 열기/닫기 ────────────────────────────────────
+    function openQuoteModal() {
+        document.getElementById('quoteModal').classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeQuoteModal() {
+        document.getElementById('quoteModal').classList.remove('show');
+        document.body.style.overflow = 'auto';
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('quoteModal');
+        if (modal) modal.addEventListener('click', function(e) {
+            if (e.target === modal) closeQuoteModal();
         });
     });
-    
-    // 다음 버튼 클릭
-    if (btnNext) {
-        btnNext.addEventListener('click', function() {
-            console.log('다음 단계로 이동');
-            window.location.href = '/business-drone-insurance-form';
-        });
-    }
-    
-    // 팝업 배경 클릭 시 닫기
-    if (quoteModal) {
-        quoteModal.addEventListener('click', function(e) {
-            if (e.target === quoteModal) {
-                window.closeQuoteModal();
-            }
-        });
-    }
-    
-    // 견적 의뢰 폼 제출
-    const quoteForm = document.getElementById('quoteForm');
-    if (quoteForm) {
-        quoteForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const data = {
-                customer_type: formData.get('customer_type'),
-                company_name: formData.get('company_name'),
-                drone_under_25kg: formData.get('drone_under_25kg') || 0,
-                drone_25_100kg: formData.get('drone_25_100kg') || 0,
-                drone_over_100kg: formData.get('drone_over_100kg') || 0,
-                manager_name: formData.get('manager_name'),
-                manager_phone: formData.get('manager_phone'),
-                manager_email: formData.get('manager_email'),
-                inquiry: formData.get('inquiry'),
-                insurance_type: '업무용 드론보험 (견적 의뢰)',
-                request_type: 'business_quote'
-            };
 
-            try {
-                const response = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
-
-                if (response.ok) {
-                    alert('견적 의뢰가 성공적으로 전송되었습니다.\n담당자가 확인 후 연락드리겠습니다.');
-                    window.closeQuoteModal();
-                    this.reset();
-                } else {
-                    alert('전송 중 오류가 발생했습니다. 다시 시도해주세요.');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('전송 중 오류가 발생했습니다. 이메일(liab.on.ins@gmail.com)로 직접 문의해주세요.');
-            }
-        });
+    // ── 견적 폼 제출 ─────────────────────────────────────
+    async function submitQuote(e) {
+        e.preventDefault();
+        const f = e.target;
+        const data = {
+            customer_type: f.q_customer_type.value,
+            company_name: f.q_company.value,
+            drone_under_25kg: f.q_under25.value || 0,
+            drone_25_100kg: f.q_25_100.value || 0,
+            drone_over_100kg: f.q_over100.value || 0,
+            manager_name: f.q_manager.value,
+            manager_phone: f.q_phone.value,
+            manager_email: f.q_email.value,
+            inquiry: f.q_inquiry.value,
+            insurance_type: '업무용 드론보험 (견적 의뢰)',
+            request_type: 'business_quote'
+        };
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            if (res.ok) {
+                alert('견적 의뢰가 성공적으로 전송되었습니다.\n담당자가 확인 후 연락드리겠습니다.');
+                closeQuoteModal(); f.reset();
+            } else { alert('전송 중 오류가 발생했습니다. 다시 시도해주세요.'); }
+        } catch (err) {
+            alert('전송 중 오류가 발생했습니다.\n이메일(liab.on.ins@gmail.com)로 직접 문의해주세요.');
+        }
     }
-});
+
+    // ── 폼 제출 (다음 단계로) ─────────────────────────────
+    document.getElementById('droneForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // 100kg 이상 + 해당없음 → 견적 팝업
+        if (selectedWeight === 'over_100kg' && selectedFlag === 'none') {
+            openQuoteModal(); return;
+        }
+        // 군집/임대 선택 시 막기
+        if (selectedFlag === 'swarm' || selectedFlag === 'rental') {
+            openQuoteModal(); return;
+        }
+
+        const formData = new FormData(this);
+        const params = new URLSearchParams();
+        for (const [k,v] of formData.entries()) params.append(k,v);
+        sessionStorage.setItem('droneFormData', params.toString());
+        window.location.href = '/business-drone-insurance-terms';
+    });
+
+    // ── 초기화 ───────────────────────────────────────────
+    setupInsuranceDates();
     </script>
 </body>
 </html>

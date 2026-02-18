@@ -716,6 +716,7 @@
     <a href="/">홈</a>
     <a href="/drone-insurance">드론보험</a>
     <a href="/claims.html" class="active">보험금청구</a>
+    
   </nav>
 </header>
 
@@ -1371,21 +1372,7 @@
       <div class="download-banner">
         <div class="download-banner-info">
           <div class="download-banner-title">📄 ${pdfLabel}</div>
-          <div class="download-banner-desc">청구 시 필수 서류입니다. 다운로드 후 작성하여 함께 제출해 주세요.<br>${pdfDesc}</div>
-        </div>
-        <div class="download-btns">
-          <a href="${pdfFile}" download="${pdfLabel}.pdf" class="btn-download">
-            <span>⬇</span> PDF 다운로드
-          </a>
-        </div>
-      </div>
-    `;
-
-    const html = `
-      <div class="docs-header">
-        <div class="docs-header-icon">${data.icon}</div>
-        <div>
-          <div class="docs-header-title">${data.title}</div>
+          <div class="download-banner-desc">청구 시 필수 서류입니다. 다운로드 후 작성하여 함께 �div class="docs-header-title">${data.title}</div>
           <div class="docs-header-sub">아래 서류를 준비하신 후 접수해 주세요</div>
         </div>
       </div>
@@ -1458,4 +1445,14 @@
   function updateSteps(active) {
     for (let i = 1; i <= 3; i++) {
       const num = document.getElementById(`step${i}-num`);
-      c
+      const lbl = document.getElementById(`step${i}-label`);
+      num.classList.remove('active', 'done');
+      lbl.classList.remove('active');
+      if (i < active) { num.classList.add('done'); num.textContent = '✓'; }
+      else if (i === active) { num.classList.add('active'); num.textContent = i; lbl.classList.add('active'); }
+      else { num.textContent = i; }
+    }
+  }
+</script>
+</body>
+</html>

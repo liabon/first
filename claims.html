@@ -708,15 +708,14 @@
 
 <!-- ─── HEADER ─── -->
 <header class="site-header">
-  <a href="https://www.liab.co.kr" class="header-logo">
+  <a href="/" class="header-logo">
     <span class="logo-badge">KB</span>
     <span class="logo-name">배상온 대리점</span>
   </a>
   <nav class="header-nav">
-    <a href="https://www.liab.co.kr">홈</a>
-    <a href="#">보험 상품</a>
-    <a href="#" class="active">보상청구</a>
-    <a href="#contact">빠른 상담</a>
+    <a href="/">홈</a>
+    <a href="/drone-insurance">드론보험</a>
+    <a href="/claims.html" class="active">보험금청구</a>
   </nav>
 </header>
 
@@ -803,7 +802,7 @@
         <div class="method-card">
           <div class="method-icon">📧</div>
           <div class="method-name">이메일 접수</div>
-          <div class="method-detail">liab.on.ins@gmail.com<br>사진/스캔본 첨부</div>
+          <div class="method-detail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f89491999ad69796d691968bb89f95999194d69b9795">[email&#160;protected]</a><br>사진/스캔본 첨부</div>
         </div>
         <div class="method-card">
           <div class="method-icon">☎️</div>
@@ -817,7 +816,7 @@
         </div>
       </div>
 
-      <a href="mailto:liab.on.ins@gmail.com" class="btn-claim">
+      <a href="/cdn-cgi/l/email-protection#a1cdc8c0c38fcecf8fc8cfd2e1c6ccc0c8cd8fc2cecc" class="btn-claim">
         📧 이메일로 청구 서류 보내기
       </a>
       <a href="https://www.kbinsure.co.kr" target="_blank" class="btn-secondary">
@@ -843,12 +842,12 @@
   <div class="footer-logo">배상온 대리점</div>
   <div class="footer-text">
     KB손해보험 공식 대리점 | 대리점등록번호: 제2026010037호<br>
-    📍 서울특별시 동대문구 천호대로 301, 1706호 | 📧 liab.on.ins@gmail.com<br>
+    📍 서울특별시 동대문구 천호대로 301, 1706호 | 📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="137f7a72713d7c7d3d7a7d6053747e727a7f3d707c7e">[email&#160;protected]</a><br>
     사업자등록번호: 501-63-18916 | 대표: 김리하
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // ─── DATA ───
   const claimTypes = {
     event: [
@@ -1444,14 +1443,4 @@
   function updateSteps(active) {
     for (let i = 1; i <= 3; i++) {
       const num = document.getElementById(`step${i}-num`);
-      const lbl = document.getElementById(`step${i}-label`);
-      num.classList.remove('active', 'done');
-      lbl.classList.remove('active');
-      if (i < active) { num.classList.add('done'); num.textContent = '✓'; }
-      else if (i === active) { num.classList.add('active'); num.textContent = i; lbl.classList.add('active'); }
-      else { num.textContent = i; }
-    }
-  }
-</script>
-</body>
-</html>
+      c

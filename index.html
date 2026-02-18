@@ -83,6 +83,66 @@
             box-shadow: 0 6px 20px rgba(255, 184, 0, 0.4);
         }
 
+        /* Navigation */
+        .header-nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--kb-gray);
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--kb-gold);
+        }
+
+        .nav-links a.active {
+            color: var(--kb-gold);
+            font-weight: 700;
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--kb-gold);
+            border-radius: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 1rem 1.5rem;
+            }
+            .kb-logo {
+                height: 35px;
+            }
+            .agency-name {
+                font-size: 1.1rem;
+            }
+            .nav-links {
+                display: none;
+            }
+            .contact-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
+
         /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -422,7 +482,14 @@
                 <div class="divider"></div>
                 <div class="agency-name">배상온 대리점</div>
             </div>
-            <a href="#contact" class="contact-btn">빠른 상담</a>
+            <div class="header-nav">
+                <nav class="nav-links">
+                    <a href="/" class="active">홈</a>
+                    <a href="/drone-insurance">드론보험</a>
+                    <a href="/claims.html">보험금청구</a>
+                </nav>
+                <a href="#contact" class="contact-btn">빠른 상담</a>
+            </div>
         </div>
     </header>
 
@@ -497,7 +564,7 @@
         <div class="footer-content">
             <div class="footer-info">
                 <h3>배상온 대리점</h3>
-                <p>📧 이메일: liab.on.ins@gmail.com</p>
+                <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="472b2e2625692829692e293407202a262e2b6924282a">[email&#160;protected]</a></p>
                 <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
                 <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
                 <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
@@ -542,7 +609,7 @@
             <p>이름: 김리하<br>
             소속: 바이인(BuyInn)<br>
             직위: 대표<br>
-            이메일: liab.on.ins@gmail.com</p>
+            이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="86eaefe7e4a8e9e8a8efe8f5c6e1ebe7efeaa8e5e9eb">[email&#160;protected]</a></p>
         </div>
     </div>
 
@@ -576,7 +643,7 @@
         </div>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // Form submission
         document.getElementById('contactForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -607,13 +674,4 @@
         // Modal functions
         function openModal(type) {
             if (type === 'privacy') {
-                document.getElementById('privacyModal').style.display = 'block';
-            } else if (type === 'terms') {
-                document.getElementById('termsModal').style.display = 'block';
-            }
-        }
-
-        function closeModal(type) {
-            if (type === 'privacy') {
-                document.getElementById('privacyModal').style.display = 'none';
-            } else if (type === 'terms') {
+                document.getElementById('privacyModal').style.display =

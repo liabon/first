@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>보험금 청구 안내 | 배상온 대리점</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --kb-yellow: #F5A623;
+      --kb-orange: #E8891A;
+      --kb-dark: #1a1a2e;
+      --kb-navy: #16213e;
+      --kb-mid: #0f3460;
+      --kb-accent: #e94560;
+      --kb-light: #f8f6f0;
+      --kb-white: #ffffff;
+      --kb-gray: #6b7280;
+      --kb-border: #e5e0d5;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+      --shadow-md: 0 8px 30px rgba(0,0,0,0.12);
+      --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+      --radius: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--kb-light);
+      color: var(--kb-dark);
+      min-height: 100vh;
+    }
+
+    /* ─── HEADER ─── */
+    .site-header {
+      background: var(--kb-white);
+      border-bottom: 2px solid var(--kb-border);
+      padding: 16px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .logo-badge {
+      background: var(--kb-yellow);
+      color: var(--kb-dark);
+      font-weight: 900;
+      font-size: 13px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      letter-spacing: -0.3px;
+    }
+    .logo-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--kb-dark);
+      letter-spacing: -0.5px;
+    }
+    .header-nav {
+      display: flex;
+      gap: 32px;
+    }
+    .header-nav a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--kb-gray);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .header-nav a:hover, .header-nav a.active {
+      color: var(--kb-orange);
+      font-weight: 700;
+    }
+
+    /* ─── HERO ─── */
+    .claims-hero {
+      background: linear-gradient(135deg, var(--kb-navy) 0%, var(--kb-mid) 60%, #1a4a8a 100%);
+      padding: 72px 40px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .claims-hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: rgba(245, 166, 35, 0.12);
+    }
+    .claims-hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -40px;
+      width: 240px; height: 240px;
+      border-radius: 50%;
+      background: rgba(245, 166, 35, 0.08);
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      background: rgba(245, 166, 35, 0.2);
+      color: var(--kb-yellow);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(245, 166, 35, 0.3);
+    }
+    .hero-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--kb-white);
+      line-height: 1.25;
+      margin-bottom: 16px;
+      letter-spacing: -1px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-title span { color: var(--kb-yellow); }
+    .hero-subtitle {
+      font-size: 16px;
+      color: rgba(255,255,255,0.65);
+      font-weight: 300;
+      letter-spacing: -0.3px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── STEP INDICATOR ─── */
+    .step-bar {
+      background: var(--kb-white);
+      border-bottom: 1px solid var(--kb-border);
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 20px;
+    }
+    .step-num {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--kb-border);
+      color: var(--kb-gray);
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+    .step-num.active {
+      background: var(--kb-orange);
+      color: white;
+      box-shadow: 0 0 0 4px rgba(232, 137, 26, 0.2);
+    }
+    .step-num.done {
+      background: var(--kb-mid);
+      color: white;
+    }
+    .step-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--kb-gray);
+    }
+    .step-label.active { color: var(--kb-dark); font-weight: 700; }
+    .step-divider {
+      width: 50px; height: 1px;
+      background: var(--kb-border);
+    }
+
+    /* ─── MAIN LAYOUT ─── */
+    .claims-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    /* ─── SECTION TITLE ─── */
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--kb-dark);
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+    .section-desc {
+      font-size: 14px;
+      color: var(--kb-gray);
+      margin-bottom: 28px;
+    }
+
+    /* ─── INSURANCE TYPE CARDS ─── */
+    .insurance-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .ins-card {
+      background: var(--kb-white);
+      border: 2px solid var(--kb-border);
+      border-radius: var(--radius);
+      padding: 32px 24px 28px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .ins-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--kb-border);
+      transition: background 0.25s;
+    }
+    .ins-card:hover {
+      border-color: var(--kb-yellow);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    .ins-card:hover::before { background: var(--kb-yellow); }
+    .ins-card.selected {
+      border-color: var(--kb-orange);
+      background: #fffdf8;
+      box-shadow: 0 0 0 3px rgba(232, 137, 26, 0.15), var(--shadow-md);
+    }
+    .ins-card.selected::before { background: var(--kb-orange); }
+    .ins-icon {
+      font-size: 40px;
+      display: block;
+      margin-bottom: 14px;
+      transition: transform 0.25s;
+    }
+    .ins-card:hover .ins-icon { transform: scale(1.15); }
+    .ins-name {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--kb-dark);
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+    .ins-desc {
+      font-size: 12px;
+      color: var(--kb-gray);
+      line-height: 1.6;
+    }
+    .ins-check {
+      position: absolute;
+      top: 14px; right: 14px;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: var(--kb-orange);
+      color: white;
+      font-size: 13px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .ins-card.selected .ins-check { display: flex; }
+
+    /* ─── CLAIM TYPE SECTION ─── */
+    .claim-types-section {
+      display: none;
+    }
+    .claim-types-section.visible { display: block; }
+
+    .claim-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+    .claim-type-btn {
+      background: var(--kb-white);
+      border: 2px solid var(--kb-border);
+      border-radius: 12px;
+      padding: 20px 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.2s;
+      text-align: left;
+    }
+    .claim-type-btn:hover {
+      border-color: var(--kb-yellow);
+      background: #fffdf8;
+      transform: translateX(4px);
+    }
+    .claim-type-btn.selected {
+      border-color: var(--kb-orange);
+      background: #fffdf8;
+      box-shadow: 0 0 0 3px rgba(232, 137, 26, 0.12);
+    }
+    .claim-type-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f8f4ec, #f0e8d4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .claim-type-btn.selected .claim-type-icon {
+      background: linear-gradient(135deg, var(--kb-yellow), var(--kb-orange));
+    }
+    .claim-type-info {}
+    .claim-type-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--kb-dark);
+      margin-bottom: 3px;
+      letter-spacing: -0.3px;
+    }
+    .claim-type-sub {
+      font-size: 12px;
+      color: var(--kb-gray);
+    }
+
+    /* ─── DOCS PANEL ─── */
+    .docs-panel {
+      display: none;
+    }
+    .docs-panel.visible { display: block; }
+
+    .docs-header {
+      background: linear-gradient(135deg, var(--kb-navy), var(--kb-mid));
+      border-radius: var(--radius) var(--radius) 0 0;
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .docs-header-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: rgba(245, 166, 35, 0.2);
+      border: 1px solid rgba(245, 166, 35, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    .docs-header-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+      letter-spacing: -0.5px;
+    }
+    .docs-header-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      margin-top: 3px;
+    }
+
+    .docs-body {
+      background: white;
+      border: 2px solid var(--kb-border);
+      border-top: none;
+      border-radius: 0 0 var(--radius) var(--radius);
+      padding: 28px;
+    }
+
+    .docs-group {
+      margin-bottom: 24px;
+    }
+    .docs-group:last-child { margin-bottom: 0; }
+
+    .docs-group-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--kb-orange);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--kb-border);
+    }
+
+    .doc-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0ede7;
+    }
+    .doc-item:last-child { border-bottom: none; }
+    .doc-bullet {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--kb-yellow);
+      flex-shrink: 0;
+      margin-top: 7px;
+    }
+    .doc-text {
+      font-size: 14px;
+      color: #374151;
+      line-height: 1.6;
+    }
+    .doc-badge {
+      display: inline-block;
+      background: #fef3c7;
+      color: #92400e;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+    .doc-sub {
+      font-size: 12px;
+      color: var(--kb-gray);
+      margin-top: 4px;
+      padding-left: 2px;
+    }
+
+    /* ─── DOWNLOAD BANNER ─── */
+    .download-banner {
+      background: linear-gradient(135deg, #fff8ec, #fff3dc);
+      border: 1.5px solid #f5d08a;
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .download-banner-info {}
+    .download-banner-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--kb-dark);
+      margin-bottom: 3px;
+    }
+    .download-banner-desc {
+      font-size: 12px;
+      color: #92400e;
+    }
+    .download-btns {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--kb-dark);
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 9px;
+      text-decoration: none;
+      transition: all 0.2s;
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-download:hover {
+      background: var(--kb-mid);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .btn-download.outline {
+      background: white;
+      color: var(--kb-dark);
+      border: 1.5px solid #d4a017;
+    }
+    .btn-download.outline:hover {
+      background: #fffaee;
+      border-color: var(--kb-orange);
+    }
+
+    /* ─── SUBMIT CTA ─── */
+    .submit-section {
+      background: linear-gradient(135deg, #fffdf5, #fff9ec);
+      border: 2px solid #f0e8d0;
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-top: 24px;
+      display: none;
+    }
+    .submit-section.visible { display: block; }
+
+    .submit-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--kb-dark);
+      margin-bottom: 6px;
+    }
+    .submit-desc {
+      font-size: 13px;
+      color: var(--kb-gray);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .submit-methods {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .method-card {
+      background: white;
+      border: 1.5px solid var(--kb-border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .method-icon { font-size: 22px; margin-bottom: 8px; }
+    .method-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--kb-dark);
+      margin-bottom: 4px;
+    }
+    .method-detail {
+      font-size: 11px;
+      color: var(--kb-gray);
+      line-height: 1.5;
+    }
+
+    .btn-claim {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--kb-yellow), var(--kb-orange));
+      color: var(--kb-dark);
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 15px rgba(232, 137, 26, 0.35);
+      letter-spacing: -0.3px;
+    }
+    .btn-claim:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(232, 137, 26, 0.45);
+    }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: white;
+      color: var(--kb-mid);
+      font-weight: 600;
+      font-size: 14px;
+      padding: 12px 24px;
+      border-radius: 10px;
+      text-decoration: none;
+      border: 2px solid var(--kb-border);
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-left: 12px;
+    }
+    .btn-secondary:hover {
+      border-color: var(--kb-mid);
+      background: #f8f9ff;
+    }
+
+    /* ─── NOTICE BOX ─── */
+    .notice-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-top: 16px;
+    }
+    .notice-box .notice-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e40af;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .notice-box ul {
+      list-style: none;
+      padding: 0;
+    }
+    .notice-box li {
+      font-size: 12px;
+      color: #3b82f6;
+      padding: 3px 0;
+      padding-left: 14px;
+      position: relative;
+    }
+    .notice-box li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: #93c5fd;
+    }
+
+    /* ─── BACK BUTTON ─── */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--kb-gray);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 0;
+      margin-bottom: 20px;
+      transition: color 0.2s;
+    }
+    .back-btn:hover { color: var(--kb-orange); }
+
+    /* ─── FOOTER ─── */
+    .site-footer {
+      background: var(--kb-dark);
+      padding: 40px;
+      text-align: center;
+    }
+    .footer-logo {
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 8px;
+    }
+    .footer-text {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.8;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .animate-in {
+      animation: slideDown 0.35s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+    }
+
+    /* ─── MOBILE ─── */
+    @media (max-width: 768px) {
+      .claims-hero { padding: 48px 24px 40px; }
+      .hero-title { font-size: 28px; }
+      .insurance-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .claim-grid { grid-template-columns: 1fr; }
+      .submit-methods { grid-template-columns: 1fr; }
+      .step-bar { padding: 16px 20px; }
+      .step-item { padding: 0 10px; }
+      .step-divider { width: 24px; }
+      .header-nav { display: none; }
+      .site-header { padding: 16px 24px; }
+    }
+    @media (max-width: 480px) {
+      .insurance-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── DRONE SPECIAL COLORS ─── */
+    .ins-card[data-type="drone"].selected { background: #f0f9ff; }
+    .ins-card[data-type="drone"].selected::before { background: #0ea5e9; }
+    .ins-card[data-type="drone"].selected { border-color: #0ea5e9; box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15), var(--shadow-md); }
+    .ins-card[data-type="drone"].selected .ins-check { background: #0ea5e9; }
+
+    /* ─── EVENT SPECIAL COLORS ─── */
+    .ins-card[data-type="event"].selected { background: #fdf4ff; }
+    .ins-card[data-type="event"].selected::before { background: #a855f7; }
+    .ins-card[data-type="event"].selected { border-color: #a855f7; box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15), var(--shadow-md); }
+    .ins-card[data-type="event"].selected .ins-check { background: #a855f7; }
+  </style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header class="site-header">
+  <a href="https://www.liab.co.kr" class="header-logo">
+    <span class="logo-badge">KB</span>
+    <span class="logo-name">배상온 대리점</span>
+  </a>
+  <nav class="header-nav">
+    <a href="https://www.liab.co.kr">홈</a>
+    <a href="#">보험 상품</a>
+    <a href="#" class="active">보상청구</a>
+    <a href="#contact">빠른 상담</a>
+  </nav>
+</header>
+
+<!-- ─── HERO ─── -->
+<section class="claims-hero">
+  <span class="hero-eyebrow">KB손해보험 공식 대리점</span>
+  <h1 class="hero-title">보험금 <span>청구 안내</span></h1>
+  <p class="hero-subtitle">필요한 서류를 안내해 드립니다. 아래에서 보험 종류를 선택해 주세요.</p>
+</section>
+
+<!-- ─── STEP BAR ─── -->
+<div class="step-bar">
+  <div class="step-item">
+    <div class="step-num active" id="step1-num">1</div>
+    <span class="step-label active" id="step1-label">보험 종류 선택</span>
+  </div>
+  <div class="step-divider"></div>
+  <div class="step-item">
+    <div class="step-num" id="step2-num">2</div>
+    <span class="step-label" id="step2-label">청구 항목 선택</span>
+  </div>
+  <div class="step-divider"></div>
+  <div class="step-item">
+    <div class="step-num" id="step3-num">3</div>
+    <span class="step-label" id="step3-label">필요 서류 확인</span>
+  </div>
+</div>
+
+<!-- ─── MAIN ─── -->
+<main class="claims-wrap">
+
+  <!-- STEP 1: 보험 종류 선택 -->
+  <div id="step1-section">
+    <p class="section-title">어떤 보험을 가입하셨나요?</p>
+    <p class="section-desc">청구하실 보험 상품을 선택해 주세요.</p>
+
+    <div class="insurance-grid">
+      <div class="ins-card" data-type="event" onclick="selectInsurance('event')">
+        <div class="ins-check">✓</div>
+        <span class="ins-icon">🎪</span>
+        <div class="ins-name">행사보험</div>
+        <div class="ins-desc">행사 중 발생한 배상책임,<br>참가자 치료비 등 보장</div>
+      </div>
+      <div class="ins-card" data-type="drone" onclick="selectInsurance('drone')">
+        <div class="ins-check">✓</div>
+        <span class="ins-icon">🚁</span>
+        <div class="ins-name">드론 배상책임보험</div>
+        <div class="ins-desc">드론 비행 중 발생한<br>사고의 대인·대물 배상</div>
+      </div>
+      <div class="ins-card" data-type="overseas" onclick="selectInsurance('overseas')">
+        <div class="ins-check">✓</div>
+        <span class="ins-icon">✈️</span>
+        <div class="ins-name">해외여행자보험</div>
+        <div class="ins-desc">해외 여행 중 의료비,<br>분실, 항공 지연 등 보장</div>
+      </div>
+      <div class="ins-card" data-type="domestic" onclick="selectInsurance('domestic')">
+        <div class="ins-check">✓</div>
+        <span class="ins-icon">🗺️</span>
+        <div class="ins-name">국내여행자보험</div>
+        <div class="ins-desc">국내 여행·출장 중<br>상해, 배상책임 등 보장</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: 청구 항목 선택 -->
+  <div id="step2-section" class="claim-types-section">
+    <button class="back-btn" onclick="goBack(1)">← 보험 종류 다시 선택</button>
+    <p class="section-title" id="step2-title">청구하실 항목을 선택해 주세요</p>
+    <p class="section-desc">해당하는 항목을 선택하면 필요한 서류를 안내해 드립니다.</p>
+    <div class="claim-grid" id="claim-grid"></div>
+  </div>
+
+  <!-- STEP 3: 필요 서류 -->
+  <div id="step3-section" class="docs-panel">
+    <button class="back-btn" onclick="goBack(2)">← 청구 항목 다시 선택</button>
+
+    <div id="docs-panel-content"></div>
+
+    <!-- 접수 방법 -->
+    <div class="submit-section visible" style="margin-top:24px;">
+      <div class="submit-title">📮 접수 방법</div>
+      <div class="submit-desc">서류 준비 후 아래 방법으로 접수해 주세요. 서류 제출 전 궁금한 점은 언제든지 문의해 주세요.</div>
+      <div class="submit-methods">
+        <div class="method-card">
+          <div class="method-icon">📧</div>
+          <div class="method-name">이메일 접수</div>
+          <div class="method-detail">liab.on.ins@gmail.com<br>사진/스캔본 첨부</div>
+        </div>
+        <div class="method-card">
+          <div class="method-icon">☎️</div>
+          <div class="method-name">전화 상담</div>
+          <div class="method-detail">KB손해보험<br>1544-0114</div>
+        </div>
+        <div class="method-card">
+          <div class="method-icon">🌐</div>
+          <div class="method-name">KB손보 홈페이지</div>
+          <div class="method-detail">www.kbinsure.co.kr<br>본인인증 후 접수</div>
+        </div>
+      </div>
+
+      <a href="mailto:liab.on.ins@gmail.com" class="btn-claim">
+        📧 이메일로 청구 서류 보내기
+      </a>
+      <a href="https://www.kbinsure.co.kr" target="_blank" class="btn-secondary">
+        KB손보 바로가기 →
+      </a>
+
+      <div class="notice-box">
+        <div class="notice-title">ℹ️ 유의사항</div>
+        <ul>
+          <li>사고 내용 및 특성에 따라 추가 심사 서류가 요청될 수 있습니다.</li>
+          <li>같은 위험을 보상하는 타 계약이 있는 경우 비례보상이 적용됩니다.</li>
+          <li>진료내역과 진료비용이 제출서류에서 확인되지 않는 경우 추가증빙서류 요청이 있을 수 있습니다.</li>
+          <li>미성년자의 경우 법정대리인(부모님)의 서류가 추가로 필요합니다.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ─── FOOTER ─── -->
+<footer class="site-footer">
+  <div class="footer-logo">배상온 대리점</div>
+  <div class="footer-text">
+    KB손해보험 공식 대리점 | 대리점등록번호: 제2026010037호<br>
+    📍 서울특별시 동대문구 천호대로 301, 1706호 | 📧 liab.on.ins@gmail.com<br>
+    사업자등록번호: 501-63-18916 | 대표: 김리하
+  </div>
+</footer>
+
+<script>
+  // ─── DATA ───
+  const claimTypes = {
+    event: [
+      { id: 'medical', icon: '🏥', name: '치료비 (상해)', sub: '행사 참가자 상해 치료비' },
+      { id: 'liability-person', icon: '🧑', name: '대인 배상', sub: '참가자·관람객 신체 피해 배상' },
+      { id: 'liability-property', icon: '🏠', name: '대물 배상', sub: '타인 재물 손해 배상' },
+    ],
+    drone: [
+      { id: 'liability-person', icon: '🧑', name: '대인 배상', sub: '타인 신체 손해 배상' },
+      { id: 'liability-property', icon: '🏠', name: '대물 배상', sub: '타인 재물 손해 배상' },
+    ],
+    overseas: [
+      { id: 'medical', icon: '🏥', name: '의료비', sub: '상해·질병 치료비' },
+      { id: 'flight', icon: '✈️', name: '항공기·수하물 지연', sub: '결항·연착·수하물 지연' },
+      { id: 'baggage', icon: '🧳', name: '휴대품 손해', sub: '도난·파손·분실' },
+      { id: 'liability', icon: '⚖️', name: '배상 책임', sub: '여행 중 타인 피해 배상' },
+      { id: 'passport', icon: '📘', name: '여권 재발급', sub: '여권 분실·도난 재발급' },
+    ],
+    domestic: [
+      { id: 'medical', icon: '🏥', name: '의료비', sub: '상해·질병 치료비' },
+      { id: 'baggage', icon: '🧳', name: '휴대품 손해', sub: '도난·파손·분실' },
+      { id: 'liability', icon: '⚖️', name: '배상 책임', sub: '여행 중 타인 피해 배상' },
+    ]
+  };
+
+  const docsData = {
+    event: {
+      medical: {
+        title: '행사보험 — 치료비 (상해)',
+        icon: '🏥',
+        groups: [
+          {
+            label: '공통 서류',
+            items: [
+              { text: '보험금청구서', badge: '필수', sub: 'KB손해보험 홈페이지에서 다운로드' },
+              { text: '청구인 신분증 사본', badge: '필수', sub: '주민등록증 앞면 (뒷면 지문 포함 면 제출 불필요)' },
+              { text: '피보험자(부상자) 통장 사본', badge: '필수' },
+              { text: '행사명·행사일자·행사장소가 확인되는 서류', badge: '필수', sub: '행사 안내문, 참가 확인서, 주최자 확인서 등' },
+              { text: '미성년자의 경우: 주민등록등본 또는 법정대리인 확인 서류 추가' },
+            ]
+          },
+          {
+            label: '입원 치료 서류',
+            items: [
+              { text: '진단서 (질병분류코드·진단명, 입퇴원 기간 기재 필수)' },
+              { text: '입퇴원 확인서 또는 진료확인서 (질병분류코드·입퇴원 기간 기재 필수)' },
+              { text: '진료비 계산서(영수증) — 카드영수증 불가' },
+              { text: '진료비 세부내역서 (비급여 내역 없을 시 생략 가능)' },
+            ]
+          },
+          {
+            label: '통원 치료 서류',
+            items: [
+              { text: '진단명이 확인되는 진료확인서 또는 진단서' },
+              { text: '진료비 계산서 (병원·약국 영수증) — 카드영수증 불가' },
+              { text: '질병분류코드가 기재된 처방전 (약 처방 시)' },
+              { text: '진료비 세부내역서' },
+            ]
+          },
+          {
+            label: '사고 경위 서류',
+            items: [
+              { text: '사고 경위서', sub: '행사 진행 중 언제·어디서·어떻게 부상이 발생했는지 기재 (임의 양식 가능)' },
+              { text: '행사 주최자(또는 주관사) 사고 확인서', sub: '행사 담당자 직인 또는 서명 필요' },
+              { text: '사고 현장 사진 (있는 경우)', sub: '부상 경위를 파악할 수 있는 현장 사진' },
+            ]
+          }
+        ]
+      },
+      'liability-person': {
+        title: '행사보험 — 배상책임 (대인)',
+        icon: '🧑',
+        groups: [
+          {
+            label: '공통 서류',
+            items: [
+              { text: '보험금청구서', badge: '필수' },
+              { text: '개인(신용)정보 수집·이용·제공 동의서', badge: '필수', sub: '피보험자 및 피해자가 미성년자인 경우 법정대리인 작성' },
+              { text: '청구인(주최자) 신분증 사본', badge: '필수' },
+              { text: '피보험자 통장 사본', badge: '필수' },
+              { text: '행사 개최 확인 서류', badge: '필수', sub: '행사 계획서, 안내문, 참가신청서 등 행사 존재를 입증하는 서류' },
+              { text: '당사자 간 합의 완료 시: 합의금 지급 확인서' },
+            ]
+          },
+          {
+            label: '대인 피해 입증 서류',
+            items: [
+              { text: '피해자의 진단서 또는 진료확인서 (진단명·상해 부위 기재)' },
+              { text: '초진 진료기록지' },
+              { text: '치료비 영수증 (카드영수증 불가)' },
+              { text: '진료비 세부내역서 (비급여 내역 없을 시 생략 가능)' },
+              { text: '손해배상금 및 기타 비용 지급 증빙서류' },
+            ]
+          },
+          {
+            label: '사고 경위 서류',
+            items: [
+              { text: '사고 경위서 (행사 일시, 장소, 사고 발생 상황 기재)' },
+              { text: '사고 현장 사진 또는 영상 (있는 경우)' },
+              { text: '목격자 확인서 (해당하는 경우)', sub: '목격자 성명, 연락처, 사고 경위 기재' },
+              { text: '행사 참가자 명단 또는 참가확인서 (피해자가 정식 참가자임을 확인)' },
+            ]
+          }
+        ]
+      },
+      'liability-property': {
+        title: '행사보험 — 배상책임 (대물)',
+        icon: '🏠',
+        groups: [
+          {
+            label: '공통 서류',
+            items: [
+              { text: '보험금청구서', badge: '필수' },
+              { text: '개인(신용)정보 수집·이용·제공 동의서', badge: '필수' },
+              { text: '청구인(주최자) 신분증 사본', badge: '필수' },
+              { text: '피보험자 통장 사본', badge: '필수' },
+              { text: '행사 개최 확인 서류', badge: '필수', sub: '행사 계획서, 안내문 등 행사 존재를 입증하는 서류' },
+              { text: '당사자 간 합의 완료 시: 합의금 지급 확인서' },
+            ]
+          },
+          {
+            label: '대물 피해 입증 서류',
+            items: [
+              { text: '손상물 내역서 (파손된 피해물품 사진 — 전체 및 파손부위, 제품명 포함)' },
+              { text: '수리 가능 시: 수리 견적서 및 수리비 영수증' },
+              { text: '수리 불가 시: 수리불가 확인서, 신품가격 견적서', sub: '물품의 구입가격·구입처 등이 적힌 구입영수증' },
+              { text: '피해물품 구입 시기·가격 증빙서류' },
+              { text: '손해배상금 및 기타 비용 지급 증빙서류' },
+            ]
+          },
+          {
+            label: '사고 경위 서류',
+            items: [
+              { text: '사고 경위서 (행사 일시, 장소, 사고 발생 상황 기재)' },
+              { text: '사고 현장 사진 또는 영상 (있는 경우)' },
+              { text: '목격자 확인서 (해당하는 경우)' },
+            ]
+          }
+        ]
+      }
+    },
+    drone: {
+      'liability-person': {
+        title: '드론 배상책임 — 대인 사고',
+        icon: '🧑',
+        groups: [
+          {
+            label: '공통 서류',
+            items: [
+              { text: '보험금청구서', badge: '필수', sub: '배상온 대리점 또는 KB손해보험 홈페이지에서 다운로드' },
+              { text: '개인(신용)정보 수집·이용·제공 동의서', badge: '필수' },
+              { text: '청구인 신분증 사본', badge: '필수', sub: '주민등록증 앞면만 (뒷면 지문정보 포함 부분은 제출 불필요)' },
+              { text: '피보험자 통장 사본', badge: '필수' },
+            ]
+          },
+          {
+            label: '대인 사고 추가 서류',
+            items: [
+              { text: '피해자의 진단서 또는 진료확인서 (진단명 기재)' },
+              { text: '초진 진료기록지' },
+              { text: '치료비 영수증 (카드영수증 불가)' },
+              { text: '진료비 세부내역서 (비급여 내역이 없을 경우 생략 가능)' },
+              { text: '손해배상금 및 기타 비용 지급 증빙서류' },
+              { text: '합의 완료 시: 손해배상 합의서 및 합의금 지급확인서' },
+              { text: '사고 발생 경위서 (드론 비행 목적, 사고 경위 기재)', sub: '임의 양식 가능' },
+              { text: '드론 비행 사진 또는 영상 (사고 입증용)', sub: '있는 경우 제출' },
+            ]
+          }
+        ]
+      },
+      'liability-property': {
+        title: '드론 배상책임 — 대물 사고',
+        icon: '🏠',
+        groups: [
+          {
+            label: '공통 서류',
+            items: [
+              { text: '보험금청구서', badge: '필수' },
+              { text: '개인(신용)정보 수집·이용·제공 동의서', badge: '필수' },
+              { text: '청구인 신분증 사본', badge: '필수' },
+              { text: '피보험자 통장 사본', badge: '필수' },
+            ]
+          },
+          {
+            label: '대물 사고 추가 서류',
+            items: [
+              { text: '손상물 내역서 및 파손 부위 사진 (전체·파손부위·제품명 포함)' },
+              { text: '수리 가능 시: 손상물 수리 견적서 및 수리비 영수증' },
+              { text: '수리 불가 시: 수리불가 확인서, 신품가격 견적서', sub: '물품의 구입가격, 구입처 등이 적힌 구입영수증' },
+              { text: '손해배상금 및 기타 비용 지급 증빙서류' },
+              { text: '사고 발생 경위서 (드론 비행 목적, 사고 경위 기재)' },
+              { text: '드론 비행 사진 또는 영상 (사고 입증용)', sub: '있는 경우 제출' },
+              { text: '관할 기관 신고 확인서 (해당 시)' },
+            ]
+          }
+        ]
+      }
+    },
+    overseas: {
+      medical: {
+        title: '해외여행 — 의료비 청구',
+        icon: '🏥',
+        groups: [
+          {
+            label: '공통 서류',
+            items: [
+              { text: '보험금청구서', badge: '필수', sub: 'KB손해보험 홈페이지에서 다운로드' },
+              { text: '여권 사본 (사진 면 + 입출국 도장 면)', badge: '필수' },
+              { text: '청구인 신분증 사본', badge: '필수', sub: '주민등록증 앞면 (뒷면 지문 포함 면 제출 불필요)' },
+              { text: '피보험자 통장 사본', badge: '필수' },
+              { text: '미성년자의 경우: 주민등록등본 또는 친권 확인 서류 추가' },
+            ]
+          },
+          {
+            label: '해외 입원·통원 서류',
+            items: [
+              { text: '해외병원 서류 일체 (진단서, 진료확인서, 병원영수증)', sub: '처방전 영수증 포함' },
+              { text: '진단명이 확인되는 의료기관 발급서류 (질병분류코드 기재 필수)' },
+              { text: '진료비 세부내역서 (비급여 내역 없을 시 생략 가능)' },
+              { text: '해외치료 후 국내 추가 진료 시: 초진 차트 사본' },
+              { text: '정밀검사 시행 시: 관련 검사기록지 또는 영상자료 (CT, MRI 등)' },
+              { text: '교통사고 등: 현지 경찰보고서 등 사고 입증 서류' },
+            ]
+          }
+        ]
+      },
+      flight: {
+        title: '해외여행 — 항공기·수하물 지연',
+        icon: '✈️',
+        groups: [
+          {
+            label: '공통 서류',
+            items: [
+              { text: '보험금청구서', badge: '필수' },
+              { text: '여권 사본 (사진 면 + 입출국 도장 면)', badge: '필수' },
+              { text: '청구인 신분증 사본', badge: '필수' },
+              { text: '비행기 탑승권(e-티켓) 사본', badge: '필수' },
+              { text: '사고경위서', badge: '필수' },
+            ]
+          },
+          {
+            label: '항공기 지연·결항 (추가 서류)',
+            items: [
+              { text: '결항·지연 확인서 (항공사 발급)', sub: '지연 사유, 지연 시간 기재 필수' },
+              { text: '변경 전 티켓과 결항·지연으로 변경된 일정의 티켓 함께 첨부' },
+              { text: '결항·지연에 따른 비용 지출 영수증', sub: '지출내역 및 시간이 표시되어야 함 (숙박비, 식비 등)' },
+            ]
+          },
+          {
+            label: '수하물 도착 지연 (추가 서류)',
+            items: [
+              { text: '수하물 지연 확인서 (항공사 발급)', sub: '지연 사유, 수하물 발송 시간 필수 기재' },
+              { text: '지연에 따른 비용 지출 영수증', sub: '지출내역 및 시간이 표시되어야 함' },
+            ]
+          }
+        ]
+      },
+      baggage: {
+        title: '해외여행 — 휴대품 손해',
+        icon: '🧳',
+        groups: [
+          {
+            label: '공통 서류',
+            items: [
+              { text: '보험금청구서', badge: '필수' },
+              { text: '여권 사본 (사진 면 + 입출국 도장 면)', badge: '필수' },
+              { text: '청구인 신분증 사본', badge: '필수' },
+              { text: '사고경위서', badge: '필수' },
+            ]
+          },
+          {
+            label: '파손 사고 서류',
+            items: [
+              { text: '피해품 내역서 (파손된 휴대품 사진)' },
+              { text: '수리 가능 시: 수리 견적서, 수리비 영수증' },
+              { text: '수리 불가 시: 수리불가 확인서, 파손 사진, 신품가격 견적서' },
+              { text: '휴대폰 파손 시: 가입 증명서 (해지 여부 확인 필수), 휴대폰 보험 확인 서류' },
+              { text: '수하물 손해의 경우: 항공사 확인서' },
+            ]
+          },
+          {
+            label: '도난 사고 서류',
+            items: [
+              { text: '사고 증명서 (현지 경찰 확인서 / 도난 증명서)', sub: '미소지 시: 여행사 사고확인서 + 가이드 재직증명서 사본 또는 목격자 확인서' },
+              { text: '피해품 내역서 및 구입 영수증' },
+              { text: '피해 현장 사진 (해당하는 경우)' },
+            ]
+          }
+        ]
+      },
+      liability: {
+        title: '해외여행 — 배상 책임',
+        icon: '⚖️',
+        groups: [
+          {
+            label: '공통 서류',
+            items: [
+              { text: '보험금청구서', badge: '필수' },
+              { text: '개인(신용)정보 수집·이용·제공 동의서', badge: '필수', sub: '피해자 및 피보험자가 미성년자인 경우 부모님(법정대리인) 작성' },
+              { text: '여권 사본 (사진 면 + 입출국 도장 면)', badge: '필수' },
+              { text: '청구인 및 피해자 신분증', badge: '필수' },
+              { text: '당사자 간 합의 완료 시: 합의금 지급 확인서' },
+            ]
+          },
+          {
+            label: '대인 사고 추가 서류',
+            items: [
+              { text: '피해자의 진단서 또는 진료확인서' },
+              { text: '초진 진료기록지' },
+              { text: '치료비 영수증' },
+              { text: '손해배상금 및 기타 비용 지급 증빙서류' },
+            ]
+          },
+          {
+            label: '대물 사고 추가 서류',
+            items: [
+              { text: '피해물품 사진 (전체 및 파손 부위, 제품명 포함)' },
+              { text: '사고 피해품의 구입 시기·가격 증빙서류' },
+              { text: '수리비 견적서 및 수리비 영수증' },
+              { text: '손해배상금 및 기타 비용 지급 증빙서류' },
+            ]
+          }
+        ]
+      },
+      passport: {
+        title: '해외여행 — 여권 재발급',
+        icon: '📘',
+        groups: [
+          {
+            label: '공통 서류',
+            items: [
+              { text: '보험금청구서', badge: '필수' },
+              { text: '여권 사본 (사진 면 + 입출국 도장 면)', badge: '필수' },
+              { text: '청구인 신분증 사본', badge: '필수' },
+            ]
+          },
+          {
+            label: '여권 재발급 추가 서류',
+            items: [
+              { text: '재발급 받은 여권 사본' },
+              { text: '여행증명서 발급 비용 영수증 및 여권 재발급 비용 지급 증빙' },
+              { text: '도난 신고 확인서 (현지 경찰 발급)', sub: '분실이 아닌 도난의 경우 필요' },
+            ]
+          }
+        ]
+      }
+    },
+    domestic: {
+      medical: {
+        title: '국내여행 — 의료비 청구',
+        icon: '🏥',
+        groups: [
+          {
+            label: '공통 서류',
+            items: [
+              { text: '보험금청구서', badge: '필수', sub: 'KB손해보험 홈페이지에서 다운로드' },
+              { text: '청구인 신분증 사본', badge: '필수', sub: '홈페이지 접수 시 불필요' },
+              { text: '피보험자 통장 사본', badge: '필수' },
+              { text: '미성년자의 경우: 주민등록등본 또는 친권 확인 서류 추가' },
+            ]
+          },
+          {
+            label: '입원 치료 서류',
+            items: [
+              { text: '진단서 (질병분류코드·진단명, 입퇴원 기간 기재 필수)' },
+              { text: '입퇴원 확인서 또는 진료확인서 (질병분류코드·입퇴원 기간 기재 필수)' },
+              { text: '진료비 계산서(영수증)' },
+              { text: '진료비 세부내역서 (비급여 내역 없을 시 생략 가능)' },
+            ]
+          },
+          {
+            label: '통원 치료 서류',
+            items: [
+              { text: '진료비 계산서 (병원·약국 영수증)' },
+              { text: '질병분류코드가 기재된 처방전' },
+              { text: '진료비 세부내역서' },
+            ]
+          }
+        ]
+      },
+      baggage: {
+        title: '국내여행 — 휴대품 손해',
+        icon: '🧳',
+        groups: [
+          {
+            label: '공통 서류',
+            items: [
+              { text: '보험금청구서', badge: '필수' },
+              { text: '청구인 신분증 사본', badge: '필수' },
+              { text: '사고경위서', badge: '필수' },
+              { text: '사고 증명서 (경찰서 발급)', sub: '도난의 경우 필수. 제출 불가 시: 목격자 확인서와 목격자 출입국 사실증명' },
+            ]
+          },
+          {
+            label: '파손 서류',
+            items: [
+              { text: '손해액 명세서' },
+              { text: '손상물 내역서 (파손된 휴대품 사진)' },
+              { text: '수리 가능 시: 손상물 수리 견적서, 수리비 영수증' },
+              { text: '수리 불가 시: 수리불가 확인서, 신품가격 견적서' },
+              { text: '피해품 구입 시기, 가격, 구입처 기재 서류' },
+            ]
+          },
+          {
+            label: '도난 서류',
+            items: [
+              { text: '도난사고 증명서 (경찰서: 사건사고 사실확인서 또는 도난사고 사실확인서)' },
+              { text: '사고 현장 사진 (피해 현장이 잘 나오도록)' },
+              { text: '피해품 내역서 및 구입 영수증', sub: '구입 자료 없을 시: 평소 사용 증빙(착용사진 등) 또는 목격자 확인서' },
+            ]
+          }
+        ]
+      },
+      liability: {
+        title: '국내여행 — 배상 책임',
+        icon: '⚖️',
+        groups: [
+          {
+            label: '공통 서류',
+            items: [
+              { text: '보험금청구서', badge: '필수' },
+              { text: '개인(신용)정보 수집·이용·제공 동의서', badge: '필수' },
+              { text: '청구인 신분증 사본', badge: '필수' },
+              { text: '주민등록등본 (배상책임 중복계약 확인용)', badge: '필수' },
+            ]
+          },
+          {
+            label: '대인 사고 추가 서류',
+            items: [
+              { text: '피해자의 진단서 또는 진료확인서' },
+              { text: '치료비 영수증' },
+              { text: '손해배상금 및 기타 비용 지급 증빙서류' },
+            ]
+          },
+          {
+            label: '대물 사고 추가 서류',
+            items: [
+              { text: '피해물품 사진 (전체 및 파손 부위)' },
+              { text: '수리비 견적서 및 수리비 영수증' },
+              { text: '피해물품 구입 증빙서류' },
+              { text: '손해배상금 및 기타 비용 지급 증빙서류' },
+            ]
+          }
+        ]
+      }
+    }
+  };
+
+  // ─── STATE ───
+  let currentInsType = null;
+  let currentClaimType = null;
+
+  // ─── FUNCTIONS ───
+  function selectInsurance(type) {
+    currentInsType = type;
+    document.querySelectorAll('.ins-card').forEach(c => c.classList.remove('selected'));
+    document.querySelector(`.ins-card[data-type="${type}"]`).classList.add('selected');
+
+    setTimeout(() => {
+      buildStep2(type);
+      showSection(2);
+    }, 200);
+  }
+
+  function buildStep2(type) {
+    const types = claimTypes[type];
+    const typeNames = { event: '행사보험', drone: '드론 배상책임보험', overseas: '해외여행자보험', domestic: '국내여행자보험' };
+    document.getElementById('step2-title').textContent = `[${typeNames[type]}] 청구 항목을 선택해 주세요`;
+
+    const grid = document.getElementById('claim-grid');
+    grid.innerHTML = types.map(t => `
+      <div class="claim-type-btn" data-id="${t.id}" onclick="selectClaimType('${t.id}')">
+        <div class="claim-type-icon">${t.icon}</div>
+        <div class="claim-type-info">
+          <div class="claim-type-name">${t.name}</div>
+          <div class="claim-type-sub">${t.sub}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function selectClaimType(id) {
+    currentClaimType = id;
+    document.querySelectorAll('.claim-type-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelector(`.claim-type-btn[data-id="${id}"]`).classList.add('selected');
+
+    setTimeout(() => {
+      buildStep3(currentInsType, id);
+      showSection(3);
+    }, 200);
+  }
+
+  function buildStep3(insType, claimId) {
+    const data = docsData[insType]?.[claimId];
+    if (!data) return;
+
+    // 청구서 종류 결정: 치료비/의료비 → 인보험용, 나머지 → 배상책임용
+    const isInBoheom = (claimId === 'medical');
+    const pdfFile    = isInBoheom ? '보험금청구서_인보험.pdf' : '보험금청구서_배상책임.pdf';
+    const pdfLabel   = isInBoheom ? '보험금청구서 (인보험用)' : '보험금청구서 (재물·배상책임用)';
+    const pdfDesc    = isInBoheom
+      ? '상해·질병 치료비 청구 시 사용하는 양식입니다.'
+      : '배상책임·드론·재물·수하물 등 청구 시 사용하는 양식입니다.';
+
+    const downloadBanner = `
+      <div class="download-banner">
+        <div class="download-banner-info">
+          <div class="download-banner-title">📄 ${pdfLabel}</div>
+          <div class="download-banner-desc">청구 시 필수 서류입니다. 다운로드 후 작성하여 함께 제출해 주세요.<br>${pdfDesc}</div>
+        </div>
+        <div class="download-btns">
+          <a href="${pdfFile}" download="${pdfLabel}.pdf" class="btn-download">
+            <span>⬇</span> PDF 다운로드
+          </a>
+        </div>
+      </div>
+    `;
+
+    const html = `
+      <div class="docs-header">
+        <div class="docs-header-icon">${data.icon}</div>
+        <div>
+          <div class="docs-header-title">${data.title}</div>
+          <div class="docs-header-sub">아래 서류를 준비하신 후 접수해 주세요</div>
+        </div>
+      </div>
+      <div class="docs-body">
+        ${downloadBanner}
+        ${data.groups.map(g => `
+          <div class="docs-group">
+            <div class="docs-group-title">${g.label}</div>
+            ${g.items.map(item => `
+              <div class="doc-item">
+                <div class="doc-bullet"></div>
+                <div>
+                  <div class="doc-text">
+                    ${item.badge ? `<span class="doc-badge">${item.badge}</span>` : ''}
+                    ${item.text}
+                  </div>
+                  ${item.sub ? `<div class="doc-sub">※ ${item.sub}</div>` : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `).join('')}
+      </div>
+    `;
+
+    document.getElementById('docs-panel-content').innerHTML = html;
+  }
+
+  function showSection(step) {
+    const s1 = document.getElementById('step1-section');
+    const s2 = document.getElementById('step2-section');
+    const s3 = document.getElementById('step3-section');
+
+    s2.classList.remove('visible');
+    s3.classList.remove('docs-panel');
+    s3.classList.add('docs-panel');
+
+    if (step === 1) {
+      s2.classList.remove('visible');
+      s3.style.display = 'none';
+      updateSteps(1);
+    } else if (step === 2) {
+      s2.classList.add('visible', 'animate-in');
+      s3.style.display = 'none';
+      updateSteps(2);
+      s2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else if (step === 3) {
+      s2.classList.add('visible');
+      s3.style.display = 'block';
+      s3.classList.add('docs-panel', 'visible', 'animate-in');
+      updateSteps(3);
+      s3.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  function goBack(toStep) {
+    if (toStep === 1) {
+      document.getElementById('step2-section').classList.remove('visible');
+      document.getElementById('step3-section').style.display = 'none';
+      updateSteps(1);
+      document.querySelector('.claims-wrap').scrollIntoView({ behavior: 'smooth' });
+    } else if (toStep === 2) {
+      document.getElementById('step3-section').style.display = 'none';
+      document.getElementById('step2-section').classList.add('visible');
+      updateSteps(2);
+      document.getElementById('step2-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  function updateSteps(active) {
+    for (let i = 1; i <= 3; i++) {
+      const num = document.getElementById(`step${i}-num`);
+      const lbl = document.getElementById(`step${i}-label`);
+      num.classList.remove('active', 'done');
+      lbl.classList.remove('active');
+      if (i < active) { num.classList.add('done'); num.textContent = '✓'; }
+      else if (i === active) { num.classList.add('active'); num.textContent = i; lbl.classList.add('active'); }
+      else { num.textContent = i; }
+    }
+  }
+</script>
+</body>
+</html>

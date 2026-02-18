@@ -81,6 +81,62 @@
             transform: translateY(-2px);
         }
 
+        /* Navigation */
+        .header-nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--kb-gray);
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--kb-gold);
+        }
+
+        .nav-links a.active {
+            color: var(--kb-gold);
+            font-weight: 700;
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--kb-gold);
+            border-radius: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 1rem 1.5rem;
+            }
+            .kb-logo {
+                height: 35px;
+            }
+            .agency-name {
+                font-size: 1.1rem;
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+
         /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
@@ -327,7 +383,14 @@
                 <div class="divider"></div>
                 <div class="agency-name">배상온 대리점</div>
             </div>
-            <a href="/" class="back-btn">← 홈으로</a>
+            <div class="header-nav">
+                <nav class="nav-links">
+                    <a href="/">홈</a>
+                    <a href="/drone-insurance" class="active">드론보험</a>
+                    <a href="/claims.html">보험금청구</a>
+                </nav>
+                <a href="/" class="back-btn">← 홈으로</a>
+            </div>
         </div>
     </header>
 

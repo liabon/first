@@ -1356,9 +1356,18 @@
       <div class="download-banner">
         <div class="download-banner-info">
           <div class="download-banner-title">📄 ${pdfLabel}</div>
-          <div class="download-banner-desc">청구 시 필수 서류입니다. 다운로드 후 작성하여 함께 �div class="docs-header-title">${data.title}</div>
-          <div class="docs-header-sub">아래 서류를 준비하신 후 접수해 주세요</div>
+          <div class="download-banner-desc">${pdfDesc}</div>
         </div>
+        <div class="download-btns">
+          <a href="/${pdfFile}" download class="btn-download">📥 다운로드</a>
+        </div>
+      </div>
+    `;
+
+    const html = `
+      <div class="docs-header">
+        <div class="docs-header-title">${data.title}</div>
+        <div class="docs-header-sub">아래 서류를 준비하신 후 접수해 주세요</div>
       </div>
       <div class="docs-body">
         ${downloadBanner}

@@ -525,38 +525,6 @@
             background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
         }
 
-        /* Compact 드론 타입 옵션 (개별 플랜용) */
-        .drone-type-option-compact {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 0.8rem 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: white;
-        }
-        .drone-type-option-compact:hover {
-            border-color: #FFB800;
-            background: #fff9e6;
-        }
-        .drone-type-option-compact.selected {
-            border-color: #FFB800;
-            background: #FFB800;
-            color: white;
-        }
-        .drone-type-option-compact input {
-            display: none;
-        }
-        .drone-type-option-compact .drone-type-icon-small {
-            font-size: 1.5rem;
-        }
-        .drone-type-option-compact .drone-type-name-small {
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
         @media (max-width: 768px) {
             .header-content {
                 padding: 0.8rem 1rem;
@@ -928,7 +896,7 @@
     <footer>
         <div class="footer-content">
             <h3 style="margin-bottom: 1rem;">배상온 대리점</h3>
-            <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="026e6b63602c6d6c2c6b6c7142656f636b6e2c616d6f">[email&#160;protected]</a></p>
+            <p>📧 이메일: liab.on.ins@gmail.com</p>
             <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
             <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
             <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
@@ -1206,13 +1174,24 @@
         function selectDroneType(droneIndex, type) {
             // 라디오 체크
             const radio = document.querySelector(`input[name="drone_type_${droneIndex}"][value="${type}"]`);
-            if (radio) radio.checked = true;
+            if (!radio) return; // null 체크
+            
+            radio.checked = true;
             
             // 선택 스타일
             document.querySelectorAll(`input[name="drone_type_${droneIndex}"]`).forEach(r => {
-                r.closest('.drone-type-option-compact').classList.remove('selected');
+                const label = r.closest('.drone-type-option');
+                if (label) {
+                    label.style.border = '2px solid #e0e0e0';
+                    label.style.background = '#fff';
+                }
             });
-            radio.closest('.drone-type-option-compact').classList.add('selected');
+            
+            const selectedLabel = radio.closest('.drone-type-option');
+            if (selectedLabel) {
+                selectedLabel.style.border = '3px solid #FFB800';
+                selectedLabel.style.background = '#fff9e6';
+            }
             
             // 해당 드론의 플랜 표시
             showPlansForDrone(droneIndex, type);
@@ -1620,4 +1599,14 @@
                     this.value = this.value.replace(/[^0-9]/g, '');
                 });
                 birthDateInput.addEventListener('keypress', function(e) {
-                    if (!/[0-9]/.test(e.key)) {
+                    if (!/[0-9]/.test(e.key)) {                        e.preventDefault();
+                    }
+                });
+            }
+
+            // 초기 드론 섹션 생성
+            updateDroneSections();
+        });
+    </script>
+</body>
+</html>

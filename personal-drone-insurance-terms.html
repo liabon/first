@@ -522,7 +522,7 @@
         </div>
     </footer>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // Toggle content visibility
         function toggleContent(button) {
             const content = button.closest('.agreement-item').querySelector('.agreement-content');
@@ -567,12 +567,11 @@
             // Add agreement info
             formData.terms_agreed = true;
             formData.marketing_agreed = document.querySelector('.agreement-check.optional').checked;
-            formData.insurance_type = '개인용 드론보험';
-
-            // Update sessionStorage
+ 
+            // Save updated data
             sessionStorage.setItem('droneInsuranceData', JSON.stringify(formData));
             
-            // Navigate to completion page
+            // Move to complete page
             window.location.href = '/personal-drone-insurance-complete';
         });
     </script>

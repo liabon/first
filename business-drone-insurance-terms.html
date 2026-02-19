@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>약관 동의 - KB손해보험 업무용 드론보험</title>
+    <title>약관 동의 - KB손해보험 개인용 드론보험</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         * {
@@ -423,7 +423,7 @@
                     <p>이름: 김리하</p>
                     <p>소속: 배상온</p>
                     <p>직위: 대표</p>
-                    <p>이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2b47424a49054445054245586b4c464a424705484446">[email&#160;protected]</a></p>
+                    <p>이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e08c898182ce8f8ece898e93a0878d81898cce838f8d">[email&#160;protected]</a></p>
                 </div>
             </div>
 
@@ -514,7 +514,7 @@
     <footer>
         <div class="footer-content">
             <h3 style="margin-bottom: 1rem;">배상온 대리점</h3>
-            <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e68a8f8784c88988c88f8895a6818b878f8ac885898b">[email&#160;protected]</a></p>
+            <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="432f2a22216d2c2d6d2a2d3003242e222a2f6d202c2e">[email&#160;protected]</a></p>
             <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
             <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
             <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
@@ -558,7 +558,7 @@
             const savedData = sessionStorage.getItem('droneInsuranceData');
             if (!savedData) {
                 alert('저장된 정보가 없습니다. 처음부터 다시 시작해주세요.');
-                window.location.href = '/business-drone-insurance';
+                window.location.href = '/personal-drone-insurance';
                 return;
             }
 
@@ -567,3 +567,13 @@
             // Add agreement info
             formData.terms_agreed = true;
             formData.marketing_agreed = document.querySelector('.agreement-check.optional').checked;
+ 
+            // Save updated data
+            sessionStorage.setItem('droneInsuranceData', JSON.stringify(formData));
+            
+            // Move to complete page
+            window.location.href = '/personal-drone-insurance-complete';
+        });
+    </script>
+</body>
+</html>

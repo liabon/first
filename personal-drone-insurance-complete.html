@@ -351,19 +351,30 @@
         let insuranceData = null;
 
         window.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 Complete 페이지 로드됨');
+            
             const savedData = sessionStorage.getItem('droneInsuranceData');
+            console.log('📦 SessionStorage 데이터:', savedData);
+            
             if (!savedData) {
+                console.error('❌ 저장된 정보가 없습니다!');
                 alert('저장된 정보가 없습니다.');
                 window.location.href = '/personal-drone-insurance';
                 return;
             }
 
             insuranceData = JSON.parse(savedData);
+            console.log('✅ 파싱된 데이터:', insuranceData);
+            
             displayInfo();
         });
 
         function displayInfo() {
+            console.log('🎨 displayInfo 함수 시작');
+            console.log('📊 insuranceData:', insuranceData);
+            
             const container = document.getElementById('insuranceInfo');
+            console.log('📦 Container:', container);
             
             const droneTypes = {
                 'camera': '촬영용 센서드론',
@@ -382,15 +393,15 @@
             let html = `
                 <div class="info-row">
                     <span class="info-label">가입자명</span>
-                    <span class="info-value">${insuranceData.name}</span>
+                    <span class="info-value">${insuranceData.name || '미입력'}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">연락처</span>
-                    <span class="info-value">${insuranceData.phone}</span>
+                    <span class="info-value">${insuranceData.phone || '미입력'}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">이메일</span>
-                    <span class="info-value">${insuranceData.email}</span>
+                    <span class="info-value">${insuranceData.email || '미입력'}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">보험기간</span>
@@ -402,8 +413,12 @@
                 </div>
             `;
             
+            console.log('📝 기본 정보 HTML 생성 완료');
+            console.log('🚁 drone_plans:', insuranceData.drone_plans);
+            
             // 드론별 상세 정보 표시
             if (insuranceData.drone_plans && insuranceData.drone_plans.length > 0) {
+                console.log('✅ 개별 플랜 모드');
                 insuranceData.drone_plans.forEach((dronePlan, index) => {
                     const drone = insuranceData.drones[index];
                     html += `
@@ -429,6 +444,7 @@
                     `;
                 });
             } else {
+                console.log('📌 통합 플랜 모드 (구버전 호환)');
                 // 구버전 데이터 호환 (통합 모드)
                 html += `
                     <div class="info-row">
@@ -446,8 +462,14 @@
                 `;
             }
 
+            console.log('📝 HTML 생성 완료, container에 삽입');
             container.innerHTML = html;
-            document.getElementById('totalPrice').textContent = `${parseInt(insuranceData.plan_total_price || 0).toLocaleString()}원`;
+            
+            const totalPrice = parseInt(insuranceData.plan_total_price || 0);
+            console.log('💰 총 보험료:', totalPrice);
+            document.getElementById('totalPrice').textContent = `${totalPrice.toLocaleString()}원`;
+            
+            console.log('✅ displayInfo 완료');
         }
 
         async function downloadPDF() {

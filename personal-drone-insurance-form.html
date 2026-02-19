@@ -907,9 +907,22 @@
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // 보험기간 설정
         function setupInsuranceDates() {
+            console.log('🔧 setupInsuranceDates 시작');
+            
             const startInput = document.getElementById('insuranceStart');
             const endInput = document.getElementById('insuranceEnd');
             const durationInput = document.getElementById('insuranceDuration');
+
+            console.log('📍 Elements:', { 
+                startInput: !!startInput, 
+                endInput: !!endInput, 
+                durationInput: !!durationInput 
+            });
+
+            if (!startInput || !endInput || !durationInput) {
+                console.error('❌ 보험기간 input 요소를 찾을 수 없습니다!');
+                return;
+            }
 
             // 로컬 시간 기준으로 datetime-local 포맷 변환
             function toLocalInput(date) {
@@ -934,6 +947,8 @@
             const now = new Date();
             const minStart = roundUp30min(new Date(now.getTime() + 30 * 60 * 1000));
 
+            console.log('📅 초기 시작 시간:', toLocalInput(minStart));
+
             startInput.min = toLocalInput(minStart);
             startInput.value = toLocalInput(minStart);
 
@@ -942,6 +957,11 @@
             endInput.value = toLocalInput(initEnd);
             endInput.min = toLocalInput(minStart);
             endInput.max = toLocalInput(initEnd);
+
+            console.log('✅ 보험기간 설정 완료:', {
+                start: startInput.value,
+                end: endInput.value
+            });
 
             // 가입 기간: 일수만 표시
             function calculateDuration() {

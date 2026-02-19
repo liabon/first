@@ -896,7 +896,7 @@
     <footer>
         <div class="footer-content">
             <h3 style="margin-bottom: 1rem;">배상온 대리점</h3>
-            <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="771b1e1615591819591e190437101a161e1b5914181a">[email&#160;protected]</a></p>
+            <p>📧 이메일: liab.on.ins@gmail.com</p>
             <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
             <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
             <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
@@ -1606,13 +1606,21 @@
             
             // 3단계: 모든 검증 통과 - 데이터 수집
             const data = collectFormDataWithIndividualPlans();
+            console.log('📦 수집된 데이터:', data);
+            
             if (!data) {
+                console.error('❌ 데이터 수집 실패!');
                 alert('⚠️ 데이터 수집 중 오류가 발생했습니다. 모든 항목을 확인해주세요.');
                 return;
             }
             
+            console.log('✅ 데이터 검증 완료');
+            console.log('📊 저장할 데이터:', JSON.stringify(data, null, 2));
+            
             // 4단계: 다음 페이지로 이동
             sessionStorage.setItem('droneInsuranceData', JSON.stringify(data));
+            console.log('💾 SessionStorage 저장 완료');
+            
             window.location.href = '/personal-drone-insurance-terms';
         });
 

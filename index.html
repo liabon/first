@@ -643,6 +643,7 @@
         </div>
     </div>
 
+    <script>
         // Form submission
         document.getElementById('contactForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -673,4 +674,32 @@
         // Modal functions
         function openModal(type) {
             if (type === 'privacy') {
-                document.getElementById('privacyModal').style.display =
+                document.getElementById('privacyModal').style.display = 'flex';
+            } else if (type === 'terms') {
+                document.getElementById('termsModal').style.display = 'flex';
+            }
+        }
+
+        function closeModal(type) {
+            if (type === 'privacy') {
+                document.getElementById('privacyModal').style.display = 'none';
+            } else if (type === 'terms') {
+                document.getElementById('termsModal').style.display = 'none';
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const privacyModal = document.getElementById('privacyModal');
+            const termsModal = document.getElementById('termsModal');
+            
+            if (event.target === privacyModal) {
+                privacyModal.style.display = 'none';
+            }
+            if (event.target === termsModal) {
+                termsModal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

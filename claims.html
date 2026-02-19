@@ -121,24 +121,25 @@
       border: 1px solid rgba(245, 166, 35, 0.3);
     }
     .hero-title {
-      font-family: 'Noto Serif KR', serif;
-      font-size: 42px;
-      font-weight: 700;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 48px;
+      font-weight: 800;
       color: var(--kb-white);
-      line-height: 1.25;
+      line-height: 1.2;
       margin-bottom: 16px;
-      letter-spacing: -1px;
+      letter-spacing: -0.5px;
       position: relative;
       z-index: 1;
     }
     .hero-title span { color: var(--kb-yellow); }
     .hero-subtitle {
-      font-size: 16px;
-      color: rgba(255,255,255,0.65);
-      font-weight: 300;
+      font-size: 18px;
+      color: rgba(255,255,255,0.75);
+      font-weight: 400;
       letter-spacing: -0.3px;
       position: relative;
       z-index: 1;
+      line-height: 1.5;
     }
 
     /* ─── STEP INDICATOR ─── */
@@ -677,7 +678,8 @@
     /* ─── MOBILE ─── */
     @media (max-width: 768px) {
       .claims-hero { padding: 48px 24px 40px; }
-      .hero-title { font-size: 28px; }
+      .hero-title { font-size: 32px; }
+      .hero-subtitle { font-size: 16px; }
       .insurance-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
       .claim-grid { grid-template-columns: 1fr; }
       .submit-methods { grid-template-columns: 1fr; }
@@ -685,10 +687,73 @@
       .step-item { padding: 0 10px; }
       .step-divider { width: 24px; }
       .header-nav { display: none; }
-      .site-header { padding: 16px 24px; }
+      .site-header { padding: 12px 20px; }
+      
+      /* 카드 크기 조정 */
+      .ins-card { padding: 16px; }
+      .ins-icon { font-size: 2rem; }
+      .ins-name { font-size: 0.95rem; }
+      .ins-sub { font-size: 0.75rem; }
+      
+      .claim-type-btn { padding: 14px; }
+      .claim-icon { font-size: 1.8rem; }
+      .claim-name { font-size: 0.9rem; }
+      
+      /* 서류 섹션 */
+      .docs-panel { padding: 24px 20px; }
+      .docs-header-title { font-size: 1.3rem; }
+      .doc-text { font-size: 0.9rem; }
+      
+      /* 버튼 */
+      .btn-claim, .btn-secondary { 
+        font-size: 0.9rem; 
+        padding: 14px 20px;
+      }
+      
+      /* 다운로드 배너 */
+      .download-banner { padding: 16px; }
+      .download-banner-title { font-size: 1rem; }
+      .btn-download { font-size: 0.85rem; padding: 10px 16px; }
     }
     @media (max-width: 480px) {
       .insurance-grid { grid-template-columns: 1fr; }
+      .site-header { padding: 10px 16px; }
+      .logo-name { font-size: 0.95rem; }
+      
+      .hero-title { font-size: 28px; }
+      .hero-subtitle { font-size: 14px; }
+      .hero-subtitle { font-size: 0.9rem; }
+      
+      .step-bar { 
+        flex-direction: column; 
+        gap: 12px; 
+        align-items: stretch;
+      }
+      .step-divider { 
+        width: 100%; 
+        height: 2px; 
+        margin: 0;
+      }
+      .step-item {
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 12px;
+      }
+      
+      /* 서류 아이템 */
+      .doc-item {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .doc-bullet { margin-top: 4px; }
+      
+      /* 제출 방법 */
+      .submit-methods {
+        gap: 12px;
+      }
+      .method-card {
+        padding: 16px;
+      }
     }
 
     /* ─── DRONE SPECIAL COLORS ─── */
@@ -802,7 +867,7 @@
         <div class="method-card">
           <div class="method-icon">📧</div>
           <div class="method-name">이메일 접수</div>
-          <div class="method-detail">liab.on.ins@gmail.com<br>사진/스캔본 첨부</div>
+          <div class="method-detail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5d31343c3f7332337334332e1d3a303c3431733e3230">[email&#160;protected]</a><br>사진/스캔본 첨부</div>
         </div>
         <div class="method-card">
           <div class="method-icon">☎️</div>
@@ -816,7 +881,7 @@
         </div>
       </div>
 
-      <a href="mailto:liab.on.ins@gmail.com" class="btn-claim">
+      <a href="/cdn-cgi/l/email-protection#e28e8b8380cc8d8ccc8b8c91a2858f838b8ecc818d8f" class="btn-claim">
         📧 이메일로 청구 서류 보내기
       </a>
       <a href="https://www.kbinsure.co.kr" target="_blank" class="btn-secondary">
@@ -842,12 +907,12 @@
   <div class="footer-logo">배상온 대리점</div>
   <div class="footer-text">
     KB손해보험 공식 대리점 | 대리점등록번호: 제2026010037호<br>
-    📍 서울특별시 동대문구 천호대로 301, 1706호 | 📧 liab.on.ins@gmail.com<br>
+    📍 서울특별시 동대문구 천호대로 301, 1706호 | 📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="274b4e4645094849094e495467404a464e4b0944484a">[email&#160;protected]</a><br>
     사업자등록번호: 501-63-18916 | 대표: 김리하
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // ─── DATA ───
   const claimTypes = {
     event: [
@@ -1438,14 +1503,4 @@
   function updateSteps(active) {
     for (let i = 1; i <= 3; i++) {
       const num = document.getElementById(`step${i}-num`);
-      const lbl = document.getElementById(`step${i}-label`);
-      num.classList.remove('active', 'done');
-      lbl.classList.remove('active');
-      if (i < active) { num.classList.add('done'); num.textContent = '✓'; }
-      else if (i === active) { num.classList.add('active'); num.textContent = i; lbl.classList.add('active'); }
-      else { num.textContent = i; }
-    }
-  }
-</script>
-</body>
-</html>
+      c

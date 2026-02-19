@@ -525,6 +525,38 @@
             background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
         }
 
+        /* Compact 드론 타입 옵션 (개별 플랜용) */
+        .drone-type-option-compact {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+        .drone-type-option-compact:hover {
+            border-color: #FFB800;
+            background: #fff9e6;
+        }
+        .drone-type-option-compact.selected {
+            border-color: #FFB800;
+            background: #FFB800;
+            color: white;
+        }
+        .drone-type-option-compact input {
+            display: none;
+        }
+        .drone-type-option-compact .drone-type-icon-small {
+            font-size: 1.5rem;
+        }
+        .drone-type-option-compact .drone-type-name-small {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
         @media (max-width: 768px) {
             .header-content {
                 padding: 0.8rem 1rem;
@@ -896,7 +928,7 @@
     <footer>
         <div class="footer-content">
             <h3 style="margin-bottom: 1rem;">배상온 대리점</h3>
-            <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9cf0f5fdfeb2f3f2b2f5f2efdcfbf1fdf5f0b2fff3f1">[email&#160;protected]</a></p>
+            <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="026e6b63602c6d6c2c6b6c7142656f636b6e2c616d6f">[email&#160;protected]</a></p>
             <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
             <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
             <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
@@ -904,7 +936,7 @@
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // 보험기간 설정
         function setupInsuranceDates() {
             const startInput = document.getElementById('insuranceStart');
@@ -1068,16 +1100,6 @@
             checkFormValidity();
         }
 
-        // 드론 대수 변경 이벤트
-        document.getElementById('droneCount').addEventListener('change', function() {
-            const count = parseInt(this.value);
-            if (count < 1) this.value = 1;
-            if (count > 10) this.value = 10;
-            updateDroneSections();
-            updateTotalPrice();
-            updatePlanModeDisplay();
-        });
-
         // 플랜 모드 토글 표시 업데이트
         function updatePlanModeDisplay() {
             const count = parseInt(document.getElementById('droneCount').value) || 1;
@@ -1130,47 +1152,54 @@
             const count = parseInt(document.getElementById('droneCount').value) || 1;
             const container = document.getElementById('perDronePlans');
             
-            let html = '';
+            container.innerHTML = '';
+            
             for (let i = 0; i < count; i++) {
-                html += `
-                <div class="per-drone-plan-section" style="border: 2px solid #FFB800; border-radius: 14px; padding: 1.5rem; margin-bottom: 1.5rem; background: #fffbf0;">
-                    <h3 style="color: #FFB800; font-size: 1.2rem; margin-bottom: 1rem; border-bottom: 2px solid #FFB800; padding-bottom: 0.5rem;">
-                        🚁 드론 ${i + 1}
+                const section = document.createElement('div');
+                section.className = 'individual-drone-section';
+                section.style.cssText = 'margin-bottom: 3rem; padding: 2rem; background: #ffffff; border: 3px solid #FFB800; border-radius: 15px;';
+                
+                section.innerHTML = `
+                    <h3 style="color: #FFB800; margin-bottom: 1.5rem; font-size: 1.5rem; font-weight: 700;">
+                        드론 ${i + 1} 가입물건 & 플랜 선택
                     </h3>
                     
-                    <div style="margin-bottom: 1.5rem;">
-                        <label style="font-weight: 600; margin-bottom: 0.8rem; display: block;">가입물건 선택 *</label>
-                        <div class="drone-type-grid">
-                            <label class="drone-type-option" onclick="selectDroneType(${i}, 'camera')">
-                                <input type="radio" name="drone_type_${i}" value="camera">
-                                <div class="drone-type-icon">📷</div>
-                                <div class="drone-type-name">촬영용</div>
+                    <!-- 가입물건 선택 -->
+                    <div style="margin-bottom: 2rem;">
+                        <h4 style="color: #1a1a1a; margin-bottom: 1rem; font-size: 1.2rem;">가입물건 선택 *</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                            <label class="drone-type-option" onclick="selectDroneType(${i}, 'camera')" style="padding: 1rem; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; text-align: center; transition: all 0.3s;">
+                                <input type="radio" name="drone_type_${i}" value="camera" style="display: none;">
+                                <div style="font-size: 2rem;">📷</div>
+                                <div style="font-size: 0.9rem; margin-top: 0.5rem; font-weight: 600;">촬영용 센서드론</div>
                             </label>
-                            <label class="drone-type-option" onclick="selectDroneType(${i}, 'fpv')">
-                                <input type="radio" name="drone_type_${i}" value="fpv">
-                                <div class="drone-type-icon">🎮</div>
-                                <div class="drone-type-name">FPV/레이싱</div>
+                            <label class="drone-type-option" onclick="selectDroneType(${i}, 'fpv')" style="padding: 1rem; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; text-align: center; transition: all 0.3s;">
+                                <input type="radio" name="drone_type_${i}" value="fpv" style="display: none;">
+                                <div style="font-size: 2rem;">🎮</div>
+                                <div style="font-size: 0.9rem; margin-top: 0.5rem; font-weight: 600;">FPV/레이싱 드론</div>
                             </label>
-                            <label class="drone-type-option" onclick="selectDroneType(${i}, 'toy')">
-                                <input type="radio" name="drone_type_${i}" value="toy">
-                                <div class="drone-type-icon">🎯</div>
-                                <div class="drone-type-name">완구형</div>
+                            <label class="drone-type-option" onclick="selectDroneType(${i}, 'toy')" style="padding: 1rem; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; text-align: center; transition: all 0.3s;">
+                                <input type="radio" name="drone_type_${i}" value="toy" style="display: none;">
+                                <div style="font-size: 2rem;">🎯</div>
+                                <div style="font-size: 0.9rem; margin-top: 0.5rem; font-weight: 600;">완구형 드론</div>
                             </label>
-                            <label class="drone-type-option" onclick="selectDroneType(${i}, 'other')">
-                                <input type="radio" name="drone_type_${i}" value="other">
-                                <div class="drone-type-icon">🚁</div>
-                                <div class="drone-type-name">기타</div>
+                            <label class="drone-type-option" onclick="selectDroneType(${i}, 'other')" style="padding: 1rem; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; text-align: center; transition: all 0.3s;">
+                                <input type="radio" name="drone_type_${i}" value="other" style="display: none;">
+                                <div style="font-size: 2rem;">🚁</div>
+                                <div style="font-size: 0.9rem; margin-top: 0.5rem; font-weight: 600;">기타</div>
                             </label>
                         </div>
                     </div>
                     
-                    <div id="drone_${i}_plan_grid" style="display:none;">
-                        <!-- 플랜 카드가 여기 동적 생성됨 -->
+                    <!-- 플랜 선택 영역 -->
+                    <div id="drone_${i}_plans" style="display: none;">
+                        <h4 style="color: #1a1a1a; margin-bottom: 1rem; font-size: 1.2rem;">보험 플랜 선택 *</h4>
+                        <div id="drone_${i}_plan_grid"></div>
                     </div>
-                </div>
                 `;
+                
+                container.appendChild(section);
             }
-            container.innerHTML = html;
         }
 
         // 개별 드론 타입 선택
@@ -1181,73 +1210,87 @@
             
             // 선택 스타일
             document.querySelectorAll(`input[name="drone_type_${droneIndex}"]`).forEach(r => {
-                r.closest('.drone-type-option').classList.remove('selected');
+                r.closest('.drone-type-option-compact').classList.remove('selected');
             });
-            radio.closest('.drone-type-option').classList.add('selected');
+            radio.closest('.drone-type-option-compact').classList.add('selected');
             
             // 해당 드론의 플랜 표시
             showPlansForDrone(droneIndex, type);
+            
+            checkFormValidity();  // 폼 검증 추가
         }
 
         // 드론별 플랜 표시
         function showPlansForDrone(droneIndex, type) {
+            const plansContainer = document.getElementById(`drone_${droneIndex}_plans`);
             const planGrid = document.getElementById(`drone_${droneIndex}_plan_grid`);
+            
+            if (!plansContainer || !planGrid) return;
             
             const plans = {
                 camera: [
-                    { value: 'camera-slim', name: '슬림', price: 49900, coverage: ['대인: 5천만원', '대물: 5천만원', '인당/사고당', '자기부담: 10만원'] },
-                    { value: 'camera-standard', name: '일반', price: 69900, coverage: ['대인: 1억원', '대물: 1억원', '누구나운전', '자기부담: 10만원'] },
-                    { value: 'camera-premium', name: '프리미엄', price: 99900, coverage: ['대인: 5억원', '대물: 5억원', '누구나+구조', '자기부담: 10만원'] }
+                    { value: 'camera-slim', name: '슬림', price: 49900, coverage: ['대인배상: 5천만원', '대물배상: 5천만원', '인당/사고당', '자기부담금: 10만원'] },
+                    { value: 'camera-standard', name: '일반', price: 69900, coverage: ['대인배상: 1억원', '대물배상: 1억원', '누구나운전 포함', '자기부담금: 10만원'] },
+                    { value: 'camera-premium', name: '프리미엄', price: 99900, coverage: ['대인배상: 5억원', '대물배상: 5억원', '누구나운전 + 구조비용', '자기부담금: 10만원'] }
                 ],
                 fpv: [
-                    { value: 'fpv-slim', name: '슬림', price: 59900, coverage: ['대인: 5천만원', '대물: 5천만원', '경기중 보장', '자기부담: 10만원'] },
-                    { value: 'fpv-standard', name: '일반', price: 79900, coverage: ['대인: 1억원', '대물: 1억원', '경기+누구나', '자기부담: 10만원'] },
-                    { value: 'fpv-premium', name: '프리미엄', price: 109900, coverage: ['대인: 5억원', '대물: 5억원', '경기+누구나+구조', '자기부담: 10만원'] }
+                    { value: 'fpv-slim', name: '슬림', price: 59900, coverage: ['대인배상: 5천만원', '대물배상: 5천만원', '드론경기중 보장', '자기부담금: 10만원'] },
+                    { value: 'fpv-standard', name: '일반', price: 79900, coverage: ['대인배상: 1억원', '대물배상: 1억원', '경기중 + 누구나운전', '자기부담금: 10만원'] },
+                    { value: 'fpv-premium', name: '프리미엄', price: 109900, coverage: ['대인배상: 5억원', '대물배상: 5억원', '경기중 + 누구나 + 구조비', '자기부담금: 10만원'] }
                 ],
                 toy: [
-                    { value: 'other-slim', name: '슬림', price: 49900, coverage: ['대인: 5천만원', '대물: 5천만원', '기본 보장', '자기부담: 10만원'] },
-                    { value: 'other-standard', name: '일반', price: 69900, coverage: ['대인: 1억원', '대물: 1억원', '누구나운전', '자기부담: 10만원'] },
-                    { value: 'other-premium', name: '프리미엄', price: 99900, coverage: ['대인: 5억원', '대물: 5억원', '누구나+구조', '자기부담: 10만원'] }
+                    { value: 'toy-slim', name: '슬림', price: 49900, coverage: ['대인배상: 5천만원', '대물배상: 5천만원', '기본 보장', '자기부담금: 10만원'] },
+                    { value: 'toy-standard', name: '일반', price: 69900, coverage: ['대인배상: 1억원', '대물배상: 1억원', '누구나운전 포함', '자기부담금: 10만원'] },
+                    { value: 'toy-premium', name: '프리미엄', price: 99900, coverage: ['대인배상: 5억원', '대물배상: 5억원', '누구나운전 + 구조비용', '자기부담금: 10만원'] }
                 ],
                 other: [
-                    { value: 'other-slim', name: '슬림', price: 49900, coverage: ['대인: 5천만원', '대물: 5천만원', '기본 보장', '자기부담: 10만원'] },
-                    { value: 'other-standard', name: '일반', price: 69900, coverage: ['대인: 1억원', '대물: 1억원', '누구나운전', '자기부담: 10만원'] },
-                    { value: 'other-premium', name: '프리미엄', price: 99900, coverage: ['대인: 5억원', '대물: 5억원', '누구나+구조', '자기부담: 10만원'] }
+                    { value: 'other-slim', name: '슬림', price: 49900, coverage: ['대인배상: 5천만원', '대물배상: 5천만원', '기본 보장', '자기부담금: 10만원'] },
+                    { value: 'other-standard', name: '일반', price: 69900, coverage: ['대인배상: 1억원', '대물배상: 1억원', '누구나운전 포함', '자기부담금: 10만원'] },
+                    { value: 'other-premium', name: '프리미엄', price: 99900, coverage: ['대인배상: 5억원', '대물배상: 5억원', '누구나운전 + 구조비용', '자기부담금: 10만원'] }
                 ]
             };
             
             const selectedPlans = plans[type] || plans.other;
             
-            let html = '<div class="plan-grid" style="margin-top: 1rem;">';
-            selectedPlans.forEach(plan => {
-                html += `
-                <label class="individual-plan-card plan-card" onclick="selectIndividualPlan(${droneIndex}, '${plan.value}', ${plan.price})">
-                    <input type="radio" name="plan_drone_${droneIndex}" value="${plan.value}" data-price="${plan.price}">
-                    <div class="plan-name">${plan.name}</div>
-                    <div class="plan-coverage">
-                        ${plan.coverage.map(c => `<div class="plan-coverage-item">• ${c}</div>`).join('')}
-                    </div>
-                    <div class="plan-price">${plan.price.toLocaleString()}<span>원/년</span></div>
-                </label>
-                `;
-            });
-            html += '</div>';
+            // 플랜 섹션 표시
+            plansContainer.style.display = 'block';
             
-            planGrid.innerHTML = html;
-            planGrid.style.display = 'block';
+            const plansHTML = selectedPlans.map(plan => `
+                <label class="individual-plan-card-new" style="position: relative; padding: 1.5rem; border: 2px solid #e0e0e0; border-radius: 12px; cursor: pointer; transition: all 0.3s; background: #fff;">
+                    <input type="radio" name="plan_drone_${droneIndex}" value="${plan.value}" data-price="${plan.price}" data-plan-name="${plan.name}" style="display: none;">
+                    <div style="text-align: center; margin-bottom: 1rem;">
+                        <div style="font-size: 1.3rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.5rem;">${plan.name}</div>
+                        <div style="font-size: 1.5rem; font-weight: 900; color: #FFB800;">${plan.price.toLocaleString()}<span style="font-size: 0.9rem; font-weight: 500;">원/년</span></div>
+                    </div>
+                    <div style="text-align: left; font-size: 0.9rem; color: #666;">
+                        ${plan.coverage.map(item => `<div style="margin: 0.3rem 0;">• ${item}</div>`).join('')}
+                    </div>
+                </label>
+            `).join('');
+            
+            planGrid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;';
+            planGrid.innerHTML = plansHTML;
+            
+            // 플랜 카드 클릭 이벤트
+            const planCards = planGrid.querySelectorAll('.individual-plan-card-new');
+            planCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const radio = this.querySelector('input[type="radio"]');
+                    planCards.forEach(c => {
+                        c.style.border = '2px solid #e0e0e0';
+                        c.style.background = '#fff';
+                        c.style.transform = 'scale(1)';
+                    });
+                    this.style.border = '3px solid #FFB800';
+                    this.style.background = '#fff9e6';
+                    this.style.transform = 'scale(1.02)';
+                    radio.checked = true;
+                    checkFormValidity();
+                });
+            });
         }
 
         // 개별 플랜 선택
-        function selectIndividualPlan(droneIndex, value, price) {
-            const radio = document.querySelector(`input[name="plan_drone_${droneIndex}"][value="${value}"]`);
-            if (radio) radio.checked = true;
-            
-            document.querySelectorAll(`input[name="plan_drone_${droneIndex}"]`).forEach(r => {
-                r.closest('.individual-plan-card').classList.remove('selected');
-            });
-            radio.closest('.individual-plan-card').classList.add('selected');
-        }
-
         // 폼 데이터 수집 함수
         function collectFormDataWithIndividualPlans() {
             const droneCount = parseInt(document.getElementById('droneCount').value);
@@ -1315,28 +1358,6 @@
             return data;
         }
 
-        // 드론 타입 카드 선택
-        document.querySelectorAll('.drone-type-card').forEach(card => {
-            card.addEventListener('click', function() {
-                document.querySelectorAll('.drone-type-card').forEach(c => c.classList.remove('selected'));
-                this.classList.add('selected');
-                
-                const droneType = this.querySelector('input[type="radio"]').value;
-                showPlansForDroneType(droneType);
-                checkFormValidity();
-            });
-        });
-
-        // 플랜 카드 선택
-        document.querySelectorAll('.plan-card').forEach(card => {
-            card.addEventListener('click', function() {
-                document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
-                this.classList.add('selected');
-                updateTotalPrice();
-                checkFormValidity();
-            });
-        });
-
         // 드론 타입별 플랜 표시
         function showPlansForDroneType(type) {
             document.getElementById('cameraDronePlans').style.display = 'none';
@@ -1383,7 +1404,7 @@
         function checkFormValidity() {
             const form = document.getElementById('droneForm');
             const submitBtn = document.getElementById('submitBtn');
-            const mode = document.querySelector('input[name="plan_selection_type"]:checked')?.value || 'unified';
+            const mode = isSamePlan ? 'unified' : 'individual';  // isSamePlan 변수 사용
             const droneCount = parseInt(document.getElementById('droneCount').value) || 1;
             
             // 기본 폼 유효성 확인
@@ -1556,6 +1577,41 @@
         window.addEventListener('DOMContentLoaded', function() {
             setupInsuranceDates();
 
+            // 드론 타입 카드 선택 이벤트
+            document.querySelectorAll('.drone-type-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    document.querySelectorAll('.drone-type-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    const droneType = this.querySelector('input[type="radio"]').value;
+                    showPlansForDroneType(droneType);
+                    checkFormValidity();
+                });
+            });
+
+            // 플랜 카드 선택 이벤트
+            document.querySelectorAll('.plan-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    updateTotalPrice();
+                    checkFormValidity();
+                });
+            });
+
+            // 드론 대수 변경 이벤트
+            document.getElementById('droneCount').addEventListener('change', function() {
+                const count = parseInt(this.value);
+                if (count < 1) this.value = 1;
+                if (count > 10) this.value = 10;
+                updateDroneSections();
+                updateTotalPrice();
+                updatePlanModeDisplay();
+            });
+
+            // 초기 토글 상태 설정
+            updatePlanModeDisplay();
+
             // 생년월일 숫자만 입력
             const birthDateInput = document.getElementById('birthDate');
             if (birthDateInput) {
@@ -1565,14 +1621,3 @@
                 });
                 birthDateInput.addEventListener('keypress', function(e) {
                     if (!/[0-9]/.test(e.key)) {
-                        e.preventDefault();
-                            }
-                });
-            }
-
-            // 초기 토글 상태 설정
-            updatePlanModeDisplay();
-        });
-    </script>
-</body>
-</html>

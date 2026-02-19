@@ -335,7 +335,7 @@
                 • 견적서를 다운로드하거나 이메일로 받아보실 수 있습니다.<br>
                 • 가입을 원하시면 결제하기 버튼을 눌러주세요.<br>
                 • 견적서는 참고용이며, 최종 보험료는 심사 후 확정됩니다.<br>
-                • 문의사항: liab.on.ins@gmail.com
+                • 문의사항: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ec80858d8ec28382c285829fac8b818d8580c28f8381">[email&#160;protected]</a>
             </div>
         </div>
     </div>
@@ -346,7 +346,7 @@
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         let insuranceData = null;
 
@@ -372,6 +372,13 @@
                 'other': '기타 드론'
             };
 
+            // 날짜 포맷 함수: 2026-02-19T11:00 → 2026-02-19 (11:00)
+            function formatDateTime(dateTimeStr) {
+                if (!dateTimeStr) return '';
+                const [date, time] = dateTimeStr.split('T');
+                return `${date} (${time})`;
+            }
+
             let html = `
                 <div class="info-row">
                     <span class="info-label">가입자명</span>
@@ -387,7 +394,7 @@
                 </div>
                 <div class="info-row">
                     <span class="info-label">보험기간</span>
-                    <span class="info-value">${insuranceData.insurance_start} ~ ${insuranceData.insurance_end}</span>
+                    <span class="info-value">${formatDateTime(insuranceData.insurance_start)} ~ ${formatDateTime(insuranceData.insurance_end)}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">드론 대수</span>
@@ -450,6 +457,13 @@
                 'toy': '완구형 드론',
                 'other': '기타 드론'
             };
+
+            // 날짜 포맷 함수
+            function formatDateTime(dateTimeStr) {
+                if (!dateTimeStr) return '';
+                const [date, time] = dateTimeStr.split('T');
+                return `${date} (${time})`;
+            }
 
             const today = new Date();
             const dateStr = `${today.getFullYear()}. ${String(today.getMonth()+1)}. ${String(today.getDate())}.`;
@@ -515,7 +529,7 @@
                         <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; page-break-inside: avoid;">
                             <h3 style="color: #FFB800; font-size: 12px; font-weight: 700; margin: 0 0 6px 0;">📋 견적 정보</h3>
                             <p style="margin: 3px 0; font-size: 10px; line-height: 1.3; color: #1a1a1a;"><strong>견적일자:</strong> ${dateStr}</p>
-                            <p style="margin: 3px 0; font-size: 10px; line-height: 1.3; color: #1a1a1a;"><strong>보험기간:</strong> ${insuranceData.insurance_start} ~ ${insuranceData.insurance_end}</p>
+                            <p style="margin: 3px 0; font-size: 10px; line-height: 1.3; color: #1a1a1a;"><strong>보험기간:</strong> ${formatDateTime(insuranceData.insurance_start)} ~ ${formatDateTime(insuranceData.insurance_end)}</p>
                             <p style="margin: 3px 0; font-size: 10px; line-height: 1.3; color: #1a1a1a;"><strong>상품명:</strong> KB손해보험 개인용 드론보험</p>
                         </div>
                         
@@ -629,13 +643,4 @@
                 if (response.ok) {
                     alert(`견적서가 ${insuranceData.email}로 전송되었습니다.`);
                 } else {
-                    alert('이메일 전송 중 오류가 발생했습니다.');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('이메일 전송 중 오류가 발생했습니다.');
-            }
-        }
-    </script>
-</body>
-</html>
+                    alert('이메일 전송 중 오류가 발생했습니다

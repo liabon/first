@@ -896,7 +896,7 @@
     <footer>
         <div class="footer-content">
             <h3 style="margin-bottom: 1rem;">배상온 대리점</h3>
-            <p>📧 이메일: liab.on.ins@gmail.com</p>
+            <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="771b1e1615591819591e190437101a161e1b5914181a">[email&#160;protected]</a></p>
             <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
             <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
             <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
@@ -904,7 +904,7 @@
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // 보험기간 설정
         function setupInsuranceDates() {
             const startInput = document.getElementById('insuranceStart');
@@ -1275,6 +1275,13 @@
             const droneCount = parseInt(document.getElementById('droneCount').value);
             const mode = isSamePlan ? 'unified' : 'individual';
             
+            const droneTypeNames = {
+                'camera': '촬영용 센서드론',
+                'fpv': 'FPV/레이싱 드론',
+                'toy': '완구형 드론',
+                'other': '기타 드론'
+            };
+            
             const data = {
                 // 고객 정보
                 name: document.querySelector('[name="name"]').value,
@@ -1294,7 +1301,10 @@
                 plan_mode: mode,
                 
                 // 드론 정보
-                drones: []
+                drones: [],
+                
+                // 드론별 플랜 정보 (complete 페이지용)
+                drone_plans: []
             };
             
             // 각 드론 정보 수집
@@ -1310,9 +1320,31 @@
                 // 플랜 정보 추가
                 if (mode === 'unified') {
                     // 통합 모드: 모든 드론이 같은 타입/플랜
-                    drone.type = document.querySelector('input[name="drone_type"]:checked').value;
-                    drone.plan = document.querySelector('input[name="plan"]:checked').value;
-                    drone.price = parseInt(document.querySelector('input[name="plan"]:checked').dataset.price);
+                    const droneTypeInput = document.querySelector('input[name="drone_type"]:checked');
+                    const planInput = document.querySelector('input[name="plan"]:checked');
+                    
+                    drone.type = droneTypeInput.value;
+                    drone.plan = planInput.value;
+                    drone.price = parseInt(planInput.dataset.price);
+                    
+                    // drone_plans 배열에 추가
+                    const planName = planInput.closest('.plan-card').querySelector('.plan-name').textContent;
+                    data.drone_plans.push({
+                        drone_index: i,
+                        drone_type: droneTypeInput.value,
+                        drone_type_name: droneTypeNames[droneTypeInput.value],
+                        plan: planInput.value,
+                        plan_name: planName,
+                        price: parseInt(planInput.dataset.price)
+                    });
+                    
+                    // 첫 드론일 때만 전체 정보 저장 (구버전 호환)
+                    if (i === 0) {
+                        data.drone_type = droneTypeInput.value;
+                        data.plan = planInput.value;
+                        data.plan_name = planName;
+                        data.plan_price_per_drone = parseInt(planInput.dataset.price);
+                    }
                 } else {
                     // 개별 모드: 드론마다 다른 타입/플랜
                     const typeInput = document.querySelector(`input[name="drone_type_${i}"]:checked`);
@@ -1326,13 +1358,25 @@
                     drone.type = typeInput.value;
                     drone.plan = planInput.value;
                     drone.price = parseInt(planInput.dataset.price);
+                    
+                    // drone_plans 배열에 추가
+                    const planName = planInput.getAttribute('data-plan-name');
+                    data.drone_plans.push({
+                        drone_index: i,
+                        drone_type: typeInput.value,
+                        drone_type_name: droneTypeNames[typeInput.value],
+                        plan: planInput.value,
+                        plan_name: planName,
+                        price: parseInt(planInput.dataset.price)
+                    });
                 }
                 
                 data.drones.push(drone);
             }
             
             // 총 금액 계산
-            data.total_price = data.drones.reduce((sum, drone) => sum + drone.price, 0);
+            data.plan_total_price = data.drones.reduce((sum, drone) => sum + drone.price, 0);
+            data.total_price = data.plan_total_price; // 구버전 호환
             
             return data;
         }
@@ -1599,14 +1643,4 @@
                     this.value = this.value.replace(/[^0-9]/g, '');
                 });
                 birthDateInput.addEventListener('keypress', function(e) {
-                    if (!/[0-9]/.test(e.key)) {                        e.preventDefault();
-                    }
-                });
-            }
-
-            // 초기 드론 섹션 생성
-            updateDroneSections();
-        });
-    </script>
-</body>
-</html>
+                    if (!/[0-9]/.tes

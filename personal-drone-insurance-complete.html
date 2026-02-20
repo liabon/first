@@ -335,7 +335,7 @@
                 • 견적서를 다운로드하거나 이메일로 받아보실 수 있습니다.<br>
                 • 가입을 원하시면 결제하기 버튼을 눌러주세요.<br>
                 • 견적서는 참고용이며, 최종 보험료는 심사 후 확정됩니다.<br>
-                • 문의사항: liab.on.ins@gmail.com
+                • 문의사항: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3b57525a59155455155255487b5c565a525715585456">[email&#160;protected]</a>
             </div>
         </div>
     </div>
@@ -346,7 +346,7 @@
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         let insuranceData = null;
 
@@ -421,6 +421,23 @@
                 console.log('✅ 개별 플랜 모드');
                 insuranceData.drone_plans.forEach((dronePlan, index) => {
                     const drone = insuranceData.drones[index];
+                    
+                    // 드론 종류 이름 결정 (우선순위: drone_type_name > droneTypes 매핑 > drone.type 직접 사용)
+                    let droneTypeName = '미입력';
+                    if (dronePlan.drone_type_name) {
+                        droneTypeName = dronePlan.drone_type_name;
+                    } else if (dronePlan.drone_type && droneTypes[dronePlan.drone_type]) {
+                        droneTypeName = droneTypes[dronePlan.drone_type];
+                    } else if (drone && drone.type && droneTypes[drone.type]) {
+                        droneTypeName = droneTypes[drone.type];
+                    }
+                    
+                    console.log(`📋 드론 ${index + 1} 표시:`, {
+                        drone_type: dronePlan.drone_type,
+                        drone_type_name: dronePlan.drone_type_name,
+                        결정된_이름: droneTypeName
+                    });
+                    
                     html += `
                         <div style="margin: 1.5rem 0; padding: 1.5rem; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #FFB800;">
                             <h3 style="margin: 0 0 1rem 0; color: #FFB800; font-size: 1.1rem;">드론 ${index + 1}</h3>
@@ -430,7 +447,7 @@
                             </div>
                             <div class="info-row">
                                 <span class="info-label">드론 종류</span>
-                                <span class="info-value">${dronePlan.drone_type_name || droneTypes[dronePlan.drone_type] || '미입력'}</span>
+                                <span class="info-value">${droneTypeName}</span>
                             </div>
                             <div class="info-row">
                                 <span class="info-label">선택 플랜</span>
@@ -667,11 +684,4 @@
                 } else {
                     alert('이메일 전송 중 오류가 발생했습니다. 다시 시도해주세요.');
                 }
-            } catch (error) {
-                console.error('이메일 전송 오류:', error);
-                alert('이메일 전송 중 오류가 발생했습니다. 다시 시도해주세요.');
-            }
-        }
-    </script>
-</body>
-</html>
+            } catch (e

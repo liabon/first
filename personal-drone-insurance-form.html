@@ -896,7 +896,7 @@
     <footer>
         <div class="footer-content">
             <h3 style="margin-bottom: 1rem;">배상온 대리점</h3>
-            <p>📧 이메일: liab.on.ins@gmail.com</p>
+            <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="620e0b03004c0d0c4c0b0c1122050f030b0e4c010d0f">[email&#160;protected]</a></p>
             <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
             <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
             <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
@@ -904,7 +904,7 @@
         </div>
     </footer>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // 보험기간 설정
         function setupInsuranceDates() {
             console.log('🔧 setupInsuranceDates 시작');
@@ -1343,12 +1343,33 @@
                     const droneTypeInput = document.querySelector('input[name="drone_type"]:checked');
                     const planInput = document.querySelector('input[name="plan"]:checked');
                     
+                    if (!droneTypeInput) {
+                        console.error('❌ 가입물건(드론 종류)이 선택되지 않았습니다!');
+                        alert('가입물건을 선택해주세요.');
+                        return null;
+                    }
+                    
+                    if (!planInput) {
+                        console.error('❌ 보험 플랜이 선택되지 않았습니다!');
+                        alert('보험 플랜을 선택해주세요.');
+                        return null;
+                    }
+                    
                     drone.type = droneTypeInput.value;
                     drone.plan = planInput.value;
                     drone.price = parseInt(planInput.dataset.price);
                     
                     // drone_plans 배열에 추가
-                    const planName = planInput.closest('.plan-card').querySelector('.plan-name').textContent;
+                    const planCard = planInput.closest('.plan-card');
+                    const planNameElement = planCard ? planCard.querySelector('.plan-name') : null;
+                    const planName = planNameElement ? planNameElement.textContent.trim() : '플랜명 없음';
+                    
+                    console.log(`✅ 드론 ${i+1} 정보:`, {
+                        drone_type: droneTypeInput.value,
+                        drone_type_name: droneTypeNames[droneTypeInput.value],
+                        plan_name: planName
+                    });
+                    
                     data.drone_plans.push({
                         drone_index: i,
                         drone_type: droneTypeInput.value,
@@ -1371,7 +1392,8 @@
                     const planInput = document.querySelector(`input[name="plan_drone_${i}"]:checked`);
                     
                     if (!typeInput || !planInput) {
-                        console.error(`드론 ${i+1} 정보 누락`);
+                        console.error(`❌ 드론 ${i+1} 정보 누락:`, {typeInput: !!typeInput, planInput: !!planInput});
+                        alert(`드론 ${i+1}의 가입물건과 플랜을 선택해주세요.`);
                         return null;
                     }
                     
@@ -1380,7 +1402,14 @@
                     drone.price = parseInt(planInput.dataset.price);
                     
                     // drone_plans 배열에 추가
-                    const planName = planInput.getAttribute('data-plan-name');
+                    const planName = planInput.getAttribute('data-plan-name') || '플랜명 없음';
+                    
+                    console.log(`✅ 드론 ${i+1} 정보 (개별):`, {
+                        drone_type: typeInput.value,
+                        drone_type_name: droneTypeNames[typeInput.value],
+                        plan_name: planName
+                    });
+                    
                     data.drone_plans.push({
                         drone_index: i,
                         drone_type: typeInput.value,
@@ -1688,15 +1717,3 @@
                 birthDateInput.addEventListener('keypress', function(e) {
                     if (!/[0-9]/.test(e.key)) {
                         e.preventDefault();
-                    }
-                });
-            }
-
-            // 초기 드론 섹션 생성
-            updateDroneSections();
-            
-            console.log('✅ 페이지 초기화 완료');
-        });
-    </script>
-</body>
-</html>

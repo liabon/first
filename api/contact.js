@@ -7,9 +7,9 @@ const { Pool } = require('pg');
 // ──────────────────────────────────────────────
 let pool;
 function getPool() {
-  if (!pool && process.env.POSTGRES_URL) {
+  if (!pool && process.env.liab_db_POSTGRES_URL) {
     pool = new Pool({
-      connectionString: process.env.POSTGRES_URL,
+      connectionString: process.env.liab_db_POSTGRES_URL,
       ssl: { rejectUnauthorized: false }
     });
   }

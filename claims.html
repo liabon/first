@@ -867,7 +867,7 @@
         <div class="method-card">
           <div class="method-icon">📧</div>
           <div class="method-name">이메일 접수</div>
-          <div class="method-detail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5d31343c3f7332337334332e1d3a303c3431733e3230">[email&#160;protected]</a><br>사진/스캔본 첨부</div>
+          <div class="method-detail">liab.on.ins@gmail.com<br>사진/스캔본 첨부</div>
         </div>
         <div class="method-card">
           <div class="method-icon">☎️</div>
@@ -881,7 +881,7 @@
         </div>
       </div>
 
-      <a href="/cdn-cgi/l/email-protection#e28e8b8380cc8d8ccc8b8c91a2858f838b8ecc818d8f" class="btn-claim">
+      <a href="mailto:liab.on.ins@gmail.com" class="btn-claim">
         📧 이메일로 청구 서류 보내기
       </a>
       <a href="https://www.kbinsure.co.kr" target="_blank" class="btn-secondary">
@@ -907,12 +907,12 @@
   <div class="footer-logo">배상온 대리점</div>
   <div class="footer-text">
     KB손해보험 공식 대리점 | 대리점등록번호: 제2026010037호<br>
-    📍 서울특별시 동대문구 천호대로 301, 1706호 | 📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="274b4e4645094849094e495467404a464e4b0944484a">[email&#160;protected]</a><br>
+    📍 서울특별시 동대문구 천호대로 301, 1706호 | 📧 liab.on.ins@gmail.com<br>
     사업자등록번호: 501-63-18916 | 대표: 김리하
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   // ─── DATA ───
   const claimTypes = {
     event: [
@@ -1500,7 +1500,28 @@
     }
   }
 
+
   function updateSteps(active) {
     for (let i = 1; i <= 3; i++) {
-      const num = document.getElementById(`step${i}-num`);
-      c
+      const num   = document.getElementById(`step${i}-num`);
+      const label = document.getElementById(`step${i}-label`);
+      if (!num) continue;
+      if (i < active) {
+        num.className   = 'step-num completed';
+        num.textContent = '✓';
+      } else if (i === active) {
+        num.className   = 'step-num active';
+        num.textContent = i;
+      } else {
+        num.className   = 'step-num';
+        num.textContent = i;
+      }
+      if (label) {
+        label.className = i <= active ? 'step-label active' : 'step-label';
+      }
+    }
+  }
+
+</script>
+</body>
+</html>

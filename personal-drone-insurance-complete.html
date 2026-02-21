@@ -275,14 +275,34 @@
         }
 
         @media (max-width: 768px) {
-            .complete-card {
-                padding: 3rem 2rem;
-            }
-
+            .main-content { padding: 1.5rem 1rem; }
+            .complete-card { padding: 2rem 1.5rem; border-radius: 20px; }
+            .complete-title { font-size: 1.5rem; }
+            .complete-subtitle { font-size: 0.9rem; }
+            .success-icon { width: 64px; height: 64px; font-size: 2rem; }
+            .total-price-value { font-size: 2rem; }
             .action-buttons,
-            .navigation-buttons {
-                grid-template-columns: 1fr;
-            }
+            .navigation-buttons { grid-template-columns: 1fr; }
+            .btn { padding: 1rem; font-size: 1rem; }
+            .info-label, .info-value { font-size: 0.9rem; }
+            .quote-title { font-size: 1.1rem; }
+        }
+
+        @media (max-width: 480px) {
+            .main-content { padding: 1rem 0.75rem; }
+            .complete-card { padding: 1.5rem 1rem; border-radius: 16px; }
+            .complete-title { font-size: 1.3rem; }
+            .total-price-value { font-size: 1.7rem; }
+            .total-price-label { font-size: 0.85rem; }
+            .total-price { padding: 1rem; }
+            .quote-box { padding: 1.2rem; }
+            .info-row { flex-direction: column; gap: 0.2rem; padding: 0.6rem 0; }
+            .info-label { color: #999; font-size: 0.8rem; }
+            .info-value { font-size: 0.95rem; }
+            .notice { padding: 1rem; font-size: 0.85rem; }
+            .btn { padding: 0.9rem; font-size: 0.95rem; border-radius: 10px; }
+            .header-content { padding: 1rem; }
+            .agency-name { font-size: 1.1rem; }
         }
     </style>
 </head>

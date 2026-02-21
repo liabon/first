@@ -335,7 +335,7 @@
                 • 견적서를 다운로드하거나 이메일로 받아보실 수 있습니다.<br>
                 • 가입을 원하시면 결제하기 버튼을 눌러주세요.<br>
                 • 견적서는 참고용이며, 최종 보험료는 심사 후 확정됩니다.<br>
-                • 문의사항: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3b57525a59155455155255487b5c565a525715585456">[email&#160;protected]</a>
+                • 문의사항: liab.on.ins@gmail.com
             </div>
         </div>
     </div>
@@ -346,7 +346,7 @@
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         let insuranceData = null;
 
@@ -665,12 +665,17 @@
         }
 
         async function sendEmail() {
+            if (!insuranceData) {
+                alert('보험 정보가 없습니다.');
+                return;
+            }
+            const emailBtn = document.querySelector('.btn-email');
+            emailBtn.disabled = true;
+            emailBtn.textContent = '전송 중...';
             try {
                 const response = await fetch('/api/contact', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         ...insuranceData,
                         insurance_type: '개인용 드론보험',
@@ -684,4 +689,14 @@
                 } else {
                     alert('이메일 전송 중 오류가 발생했습니다. 다시 시도해주세요.');
                 }
-            } catch (e
+            } catch (e) {
+                console.error('이메일 전송 오류:', e);
+                alert('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+            } finally {
+                emailBtn.disabled = false;
+                emailBtn.textContent = '📧 이메일 전송';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+/**
+ * drone-insurance.html 상담 신청 폼 패치
+ * ─────────────────────────────────────────
+ * 기존 drone-insurance.html의 <script> 내 폼 제출 핸들러를
+ * 아래 코드로 교체/추가하세요.
+ *
+ * 또는 drone-insurance.html 하단 </body> 직전에
+ * <script src="/js/drone-inquiry-form.js"></script> 를 추가하고
+ * 이 파일을 /public/js/drone-inquiry-form.js 로 저장하세요.
+ */
+
+(function () {
+  const form = document.querySelector('form'); // 상담 신청 폼 선택자 (필요시 #consultation-form 등으로 변경)
+  if (!form) return;
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    // 폼 데이터 수집
+    const insuranceTypeEl = form.querySelector('select');          // 보험 종류 select
+    const nameEl          = form.querySelector('input[type="text"], input:not([type])');
+    const phoneEl         = form.querySelectorAll('input')[1];     // 연락처 (두 번째 input)
+    const emailEl         = form.querySelector('input[type="email"]');
+    const messageEl       = form.querySelector('textarea');
+
+    // insurance_type 값 변환
+    let insurance_type = insuranceTypeEl?.value || '';
+    if (insurance_type.includes('업무')) insurance_type = 'business';
+    else if (insurance_type.includes('개인')) insurance_type = 'personal';
+
+    const payload = {
+      name:           nameEl?.value?.trim()    || '',
+      phone:          phoneEl?.value?.trim()   || '',
+      email:          emailEl?.value?.trim()   || '',
+      insurance_type: insurance_type,
+      message:        messageEl?.value?.trim() || ''
+    };
+
+    // 필수값 클라이언트 검증
+    if (!payload.name || !payload.phone) {
+      alert('이름과 연락처를 입력해주세요.');
+      return;
+    }
+
+    const submitBtn = form.querySelector('button[type="submit"], button');
+    if (submitBtn) submitBtn.disabled = true;
+
+    try {
+      const res = await fetch('/api/submit-drone-inquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert('상담 신청이 완료되었습니다.\n빠른 시일 내에 연락드리겠습니다.');
+        form.reset();
+      } else {
+        alert(data.error || '오류가 발생했습니다. 다시 시도해주세요.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+    }
+  });
+})();

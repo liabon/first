@@ -1,4 +1,42 @@
 const nodemailer = require('nodemailer');
+const { Pool } = require('pg');
+
+// ──────────────────────────────────────────────
+// DB 연결 풀 (POSTGRES_URL 환경변수 필요)
+// Vercel Storage > Postgres 연결 시 자동 주입됨
+// ──────────────────────────────────────────────
+let pool;
+function getPool() {
+  if (!pool && process.env.POSTGRES_URL) {
+    pool = new Pool({
+      connectionString: process.env.POSTGRES_URL,
+      ssl: { rejectUnauthorized: false }
+    });
+  }
+  return pool;
+}
+
+// DB 저장 헬퍼 (실패해도 이메일 전송은 계속됨)
+async function saveToDb(tableName, data) {
+  const db = getPool();
+  if (!db) return null; // DB 미설정 시 조용히 skip
+
+  try {
+    const keys = Object.keys(data);
+    const values = Object.values(data);
+    const placeholders = keys.map((_, i) => `$${i + 1}`).join(', ');
+    const columns = keys.join(', ');
+
+    const result = await db.query(
+      `INSERT INTO ${tableName} (${columns}) VALUES (${placeholders}) RETURNING id`,
+      values
+    );
+    return result.rows[0].id;
+  } catch (err) {
+    console.error(`DB 저장 실패 (${tableName}):`, err.message);
+    return null;
+  }
+}
 
 // 플랜별 보장내용 반환 함수
 function getCoverageDetails(plan) {
@@ -111,6 +149,53 @@ module.exports = async (req, res) => {
       });
     }
 
+    // ──────────────────────────────────────────────
+    // DB 저장 (이메일 전송과 별개로 먼저 저장)
+    // ──────────────────────────────────────────────
+    if (insurance_type === '개인용 드론보험') {
+      // personal_drone_applications 테이블에 저장
+      await saveToDb('personal_drone_applications', {
+        name: name || '',
+        birth_date: birth_date || '',
+        gender: gender || '',
+        phone: phone || '',
+        email: email || '',
+        coverage_start: insurance_start || null,
+        coverage_end: insurance_end || null,
+        drone_count: parseInt(drone_count) || 1,
+        drones: JSON.stringify(drones || []),
+        drone_plans: JSON.stringify(drone_plans || []),
+        total_premium: parseInt(plan_total_price) || 0,
+        plan_mode: plan_selection_type || 'unified',
+        terms_agreed: true,
+        agreed_at: new Date().toISOString(),
+        source_page: 'personal-drone-insurance-form',
+        status: 'pending'
+      });
+    } else if (insurance_type === '업무용 드론보험' || request_type === 'business_quote') {
+      // drone_inquiries 테이블에 저장
+      await saveToDb('drone_inquiries', {
+        name: req.body.manager_name || name || '',
+        phone: req.body.manager_phone || phone || '',
+        email: req.body.manager_email || email || '',
+        insurance_type: 'business',
+        message: req.body.inquiry || message || '',
+        source_page: 'drone-insurance',
+        status: 'new'
+      });
+    } else if (insurance_type && insurance_type.includes('드론')) {
+      // 그 외 드론 관련 상담
+      await saveToDb('drone_inquiries', {
+        name: name || '',
+        phone: phone || '',
+        email: email || '',
+        insurance_type: insurance_type.includes('개인') ? 'personal' : 'business',
+        message: message || '',
+        source_page: 'drone-insurance',
+        status: 'new'
+      });
+    }
+
     // 이메일 전송 설정
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -197,56 +282,42 @@ module.exports = async (req, res) => {
       emailBody = `
         <h2>🚁 개인용 드론보험 상담 신청</h2>
         <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0;">
-          <h3 style="color: #1e3c72; margin-top: 0;">신청자 정보</h3>
+          <h3 style="color: #FFB800; margin-top: 0;">신청자 정보</h3>
           <p><strong>이름:</strong> ${name}</p>
-          <p><strong>연락처:</strong> ${phone}</p>
-          <p><strong>이메일:</strong> ${email || '미입력'}</p>
           <p><strong>생년월일:</strong> ${birth_date || '미입력'}</p>
           <p><strong>성별:</strong> ${gender === 'male' ? '남성' : gender === 'female' ? '여성' : '미입력'}</p>
+          <p><strong>연락처:</strong> ${phone}</p>
+          <p><strong>이메일:</strong> ${email || '미입력'}</p>
         </div>
-        
+
+        <div style="background: #fff9e6; padding: 20px; border-radius: 10px; margin: 20px 0;">
+          <h3 style="color: #FFB800; margin-top: 0;">보험 기간</h3>
+          <p><strong>보험 시작:</strong> ${insurance_start || '미입력'}</p>
+          <p><strong>보험 종료:</strong> ${insurance_end || '미입력'}</p>
+        </div>
+
         <div style="background: #e3f2fd; padding: 20px; border-radius: 10px; margin: 20px 0;">
-          <h3 style="color: #1e3c72; margin-top: 0;">드론 정보</h3>
-          <p><strong>드론 종류:</strong> ${droneTypes[drone_type] || '미입력'}</p>
-          <p><strong>드론 대수:</strong> ${drone_count || 1}대</p>
+          <h3 style="color: #1e3c72; margin-top: 0;">드론 정보 (${drone_count || 1}대)</h3>
           ${drones && drones.length > 0 ? drones.map((drone, i) => {
             const dronePlan = drone_plans && drone_plans[i] ? drone_plans[i] : null;
             return `
-            <div style="background: #fff; padding: 15px; margin: 10px 0; border-left: 4px solid #FFB800; border-radius: 6px;">
-              <p style="margin: 5px 0; font-weight: bold; color: #FFB800;">드론 ${i + 1}</p>
-              <p style="margin: 5px 0;"><strong>모델명:</strong> ${drone.model || '미입력'}</p>
-              <p style="margin: 5px 0;"><strong>시리얼번호:</strong> ${drone.serial || '미입력'}</p>
-              <p style="margin: 5px 0;"><strong>자체중량:</strong> ${drone.weight || '미입력'}kg</p>
-              <p style="margin: 5px 0;"><strong>최대이륙중량:</strong> ${drone.max_weight || '미입력'}kg</p>
-              ${dronePlan ? `
-              <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #e0e0e0;">
-                <p style="margin: 5px 0; color: #FFB800; font-weight: bold;">선택 플랜: ${dronePlan.plan_name}</p>
-                <p style="margin: 5px 0;">보험료: ${parseInt(dronePlan.price).toLocaleString()}원/년</p>
-              </div>
-              ` : ''}
-            </div>
-            `;
-          }).join('') : ''}
+            <div style="border: 1px solid #e0e0e0; padding: 15px; margin: 10px 0; border-radius: 8px; background: #fff;">
+              <p style="font-weight: bold; color: #FFB800;">드론 ${i + 1} (${droneTypes[drone.type] || '미입력'})</p>
+              <p>모델명: ${drone.model || '미입력'}</p>
+              <p>시리얼번호: ${drone.serial || '미입력'}</p>
+              <p>자체중량: ${drone.weight || '미입력'}kg</p>
+              <p>최대이륙중량: ${drone.max_weight || '미입력'}kg</p>
+              ${dronePlan ? `<p>선택 플랜: ${dronePlan.plan_name || '미입력'} (${parseInt(dronePlan.price || 0).toLocaleString()}원/년)</p>` : ''}
+            </div>`;
+          }).join('') : `<p>드론 대수: ${drone_count || 1}대</p><p>드론 종류: ${droneTypes[drone_type] || '미입력'}</p>`}
         </div>
-        
-        <div style="background: #fff9e6; padding: 20px; border-radius: 10px; margin: 20px 0;">
-          <h3 style="color: #FFB800; margin-top: 0;">보험료 정보</h3>
-          <p><strong>총 보험료:</strong> <span style="color: #e74c3c; font-size: 24px; font-weight: bold;">${plan_total_price ? parseInt(plan_total_price).toLocaleString() : '0'}원/년</span></p>
-          ${plan_selection_type === 'unified' ? `
-          <p><strong>플랜명:</strong> ${plan_name || '미입력'} (전체 동일)</p>
-          <p><strong>보험료(1대당):</strong> ${plan_price_per_drone ? parseInt(plan_price_per_drone).toLocaleString() : '0'}원/년</p>
-          ` : `
-          <p><strong>플랜 선택:</strong> 드론별 개별 플랜</p>
-          `}
+
+        <div style="background: #FFB800; padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0;">
+          <p style="margin: 0; font-size: 1.5rem; font-weight: bold; color: #1a1a1a;">
+            총 보험료: ${plan_total_price ? parseInt(plan_total_price).toLocaleString() : '0'}원/년
+          </p>
         </div>
-        
-        ${message ? `
-        <div style="background: #f0f0f0; padding: 20px; border-radius: 10px; margin: 20px 0;">
-          <h3 style="color: #1e3c72; margin-top: 0;">추가 문의사항</h3>
-          <p>${message}</p>
-        </div>
-        ` : ''}
-        
+
         <hr style="margin: 30px 0; border: none; border-top: 2px solid #e0e0e0;">
         <p style="color: #999; font-size: 14px;">배상온 대리점 웹사이트에서 전송됨</p>
       `;
@@ -321,7 +392,7 @@ module.exports = async (req, res) => {
       `;
     }
 
-    // 관리자에게 이메일 전송 (개인용 드론보험의 고객 견적서 전송 제외)
+    // 관리자에게 이메일 전송
     if (!(send_to_customer && insurance_type === '개인용 드론보험')) {
       const mailOptions = {
         from: process.env.EMAIL_USER,
@@ -342,7 +413,6 @@ module.exports = async (req, res) => {
         'other': '기타 드론'
       };
 
-      // 고객용 견적서 이메일
       const customerEmailBody = `
         <div style="font-family: 'Noto Sans KR', sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background: linear-gradient(135deg, #FFB800 0%, #FFCD00 100%); padding: 30px; text-align: center;">

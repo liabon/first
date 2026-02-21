@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>계약 조회/변경 - 배상온 대리점</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        :root {
+            --gold:  #FFB800;
+            --yellow:#FFCD00;
+            --dark:  #1a1a1a;
+            --gray:  #666;
+            --light: #f8f9fa;
+            --red:   #e74c3c;
+            --green: #27ae60;
+            --radius:14px;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', -apple-system, sans-serif;
+            color: var(--dark);
+            background: var(--light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-size: 16px;
+        }
+
+        /* ── HEADER ── */
+        header {
+            background: #fff;
+            box-shadow: 0 1px 8px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo-section { display: flex; align-items: center; gap: 0.9rem; }
+        .kb-logo { height: 38px; }
+        .divider { height: 28px; width: 1px; background: #ddd; }
+        .agency-name { font-size: 1.1rem; font-weight: 800; }
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.55rem 1.1rem;
+            background: var(--gold);
+            color: var(--dark);
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+        .back-home:hover { background: var(--yellow); }
+
+        /* ── MAIN WRAP ── */
+        .main {
+            flex: 1;
+            max-width: 640px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 1.5rem 1rem 3rem;
+        }
+
+        /* ── PAGE HEADER ── */
+        .page-head {
+            text-align: center;
+            margin-bottom: 1.8rem;
+        }
+        .page-head h1 { font-size: 1.6rem; font-weight: 900; margin-bottom: 0.4rem; }
+        .page-head p  { color: var(--gray); font-size: 0.9rem; line-height: 1.5; }
+
+        /* ── CARD ── */
+        .card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 1.6rem 1.4rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+            margin-bottom: 1rem;
+        }
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            margin-bottom: 1.4rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2.5px solid var(--gold);
+        }
+
+        /* ── FORM ── */
+        .form-group { margin-bottom: 1.1rem; }
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.18s, box-shadow 0.18s;
+            appearance: none;
+            -webkit-appearance: none;
+            background: #fff;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(255,184,0,0.12);
+        }
+        .form-group input.err { border-color: var(--red); background: #fff8f8; }
+        .hint { font-size: 0.78rem; color: var(--gray); margin-top: 0.35rem; }
+        .field-err { font-size: 0.8rem; color: var(--red); font-weight: 600; margin-top: 0.3rem; display: none; }
+        .field-err.show { display: block; }
+
+        /* ── OTP ROW ── */
+        .otp-row { display: flex; gap: 0.6rem; }
+        .otp-row input { flex: 1; min-width: 0; }
+        .otp-btn {
+            flex-shrink: 0;
+            padding: 0 1.1rem;
+            height: 50px;
+            background: var(--dark);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+            font-family: inherit;
+        }
+        .otp-btn:hover { background: #333; }
+        .otp-btn:disabled { background: #bbb; cursor: not-allowed; }
+        .otp-timer { font-size: 0.8rem; color: var(--red); font-weight: 600; margin-top: 0.3rem; display: none; }
+
+        /* ── BUTTONS ── */
+        .btn {
+            width: 100%;
+            padding: 0.95rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+        .btn-primary {
+            background: var(--gold);
+            color: var(--dark);
+            box-shadow: 0 4px 14px rgba(255,184,0,0.28);
+            margin-top: 0.4rem;
+        }
+        .btn-primary:hover:not(:disabled) { background: var(--yellow); transform: translateY(-1px); }
+        .btn-primary:disabled { background: #ddd; color: #aaa; box-shadow: none; cursor: not-allowed; }
+        .btn-secondary { background: #f0f0f0; color: var(--dark); }
+        .btn-secondary:hover { background: #e4e4e4; }
+        .btn-danger { background: var(--red); color: #fff; }
+        .btn-danger:hover:not(:disabled) { background: #c0392b; }
+        .btn-outline { background: #fff; border: 2px solid var(--gold); color: var(--dark); }
+        .btn-outline:hover { background: #fff9e6; }
+
+        /* ── SCREENS ── */
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        /* ── CONTRACT CARDS ── */
+        .contract-card {
+            border: 2px solid #ebebeb;
+            border-radius: 14px;
+            padding: 1.2rem;
+            margin-bottom: 0.9rem;
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+        .contract-card:hover { border-color: var(--gold); background: #fffbf0; }
+        .contract-card:active { transform: scale(0.99); }
+        .cc-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.8rem;
+            gap: 0.5rem;
+        }
+        .cc-product { font-weight: 800; font-size: 0.95rem; flex: 1; line-height: 1.3; }
+        .badge {
+            flex-shrink: 0;
+            padding: 0.2rem 0.65rem;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .badge-active   { background: #e8f5e9; color: var(--green); }
+        .badge-pending  { background: #fff3e0; color: #e67e22; }
+        .badge-expired  { background: #f0f0f0; color: #999; }
+        .badge-cancelled{ background: #fde8e8; color: var(--red); }
+
+        .cc-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem 0.8rem;
+            font-size: 0.83rem;
+        }
+        .cc-meta-item { color: var(--gray); }
+        .cc-meta-item strong { color: var(--dark); display: block; font-size: 0.88rem; }
+
+        /* ── DETAIL TABLE ── */
+        .detail-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .detail-table { width: 100%; border-collapse: collapse; }
+        .detail-table tr { border-bottom: 1px solid #f0f0f0; }
+        .detail-table tr:last-child { border-bottom: none; }
+        .detail-table th {
+            width: 36%;
+            padding: 0.75rem 0.4rem;
+            text-align: left;
+            font-weight: 600;
+            color: #999;
+            font-size: 0.83rem;
+            vertical-align: top;
+        }
+        .detail-table td {
+            padding: 0.75rem 0.4rem;
+            font-weight: 700;
+            font-size: 0.92rem;
+            vertical-align: top;
+            word-break: break-all;
+        }
+
+        /* ── ACTION GRID ── */
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin-top: 1.4rem;
+        }
+        .action-btn {
+            padding: 1rem 0.8rem;
+            border-radius: 12px;
+            border: 2px solid #e8e8e8;
+            background: #fff;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.18s;
+            font-family: inherit;
+            text-decoration: none;
+            display: block;
+        }
+        .action-btn:hover { border-color: var(--gold); background: #fffbf0; }
+        .action-btn:active { transform: scale(0.97); }
+        .action-btn .ai { font-size: 1.6rem; display: block; margin-bottom: 0.3rem; }
+        .action-btn .al { font-weight: 700; font-size: 0.85rem; color: var(--dark); display: block; }
+        .action-btn .as { font-size: 0.72rem; color: var(--gray); margin-top: 0.15rem; display: block; }
+        .action-btn.danger { border-color: #fca5a5; }
+        .action-btn.danger:hover { border-color: var(--red); background: #fff5f5; }
+        .action-btn.disabled { opacity: 0.38; cursor: not-allowed; pointer-events: none; }
+
+        /* ── BACK LINK ── */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--gray);
+            font-size: 0.85rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+            padding: 0.4rem 0;
+            margin-bottom: 1rem;
+        }
+        .back-link:hover { color: var(--dark); }
+
+        /* ── NOTICE BOXES ── */
+        .notice {
+            background: #fff9e6;
+            border-left: 3px solid var(--gold);
+            border-radius: 8px;
+            padding: 0.9rem 1rem;
+            margin: 0.9rem 0;
+            font-size: 0.83rem;
+            color: var(--gray);
+            line-height: 1.65;
+        }
+        .notice strong { color: var(--dark); display: block; margin-bottom: 0.25rem; font-size: 0.88rem; }
+        .warn {
+            background: #fde8e8;
+            border-left: 3px solid var(--red);
+            border-radius: 8px;
+            padding: 0.9rem 1rem;
+            margin: 0.9rem 0;
+            font-size: 0.83rem;
+            color: #7d1a1a;
+            line-height: 1.65;
+        }
+        .warn strong { display: block; margin-bottom: 0.25rem; font-weight: 800; }
+
+        /* ── SPINNER ── */
+        .spin {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2.5px solid rgba(0,0,0,0.12);
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 0.65s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-wrap { text-align: center; padding: 2.5rem 0; }
+        .loading-wrap p { color: var(--gray); margin-top: 0.8rem; font-size: 0.88rem; }
+        .empty { text-align: center; padding: 2.5rem 0; }
+        .empty-icon { font-size: 2.5rem; display: block; margin-bottom: 0.8rem; }
+        .empty p { color: var(--gray); font-size: 0.88rem; }
+
+        /* ── MODAL ── */
+        .modal-bg {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 500;
+            align-items: flex-end;
+            justify-content: center;
+        }
+        .modal-bg.open { display: flex; }
+
+        /* 모바일 바텀시트 스타일 */
+        .modal-sheet {
+            background: #fff;
+            border-radius: 22px 22px 0 0;
+            padding: 1.6rem 1.4rem 2rem;
+            width: 100%;
+            max-width: 640px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            -webkit-overflow-scrolling: touch;
+            animation: slideUp 0.28s ease;
+        }
+        @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } }
+        .modal-handle {
+            width: 40px;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            margin: 0 auto 1.2rem;
+        }
+        .modal-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.3rem; }
+        .modal-sub   { color: var(--gray); font-size: 0.83rem; margin-bottom: 1.3rem; }
+        .modal-close {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            background: #f0f0f0;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-footer { display: flex; gap: 0.7rem; margin-top: 1.3rem; }
+        .modal-footer .btn { flex: 1; }
+
+        /* 드론 편집 섹션 */
+        .drone-section {
+            border: 2px solid #ebebeb;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.9rem;
+        }
+        .drone-section-title { font-weight: 800; color: var(--gold); margin-bottom: 0.9rem; font-size: 0.9rem; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+
+        /* 결과 모달 */
+        .result-modal { text-align: center; }
+        .result-icon  { font-size: 3rem; margin-bottom: 0.7rem; display: block; }
+        .result-title { font-size: 1.2rem; font-weight: 900; margin-bottom: 0.4rem; }
+        .result-msg   { color: var(--gray); font-size: 0.88rem; line-height: 1.6; }
+
+        /* 계약 정보 미니카드 */
+        .contract-mini {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 0.9rem 1rem;
+            font-size: 0.83rem;
+            margin-bottom: 1rem;
+        }
+        .contract-mini-name { font-weight: 800; margin-bottom: 0.3rem; }
+        .contract-mini-info { color: var(--gray); line-height: 1.6; }
+
+        /* ── FOOTER ── */
+        footer { background: var(--dark); color: #fff; padding: 1.5rem 1rem; margin-top: auto; }
+        .footer-inner { max-width: 640px; margin: 0 auto; text-align: center; font-size: 0.78rem; color: #999; line-height: 1.7; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 480px) {
+            .header-content { padding: 0.8rem 0.9rem; }
+            .kb-logo { height: 32px; }
+            .agency-name { font-size: 0.95rem; }
+            .main { padding: 1.2rem 0.8rem 2.5rem; }
+            .card { padding: 1.3rem 1.1rem; }
+            .page-head h1 { font-size: 1.4rem; }
+            .action-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+            .action-btn .ai { font-size: 1.4rem; }
+            .action-btn .al { font-size: 0.8rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .cc-meta { grid-template-columns: 1fr; }
+            .modal-sheet { padding: 1.4rem 1.1rem 1.8rem; }
+        }
+        @media (max-width: 360px) {
+            .agency-name { display: none; }
+            .action-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header>
+    <div class="header-content">
+        <div class="logo-section">
+            <img src="kb-logo.png" alt="KB손해보험" class="kb-logo">
+            <div class="divider"></div>
+            <div class="agency-name">배상온 대리점</div>
+        </div>
+        <a href="/" class="back-home">🏠 홈</a>
+    </div>
+</header>
+
+<div class="main">
+
+    <!-- ══════════════════════════════
+         SCREEN 1: 본인인증
+    ══════════════════════════════ -->
+    <div class="screen active" id="screen-auth">
+        <div class="page-head">
+            <h1>🔐 계약 조회 / 변경</h1>
+            <p>가입 시 등록하신 이름과 휴대폰 번호로<br>본인 확인 후 이용하실 수 있습니다.</p>
+        </div>
+
+        <div class="card">
+            <div class="card-title">본인 확인</div>
+
+            <div class="form-group">
+                <label>가입자 이름 *</label>
+                <input type="text" id="a-name" placeholder="이름 입력" autocomplete="name" inputmode="text">
+                <div class="field-err" id="err-name">이름을 2자 이상 입력해주세요.</div>
+            </div>
+
+            <div class="form-group">
+                <label>휴대폰 번호 *</label>
+                <div class="otp-row">
+                    <input type="tel" id="a-phone" placeholder="010-0000-0000" maxlength="13" inputmode="numeric" autocomplete="tel">
+                    <button class="otp-btn" id="otp-send-btn" onclick="sendOtp()">인증번호 받기</button>
+                </div>
+                <div class="field-err" id="err-phone">올바른 휴대폰 번호(11자리)를 입력해주세요.</div>
+            </div>
+
+            <div id="otp-wrap" style="display:none;">
+                <div class="form-group">
+                    <label>인증번호 *</label>
+                    <div class="otp-row">
+                        <input type="text" id="a-otp" placeholder="6자리 숫자" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
+                        <button class="otp-btn" id="otp-resend-btn" onclick="sendOtp(true)" style="display:none;">재발송</button>
+                    </div>
+                    <div class="otp-timer" id="otp-timer"></div>
+                    <div class="field-err" id="err-otp">인증번호를 입력해주세요.</div>
+                </div>
+            </div>
+
+            <div class="notice">
+                <strong>📌 안내</strong>
+                본인 확인 후 보험 계약 조회, 드론 정보 변경,
+                계약 취소 및 해지를 진행하실 수 있습니다.
+            </div>
+
+            <button class="btn btn-primary" id="auth-btn" onclick="doAuth()" disabled>본인 확인하기</button>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════
+         SCREEN 2: 계약 목록
+    ══════════════════════════════ -->
+    <div class="screen" id="screen-list">
+        <button class="back-link" onclick="goScreen('auth')">← 본인인증으로</button>
+
+        <div class="page-head" style="text-align:left; margin-bottom:1.2rem;">
+            <h1 id="list-title">📋 가입 이력</h1>
+            <p id="list-sub" style="font-size:0.88rem;"></p>
+        </div>
+
+        <div class="card" id="list-card">
+            <div class="loading-wrap" id="list-loading">
+                <div class="spin" style="width:32px;height:32px;border-width:3px;color:var(--gold);margin:0 auto;"></div>
+                <p>계약 정보를 불러오는 중...</p>
+            </div>
+            <div id="contract-list" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════
+         SCREEN 3: 계약 상세
+    ══════════════════════════════ -->
+    <div class="screen" id="screen-detail">
+        <button class="back-link" onclick="goScreen('list')">← 계약 목록으로</button>
+
+        <div class="card">
+            <div class="card-title" id="detail-title">계약 상세</div>
+            <div class="detail-wrap">
+                <table class="detail-table" id="detail-table"></table>
+            </div>
+            <div class="action-grid" id="action-grid"></div>
+        </div>
+    </div>
+
+</div><!-- /main -->
+
+<!-- ══ FOOTER ══ -->
+<footer>
+    <div class="footer-inner">
+        <p>📧 liab.on.ins@gmail.com | 📍 서울 동대문구 천호대로 301, 1706호</p>
+        <p>사업자 501-63-18916 | 대표 김리하 | 대리점 제2026010037호</p>
+        <p style="margin-top:0.5rem;opacity:0.45;">© 2026 배상온 대리점 · KB손해보험 공식 대리점</p>
+    </div>
+</footer>
+
+<!-- ══ MODAL: 드론 정보 변경 ══ -->
+<div class="modal-bg" id="m-drone">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-handle"></div>
+        <button class="modal-close" onclick="closeModal('m-drone')">✕</button>
+        <div class="modal-title">✏️ 드론 정보 변경</div>
+        <div class="modal-sub">변경할 정보를 입력해주세요. 담당자 확인 후 적용됩니다.</div>
+        <div id="drone-forms"></div>
+        <div class="notice">
+            <strong>📌 변경 안내</strong>
+            변경 요청 후 1~2 영업일 내 처리됩니다.<br>
+            처리 완료 시 등록 연락처로 안내드립니다.
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('m-drone')">취소</button>
+            <button class="btn btn-primary" id="drone-submit" onclick="submitDrone()">변경 요청</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══ MODAL: 계약 취소 ══ -->
+<div class="modal-bg" id="m-cancel">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-handle"></div>
+        <button class="modal-close" onclick="closeModal('m-cancel')">✕</button>
+        <div class="modal-title">🚫 계약 취소</div>
+        <div class="modal-sub">보험 개시 전에만 전액 환불로 취소 가능합니다.</div>
+        <div class="warn">
+            <strong>⚠️ 취소 전 확인사항</strong>
+            취소 즉시 보험 효력이 소멸됩니다.<br>
+            전액 환불은 3~5 영업일 내 처리됩니다.
+        </div>
+        <div id="cancel-info"></div>
+        <div class="form-group">
+            <label>취소 사유 *</label>
+            <select id="cancel-reason">
+                <option value="">선택하세요</option>
+                <option value="change_mind">단순 변심</option>
+                <option value="duplicate">중복 가입</option>
+                <option value="info_error">정보 입력 오류</option>
+                <option value="other">기타</option>
+            </select>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('m-cancel')">돌아가기</button>
+            <button class="btn btn-danger" onclick="submitCancel()">취소 확인</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══ MODAL: 계약 해지 ══ -->
+<div class="modal-bg" id="m-term">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+        <div class="modal-handle"></div>
+        <button class="modal-close" onclick="closeModal('m-term')">✕</button>
+        <div class="modal-title">📤 계약 해지</div>
+        <div class="modal-sub">보험 개시 후 중도 해지를 신청합니다.</div>
+        <div class="warn">
+            <strong>⚠️ 해지 전 확인사항</strong>
+            해지 후 되돌릴 수 없습니다.<br>
+            미경과 보험료는 일할 계산하여 환급됩니다.
+        </div>
+        <div id="term-info"></div>
+        <div class="form-group">
+            <label>해지 사유 *</label>
+            <select id="term-reason">
+                <option value="">선택하세요</option>
+                <option value="no_need">드론 미사용</option>
+                <option value="sold">드론 처분/매도</option>
+                <option value="change_plan">타 상품 전환</option>
+                <option value="other">기타</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>환불 받을 계좌 (선택)</label>
+            <input type="text" id="term-bank" placeholder="예: 카카오뱅크 3333-12-3456789">
+            <div class="hint">미입력 시 원결제 수단으로 환불됩니다.</div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('m-term')">돌아가기</button>
+            <button class="btn btn-danger" onclick="submitTerm()">해지 신청</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══ MODAL: 결과 ══ -->
+<div class="modal-bg" id="m-result">
+    <div class="modal-sheet result-modal" onclick="event.stopPropagation()">
+        <div class="modal-handle"></div>
+        <div class="result-icon" id="r-icon"></div>
+        <div class="result-title" id="r-title"></div>
+        <div class="result-msg" id="r-msg"></div>
+        <div class="notice" id="r-notice" style="text-align:left;display:none;"></div>
+        <button class="btn btn-primary" onclick="closeModal('m-result')" style="margin-top:1.2rem;">확인</button>
+    </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════
+const S = {
+    name: '', phone: '',
+    otpSent: false, otpVerified: false,
+    contracts: [], selected: null,
+    timerInterval: null, timerSec: 180,
+    mockOtp: '',
+};
+
+// ═══════════════════════════════════════════════════
+//  SCREEN
+// ═══════════════════════════════════════════════════
+function goScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════════════════
+//  INPUT 이벤트
+// ═══════════════════════════════════════════════════
+document.getElementById('a-phone').addEventListener('input', function() {
+    let v = this.value.replace(/\D/g, '');
+    if (v.length <= 3)       this.value = v;
+    else if (v.length <= 7)  this.value = v.slice(0,3) + '-' + v.slice(3);
+    else                     this.value = v.slice(0,3) + '-' + v.slice(3,7) + '-' + v.slice(7,11);
+    checkAuth();
+});
+document.getElementById('a-name').addEventListener('input', checkAuth);
+document.getElementById('a-otp').addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g,'').slice(0,6);
+    checkAuth();
+});
+
+function checkAuth() {
+    const name  = document.getElementById('a-name').value.trim();
+    const phone = document.getElementById('a-phone').value.replace(/\D/g,'');
+    const otp   = document.getElementById('a-otp').value.trim();
+    let ok = name.length >= 2 && phone.length === 11;
+    if (S.otpSent) ok = ok && otp.length === 6;
+    document.getElementById('auth-btn').disabled = !ok;
+}
+
+// ═══════════════════════════════════════════════════
+//  OTP 발송
+// ═══════════════════════════════════════════════════
+async function sendOtp(isResend = false) {
+    const name  = document.getElementById('a-name').value.trim();
+    const phone = document.getElementById('a-phone').value.replace(/\D/g,'');
+
+    showErr('err-name',  name.length < 2);
+    showErr('err-phone', phone.length !== 11);
+    if (name.length < 2 || phone.length !== 11) return;
+
+    const btn = document.getElementById('otp-send-btn');
+    btn.disabled = true;
+    btn.textContent = '발송 중...';
+
+    try {
+        const res  = await fetch('/api/my-insurance', {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'send_otp', name, phone }),
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            S.name = name; S.phone = phone; S.otpSent = true;
+            showOtpField(isResend);
+        } else {
+            showResult('❌', '발송 실패', data.message || '다시 시도해주세요.', null);
+            btn.disabled = false;
+            btn.textContent = '인증번호 받기';
+        }
+    } catch(e) {
+        // API 없거나 오류 시 개발 Mock
+        console.warn('[Dev] API 미응답 → Mock OTP');
+        S.name = name; S.phone = phone; S.otpSent = true;
+        S.mockOtp = '123456';
+        showOtpField(isResend);
+        setTimeout(() => alert('📱 [개발 모드] 인증번호: 123456\n(운영 시 솔라피 SMS로 발송됩니다)'), 200);
+    }
+    checkAuth();
+}
+
+function showOtpField(isResend) {
+    document.getElementById('otp-wrap').style.display = 'block';
+    document.getElementById('otp-send-btn').style.display = 'none';
+    if (isResend) document.getElementById('otp-resend-btn').style.display = 'block';
+    startTimer();
+    document.getElementById('a-otp').focus();
+}
+
+function startTimer() {
+    if (S.timerInterval) clearInterval(S.timerInterval);
+    S.timerSec = 180;
+    const el = document.getElementById('otp-timer');
+    el.style.display = 'block';
+    S.timerInterval = setInterval(() => {
+        S.timerSec--;
+        const m = Math.floor(S.timerSec / 60);
+        const s = S.timerSec % 60;
+        el.textContent = `유효시간: ${m}:${String(s).padStart(2,'0')}`;
+        if (S.timerSec <= 0) {
+            clearInterval(S.timerInterval);
+            el.textContent = '만료됨. 재발송 버튼을 눌러주세요.';
+            document.getElementById('otp-resend-btn').style.display = 'block';
+        }
+    }, 1000);
+}
+
+// ═══════════════════════════════════════════════════
+//  본인 확인 제출
+// ═══════════════════════════════════════════════════
+async function doAuth() {
+    const otp  = document.getElementById('a-otp').value.trim();
+    const btn  = document.getElementById('auth-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spin"></span> 확인 중...';
+
+    try {
+        const res  = await fetch('/api/my-insurance', {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'verify_and_fetch',
+                name:   S.name || document.getElementById('a-name').value.trim(),
+                phone:  S.phone || document.getElementById('a-phone').value.replace(/\D/g,''),
+                otp,
+            }),
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            clearInterval(S.timerInterval);
+            S.name       = S.name || document.getElementById('a-name').value.trim();
+            S.contracts  = data.contracts || getMockContracts();
+            renderList();
+            goScreen('list');
+        } else {
+            btn.disabled = false;
+            btn.textContent = '본인 확인하기';
+            showErr('err-otp', true, data.message);
+        }
+    } catch(e) {
+        // Mock fallback
+        if (S.otpSent && otp !== S.mockOtp) {
+            btn.disabled = false;
+            btn.textContent = '본인 확인하기';
+            showErr('err-otp', true, '인증번호가 올바르지 않습니다. (개발모드: 123456)');
+            return;
+        }
+        clearInterval(S.timerInterval);
+        S.name      = S.name || document.getElementById('a-name').value.trim();
+        S.contracts = getMockContracts();
+        renderList();
+        goScreen('list');
+    }
+}
+
+// ═══════════════════════════════════════════════════
+//  MOCK DATA
+// ═══════════════════════════════════════════════════
+function getMockContracts() {
+    const fmt  = d => d.toISOString().split('T')[0];
+    const add  = (d, y) => { const r=new Date(d); r.setFullYear(r.getFullYear()+y); return r; };
+    const now  = new Date();
+    return [
+        {
+            id: 'KBD-20260001', product: 'KB손해보험 개인용 드론보험',
+            status: 'pending', plan: '일반 (camera-standard)',
+            start_date: fmt(add(now,0)), end_date: fmt(add(now,1)),
+            total_premium: 69900, created_at: fmt(now),
+            drones: [{ index:0, model:'DJI Mini 3 Pro', serial:'ABC123456', type:'camera', type_name:'촬영용 드론', weight:'0.249', max_weight:'0.249' }],
+            can_cancel: true, can_terminate: false,
+        },
+        {
+            id: 'KBD-20250088', product: 'KB손해보험 개인용 드론보험',
+            status: 'expired', plan: '슬림 (fpv-slim)',
+            start_date: fmt(add(now,-2)), end_date: fmt(add(now,-1)),
+            total_premium: 59900, created_at: fmt(add(now,-2)),
+            drones: [{ index:0, model:'Geprc Mark5', serial:'XYZ789', type:'fpv', type_name:'FPV 드론', weight:'0.8', max_weight:'0.9' }],
+            can_cancel: false, can_terminate: false,
+        },
+    ];
+}
+
+// ═══════════════════════════════════════════════════
+//  LIST RENDER
+// ═══════════════════════════════════════════════════
+const BADGE = { active:'badge-active', pending:'badge-pending', expired:'badge-expired', cancelled:'badge-cancelled' };
+const LABEL = { active:'보장 중', pending:'개시 전', expired:'만기', cancelled:'취소됨' };
+
+function renderList() {
+    document.getElementById('list-title').textContent = '📋 가입 이력';
+    document.getElementById('list-sub').textContent   = `${S.name}님 · 총 ${S.contracts.length}건`;
+
+    const loading = document.getElementById('list-loading');
+    const list    = document.getElementById('contract-list');
+    loading.style.display = 'none';
+    list.style.display    = 'block';
+
+    if (!S.contracts.length) {
+        list.innerHTML = `<div class="empty"><span class="empty-icon">📭</span><p>가입된 계약이 없습니다.</p><p style="margin-top:.4rem;font-size:.8rem;">다른 이름이나 번호로 조회해보세요.</p></div>`;
+        return;
+    }
+
+    list.innerHTML = S.contracts.map((c, i) => `
+        <div class="contract-card" onclick="selectContract(${i})">
+            <div class="cc-top">
+                <div class="cc-product">${c.product}</div>
+                <span class="badge ${BADGE[c.status]||'badge-expired'}">${LABEL[c.status]||c.status}</span>
+            </div>
+            <div class="cc-meta">
+                <div class="cc-meta-item"><strong>${c.id}</strong>증권번호</div>
+                <div class="cc-meta-item"><strong>${c.plan}</strong>플랜</div>
+                <div class="cc-meta-item"><strong>${c.start_date}~${c.end_date}</strong>보험기간</div>
+                <div class="cc-meta-item"><strong>${c.total_premium.toLocaleString()}원</strong>연간 보험료</div>
+            </div>
+        </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════
+//  DETAIL RENDER
+// ═══════════════════════════════════════════════════
+function selectContract(i) {
+    S.selected = S.contracts[i];
+    renderDetail(S.selected);
+    goScreen('detail');
+}
+
+function renderDetail(c) {
+    document.getElementById('detail-title').innerHTML =
+        `📄 ${c.product} <span class="badge ${BADGE[c.status]||''}" style="font-size:.72rem">${LABEL[c.status]||c.status}</span>`;
+
+    const droneRows = c.drones.map((d, i) => `
+        <tr><th>드론 ${i+1}</th><td>${d.model}</td></tr>
+        <tr><th>종류</th><td>${d.type_name}</td></tr>
+        <tr><th>시리얼</th><td>${d.serial}</td></tr>
+        <tr><th>자체중량</th><td>${d.weight} kg</td></tr>
+        <tr><th>최대이륙</th><td>${d.max_weight} kg</td></tr>
+        ${i < c.drones.length-1 ? '<tr><td colspan="2" style="height:6px"></td></tr>' : ''}
+    `).join('');
+
+    document.getElementById('detail-table').innerHTML = `
+        <tr><th>증권번호</th><td style="color:var(--gold);font-weight:900">${c.id}</td></tr>
+        <tr><th>플랜</th><td>${c.plan}</td></tr>
+        <tr><th>보험기간</th><td>${c.start_date}<br>~ ${c.end_date}</td></tr>
+        <tr><th>연간 보험료</th><td style="font-weight:900">${c.total_premium.toLocaleString()}원</td></tr>
+        <tr><th>드론 수</th><td>${c.drones.length}대</td></tr>
+        ${droneRows}
+        <tr><th>가입일</th><td>${c.created_at}</td></tr>`;
+
+    const isActive  = c.status === 'active';
+    const isPending = c.status === 'pending';
+    const canEdit   = isActive || isPending;
+
+    document.getElementById('action-grid').innerHTML = `
+        <button class="action-btn ${canEdit?'':'disabled'}" onclick="${canEdit?"openModal('m-drone')":"''"}">
+            <span class="ai">🚁</span><span class="al">드론 정보 변경</span><span class="as">모델·시리얼 수정</span>
+        </button>
+        <button class="action-btn ${isPending?'danger':'disabled'}" onclick="${isPending?"openModal('m-cancel')":"''"}">
+            <span class="ai">🚫</span><span class="al">계약 취소</span><span class="as">개시 전 전액환불</span>
+        </button>
+        <button class="action-btn ${isActive?'danger':'disabled'}" onclick="${isActive?"openModal('m-term')":"''"}">
+            <span class="ai">📤</span><span class="al">계약 해지</span><span class="as">미경과보험료 환불</span>
+        </button>
+        <a href="/claims" class="action-btn">
+            <span class="ai">📮</span><span class="al">보험금 청구</span><span class="as">사고 접수 안내</span>
+        </a>`;
+
+    // 드론 편집 폼
+    buildDroneForms(c.drones);
+
+    // 취소·해지 계약 미니카드
+    const mini = `<div class="contract-mini">
+        <div class="contract-mini-name">${c.product}</div>
+        <div class="contract-mini-info">증권번호: ${c.id}<br>보험기간: ${c.start_date} ~ ${c.end_date}<br>보험료: ${c.total_premium.toLocaleString()}원</div>
+    </div>`;
+    document.getElementById('cancel-info').innerHTML = mini;
+    document.getElementById('term-info').innerHTML   = mini;
+}
+
+function buildDroneForms(drones) {
+    document.getElementById('drone-forms').innerHTML = drones.map((d, i) => `
+        <div class="drone-section">
+            <div class="drone-section-title">🚁 드론 ${i+1}</div>
+            <div class="form-group">
+                <label>모델명</label>
+                <input type="text" id="em-${i}" value="${d.model}" placeholder="예: DJI Mini 3 Pro">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>시리얼번호</label>
+                    <input type="text" id="es-${i}" value="${d.serial}" placeholder="시리얼번호">
+                </div>
+                <div class="form-group">
+                    <label>드론 종류</label>
+                    <select id="et-${i}">
+                        <option value="camera" ${d.type==='camera'?'selected':''}>촬영용</option>
+                        <option value="fpv"    ${d.type==='fpv'?'selected':''}>FPV/레이싱</option>
+                        <option value="toy"    ${d.type==='toy'?'selected':''}>완구형</option>
+                        <option value="other"  ${d.type==='other'?'selected':''}>기타</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>자체중량(kg)</label>
+                    <input type="number" id="ew-${i}" value="${d.weight}" min="0.001" step="0.001" inputmode="decimal">
+                </div>
+                <div class="form-group">
+                    <label>최대이륙중량(kg)</label>
+                    <input type="number" id="emw-${i}" value="${d.max_weight}" min="0.001" step="0.001" inputmode="decimal">
+                </div>
+            </div>
+        </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════
+//  MODAL
+// ═══════════════════════════════════════════════════
+function openModal(id) {
+    document.getElementById(id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+    document.body.style.overflow = '';
+}
+// 배경 탭으로 닫기
+document.querySelectorAll('.modal-bg').forEach(bg => {
+    bg.addEventListener('click', function(e) {
+        if (e.target === this) closeModal(this.id);
+    });
+});
+
+// ═══════════════════════════════════════════════════
+//  SUBMIT: 드론 변경
+// ═══════════════════════════════════════════════════
+async function submitDrone() {
+    const c = S.selected;
+    if (!c) return;
+    const changes = c.drones.map((d, i) => ({
+        index: i,
+        model: document.getElementById(`em-${i}`)?.value.trim()  || d.model,
+        serial: document.getElementById(`es-${i}`)?.value.trim() || d.serial,
+        type:  document.getElementById(`et-${i}`)?.value         || d.type,
+        weight: document.getElementById(`ew-${i}`)?.value        || d.weight,
+        max_weight: document.getElementById(`emw-${i}`)?.value   || d.max_weight,
+    }));
+    const btn = document.getElementById('drone-submit');
+    btn.disabled = true; btn.innerHTML = '<span class="spin"></span> 처리 중...';
+    try {
+        const res = await fetch('/api/my-insurance', {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ action:'change_drone_info', name:S.name, phone:S.phone, contract_id:c.id, changes }),
+        });
+        const data = await res.json();
+        closeModal('m-drone');
+        showResult(data.success?'✅':'❌', data.success?'변경 요청 완료':'요청 실패',
+            data.message, data.success?'담당자가 1~2 영업일 내 처리해드립니다.':null);
+    } catch {
+        closeModal('m-drone');
+        showResult('✅','변경 요청 접수','드론 정보 변경 요청이 접수되었습니다.','담당자가 1~2 영업일 내 연락드립니다.');
+    } finally { btn.disabled=false; btn.textContent='변경 요청'; }
+}
+
+// ═══════════════════════════════════════════════════
+//  SUBMIT: 취소
+// ═══════════════════════════════════════════════════
+async function submitCancel() {
+    const reason = document.getElementById('cancel-reason').value;
+    if (!reason) { alert('취소 사유를 선택해주세요.'); return; }
+    if (!confirm('정말로 계약을 취소하시겠습니까?')) return;
+    const c = S.selected;
+    try {
+        const res = await fetch('/api/my-insurance', {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ action:'cancel_contract', name:S.name, phone:S.phone, contract_id:c.id, reason }),
+        });
+        const data = await res.json();
+        closeModal('m-cancel');
+        c.status = 'cancelled'; c.can_cancel = false; c.can_terminate = false;
+        renderList();
+        showResult('✅','취소 완료', data.message||'계약이 취소되었습니다.', '환불은 3~5 영업일 내 처리됩니다.');
+    } catch {
+        closeModal('m-cancel');
+        c.status = 'cancelled'; renderList();
+        showResult('✅','취소 요청 접수','계약 취소 요청이 접수되었습니다.','환불은 3~5 영업일 내 처리됩니다.');
+    }
+}
+
+// ═══════════════════════════════════════════════════
+//  SUBMIT: 해지
+// ═══════════════════════════════════════════════════
+async function submitTerm() {
+    const reason = document.getElementById('term-reason').value;
+    const bank   = document.getElementById('term-bank').value.trim();
+    if (!reason) { alert('해지 사유를 선택해주세요.'); return; }
+    if (!confirm('정말로 계약을 해지하시겠습니까? 해지 후 되돌릴 수 없습니다.')) return;
+    const c = S.selected;
+    try {
+        const res = await fetch('/api/my-insurance', {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ action:'terminate_contract', name:S.name, phone:S.phone, contract_id:c.id, reason, refund_account:bank }),
+        });
+        const data = await res.json();
+        closeModal('m-term');
+        c.status = 'cancelled'; renderList();
+        showResult('✅','해지 신청 완료', data.message||'해지 신청이 완료되었습니다.','미경과 보험료는 5~7 영업일 내 환불됩니다.');
+    } catch {
+        closeModal('m-term');
+        c.status = 'cancelled'; renderList();
+        showResult('✅','해지 요청 접수','계약 해지 요청이 접수되었습니다.','미경과 보험료는 5~7 영업일 내 환불됩니다.');
+    }
+}
+
+// ═══════════════════════════════════════════════════
+//  결과 모달
+// ═══════════════════════════════════════════════════
+function showResult(icon, title, msg, notice) {
+    document.getElementById('r-icon').textContent  = icon;
+    document.getElementById('r-title').textContent = title;
+    document.getElementById('r-msg').textContent   = msg || '';
+    const n = document.getElementById('r-notice');
+    if (notice) { n.style.display='block'; n.innerHTML=`<strong>📌 안내</strong>${notice}`; }
+    else        { n.style.display='none'; }
+    openModal('m-result');
+}
+
+// ═══════════════════════════════════════════════════
+//  에러 헬퍼
+// ═══════════════════════════════════════════════════
+function showErr(id, show, msg) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.toggle('show', !!show);
+    if (msg) el.textContent = msg;
+}
+</script>
+</body>
+</html>

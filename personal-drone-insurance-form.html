@@ -1509,12 +1509,6 @@
             submitBtn.disabled = !allValid;
         }
 
-        // 모든 입력 필드 감지
-        document.querySelectorAll('input, select').forEach(element => {
-            element.addEventListener('input', checkFormValidity);
-            element.addEventListener('change', checkFormValidity);
-        });
-
         // 폼 제출
         document.getElementById('droneForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -1723,6 +1717,15 @@
 
             // 초기 드론 섹션 생성
             updateDroneSections();
+            
+            // 모든 입력 필드에 변화 감지 추가
+            document.querySelectorAll('input, select').forEach(element => {
+                element.addEventListener('input', checkFormValidity);
+                element.addEventListener('change', checkFormValidity);
+            });
+            
+            // 초기 폼 유효성 검사
+            checkFormValidity();
             
             console.log('✅ 페이지 초기화 완료');
         });

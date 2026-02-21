@@ -153,8 +153,11 @@ module.exports = async (req, res) => {
     // ──────────────────────────────────────────────
     const db = getPool(); // DB 연결 풀
 
+    // quote_email(견적서 재전송)은 DB 저장 skip (terms에서 이미 저장됨)
+    const isQuoteEmailOnly = (request_type === 'quote_email');
+
     try {
-    if (insurance_type === '개인용 드론보험') {
+    if (!isQuoteEmailOnly && insurance_type === '개인용 드론보험') {
       // 보험 시작/종료 날짜와 시간 분리 (형식: "2026-02-19T11:00")
       const parseDateTime = (str) => {
         if (!str) return { date: null, time: null };
@@ -441,8 +444,8 @@ module.exports = async (req, res) => {
       `;
     }
 
-    // 관리자에게 이메일 전송
-    if (!(send_to_customer && insurance_type === '개인용 드론보험')) {
+    // 관리자에게 이메일 전송 (견적서 재전송 및 고객 전용 전송은 제외)
+    if (!isQuoteEmailOnly && !(send_to_customer && insurance_type === '개인용 드론보험')) {
       const mailOptions = {
         from: process.env.EMAIL_USER,
         to: process.env.ADMIN_EMAIL,

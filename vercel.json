@@ -1,37 +1,15 @@
 {
+  "cleanUrls": true,
   "rewrites": [
-    {
-      "source": "/event-insurance",
-      "destination": "/event-insurance.html"
-    },
-    {
-      "source": "/drone-insurance",
-      "destination": "/drone-insurance.html"
-    },
-    {
-      "source": "/overseas-travel-insurance",
-      "destination": "/overseas-travel-insurance.html"
-    },
-    {
-      "source": "/domestic-travel-insurance",
-      "destination": "/domestic-travel-insurance.html"
-    },
-    {
-      "source": "/personal-drone-insurance",
-      "destination": "/personal-drone-insurance.html"
-    },
-    {
-      "source": "/personal-drone-insurance-form",
-      "destination": "/personal-drone-insurance-form.html"
-    },
-    {
-      "source": "/personal-drone-insurance-terms",
-      "destination": "/personal-drone-insurance-terms.html"
-    },
-    {
-      "source": "/personal-drone-insurance-complete",
-      "destination": "/personal-drone-insurance-complete.html"
-    }
-  ],
-  "cleanUrls": true
+    { "source": "/event-insurance",                   "destination": "/event-insurance.html" },
+    { "source": "/drone-insurance",                   "destination": "/drone-insurance.html" },
+    { "source": "/overseas-travel-insurance",         "destination": "/overseas-travel-insurance.html" },
+    { "source": "/domestic-travel-insurance",         "destination": "/domestic-travel-insurance.html" },
+    { "source": "/personal-drone-insurance",          "destination": "/personal-drone-insurance.html" },
+    { "source": "/personal-drone-insurance-form",     "destination": "/personal-drone-insurance-form.html" },
+    { "source": "/personal-drone-insurance-terms",    "destination": "/personal-drone-insurance-terms.html" },
+    { "source": "/personal-drone-insurance-complete", "destination": "/personal-drone-insurance-complete.html" },
+    { "source": "/claims",                            "destination": "/claims.html" },
+    { "source": "/my-insurance",                      "destination": "/my-insurance.html" }
+  ]
 }

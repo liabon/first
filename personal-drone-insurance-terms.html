@@ -423,7 +423,7 @@
                     <p>이름: 김리하</p>
                     <p>소속: 배상온</p>
                     <p>직위: 대표</p>
-                    <p>이메일: liab.on.ins@gmail.com</p>
+                    <p>이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5a36333b38743534743334291a3d373b333674393537">[email&#160;protected]</a></p>
                 </div>
             </div>
 
@@ -514,7 +514,7 @@
     <footer>
         <div class="footer-content">
             <h3 style="margin-bottom: 1rem;">배상온 대리점</h3>
-            <p>📧 이메일: liab.on.ins@gmail.com</p>
+            <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ed81848c8fc38283c384839ead8a808c8481c38e8280">[email&#160;protected]</a></p>
             <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
             <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
             <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
@@ -522,7 +522,7 @@
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // Toggle content visibility
         function toggleContent(button) {
             const content = button.closest('.agreement-item').querySelector('.agreement-content');
@@ -554,7 +554,7 @@
         }
 
         // Submit
-        document.getElementById('submitBtn').addEventListener('click', function() {
+        document.getElementById('submitBtn').addEventListener('click', async function() {
             const savedData = sessionStorage.getItem('droneInsuranceData');
             if (!savedData) {
                 alert('저장된 정보가 없습니다. 처음부터 다시 시작해주세요.');
@@ -564,16 +564,42 @@
 
             const formData = JSON.parse(savedData);
             
-            // Add agreement info
+            // 약관 동의 정보 추가
             formData.terms_agreed = true;
-            formData.marketing_agreed = document.querySelector('.agreement-check.optional').checked;
- 
-            // Save updated data
-            sessionStorage.setItem('droneInsuranceData', JSON.stringify(formData));
-            
-            // Move to complete page
-            window.location.href = '/personal-drone-insurance-complete';
-        });
-    </script>
+            formData.marketing_agreed = document.getElementById('agreeMarketing')?.checked || false;
+            formData.agreed_at = new Date().toISOString();
+            formData.insurance_type = '개인용 드론보험';
+
+            // 버튼 비활성화 (중복 클릭 방지)
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.textContent = '처리 중...';
+
+            try {
+                // API 호출: 이메일 전송 + DB 저장 (contact.js에서 처리)
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    // sessionStorage 업데이트 (약관 동의 정보 포함)
+                    sessionStorage.setItem('droneInsuranceData', JSON.stringify(formData));
+                    // 완료 페이지로 이동
+                    window.location.href = '/personal-drone-insurance-complete';
+                } else {
+                    const err = await response.json();
+                    alert(err.message || '오류가 발생했습니다. 다시 시도해주세요.');
+                    btn.disabled = false;
+                    btn.textContent = '다음';
+                }
+            } catch (e) {
+                console.error('제출 오류:', e);
+                // 네트워크 오류여도 일단 페이지 이동 (데이터는 sessionStorage에 있음)
+                sessionStorage.setItem('droneInsuranceData', JSON.stringify(formData));
+                window.location.href = '/personal-drone-insurance-complete';
+            }
+        });    </script>
 </body>
 </html>

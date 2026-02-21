@@ -19,14 +19,13 @@ function getPool() {
 // DB 저장 헬퍼 (실패해도 이메일 전송은 계속됨)
 async function saveToDb(tableName, data) {
   const db = getPool();
-  if (!db) return null; // DB 미설정 시 조용히 skip
+  if (!db) return null;
 
   try {
     const keys = Object.keys(data);
     const values = Object.values(data);
     const placeholders = keys.map((_, i) => `$${i + 1}`).join(', ');
     const columns = keys.join(', ');
-
     const result = await db.query(
       `INSERT INTO ${tableName} (${columns}) VALUES (${placeholders}) RETURNING id`,
       values
@@ -152,26 +151,73 @@ module.exports = async (req, res) => {
     // ──────────────────────────────────────────────
     // DB 저장 (이메일 전송과 별개로 먼저 저장)
     // ──────────────────────────────────────────────
+    const db = getPool(); // DB 연결 풀
+
+    try {
     if (insurance_type === '개인용 드론보험') {
-      // personal_drone_applications 테이블에 저장
-      await saveToDb('personal_drone_applications', {
-        name: name || '',
-        birth_date: birth_date || '',
-        gender: gender || '',
-        phone: phone || '',
-        email: email || '',
-        coverage_start: insurance_start || null,
-        coverage_end: insurance_end || null,
-        drone_count: parseInt(drone_count) || 1,
-        drones: JSON.stringify(drones || []),
-        drone_plans: JSON.stringify(drone_plans || []),
-        total_premium: parseInt(plan_total_price) || 0,
-        plan_mode: plan_selection_type || 'unified',
-        terms_agreed: true,
-        agreed_at: new Date().toISOString(),
-        source_page: 'personal-drone-insurance-form',
-        status: 'pending'
-      });
+      // 보험 시작/종료 날짜와 시간 분리 (형식: "2026-02-19T11:00")
+      const parseDateTime = (str) => {
+        if (!str) return { date: null, time: null };
+        const parts = str.split('T');
+        return { date: parts[0] || null, time: parts[1] || null };
+      };
+      const start = parseDateTime(insurance_start);
+      const end   = parseDateTime(insurance_end);
+
+      // personal_drone_applications 메인 레코드 저장
+      const appResult = await db.query(
+        `INSERT INTO personal_drone_applications
+          (name, birth_date, gender, phone, email,
+           coverage_start_date, coverage_start_time,
+           coverage_end_date,   coverage_end_time,
+           coverage_location, drone_count, plan_mode,
+           total_premium, terms_agreed, agreed_at,
+           source_page, status)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
+         RETURNING id`,
+        [
+          name || '', birth_date || '', gender || '', phone || '', email || '',
+          start.date, start.time,
+          end.date,   end.time,
+          null,
+          parseInt(drone_count) || 1,
+          plan_selection_type || 'unified',
+          parseInt(plan_total_price) || 0,
+          true,
+          new Date().toISOString(),
+          'personal-drone-insurance-form',
+          'pending'
+        ]
+      );
+
+      const applicationId = appResult.rows[0].id;
+
+      // drone_details: 드론별 각 컬럼으로 저장
+      const dronesArr  = Array.isArray(drones) ? drones : [];
+      const plansArr   = Array.isArray(drone_plans) ? drone_plans : [];
+
+      for (let i = 0; i < dronesArr.length; i++) {
+        const d = dronesArr[i] || {};
+        const p = plansArr[i] || {};
+        await db.query(
+          `INSERT INTO drone_details
+            (application_id, drone_index,
+             model, serial_number, registration_number, weight, max_weight,
+             drone_type, drone_type_name, plan, plan_name, price)
+           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`,
+          [
+            applicationId, i,
+            d.model || '', d.serial || '', d.registration || '',
+            d.weight || '', d.max_weight || '',
+            p.drone_type || d.type || '',
+            p.drone_type_name || '',
+            p.plan || plan || '',
+            p.plan_name || plan_name || '',
+            parseInt(p.price || d.price || 0)
+          ]
+        );
+      }
+
     } else if (insurance_type === '업무용 드론보험' || request_type === 'business_quote') {
       // drone_inquiries 테이블에 저장
       await saveToDb('drone_inquiries', {
@@ -194,6 +240,9 @@ module.exports = async (req, res) => {
         source_page: 'drone-insurance',
         status: 'new'
       });
+    }
+    } catch (dbErr) {
+      console.error('DB 저장 오류 (이메일은 계속 전송):', dbErr.message);
     }
 
     // 이메일 전송 설정

@@ -12,14 +12,14 @@ module.exports = async (req, res) => {
     return res.status(401).json({ error: '인증 실패. ?secret=값 을 올바르게 입력해주세요.' });
   }
 
-  if (!process.env.POSTGRES_URL) {
+  if (!process.env.liab_db_POSTGRES_URL) {
     return res.status(500).json({ 
       error: 'POSTGRES_URL 환경변수가 설정되지 않았습니다. Vercel Storage > Postgres DB를 생성하고 프로젝트에 연결해주세요.' 
     });
   }
 
   const pool = new Pool({
-    connectionString: process.env.POSTGRES_URL,
+    connectionString: process.env.liab_db_POSTGRES_URL,
     ssl: { rejectUnauthorized: false }
   });
 

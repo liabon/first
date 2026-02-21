@@ -41,42 +41,68 @@ module.exports = async (req, res) => {
       );
     `);
 
-    // 2. 개인용 드론보험 가입 신청 테이블 (personal-drone-insurance-form)
+    // 2. 개인용 드론보험 가입 신청 - 메인 테이블
     await client.query(`
       CREATE TABLE IF NOT EXISTS personal_drone_applications (
-        id              SERIAL PRIMARY KEY,
-        created_at      TIMESTAMPTZ DEFAULT NOW(),
-        name            VARCHAR(100) NOT NULL DEFAULT '',
-        birth_date      VARCHAR(10)  NOT NULL DEFAULT '',
-        gender          VARCHAR(10),
-        phone           VARCHAR(30)  NOT NULL DEFAULT '',
-        email           VARCHAR(200) NOT NULL DEFAULT '',
-        coverage_start  VARCHAR(50),
-        coverage_end    VARCHAR(50),
-        coverage_location VARCHAR(200),
-        drone_count     INT DEFAULT 1,
-        drones          TEXT DEFAULT '[]',
-        drone_plans     TEXT DEFAULT '[]',
-        total_premium   INT DEFAULT 0,
-        plan_mode       VARCHAR(20) DEFAULT 'unified',
-        terms_agreed    BOOLEAN DEFAULT FALSE,
-        agreed_at       VARCHAR(50),
-        source_page     VARCHAR(100) DEFAULT 'personal-drone-insurance-form',
-        status          VARCHAR(30)  DEFAULT 'pending'
+        id                  SERIAL PRIMARY KEY,
+        created_at          TIMESTAMPTZ DEFAULT NOW(),
+        -- 고객 정보
+        name                VARCHAR(100) NOT NULL DEFAULT '',
+        birth_date          VARCHAR(10)  NOT NULL DEFAULT '',
+        gender              VARCHAR(10),
+        phone               VARCHAR(30)  NOT NULL DEFAULT '',
+        email               VARCHAR(200) NOT NULL DEFAULT '',
+        -- 보험 기간
+        coverage_start_date VARCHAR(20),
+        coverage_start_time VARCHAR(10),
+        coverage_end_date   VARCHAR(20),
+        coverage_end_time   VARCHAR(10),
+        coverage_location   VARCHAR(200),
+        -- 드론 요약
+        drone_count         INT DEFAULT 1,
+        plan_mode           VARCHAR(20) DEFAULT 'unified',
+        total_premium       INT DEFAULT 0,
+        -- 약관
+        terms_agreed        BOOLEAN DEFAULT FALSE,
+        agreed_at           VARCHAR(50),
+        source_page         VARCHAR(100) DEFAULT 'personal-drone-insurance-form',
+        status              VARCHAR(30)  DEFAULT 'pending'
       );
     `);
 
-    // 3. 인덱스 생성
+    // 3. 드론별 상세 정보 테이블 (application 1개당 드론 N개)
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS drone_details (
+        id                  SERIAL PRIMARY KEY,
+        application_id      INT NOT NULL REFERENCES personal_drone_applications(id) ON DELETE CASCADE,
+        drone_index         INT NOT NULL DEFAULT 0,
+        -- 드론 기본 정보
+        model               VARCHAR(200),
+        serial_number       VARCHAR(200),
+        registration_number VARCHAR(200),
+        weight              VARCHAR(50),
+        max_weight          VARCHAR(50),
+        -- 가입물건 & 플랜
+        drone_type          VARCHAR(20),
+        drone_type_name     VARCHAR(100),
+        plan                VARCHAR(50),
+        plan_name           VARCHAR(100),
+        price               INT DEFAULT 0
+      );
+    `);
+
+    // 4. 인덱스 생성
     await client.query(`CREATE INDEX IF NOT EXISTS idx_drone_inquiries_created_at ON drone_inquiries(created_at DESC);`);
     await client.query(`CREATE INDEX IF NOT EXISTS idx_drone_inquiries_status ON drone_inquiries(status);`);
     await client.query(`CREATE INDEX IF NOT EXISTS idx_personal_drone_apps_created_at ON personal_drone_applications(created_at DESC);`);
     await client.query(`CREATE INDEX IF NOT EXISTS idx_personal_drone_apps_status ON personal_drone_applications(status);`);
     await client.query(`CREATE INDEX IF NOT EXISTS idx_personal_drone_apps_phone ON personal_drone_applications(phone);`);
+    await client.query(`CREATE INDEX IF NOT EXISTS idx_drone_details_application_id ON drone_details(application_id);`);
 
     return res.status(200).json({ 
       success: true, 
       message: '✅ DB 테이블 초기화 완료!',
-      tables: ['drone_inquiries', 'personal_drone_applications']
+      tables: ['drone_inquiries', 'personal_drone_applications', 'drone_details']
     });
 
   } catch (err) {

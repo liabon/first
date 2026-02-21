@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>배상온 대리점 - KB손해보험 전문 보험 대리점</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -25,10 +26,10 @@
             line-height: 1.6;
         }
 
-        /* Header */
+        /* ── Header ── */
         header {
             background: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -37,7 +38,7 @@
         .header-content {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1.5rem 2rem;
+            padding: 1.2rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -46,53 +47,37 @@
         .logo-section {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
+            gap: 1.2rem;
         }
 
         .kb-logo {
-            height: 50px;
+            height: 44px;
             width: auto;
         }
 
         .divider {
-            height: 40px;
+            height: 36px;
             width: 1px;
             background: #ddd;
         }
 
         .agency-name {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--kb-dark);
         }
 
-        .contact-btn {
-            background: var(--kb-gold);
-            color: #fff;
-            padding: 0.75rem 2rem;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(255, 184, 0, 0.3);
-        }
-
-        .contact-btn:hover {
-            background: var(--kb-yellow);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 184, 0, 0.4);
-        }
-
-        /* Navigation */
+        /* ── Desktop Nav ── */
         .header-nav {
             display: flex;
-            gap: 2rem;
+            gap: 1.5rem;
             align-items: center;
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 1.8rem;
+            align-items: center;
         }
 
         .nav-links a {
@@ -100,13 +85,11 @@
             font-weight: 500;
             color: var(--kb-gray);
             text-decoration: none;
-            transition: all 0.3s;
+            transition: color 0.2s;
             position: relative;
         }
 
-        .nav-links a:hover {
-            color: var(--kb-gold);
-        }
+        .nav-links a:hover { color: var(--kb-gold); }
 
         .nav-links a.active {
             color: var(--kb-gold);
@@ -116,7 +99,7 @@
         .nav-links a.active::after {
             content: '';
             position: absolute;
-            bottom: -8px;
+            bottom: -6px;
             left: 0;
             width: 100%;
             height: 3px;
@@ -124,259 +107,364 @@
             border-radius: 2px;
         }
 
-        @media (max-width: 768px) {
-            .header-content {
-                padding: 1rem 1.5rem;
-            }
-            .kb-logo {
-                height: 35px;
-            }
-            .agency-name {
-                font-size: 1.1rem;
-            }
-            .nav-links {
-                display: none;
-            }
-            .contact-btn {
-                padding: 0.5rem 1rem;
-                font-size: 0.85rem;
-            }
+
+
+        .contact-btn {
+            background: var(--kb-dark);
+            color: #fff;
+            padding: 0.65rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        .contact-btn:hover {
+            background: #333;
+            transform: translateY(-1px);
         }
 
-        /* Hero Section */
+        /* ── 햄버거 버튼 ── */
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 6px;
+        }
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--kb-dark);
+            border-radius: 2px;
+            transition: all 0.3s;
+            transform-origin: center;
+        }
+        .mobile-menu-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .mobile-menu-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .mobile-menu-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* ── 모바일 드로어 ── */
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 1100;
+            backdrop-filter: blur(2px);
+        }
+        .mobile-overlay.open { display: block; }
+
+        .mobile-drawer {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: min(280px, 82vw);
+            height: 100%;
+            background: #fff;
+            z-index: 1200;
+            transition: right 0.32s cubic-bezier(0.4,0,0.2,1);
+            overflow-y: auto;
+            box-shadow: -6px 0 30px rgba(0,0,0,0.15);
+        }
+        .mobile-drawer.open { right: 0; }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 1.4rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .drawer-logo {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--kb-dark);
+        }
+        .drawer-close {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: #999;
+            line-height: 1;
+            padding: 4px;
+        }
+        .drawer-close:hover { color: var(--kb-dark); }
+
+        .drawer-nav {
+            padding: 1rem 0;
+        }
+        .drawer-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.95rem 1.4rem;
+            color: var(--kb-dark);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background 0.15s;
+            border-left: 3px solid transparent;
+        }
+        .drawer-nav a:hover {
+            background: #fafafa;
+            border-left-color: var(--kb-gold);
+            color: var(--kb-gold);
+        }
+        .drawer-nav a .menu-icon { font-size: 1.2rem; width: 1.5rem; text-align: center; }
+
+        .drawer-cta {
+            margin: 0.4rem 1.4rem;
+            display: block;
+            background: var(--kb-dark);
+            color: #fff !important;
+            border-radius: 12px;
+            text-align: center;
+            padding: 0.9rem 1rem !important;
+            border-left: none !important;
+        }
+        .drawer-cta:hover {
+            background: #333 !important;
+            border-left-color: transparent !important;
+        }
+
+        /* ── Hero ── */
         .hero {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 6rem 2rem;
+            padding: 5rem 1.5rem;
             text-align: center;
         }
-
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+        .hero-content { max-width: 760px; margin: 0 auto; }
 
         .hero h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 1.5rem;
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin-bottom: 1.2rem;
             color: var(--kb-dark);
-            line-height: 1.2;
+            line-height: 1.25;
         }
-
         .hero p {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: var(--kb-gray);
             margin-bottom: 2rem;
         }
-
         .kb-badge {
             display: inline-block;
             background: var(--kb-gold);
             color: #fff;
-            padding: 0.5rem 1.5rem;
+            padding: 0.45rem 1.3rem;
             border-radius: 20px;
-            font-weight: 600;
-            margin-bottom: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.8rem;
+            font-size: 0.95rem;
         }
 
-        /* Products Section */
+        /* ── Products ── */
         .products {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 5rem 2rem;
+            padding: 4rem 1.5rem;
         }
-
         .section-title {
             text-align: center;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 3rem;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 2.5rem;
             color: var(--kb-dark);
         }
-
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
             margin-bottom: 3rem;
         }
-
         .product-card {
             background: #fff;
             border-radius: 20px;
-            padding: 3rem 2rem;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            transition: all 0.3s;
+            padding: 2.5rem 1.8rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.07);
+            transition: all 0.25s;
             cursor: pointer;
             text-align: center;
             border: 2px solid transparent;
         }
-
         .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+            transform: translateY(-8px);
+            box-shadow: 0 16px 50px rgba(0,0,0,0.12);
             border-color: var(--kb-gold);
         }
-
         .product-icon {
-            width: 80px;
-            height: 80px;
+            width: 72px;
+            height: 72px;
             background: linear-gradient(135deg, var(--kb-gold) 0%, var(--kb-yellow) 100%);
-            border-radius: 20px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
-            font-size: 2.5rem;
+            margin: 0 auto 1.3rem;
+            font-size: 2.2rem;
         }
-
         .product-card h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            margin-bottom: 0.8rem;
             color: var(--kb-dark);
+            font-weight: 800;
         }
-
         .product-card p {
             color: var(--kb-gray);
-            margin-bottom: 1.5rem;
-            font-size: 1.05rem;
+            margin-bottom: 1.2rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
-
         .product-card .learn-more {
             color: var(--kb-gold);
-            font-weight: 600;
+            font-weight: 700;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.4rem;
+            font-size: 0.9rem;
         }
+        .product-card .learn-more:hover { gap: 0.8rem; }
 
-        .product-card .learn-more:hover {
-            gap: 1rem;
+        /* 계약 조회 배너 */
+        .contract-banner {
+            background: linear-gradient(135deg, var(--kb-dark) 0%, #2d2d2d 100%);
+            border-radius: 20px;
+            padding: 2rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
         }
+        .contract-banner-text h3 {
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 0.4rem;
+        }
+        .contract-banner-text p { color: #aaa; font-size: 0.9rem; }
+        .contract-banner-btn {
+            background: var(--kb-gold);
+            color: var(--kb-dark);
+            padding: 0.8rem 1.8rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .contract-banner-btn:hover { background: var(--kb-yellow); transform: translateY(-2px); }
 
-        /* Contact Form Section */
+        /* ── Contact Form ── */
         .contact-section {
             background: var(--kb-light-gray);
-            padding: 5rem 2rem;
+            padding: 4rem 1.5rem;
         }
-
         .contact-container {
-            max-width: 600px;
+            max-width: 580px;
             margin: 0 auto;
             background: #fff;
-            padding: 3rem;
+            padding: 2.5rem 2rem;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.07);
         }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
+        .form-group { margin-bottom: 1.3rem; }
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--kb-dark);
+            font-size: 0.95rem;
         }
-
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 1rem;
+            padding: 0.9rem 1rem;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
             font-size: 1rem;
-            transition: all 0.3s;
+            font-family: inherit;
+            transition: border-color 0.2s;
         }
-
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
             border-color: var(--kb-gold);
+            box-shadow: 0 0 0 3px rgba(255,184,0,0.1);
         }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-
+        .form-group textarea { resize: vertical; min-height: 110px; }
         .submit-btn {
             width: 100%;
-            padding: 1.2rem;
+            padding: 1.1rem;
             background: var(--kb-gold);
-            color: #fff;
+            color: var(--kb-dark);
             border: none;
             border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            font-size: 1.05rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
+            font-family: inherit;
         }
-
         .submit-btn:hover {
             background: var(--kb-yellow);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 184, 0, 0.4);
         }
 
-        /* Footer */
+        /* ── Footer ── */
         footer {
             background: var(--kb-dark);
             color: #fff;
-            padding: 3rem 2rem 1.5rem;
+            padding: 2.5rem 1.5rem 1.5rem;
         }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer-info {
-            margin-bottom: 2rem;
-        }
-
+        .footer-content { max-width: 1200px; margin: 0 auto; }
+        .footer-info { margin-bottom: 1.5rem; }
         .footer-info h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
+            font-size: 1.15rem;
+            margin-bottom: 0.8rem;
             color: var(--kb-gold);
         }
-
         .footer-info p {
             color: #aaa;
-            margin-bottom: 0.5rem;
-            font-size: 0.95rem;
+            margin-bottom: 0.4rem;
+            font-size: 0.88rem;
         }
-
         .footer-links {
             display: flex;
-            gap: 2rem;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
+            gap: 1.5rem;
+            margin-top: 1.2rem;
+            padding-top: 1.2rem;
             border-top: 1px solid #333;
+            flex-wrap: wrap;
         }
-
         .footer-links a {
             color: #aaa;
             text-decoration: none;
-            transition: color 0.3s;
+            font-size: 0.88rem;
+            transition: color 0.2s;
         }
-
-        .footer-links a:hover {
-            color: var(--kb-gold);
-        }
-
+        .footer-links a:hover { color: var(--kb-gold); }
         .footer-bottom {
             text-align: center;
-            padding-top: 1.5rem;
-            margin-top: 1.5rem;
+            padding-top: 1.2rem;
+            margin-top: 1.2rem;
             border-top: 1px solid #333;
-            color: #666;
-            font-size: 0.9rem;
+            color: #555;
+            font-size: 0.83rem;
         }
 
-        /* Modal */
+        /* ── Modal ── */
         .modal {
             display: none;
             position: fixed;
@@ -385,96 +473,112 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.7);
+            background-color: rgba(0,0,0,0.65);
             overflow: auto;
+            align-items: center;
+            justify-content: center;
         }
-
         .modal-content {
             background-color: #fff;
             margin: 5% auto;
-            padding: 3rem;
+            padding: 2.5rem 2rem;
             border-radius: 20px;
-            max-width: 800px;
-            max-height: 80vh;
+            max-width: 780px;
+            max-height: 82vh;
             overflow-y: auto;
             position: relative;
         }
-
         .close {
             position: absolute;
-            right: 2rem;
-            top: 2rem;
-            font-size: 2rem;
+            right: 1.5rem;
+            top: 1.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
             color: #aaa;
             cursor: pointer;
+            line-height: 1;
         }
-
-        .close:hover {
-            color: var(--kb-dark);
-        }
-
+        .close:hover { color: var(--kb-dark); }
         .modal h2 {
             color: var(--kb-dark);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.3rem;
             padding-bottom: 1rem;
             border-bottom: 3px solid var(--kb-gold);
+            font-size: 1.4rem;
         }
-
         .modal h3 {
             color: var(--kb-dark);
-            margin-top: 2rem;
-            margin-bottom: 1rem;
+            margin-top: 1.8rem;
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
         }
-
         .modal p {
-            margin-bottom: 1rem;
+            margin-bottom: 0.9rem;
             line-height: 1.8;
             color: #333;
+            font-size: 0.92rem;
         }
 
-        /* Responsive */
+        /* ══ 모바일 반응형 ══ */
         @media (max-width: 768px) {
+            /* Header */
             .header-content {
+                padding: 0.9rem 1rem;
+            }
+            .kb-logo { height: 34px; }
+            .agency-name { font-size: 1rem; }
+            .divider { height: 26px; }
+            .nav-links { display: none; }
+            .contact-btn { display: none; }
+            .mobile-menu-btn { display: flex; }
+
+            /* Hero */
+            .hero { padding: 3rem 1rem 3.5rem; }
+            .hero h1 { font-size: 1.75rem; }
+            .hero p { font-size: 1rem; }
+
+            /* Products */
+            .products { padding: 2.5rem 1rem; }
+            .section-title { font-size: 1.6rem; margin-bottom: 1.8rem; }
+            .products-grid { grid-template-columns: 1fr; gap: 1rem; }
+            .product-card { padding: 1.8rem 1.4rem; }
+            .product-card h3 { font-size: 1.3rem; }
+            .product-icon { width: 60px; height: 60px; font-size: 1.8rem; }
+
+            /* Contract Banner */
+            .contract-banner {
                 flex-direction: column;
+                text-align: center;
+                padding: 1.6rem 1.4rem;
                 gap: 1rem;
             }
+            .contract-banner-btn { width: 100%; text-align: center; }
 
-            .logo-section {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
+            /* Contact */
+            .contact-section { padding: 2.5rem 1rem; }
+            .contact-container { padding: 1.8rem 1.2rem; border-radius: 16px; }
 
-            .divider {
-                display: none;
-            }
+            /* Footer */
+            footer { padding: 2rem 1rem 1.2rem; }
+            .footer-links { gap: 1rem; }
 
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 1.1rem;
-            }
-
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-links {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
+            /* Modal */
             .modal-content {
-                margin: 10% 1rem;
-                padding: 2rem 1.5rem;
+                margin: 4% 1rem;
+                padding: 1.8rem 1.2rem;
+                max-height: 88vh;
             }
+        }
+
+        @media (max-width: 380px) {
+            .agency-name { display: none; }
+            .hero h1 { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
+
+    <!-- ══ Header ══ -->
     <header>
         <div class="header-content">
             <div class="logo-section">
@@ -487,13 +591,37 @@
                     <a href="/" class="active">홈</a>
                     <a href="/drone-insurance">드론보험</a>
                     <a href="/claims.html">보험금청구</a>
+                    <a href="/my-insurance">계약조회/변경</a>
                 </nav>
                 <a href="#contact" class="contact-btn">빠른 상담</a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleDrawer()" aria-label="메뉴 열기">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- ══ Mobile Drawer Overlay ══ -->
+    <div class="mobile-overlay" id="mobileOverlay" onclick="toggleDrawer()"></div>
+
+    <!-- ══ Mobile Drawer ══ -->
+    <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-header">
+            <span class="drawer-logo">🛡️ 배상온 대리점</span>
+            <button class="drawer-close" onclick="toggleDrawer()">✕</button>
+        </div>
+        <nav class="drawer-nav">
+            <a href="/" onclick="toggleDrawer()"><span class="menu-icon">🏠</span> 홈</a>
+            <a href="/drone-insurance" onclick="toggleDrawer()"><span class="menu-icon">🚁</span> 드론보험</a>
+            <a href="/claims.html" onclick="toggleDrawer()"><span class="menu-icon">📮</span> 보험금청구</a>
+            <a href="/my-insurance" onclick="toggleDrawer()"><span class="menu-icon">📋</span> 계약조회/변경</a>
+            <a href="#contact" onclick="toggleDrawer()" class="drawer-cta">💬 빠른 상담 신청</a>
+        </nav>
+    </div>
+
+    <!-- ══ Hero ══ -->
     <section class="hero">
         <div class="hero-content">
             <div class="kb-badge">KB손해보험 공식 대리점</div>
@@ -502,7 +630,7 @@
         </div>
     </section>
 
-    <!-- Products Section -->
+    <!-- ══ Products ══ -->
     <section class="products">
         <h2 class="section-title">보험 상품</h2>
         <div class="products-grid">
@@ -531,24 +659,33 @@
                 <a href="/domestic-travel-insurance" class="learn-more">자세히 보기 →</a>
             </div>
         </div>
+
+        <!-- 계약 조회 배너 -->
+        <div class="contract-banner">
+            <div class="contract-banner-text">
+                <h3>📋 가입한 보험, 언제든 조회·변경</h3>
+                <p>이름과 휴대폰 번호로 간편하게 계약 내역을 확인하고 변경하세요.</p>
+            </div>
+            <a href="/my-insurance" class="contract-banner-btn">계약 조회/변경 →</a>
+        </div>
     </section>
 
-    <!-- Contact Section -->
+    <!-- ══ Contact ══ -->
     <section class="contact-section" id="contact">
         <div class="contact-container">
-            <h2 class="section-title">빠른 상담 신청</h2>
+            <h2 class="section-title" style="font-size:1.7rem; margin-bottom:1.8rem;">빠른 상담 신청</h2>
             <form id="contactForm">
                 <div class="form-group">
                     <label>이름 *</label>
-                    <input type="text" name="name" required>
+                    <input type="text" name="name" placeholder="이름을 입력하세요" required>
                 </div>
                 <div class="form-group">
                     <label>연락처 *</label>
-                    <input type="tel" name="phone" required>
+                    <input type="tel" name="phone" placeholder="010-0000-0000" required>
                 </div>
                 <div class="form-group">
                     <label>이메일</label>
-                    <input type="email" name="email">
+                    <input type="email" name="email" placeholder="example@email.com">
                 </div>
                 <div class="form-group">
                     <label>상담 내용</label>
@@ -559,7 +696,7 @@
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- ══ Footer ══ -->
     <footer>
         <div class="footer-content">
             <div class="footer-info">
@@ -572,6 +709,7 @@
             <div class="footer-links">
                 <a href="#" onclick="openModal('privacy'); return false;">개인정보 처리방침</a>
                 <a href="#" onclick="openModal('terms'); return false;">이용약관</a>
+                <a href="/my-insurance">계약 조회/변경</a>
             </div>
             <div class="footer-bottom">
                 <p>© 2026 배상온 대리점. All rights reserved. | KB손해보험 공식 대리점</p>
@@ -579,87 +717,106 @@
         </div>
     </footer>
 
-    <!-- Privacy Policy Modal -->
+    <!-- ══ Privacy Modal ══ -->
     <div id="privacyModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('privacy')">&times;</span>
             <h2>개인정보 처리방침</h2>
-            <p>바이인(BuyInn)(이하 "회사")는 바이인 서비스(이하 "서비스")를 제공함에 있어 서비스의 기획부터 종료까지 정보통신망 이용촉진 및 정보보호 등에 관한 법률(이하 '정보통신망법'), 개인정보보호법 등 국내의 개인정보 보호 법령을 철저히 준수하며, 관련 법규에 의거한 개인정보취급방침을 정하여 고객 권익 보호에 최선을 다하고 있습니다.</p>
-            
+            <p>배상온 대리점(이하 "회사")는 서비스를 제공함에 있어 개인정보보호법 등 국내의 개인정보 보호 법령을 철저히 준수하며, 관련 법규에 의거한 개인정보취급방침을 정하여 고객 권익 보호에 최선을 다하고 있습니다.</p>
+
             <h3>1. 수집하는 개인정보의 항목</h3>
-            <p>회사는 고객이 입력한 정보를 기반으로 회원가입, 서비스의 제공, 원활한 고객상담 등을 위하여 다음과 같은 정보를 수집합니다.</p>
+            <p>회사는 고객이 입력한 정보를 기반으로 서비스 제공 및 원활한 고객상담 등을 위하여 다음과 같은 정보를 수집합니다.</p>
             <p><strong>보험제휴 서비스를 위한 수집항목:</strong> 개인식별정보 (성명, 생년월일, 주소, 성별, 직업, 전화번호, 휴대전화번호, 전자우편주소, 기타개인식별정보), 보험계약정보, 보험금지급정보</p>
-            
+
             <h3>2. 개인정보의 이용 목적</h3>
             <p>• 보험 상품의 제휴서비스를 위한 상품 소개 및 판매<br>
             • 보험회사의 상품판매와 관련하여 상담·체결·유지·관리·비교견적을 위한 조회<br>
             • 보험 회사의 상품·서비스 소개 및 가입권유<br>
             • 고객 관리, 서비스 관련 문의 및 불만사항 처리</p>
-            
+
             <h3>3. 개인정보 보유 및 이용 기간</h3>
-            <p>개인정보는 고객의 서비스의 이용 기간에만 활용되며, 회원 탈퇴 시 지체 없이 파기합니다. 단, 관련 법령에서 일정 기간 정보보관 의무를 부과하는 경우에는 해당 기간 동안 개인정보를 안전하게 보관합니다.</p>
-            
+            <p>개인정보는 고객의 서비스 이용 기간에만 활용되며, 관련 법령에서 일정 기간 정보보관 의무를 부과하는 경우에는 해당 기간 동안 개인정보를 안전하게 보관합니다.</p>
+
             <h3>4. 개인정보의 제3자 제공</h3>
             <p><strong>제공받는 자:</strong> KB손해보험<br>
             <strong>제공목적:</strong> 보험계약체결·유지·관리·이행<br>
             <strong>제공항목:</strong> 개인식별정보, 보험계약정보, 보험금지급정보<br>
-            <strong>보유·이용기간:</strong> 제공동의일로부터 개인(신용)정보의 제공목적을 달성할때까지</p>
-            
+            <strong>보유·이용기간:</strong> 제공동의일로부터 제공목적을 달성할 때까지</p>
+
             <h3>5. 개인정보관리책임자</h3>
-            <p>이름: 김리하<br>
-            소속: 바이인(BuyInn)<br>
-            직위: 대표<br>
-            이메일: liab.on.ins@gmail.com</p>
+            <p>이름: 김리하<br>소속: 배상온 대리점<br>직위: 대표<br>이메일: liab.on.ins@gmail.com</p>
         </div>
     </div>
 
-    <!-- Terms of Service Modal -->
+    <!-- ══ Terms Modal ══ -->
     <div id="termsModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('terms')">&times;</span>
             <h2>이용약관</h2>
-            
+
             <h3>제 1조 (목적)</h3>
-            <p>이 약관은 바이인(이하 "바이인"이라 한다)가 제휴사와 함께 제공하는 보험서비스 등을(이하 "서비스"라 칭한다)이용함에 있어 바이인와 회원의 권리․의무 및 책임사항을 규정함을 목적으로 합니다.</p>
-            
+            <p>이 약관은 배상온 대리점(이하 "배상온"이라 한다)가 제휴사와 함께 제공하는 보험서비스 등을 이용함에 있어 배상온과 회원의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.</p>
+
             <h3>제 4조 (서비스의 내용)</h3>
-            <p>"바이인"가 제공하는 서비스는 다음과 같습니다.<br>
+            <p>"배상온"이 제공하는 서비스는 다음과 같습니다.<br>
             가. 보험상품정보 제공<br>
             나. 보험료 계산<br>
             다. 보험 상담<br>
             라. 보험 가입<br>
             마. 기타 금융정보 제공</p>
-            
+
             <h3>제 5조 (단체보험 가입)</h3>
-            <p>"바이인"는 "바이인"가 제공하는 서비스와 관련하여, 계약자로서 "회원"을 피보험자로 하는 단체보험계약을 체결할 수 있습니다. 보험계약에 관한 세부내용은 보험사가 제공하는 보험약관에 따르며, 보험약관이 정한 바가 본 약관에 우선합니다.</p>
-            
-            <h3>제 11조 (환불 규정 내용)</h3>
-            <p>회원은 회사에 환불을 요구할 수 있습니다. 환불은 회사가 안내하는 정책 및 방법에 따라 진행됩니다.<br>
-            가. 보험 개시 전 취소 회원: 보험 개시 전 환불은 전액 환불로 진행됩니다. 단, 일부 결제 수수료가 차감될 수 있습니다.<br>
-            나. 보험 개시 후 취소 회원: 보험 개시 후 환불은 각 보험사의 규정에 따라 미경과된 보험료를 산출하며 산출된 금액에 따라 환불 처리됩니다.</p>
-            
+            <p>"배상온"은 제공하는 서비스와 관련하여, 계약자로서 "회원"을 피보험자로 하는 단체보험계약을 체결할 수 있습니다. 보험계약에 관한 세부내용은 보험사가 제공하는 보험약관에 따르며, 보험약관이 정한 바가 본 약관에 우선합니다.</p>
+
+            <h3>제 11조 (환불 규정)</h3>
+            <p>가. 보험 개시 전 취소: 전액 환불로 진행됩니다. 단, 일부 결제 수수료가 차감될 수 있습니다.<br>
+            나. 보험 개시 후 취소: 각 보험사의 규정에 따라 미경과된 보험료를 산출하여 환불 처리됩니다.</p>
+
             <h3>제 12조 (분쟁의 해결)</h3>
-            <p>"바이인"와 이용자는 서비스와 관련하여 분쟁이 발생한 경우에 이를 원만하게 해결하기 위하여 노력합니다. 당사자간 분쟁으로 인하여 소송이 제기될 경우 서울중앙지방법원을 관할법원으로 합니다.</p>
+            <p>"배상온"과 이용자는 서비스와 관련하여 분쟁이 발생한 경우 원만하게 해결하기 위해 노력합니다. 소송이 제기될 경우 서울중앙지방법원을 관할법원으로 합니다.</p>
         </div>
     </div>
 
     <script>
-        // Form submission
+        // ── 모바일 드로어 토글 ──
+        function toggleDrawer() {
+            const drawer  = document.getElementById('mobileDrawer');
+            const overlay = document.getElementById('mobileOverlay');
+            const btn     = document.getElementById('mobileMenuBtn');
+            const isOpen  = drawer.classList.contains('open');
+
+            drawer.classList.toggle('open', !isOpen);
+            overlay.classList.toggle('open', !isOpen);
+            btn.classList.toggle('open', !isOpen);
+            document.body.style.overflow = isOpen ? '' : 'hidden';
+        }
+
+        // ESC키로 드로어 닫기
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const drawer = document.getElementById('mobileDrawer');
+                if (drawer.classList.contains('open')) toggleDrawer();
+                closeModal('privacy');
+                closeModal('terms');
+            }
+        });
+
+        // ── 상담 폼 제출 ──
         document.getElementById('contactForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+            const btn = this.querySelector('.submit-btn');
+            btn.disabled = true;
+            btn.textContent = '전송 중...';
+
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
-            
+
             try {
                 const response = await fetch('/api/contact', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-                
                 if (response.ok) {
                     alert('상담 신청이 완료되었습니다. 빠른 시일 내에 연락드리겠습니다.');
                     e.target.reset();
@@ -667,39 +824,32 @@
                     alert('전송 중 오류가 발생했습니다. 다시 시도해주세요.');
                 }
             } catch (error) {
-                alert('전송 중 오류가 발생했습니다. 이메일로 직접 연락 주시기 바랍니다: liab.on.ins@gmail.com');
+                alert('전송 중 오류가 발생했습니다. 이메일로 직접 연락 주시기 바랍니다:\nliab.on.ins@gmail.com');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '상담 신청하기';
             }
         });
 
-        // Modal functions
+        // ── 모달 ──
         function openModal(type) {
-            if (type === 'privacy') {
-                document.getElementById('privacyModal').style.display = 'flex';
-            } else if (type === 'terms') {
-                document.getElementById('termsModal').style.display = 'flex';
-            }
+            const id = type === 'privacy' ? 'privacyModal' : 'termsModal';
+            document.getElementById(id).style.display = 'flex';
+            document.body.style.overflow = 'hidden';
         }
-
         function closeModal(type) {
-            if (type === 'privacy') {
-                document.getElementById('privacyModal').style.display = 'none';
-            } else if (type === 'terms') {
-                document.getElementById('termsModal').style.display = 'none';
-            }
+            const id = type === 'privacy' ? 'privacyModal' : 'termsModal';
+            const el = document.getElementById(id);
+            if (el) { el.style.display = 'none'; document.body.style.overflow = ''; }
         }
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const privacyModal = document.getElementById('privacyModal');
-            const termsModal = document.getElementById('termsModal');
-            
-            if (event.target === privacyModal) {
-                privacyModal.style.display = 'none';
-            }
-            if (event.target === termsModal) {
-                termsModal.style.display = 'none';
-            }
-        }
+        // 모달 바깥 클릭 닫기
+        window.addEventListener('click', function(e) {
+            ['privacyModal','termsModal'].forEach(id => {
+                const m = document.getElementById(id);
+                if (e.target === m) { m.style.display = 'none'; document.body.style.overflow = ''; }
+            });
+        });
     </script>
 </body>
 </html>

@@ -896,7 +896,7 @@
     <footer>
         <div class="footer-content">
             <h3 style="margin-bottom: 1rem;">배상온 대리점</h3>
-            <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="620e0b03004c0d0c4c0b0c1122050f030b0e4c010d0f">[email&#160;protected]</a></p>
+            <p>📧 이메일: liab.on.ins@gmail.com</p>
             <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
             <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
             <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
@@ -1717,3 +1717,15 @@
                 birthDateInput.addEventListener('keypress', function(e) {
                     if (!/[0-9]/.test(e.key)) {
                         e.preventDefault();
+                    }
+                });
+            }
+
+            // 초기 드론 섹션 생성
+            updateDroneSections();
+            
+            console.log('✅ 페이지 초기화 완료');
+        });
+    </script>
+</body>
+</html>

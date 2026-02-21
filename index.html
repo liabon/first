@@ -585,15 +585,12 @@
             flex-direction: column;
             align-items: flex-end;
             gap: 8px;
-            /* 페이지 로드 입장 애니메이션 */
             animation: kk-enter 0.45s cubic-bezier(0.34,1.56,0.64,1) 0.9s both;
         }
         @keyframes kk-enter {
             from { opacity: 0; transform: translateY(16px) scale(0.75); }
             to   { opacity: 1; transform: translateY(0) scale(1); }
         }
-
-        /* 툴팁 말풍선 */
         .kakao-tip {
             background: rgba(30,30,30,0.88);
             color: #fff;
@@ -602,7 +599,6 @@
             padding: 0.38rem 0.85rem;
             border-radius: 16px;
             white-space: nowrap;
-            letter-spacing: -0.01em;
             pointer-events: none;
             opacity: 0;
             transform: translateY(5px);
@@ -618,12 +614,7 @@
             border-top-color: rgba(30,30,30,0.88);
             border-bottom: 0;
         }
-        .kakao-float:hover .kakao-tip {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* 원형 버튼 */
+        .kakao-float:hover .kakao-tip { opacity: 1; transform: translateY(0); }
         .kakao-btn {
             width: 52px;
             height: 52px;
@@ -633,26 +624,14 @@
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.16);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.18);
             transition: transform 0.2s, box-shadow 0.2s;
             position: relative;
             -webkit-tap-highlight-color: transparent;
-            cursor: pointer;
         }
-        .kakao-btn:hover {
-            transform: translateY(-3px) scale(1.07);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.20);
-        }
+        .kakao-btn:hover { transform: translateY(-3px) scale(1.07); box-shadow: 0 8px 24px rgba(0,0,0,0.22); }
         .kakao-btn:active { transform: scale(0.94); }
-
-        /* 카카오 말풍선 이모지 */
-        .kakao-icon {
-            font-size: 1.55rem;
-            line-height: 1;
-            display: block;
-        }
-
-        /* 알림 뱃지 */
+        .kakao-icon { font-size: 1.55rem; line-height: 1; display: block; }
         .kakao-dot {
             position: absolute;
             top: 1px;
@@ -668,8 +647,6 @@
             0%,100% { transform: scale(1); }
             50%      { transform: scale(1.4); opacity: 0.65; }
         }
-
-        /* 모바일: 조금 작게 */
         @media (max-width: 768px) {
             .kakao-float { right: 16px; bottom: 24px; }
             .kakao-btn   { width: 46px; height: 46px; }
@@ -802,7 +779,7 @@
         <div class="footer-content">
             <div class="footer-info">
                 <h3>배상온 대리점</h3>
-                <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3a56535b58145554145354497a5d575b535614595557">[email&#160;protected]</a></p>
+                <p>📧 이메일: liab.on.ins@gmail.com</p>
                 <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
                 <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
                 <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
@@ -818,26 +795,19 @@
         </div>
     </footer>
 
-    <!-- ══ 카카오톡 실시간 상담 플로팅 버튼 ══
-         채널: http://pf.kakao.com/_xodxdAX
-         채팅: https://pf.kakao.com/_xodxdAX/chat
-    -->
+    <!-- ══ 카카오톡 실시간 상담 플로팅 버튼 ══ -->
     <div class="kakao-float" id="kakaoFloat">
         <div class="kakao-tip">💬 카카오로 실시간 상담</div>
-        <a
-            class="kakao-btn"
-            href="https://pf.kakao.com/_xodxdAX/chat"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="카카오톡 실시간 상담 시작"
-            id="kakaoChatBtn"
-        >
+        <a class="kakao-btn"
+           href="https://pf.kakao.com/_xodxdAX/chat"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="카카오톡 실시간 상담"
+           id="kakaoChatBtn">
             <span class="kakao-icon">💬</span>
             <span class="kakao-dot" id="kakaoDot"></span>
         </a>
     </div>
-
-    <!-- ══ Privacy Modal ══ -->
     <div id="privacyModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('privacy')">&times;</span>
@@ -864,7 +834,7 @@
             <strong>보유·이용기간:</strong> 제공동의일로부터 제공목적을 달성할 때까지</p>
 
             <h3>5. 개인정보관리책임자</h3>
-            <p>이름: 김리하<br>소속: 배상온 대리점<br>직위: 대표<br>이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="82eeebe3e0acedecacebecf1c2e5efe3ebeeace1edef">[email&#160;protected]</a></p>
+            <p>이름: 김리하<br>소속: 배상온 대리점<br>직위: 대표<br>이메일: liab.on.ins@gmail.com</p>
         </div>
     </div>
 
@@ -897,7 +867,7 @@
         </div>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script>
         // ── 모바일 드로어 토글 ──
         function toggleDrawer() {
             const drawer  = document.getElementById('mobileDrawer');
@@ -966,32 +936,26 @@
         // 모달 바깥 클릭 닫기
         window.addEventListener('click', function(e) {
             ['privacyModal','termsModal'].forEach(function(id) {
-                const m = document.getElementById(id);
+                var m = document.getElementById(id);
                 if (e.target === m) { m.style.display = 'none'; document.body.style.overflow = ''; }
             });
         });
 
         // ── 카카오톡 플로팅 버튼 ──
-        // 클릭 시 빨간 뱃지 제거
-        document.getElementById('kakaoChatBtn').addEventListener('click', function () {
+        document.getElementById('kakaoChatBtn').addEventListener('click', function() {
             var dot = document.getElementById('kakaoDot');
             if (dot) dot.style.display = 'none';
         });
 
-        // footer와 겹치지 않도록 스크롤 시 bottom 위치 보정
-        (function () {
+        // footer와 겹치지 않게 bottom 보정
+        (function() {
             var floatEl  = document.getElementById('kakaoFloat');
             var footerEl = document.querySelector('footer');
             if (!floatEl || !footerEl) return;
-
             function adjust() {
-                var footerTop = footerEl.getBoundingClientRect().top;
-                var winH      = window.innerHeight;
-                if (footerTop < winH) {
-                    floatEl.style.bottom = (32 + winH - footerTop) + 'px';
-                } else {
-                    floatEl.style.bottom = '';
-                }
+                var ft = footerEl.getBoundingClientRect().top;
+                var wh = window.innerHeight;
+                floatEl.style.bottom = ft < wh ? (32 + wh - ft) + 'px' : '';
             }
             window.addEventListener('scroll', adjust, { passive: true });
             window.addEventListener('resize', adjust, { passive: true });

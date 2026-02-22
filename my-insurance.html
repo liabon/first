@@ -666,6 +666,26 @@ function goScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('screen-' + id).classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // 본인인증 화면으로 돌아올 때 OTP 상태 초기화
+    if (id === 'auth') {
+        S.otpSent = false;
+        S.otpToken = null;
+        if (S.timerInterval) clearInterval(S.timerInterval);
+        S.timerSec = 0;
+        document.getElementById('otp-wrap').style.display = 'none';
+        document.getElementById('a-otp').value = '';
+        document.getElementById('otp-send-btn').style.display = '';
+        document.getElementById('otp-send-btn').disabled = false;
+        document.getElementById('otp-send-btn').textContent = '인증번호 받기';
+        document.getElementById('otp-resend-btn').style.display = 'none';
+        document.getElementById('otp-timer').style.display = 'none';
+        document.getElementById('auth-btn').disabled = true;
+        document.getElementById('auth-btn').textContent = '본인 확인하기';
+        showErr('err-otp', false);
+        showErr('err-name', false);
+        showErr('err-phone', false);
+    }
 }
 
 // ═══════════════════════════════════════════════════

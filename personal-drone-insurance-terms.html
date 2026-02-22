@@ -423,7 +423,7 @@
                     <p>이름: 김리하</p>
                     <p>소속: 배상온</p>
                     <p>직위: 대표</p>
-                    <p>이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5a36333b38743534743334291a3d373b333674393537">[email&#160;protected]</a></p>
+                    <p>이메일: liab.on.ins@gmail.com</p>
                 </div>
             </div>
 
@@ -514,7 +514,7 @@
     <footer>
         <div class="footer-content">
             <h3 style="margin-bottom: 1rem;">배상온 대리점</h3>
-            <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="127e7b73703c7d7c3c7b7c6152757f737b7e3c717d7f">[email&#160;protected]</a></p>
+            <p>📧 이메일: <a href="mailto:liab.on.ins@gmail.com" style="color:#aaa;">liab.on.ins@gmail.com</a></p>
             <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
             <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
             <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
@@ -522,7 +522,7 @@
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script>
         // 페이지 로드/재방문(이전 버튼) 시 버튼 상태 초기화
         window.addEventListener('pageshow', function() {
             const btn = document.getElementById('submitBtn');
@@ -583,8 +583,8 @@
             btn.disabled = true;
             btn.textContent = '처리 중...';
 
-            // ✅ API 호출 전에 sessionStorage 먼저 저장
-            // → API 성공/실패/네트워크오류 모두 complete 페이지에서 데이터 정상 표시
+            // API 호출 전에 sessionStorage 먼저 저장
+            // → API 성공/실패/네트워크 오류 모두 complete 페이지에서 정상 표시
             sessionStorage.setItem('droneInsuranceData', JSON.stringify(formData));
 
             try {
@@ -596,15 +596,15 @@
                 });
 
                 if (!response.ok) {
-                    // API 실패해도 데이터는 이미 저장됨 → 로그만 남기고 이동
-                    console.warn('API 오류 (이메일 발송 실패 가능):', response.status);
+                    // 실패해도 데이터는 이미 저장됨 → 로그만
+                    console.warn('API 오류:', response.status);
                 }
             } catch (e) {
-                // 네트워크 오류여도 데이터는 이미 저장됨 → 로그만 남기고 이동
-                console.error('제출 네트워크 오류:', e);
+                // 네트워크 오류여도 sessionStorage는 이미 저장됨 → 이동
+                console.error('제출 오류:', e);
             }
 
-            // 성공/실패 무관하게 complete 페이지로 이동
+            // API 성공/실패 무관하게 complete 페이지로 이동
             window.location.href = '/personal-drone-insurance-complete';
         });
     </script>

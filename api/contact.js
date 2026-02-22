@@ -444,20 +444,20 @@ module.exports = async (req, res) => {
       `;
     }
 
-    // 관리자에게 이메일 전송 (견적서 재전송 및 고객 전용 전송은 제외)
-    if (!isQuoteEmailOnly && !(send_to_customer && insurance_type === '개인용 드론보험')) {
+    // 관리자에게 이메일 전송
+    // 개인용 드론보험은 관리자 발송 완전 제외 — 고객에게만 발송
+    if (!isQuoteEmailOnly && insurance_type !== '개인용 드론보험') {
       const mailOptions = {
         from: process.env.EMAIL_USER,
         to: process.env.ADMIN_EMAIL,
         subject: emailSubject,
         html: emailBody
       };
-      
       await transporter.sendMail(mailOptions);
     }
 
-    // 고객에게 견적서 전송 (개인용 드론보험 & send_to_customer 플래그가 있을 때)
-    if (send_to_customer && email && insurance_type === '개인용 드론보험') {
+    // 고객에게 견적서 전송 (개인용 드론보험이면 항상 발송 — send_to_customer 플래그 불필요)
+    if (email && insurance_type === '개인용 드론보험') {
       const droneTypes = {
         'camera': '촬영용 센서드론',
         'fpv': 'FPV/레이싱 드론',
@@ -555,7 +555,9 @@ module.exports = async (req, res) => {
     }
 
     return res.status(200).json({ 
-      message: send_to_customer ? '상담 신청이 완료되었으며, 견적서가 이메일로 전송되었습니다.' : '상담 신청이 완료되었습니다.'
+      message: insurance_type === '개인용 드론보험' 
+        ? '신청이 완료되었으며, 견적서가 이메일로 전송되었습니다.'
+        : '상담 신청이 완료되었습니다.'
     });
 
   } catch (error) {

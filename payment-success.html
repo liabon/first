@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>결제 완료 - KB손해보험 개인용 드론보험</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --kb-gold: #FFB800; --kb-yellow: #FFCD00; --kb-dark: #1a1a1a; }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section { display: flex; align-items: center; gap: 1.5rem; }
+        .kb-logo      { height: 50px; }
+        .divider      { height: 40px; width: 1px; background: #ddd; }
+        .agency-name  { font-size: 1.5rem; font-weight: 700; color: var(--kb-dark); }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+        }
+
+        .result-card {
+            background: #fff;
+            border-radius: 30px;
+            padding: 4rem 3rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        /* 체크 아이콘 애니메이션 */
+        .check-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            font-size: 3rem;
+            animation: popIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+
+        .result-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--kb-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .result-subtitle {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .payment-info-box {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 1.8rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .payment-info-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #43e97b;
+            margin-bottom: 1rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 0.95rem;
+        }
+
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: #666; font-weight: 600; }
+        .info-value { font-weight: 700; color: var(--kb-dark); }
+
+        .notice-box {
+            background: #e8f5e9;
+            border-radius: 12px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: #388e3c;
+            text-align: left;
+            line-height: 1.7;
+        }
+
+        .btn-home {
+            display: block;
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--kb-gold);
+            color: var(--kb-dark);
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-home:hover {
+            background: var(--kb-yellow);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255,184,0,0.3);
+        }
+
+        /* 로딩 */
+        .loading-state {
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #e0e0e0;
+            border-top-color: #43e97b;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        footer {
+            background: var(--kb-dark);
+            color: #fff;
+            padding: 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .result-card { padding: 2.5rem 1.5rem; }
+            .result-title { font-size: 1.5rem; }
+            .check-circle { width: 80px; height: 80px; font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="kb-logo.png" alt="KB손해보험" class="kb-logo">
+                <div class="divider"></div>
+                <div class="agency-name">배상온 대리점</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="result-card">
+            <!-- 로딩 상태 -->
+            <div class="loading-state" id="loadingState">
+                <div class="spinner"></div>
+                <p style="color:#666;">결제를 처리하는 중입니다...</p>
+            </div>
+
+            <!-- 성공 상태 (초기 숨김) -->
+            <div id="successState" style="display:none;">
+                <div class="check-circle">✓</div>
+                <h1 class="result-title">결제가 완료되었습니다!</h1>
+                <p class="result-subtitle">
+                    KB손해보험 개인용 드론보험 가입이 신청되었습니다.<br>
+                    담당자가 확인 후 빠른 시일 내에 연락드리겠습니다.
+                </p>
+
+                <div class="payment-info-box">
+                    <div class="payment-info-title">✅ 결제 정보</div>
+                    <div class="info-row">
+                        <span class="info-label">주문번호</span>
+                        <span class="info-value" id="displayOrderId">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">결제 금액</span>
+                        <span class="info-value" id="displayAmount">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">결제 수단</span>
+                        <span class="info-value" id="displayMethod">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">결제 상태</span>
+                        <span class="info-value" style="color:#43e97b;">✓ 결제 완료</span>
+                    </div>
+                </div>
+
+                <div class="notice-box">
+                    📌 가입 신청이 접수되었습니다. 담당자 검토 후 보험 증권이 이메일로 발송됩니다.<br>
+                    문의: liab.on.ins@gmail.com
+                </div>
+
+                <a href="/personal-drone-insurance" class="btn-home">🏠 홈으로 돌아가기</a>
+            </div>
+
+            <!-- 오류 상태 (초기 숨김) -->
+            <div id="errorState" style="display:none;">
+                <div style="font-size:3rem;margin-bottom:1rem;">⚠️</div>
+                <h1 class="result-title" style="color:#e74c3c;">결제 처리 오류</h1>
+                <p class="result-subtitle" id="errorMessage">결제 승인 중 오류가 발생했습니다.</p>
+                <a href="/personal-drone-insurance-complete" class="btn-home" style="background:#e74c3c;color:#fff;">
+                    다시 시도하기
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2026 배상온 대리점. All rights reserved. | KB손해보험 공식 대리점</p>
+        </div>
+    </footer>
+
+    <script>
+        /**
+         * 결제 성공 페이지
+         * 토스페이먼츠가 successUrl로 리다이렉트할 때 아래 쿼리 파라미터를 전달합니다:
+         *   paymentKey, orderId, amount
+         *
+         * 이 페이지에서 서버(/api/toss-payment-confirm)에 승인 요청을 보냅니다.
+         */
+        (async function () {
+            const params     = new URLSearchParams(window.location.search);
+            const paymentKey = params.get('paymentKey');
+            const orderId    = params.get('orderId');
+            const amount     = params.get('amount');
+
+            // 필수 파라미터 검증
+            if (!paymentKey || !orderId || !amount) {
+                showError('결제 정보가 올바르지 않습니다. 처음부터 다시 시도해주세요.');
+                return;
+            }
+
+            try {
+                // ── 서버에 결제 승인 요청 ──
+                const res = await fetch('/api/toss-payment-confirm', {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify({ paymentKey, orderId, amount })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok || !data.success) {
+                    showError(data.message || '결제 승인에 실패했습니다.');
+                    return;
+                }
+
+                // ── 성공 처리 ──
+                showSuccess(data.payment, amount);
+
+                // sessionStorage 결제 완료 표시
+                try {
+                    const existing = JSON.parse(sessionStorage.getItem('droneInsuranceData') || '{}');
+                    existing.payment_completed = true;
+                    existing.payment_key       = paymentKey;
+                    existing.order_id          = orderId;
+                    sessionStorage.setItem('droneInsuranceData', JSON.stringify(existing));
+                } catch (_) {}
+
+            } catch (err) {
+                console.error('결제 승인 오류:', err);
+                showError('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+            }
+        })();
+
+        function showSuccess(payment, amount) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('successState').style.display = 'block';
+
+            // 주문번호 (긴 경우 줄임)
+            const orderId = payment?.orderId || new URLSearchParams(window.location.search).get('orderId') || '-';
+            document.getElementById('displayOrderId').textContent =
+                orderId.length > 20 ? orderId.slice(0, 20) + '…' : orderId;
+
+            // 결제 금액
+            const amtNum = parseInt(amount || payment?.totalAmount || 0);
+            document.getElementById('displayAmount').textContent =
+                amtNum ? `${amtNum.toLocaleString()}원` : '-';
+
+            // 결제 수단
+            const methodMap = {
+                'CARD':           '카드',
+                'VIRTUAL_ACCOUNT':'가상계좌',
+                'EASY_PAY':       '간편결제',
+                'TRANSFER':       '계좌이체',
+                'MOBILE_PHONE':   '휴대폰',
+            };
+            const method = payment?.method || '';
+            document.getElementById('displayMethod').textContent = methodMap[method] || method || '-';
+        }
+
+        function showError(message) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display   = 'block';
+            document.getElementById('errorMessage').textContent   = message;
+        }
+    </script>
+</body>
+</html>

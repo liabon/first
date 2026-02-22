@@ -2,12 +2,13 @@
  * api/my-insurance.js
  * 계약 조회 / 변경 API
  *
- * ── SMS OTP: 솔라피(Solapi) HMAC-SHA256 인증 ──
+ * ── SMS OTP: 솔라피(Solapi) 공식 Node.js SDK ──
+ *   npm install solapi
  *
  * 환경변수 (Vercel Dashboard → Settings → Environment Variables):
  *   SOLAPI_API_KEY    = NCSAJG4NTNBPPQAL
  *   SOLAPI_API_SECRET = <솔라피 콘솔 https://console.solapi.com/credentials 에서 복사>
- *   SOLAPI_SENDER     = 등록된 발신번호 (예: 01012345678, 하이픈 제외)
+ *   SOLAPI_SENDER     = 01084618712 (등록 완료된 발신번호)
  *   EMAIL_USER        = Gmail 주소 (OTP SMS 실패 시 fallback)
  *   EMAIL_PASS        = Gmail 앱 비밀번호
  *   ADMIN_EMAIL       = liab.on.ins@gmail.com
@@ -19,94 +20,55 @@
 
 'use strict';
 
-const crypto     = require('crypto');
 const nodemailer = require('nodemailer');
+const { SolapiMessageService } = require('solapi');
 
 // ═══════════════════════════════════════════════════
-//  솔라피 HMAC-SHA256 인증
-//  https://developers.solapi.com/references/authentication/api-key
+//  솔라피 공식 Node.js SDK
+//  https://developers.solapi.com/category/nodejs
+//  npm install solapi
 // ═══════════════════════════════════════════════════
 
 /**
- * HMAC-SHA256 Signature 생성
- * data = dateTime + salt  →  HMAC-SHA256(apiSecret, data) → hex
+ * 솔라피 SDK 인스턴스 (lazy init)
  */
-function generateSignature(apiSecret, dateTime, salt) {
-    const data = dateTime + salt;
-    return crypto
-        .createHmac('sha256', apiSecret)
-        .update(data)
-        .digest('hex');
-}
-
-/**
- * Authorization 헤더 생성
- * HMAC-SHA256 apiKey=<KEY>, date=<ISO8601>, salt=<random32hex>, signature=<HMAC>
- */
-function createSolapiAuthHeader(apiKey, apiSecret) {
-    const dateTime  = new Date().toISOString();           // ISO 8601
-    const salt      = crypto.randomBytes(16).toString('hex'); // 32자 hex
-    const signature = generateSignature(apiSecret, dateTime, salt);
-    return `HMAC-SHA256 apiKey=${apiKey}, date=${dateTime}, salt=${salt}, signature=${signature}`;
-}
-
-/**
- * 솔라피 SMS 단건 발송
- * POST https://api.solapi.com/messages/v4/send
- */
-async function sendSolapiSms(to, text) {
+let _messageService = null;
+function getSolapiService() {
+    if (_messageService) return _messageService;
     const apiKey    = process.env.SOLAPI_API_KEY    || 'NCSAJG4NTNBPPQAL';
     const apiSecret = process.env.SOLAPI_API_SECRET;
-    const sender    = process.env.SOLAPI_SENDER;
+    if (!apiSecret) return null;
+    _messageService = new SolapiMessageService(apiKey, apiSecret);
+    return _messageService;
+}
 
-    if (!apiSecret || !sender) {
+/**
+ * 솔라피 SMS 단건 발송 (공식 SDK 사용)
+ */
+async function sendSolapiSms(to, text) {
+    const messageService = getSolapiService();
+    const sender = process.env.SOLAPI_SENDER;
+
+    if (!messageService || !sender) {
         console.warn('[Solapi] 환경변수 없음 (SOLAPI_API_SECRET / SOLAPI_SENDER). SMS 건너뜀.');
         return { skipped: true };
     }
 
     const cleanTo     = to.replace(/\D/g, '');
     const cleanSender = sender.replace(/\D/g, '');
-    const authHeader  = createSolapiAuthHeader(apiKey, apiSecret);
 
-    const payload = {
-        message: {
+    try {
+        const result = await messageService.send({
             to:   cleanTo,
             from: cleanSender,
             text: text,
-            type: 'SMS',
-        },
-    };
-
-    console.log('[Solapi] 발송 시도 → to:', cleanTo, '| from:', cleanSender);
-    console.log('[Solapi] Authorization:', authHeader.substring(0, 60) + '...');
-
-    const res = await fetch('https://api.solapi.com/messages/v4/send', {
-        method:  'POST',
-        headers: {
-            'Authorization': authHeader,
-            'Content-Type':  'application/json',
-        },
-        body: JSON.stringify(payload),
-    });
-
-    const rawText = await res.text();
-    let data;
-    try {
-        data = JSON.parse(rawText);
-    } catch {
-        console.error('[Solapi] 응답 파싱 실패:', rawText.substring(0, 500));
-        throw new Error(`SMS 응답 파싱 실패: ${res.status} ${res.statusText}`);
+        });
+        console.log('[Solapi] SMS 발송 성공 →', cleanTo, '| result:', JSON.stringify(result));
+        return result;
+    } catch (err) {
+        console.error('[Solapi] SMS 발송 실패:', err.message || err);
+        throw new Error(`SMS 발송 실패: ${err.message || JSON.stringify(err)}`);
     }
-
-    if (!res.ok) {
-        const errMsg = data.errorMessage || data.message || data.errorCode || JSON.stringify(data);
-        console.error('[Solapi] SMS 발송 실패:', res.status, errMsg);
-        console.error('[Solapi] 전체 응답:', JSON.stringify(data));
-        throw new Error(`SMS 발송 실패: ${res.status} ${errMsg}`);
-    }
-
-    console.log('[Solapi] SMS 발송 성공 →', cleanTo, '| messageId:', data.messageId);
-    return data;
 }
 
 // ═══════════════════════════════════════════════════

@@ -16,7 +16,8 @@
     "axios": "^1.6.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "pg": "^8.13.3"
+    "pg": "^8.13.3",
+    "solapi": "^5.2.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"

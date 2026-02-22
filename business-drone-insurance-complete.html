@@ -251,13 +251,17 @@ function displayInfo() {
         parseInt(d.plan_total_price || 0).toLocaleString() + '원';
 }
 
-/* ── PDF 다운로드
-   핵심 수정:
-   1. html2pdf().from(htmlString, 'string') 방식 — DOM 엘리먼트 방식 대신
-      → html2canvas가 off-screen 렌더 문제 없이 내부에서 직접 처리
-   2. display:grid, linear-gradient 완전 제거 → table + bgcolor
-   3. "자체중량 구분" → "가입물건" / "드론 유형" 제거
-── */
+/* ── PDF 다운로드 ────────────────────────────────────────────────────
+   ★ 빈 페이지 해결: position:absolute;left:-99999px (off-screen)
+     opacity:0 / z-index 음수는 html2canvas 캡처 불가 → 절대 사용 금지
+   ★ 레이아웃 (모두 table, gradient/grid/flex 없음)
+     ①헤더           : ≤2cm, 글씨 11px
+     ②견적정보|고객정보 : 2컬럼
+     ③보험조건|드론정보 : 2컬럼, 드론 여러대 우측에 쌓임
+     ④연간총보험료    : ≤2cm, 글씨 16px
+     ⑤유의사항 ⑥푸터
+   ★ 잘림 방지: page-break-inside:avoid + avoid-all
+──────────────────────────────────────────────────────────────────── */
 async function downloadPDF() {
     if (!insuranceData) { alert('보험 정보가 없습니다.'); return; }
 
@@ -265,138 +269,220 @@ async function downloadPDF() {
     pdfBtn.disabled = true;
     pdfBtn.textContent = '생성 중...';
 
+    var wrapper = null;
     try {
-        var d      = insuranceData;
-        var today  = new Date();
-        var dateStr = today.getFullYear() + '년 ' + (today.getMonth() + 1) + '월 ' + today.getDate() + '일';
-        var count  = parseInt(d.drone_count) || 1;
-        var drones = d.drones      || [];
-        var plans  = d.drone_plans || [];
-        var total  = parseInt(d.plan_total_price || 0);
+        var d        = insuranceData;
+        var today    = new Date();
+        var dateStr  = today.getFullYear() + '년 ' + (today.getMonth()+1) + '월 ' + today.getDate() + '일';
+        var count    = parseInt(d.drone_count) || 1;
+        var drones   = d.drones      || [];
+        var plans    = d.drone_plans || [];
+        var total    = parseInt(d.plan_total_price || 0);
         var custName = d.corp_name || d.name || '';
 
-        function fmtDT(s) { return (s || '').replace('T', ' '); }
+        var W = 760; // px — A4 190mm @ 96dpi 근사
+
+        function fmtDT(s) { return (s||'').replace('T',' '); }
         function safe(v)  { return (v != null && v !== '') ? String(v) : '미입력'; }
 
-        // 드론별 행 (table 셀)
-        var droneRows = '';
-        for (var i = 0; i < count; i++) {
-            var dr = drones[i] || {};
-            var pl = plans[i]  || {};
-            var planLabel = pl.plan_name ? ' (' + safe(pl.plan_name) + ')' : '';
-            droneRows +=
-                '<tr><td colspan="4" style="background:#FFB800;padding:6px 10px;font-weight:700;font-size:10px;color:#1a1a1a;">드론 ' + (i + 1) + planLabel + '</td></tr>' +
-                '<tr style="background:#fafafa;">' +
-                    '<td style="padding:4px 10px;font-size:9px;color:#555;width:24%;border-bottom:1px solid #eee;">모델명</td>' +
-                    '<td style="padding:4px 10px;font-size:9px;border-bottom:1px solid #eee;width:26%;">' + safe(dr.model) + '</td>' +
-                    '<td style="padding:4px 10px;font-size:9px;color:#555;border-bottom:1px solid #eee;width:24%;">시리얼번호</td>' +
-                    '<td style="padding:4px 10px;font-size:9px;border-bottom:1px solid #eee;">' + safe(dr.serial) + '</td>' +
-                '</tr>' +
-                '<tr style="background:#fff;">' +
-                    '<td style="padding:4px 10px;font-size:9px;color:#555;border-bottom:1px solid #eee;">자체중량</td>' +
-                    '<td style="padding:4px 10px;font-size:9px;border-bottom:1px solid #eee;">' + (dr.weight ? dr.weight + 'kg' : '미입력') + '</td>' +
-                    '<td style="padding:4px 10px;font-size:9px;color:#555;border-bottom:1px solid #eee;">최대이륙중량</td>' +
-                    '<td style="padding:4px 10px;font-size:9px;border-bottom:1px solid #eee;">' + (dr.max_weight ? dr.max_weight + 'kg' : '미입력') + '</td>' +
-                '</tr>' +
-                '<tr style="background:#fafafa;">' +
-                    '<td style="padding:4px 10px;font-size:9px;color:#555;border-bottom:1px solid #eee;">대인배상</td>' +
-                    '<td style="padding:4px 10px;font-size:9px;border-bottom:1px solid #eee;">' + safe(pl.coverage_personal) + '</td>' +
-                    '<td style="padding:4px 10px;font-size:9px;color:#555;border-bottom:1px solid #eee;">대물배상</td>' +
-                    '<td style="padding:4px 10px;font-size:9px;border-bottom:1px solid #eee;">' + safe(pl.coverage_property) + '</td>' +
-                '</tr>' +
-                '<tr style="background:#fff;">' +
-                    '<td style="padding:4px 10px;font-size:9px;color:#555;border-bottom:1px solid #eee;">자기부담금</td>' +
-                    '<td style="padding:4px 10px;font-size:9px;border-bottom:1px solid #eee;">' + safe(d.selected_deductible) + '만원</td>' +
-                    '<td style="padding:4px 10px;font-size:9px;color:#555;border-bottom:1px solid #eee;">보험료</td>' +
-                    '<td style="padding:4px 10px;font-size:9px;font-weight:700;color:#cc8800;border-bottom:1px solid #eee;">' + parseInt(pl.price || 0).toLocaleString() + '원/년</td>' +
-                '</tr>';
+        // 섹션 헤더 행 (colspan=2)
+        function secHead(label, gold) {
+            var bg = gold ? '#FFB800' : '#1a1a1a';
+            var fg = gold ? '#1a1a1a' : '#FFB800';
+            return '<tr><td colspan="2" style="background:' + bg + ';padding:5px 8px;' +
+                   'font-size:8px;font-weight:700;color:' + fg + ';letter-spacing:0.3px;">' +
+                   label + '</td></tr>';
+        }
+
+        // 데이터 행 (label / value, 줄무늬)
+        function irow(label, val, alt) {
+            var bg = alt ? 'background:#f6f6f6;' : '';
+            return '<tr style="' + bg + '">' +
+                   '<td style="padding:3.5px 8px;font-size:8px;color:#555;width:38%;' +
+                   'border-bottom:1px solid #ebebeb;">' + label + '</td>' +
+                   '<td style="padding:3.5px 8px;font-size:8px;font-weight:600;' +
+                   'border-bottom:1px solid #ebebeb;">' + safe(val) + '</td></tr>';
+        }
+        function irow_price(val) {
+            return '<tr><td style="padding:3.5px 8px;font-size:8px;color:#555;width:38%;' +
+                   'border-bottom:1px solid #ebebeb;">보험료</td>' +
+                   '<td style="padding:3.5px 8px;font-size:8px;font-weight:700;' +
+                   'color:#b87000;border-bottom:1px solid #ebebeb;">' + val + '</td></tr>';
+        }
+
+        // 인라인 테이블 래퍼 (full-width, border-collapse)
+        function tbl(inner) {
+            return '<table width="100%" cellpadding="0" cellspacing="0" ' +
+                   'style="border-collapse:collapse;">' + inner + '</table>';
         }
 
         // 가입물건 라벨
         var weightLabel = d.drone_weight ? (WEIGHT_LABELS[d.drone_weight] || d.drone_weight) : '미입력';
 
-        // PDF HTML — 순수 table 레이아웃, 배경색 단색, gradient/flex/grid 없음
-        var pdfHTML =
-            '<div style="width:190mm;font-family:Arial,Helvetica,sans-serif;color:#1a1a1a;background:#ffffff;">' +
+        /* ─ 드론 카드들 ─ */
+        var droneCards = '';
+        for (var i = 0; i < count; i++) {
+            var dr = drones[i] || {};
+            var pl = plans[i]  || {};
+            var planTxt = pl.plan_name ? ' [' + safe(pl.plan_name) + ']' : '';
+            var inner =
+                secHead('드론 ' + (i+1) + planTxt, true) +
+                irow('모델명',    safe(dr.model),    false) +
+                irow('시리얼번호', safe(dr.serial),   true) +
+                (dr.weight     ? irow('자체중량',    dr.weight + 'kg',    false) : '') +
+                (dr.max_weight ? irow('최대이륙중량', dr.max_weight + 'kg', true)  : '') +
+                (pl.coverage_personal ? irow('대인배상', safe(pl.coverage_personal), false) : '') +
+                (pl.coverage_property ? irow('대물배상', safe(pl.coverage_property), true)  : '') +
+                irow_price(parseInt(pl.price||0).toLocaleString() + '원/년');
 
-            // 헤더
-            '<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:10px;">' +
-            '<tr><td style="background:#FFB800;padding:14px 20px;text-align:center;">' +
-            '<div style="font-size:16px;font-weight:900;color:#1a1a1a;">배상온 업무용드론보험 견적서</div>' +
-            '</td></tr></table>' +
+            droneCards +=
+                '<div style="page-break-inside:avoid;margin-bottom:4px;">' +
+                tbl(inner) + '</div>';
+        }
 
-            // 견적 정보 + 고객 정보 (2컬럼 → 인접 td)
-            '<table width="100%" cellpadding="0" cellspacing="4" style="margin-bottom:10px;border-collapse:separate;">' +
-            '<tr>' +
-            // 견적 정보
-            '<td width="50%" valign="top">' +
-            '<table width="100%" cellpadding="0" cellspacing="0">' +
-            '<tr><td colspan="2" style="background:#1a1a1a;padding:6px 10px;font-weight:700;font-size:10px;color:#FFB800;">견적 정보</td></tr>' +
-            '<tr><td style="padding:4px 10px;font-size:9px;color:#555;width:40%;">견적일자</td><td style="padding:4px 10px;font-size:9px;">' + dateStr + '</td></tr>' +
-            '<tr style="background:#f5f5f5;"><td style="padding:4px 10px;font-size:9px;color:#555;">보험시작</td><td style="padding:4px 10px;font-size:9px;">' + fmtDT(d.insurance_start) + '</td></tr>' +
-            '<tr><td style="padding:4px 10px;font-size:9px;color:#555;">보험종료</td><td style="padding:4px 10px;font-size:9px;">' + fmtDT(d.insurance_end) + '</td></tr>' +
-            '<tr style="background:#f5f5f5;"><td style="padding:4px 10px;font-size:9px;color:#555;">상품명</td><td style="padding:4px 10px;font-size:9px;">KB손해보험 업무용드론보험</td></tr>' +
-            '<tr><td style="padding:4px 10px;font-size:9px;color:#555;">가입물건</td><td style="padding:4px 10px;font-size:9px;">' + weightLabel + '</td></tr>' +
-            '<tr style="background:#f5f5f5;"><td style="padding:4px 10px;font-size:9px;color:#555;">드론 대수</td><td style="padding:4px 10px;font-size:9px;">' + count + '대</td></tr>' +
-            '</table></td>' +
-            // 고객 정보
-            '<td width="50%" valign="top">' +
-            '<table width="100%" cellpadding="0" cellspacing="0">' +
-            '<tr><td colspan="2" style="background:#1a1a1a;padding:6px 10px;font-weight:700;font-size:10px;color:#FFB800;">고객 정보</td></tr>' +
-            '<tr><td style="padding:4px 10px;font-size:9px;color:#555;width:38%;">' + (d.corp_name ? '법인명' : '이름') + '</td><td style="padding:4px 10px;font-size:9px;">' + safe(custName) + '</td></tr>' +
-            (d.corp_number ? '<tr style="background:#f5f5f5;"><td style="padding:4px 10px;font-size:9px;color:#555;">사업자번호</td><td style="padding:4px 10px;font-size:9px;">' + safe(d.corp_number) + '</td></tr>' : '') +
-            '<tr style="background:#f5f5f5;"><td style="padding:4px 10px;font-size:9px;color:#555;">연락처</td><td style="padding:4px 10px;font-size:9px;">' + safe(d.phone) + '</td></tr>' +
-            '<tr><td style="padding:4px 10px;font-size:9px;color:#555;">이메일</td><td style="padding:4px 10px;font-size:9px;">' + safe(d.email) + '</td></tr>' +
-            '</table></td>' +
-            '</tr></table>' +
+        /* ─ 전체 PDF HTML ─ */
+        var html =
+        /* 컨테이너 */
+        '<div style="width:' + W + 'px;font-family:Arial,Helvetica,sans-serif;' +
+        'color:#1a1a1a;background:#ffffff;">' +
 
-            // 드론 정보
-            '<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:10px;border-collapse:collapse;">' +
-            '<tr><td colspan="4" style="background:#1a1a1a;padding:6px 10px;font-weight:700;font-size:10px;color:#FFB800;">드론 정보 (' + count + '대)</td></tr>' +
-            droneRows +
-            '</table>' +
+        /* ① 헤더 (≤2cm) */
+        '<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:5px;">' +
+        '<tr><td style="background:#FFB800;padding:6px 0;text-align:center;">' +
+        '<div style="font-size:11px;font-weight:900;color:#1a1a1a;line-height:1.2;">' +
+        '배상온 업무용드론보험 견적서</div>' +
+        '</td></tr></table>' +
 
-            // 총 보험료
-            '<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:10px;">' +
-            '<tr><td style="background:#FFB800;padding:14px;text-align:center;">' +
-            '<div style="font-size:10px;color:#1a1a1a;margin-bottom:4px;font-weight:600;">연간 총 보험료</div>' +
-            '<div style="font-size:22px;font-weight:900;color:#1a1a1a;">' + total.toLocaleString() + '원</div>' +
-            '</td></tr></table>' +
+        /* ② 견적정보 | 고객정보 (2컬럼) */
+        '<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:5px;">' +
+        '<tr>' +
 
-            // 유의사항
-            '<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:10px;">' +
-            '<tr><td style="background:#fffbea;padding:10px 14px;font-size:8px;color:#555;line-height:1.8;">' +
-            '<strong style="color:#1a1a1a;display:block;margin-bottom:3px;">유의사항</strong>' +
-            '※ 구체적인 보장/면책 및 보험금 지급은 약관에 따릅니다.<br>' +
-            '※ 본 견적서는 참고용이며, 최종 보험료는 심사 후 확정됩니다.' +
-            '</td></tr></table>' +
+        /* 견적정보 */
+        '<td width="49%" valign="top" style="padding-right:3px;">' +
+        tbl(
+            secHead('견적 정보', false) +
+            irow('견적일자', dateStr,                    false) +
+            irow('보험시작', fmtDT(d.insurance_start),   true) +
+            irow('보험종료', fmtDT(d.insurance_end),     false) +
+            irow('상품명',   'KB손해보험 업무용드론보험', true)
+        ) +
+        '</td>' +
 
-            // 푸터
-            '<table width="100%" cellpadding="0" cellspacing="0">' +
-            '<tr><td style="background:#1a1a1a;padding:12px;text-align:center;">' +
-            '<div style="font-size:11px;font-weight:700;color:#fff;margin-bottom:3px;">배상온 대리점</div>' +
-            '<div style="font-size:8px;color:#aaaaaa;">liab.on.ins@gmail.com  |  www.liab.co.kr  |  KB손해보험 공식 대리점</div>' +
-            '</td></tr></table>' +
-            '</div>';
+        '<td width="2%" style="min-width:4px;"></td>' +
+
+        /* 고객정보 */
+        '<td width="49%" valign="top" style="padding-left:3px;">' +
+        tbl(
+            secHead('고객 정보', false) +
+            (d.corp_name
+                ? irow('법인명', safe(d.corp_name), false) +
+                  (d.corp_number ? irow('사업자번호', safe(d.corp_number), true) : '')
+                : irow('이름', safe(d.name), false)) +
+            irow('연락처', safe(d.phone), true) +
+            irow('이메일', safe(d.email), false)
+        ) +
+        '</td>' +
+        '</tr></table>' +
+
+        /* ③ 보험조건 | 드론정보 (2컬럼, 38:62) */
+        '<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:5px;">' +
+        '<tr>' +
+
+        /* 보험조건 */
+        '<td width="37%" valign="top" style="padding-right:3px;">' +
+        tbl(
+            secHead('보험 조건', false) +
+            irow('가입물건',   weightLabel,                          false) +
+            irow('드론 대수',  count + '대',                         true)  +
+            irow('자기부담금', (d.selected_deductible||'10') + '만원', false)
+        ) +
+        '</td>' +
+
+        '<td width="2%" style="min-width:4px;"></td>' +
+
+        /* 드론정보 */
+        '<td width="61%" valign="top" style="padding-left:3px;">' +
+        '<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-bottom:3px;">' +
+        '<tr><td style="background:#1a1a1a;padding:5px 8px;font-size:8px;' +
+        'font-weight:700;color:#FFB800;">드론 정보 (' + count + '대)</td></tr>' +
+        '</table>' +
+        droneCards +
+        '</td>' +
+        '</tr></table>' +
+
+        /* ④ 연간 총 보험료 (≤2cm) */
+        '<div style="page-break-inside:avoid;">' +
+        '<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:5px;">' +
+        '<tr><td style="background:#FFB800;padding:6px 0;text-align:center;">' +
+        '<div style="font-size:8px;color:#1a1a1a;font-weight:600;margin-bottom:2px;">연간 총 보험료</div>' +
+        '<div style="font-size:16px;font-weight:900;color:#1a1a1a;line-height:1.15;">' +
+        total.toLocaleString() + '원</div>' +
+        '</td></tr></table>' +
+
+        /* ⑤ 유의사항 */
+        '<table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:5px;">' +
+        '<tr><td style="background:#fffbea;padding:6px 10px;font-size:7px;' +
+        'color:#555;line-height:1.7;">' +
+        '<strong style="color:#1a1a1a;font-size:7.5px;display:block;margin-bottom:2px;">유의사항</strong>' +
+        '※ 구체적인 보장/면책 및 보험금 지급은 약관에 따릅니다.<br>' +
+        '※ 본 견적서는 참고용이며, 최종 보험료는 심사 후 확정됩니다.' +
+        '</td></tr></table>' +
+        '</div>' +
+
+        /* ⑥ 푸터 */
+        '<table width="100%" cellpadding="0" cellspacing="0">' +
+        '<tr><td style="background:#1a1a1a;padding:7px;text-align:center;">' +
+        '<div style="font-size:8px;font-weight:700;color:#ffffff;margin-bottom:2px;">배상온 대리점</div>' +
+        '<div style="font-size:7px;color:#aaaaaa;">' +
+        'liab.on.ins@gmail.com  |  www.liab.co.kr  |  KB손해보험 공식 대리점</div>' +
+        '</td></tr></table>' +
+
+        '</div>'; /* 컨테이너 끝 */
+
+        /* ── DOM 삽입 ──────────────────────────────────────────────────
+           ★ position:absolute;left:-99999px — off-screen, 레이아웃 플로우 유지
+           ★ opacity:0 / z-index 음수 절대 사용 금지 (html2canvas 캡처 실패)
+           ─────────────────────────────────────────────────────────── */
+        wrapper = document.createElement('div');
+        wrapper.setAttribute('aria-hidden', 'true');
+        wrapper.style.cssText =
+            'position:absolute;left:-99999px;top:0;' +
+            'width:' + W + 'px;overflow:visible;background:#fff;';
+        wrapper.innerHTML = html;
+        document.body.appendChild(wrapper);
+
+        // 렌더링 반영을 위한 최소 대기 (1프레임)
+        await new Promise(function(res){ setTimeout(res, 150); });
 
         var filename = 'KB_업무용드론보험_견적서_' + custName + '_' +
             today.getFullYear() +
-            String(today.getMonth() + 1).padStart(2, '0') +
-            String(today.getDate()).padStart(2, '0') + '.pdf';
+            String(today.getMonth()+1).padStart(2,'0') +
+            String(today.getDate()).padStart(2,'0') + '.pdf';
 
-        // ★ from(string, 'string') 방식: DOM 엘리먼트 불필요 → 빈 페이지 버그 해결
         await html2pdf().set({
-            margin:      [4, 4, 4, 4],
+            margin:      [8, 8, 8, 8],
             filename:    filename,
-            image:       { type: 'jpeg', quality: 0.95 },
-            html2canvas: { scale: 2, useCORS: true, letterRendering: true, logging: false },
-            jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        }).from(pdfHTML, 'string').save();
+            image:       { type: 'jpeg', quality: 0.97 },
+            html2canvas: {
+                scale:           2,
+                useCORS:         true,
+                letterRendering: true,
+                logging:         false,
+                scrollY:         0,
+                scrollX:         0,
+                windowWidth:     W
+            },
+            jsPDF:     { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['avoid-all', 'css'] }
+        }).from(wrapper).save();
 
     } catch(err) {
         console.error('PDF 오류:', err);
-        alert('PDF 생성 중 오류가 발생했습니다.');
+        alert('PDF 생성 중 오류가 발생했습니다.\n' + err.message);
     } finally {
+        if (wrapper && wrapper.parentNode) {
+            wrapper.parentNode.removeChild(wrapper);
+        }
         pdfBtn.disabled = false;
         pdfBtn.textContent = '📄 PDF 다운로드';
     }

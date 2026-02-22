@@ -77,6 +77,9 @@ async function sendSolapiSms(to, text) {
         },
     };
 
+    console.log('[Solapi] 발송 시도 → to:', cleanTo, '| from:', cleanSender);
+    console.log('[Solapi] Authorization:', authHeader.substring(0, 60) + '...');
+
     const res = await fetch('https://api.solapi.com/messages/v4/send', {
         method:  'POST',
         headers: {
@@ -86,12 +89,20 @@ async function sendSolapiSms(to, text) {
         body: JSON.stringify(payload),
     });
 
-    const data = await res.json();
+    const rawText = await res.text();
+    let data;
+    try {
+        data = JSON.parse(rawText);
+    } catch {
+        console.error('[Solapi] 응답 파싱 실패:', rawText.substring(0, 500));
+        throw new Error(`SMS 응답 파싱 실패: ${res.status} ${res.statusText}`);
+    }
 
     if (!res.ok) {
-        const errMsg = data.message || data.errorCode || JSON.stringify(data);
-        console.error('[Solapi] SMS 발송 실패:', errMsg);
-        throw new Error(`SMS 발송 실패: ${errMsg}`);
+        const errMsg = data.errorMessage || data.message || data.errorCode || JSON.stringify(data);
+        console.error('[Solapi] SMS 발송 실패:', res.status, errMsg);
+        console.error('[Solapi] 전체 응답:', JSON.stringify(data));
+        throw new Error(`SMS 발송 실패: ${res.status} ${errMsg}`);
     }
 
     console.log('[Solapi] SMS 발송 성공 →', cleanTo, '| messageId:', data.messageId);

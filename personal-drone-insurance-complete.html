@@ -538,7 +538,7 @@
                 • 견적서를 다운로드하거나 이메일로 받아보실 수 있습니다.<br>
                 • 가입을 원하시면 결제하기 버튼을 눌러주세요.<br>
                 • 견적서는 참고용이며, 최종 보험료는 심사 후 확정됩니다.<br>
-                • 문의사항: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="eb87828a89c58485c5828598ab8c868a8287c5888486">[email&#160;protected]</a>
+                • 문의사항: <span id="noticeEmail"></span>
             </div>
         </div>
     </div>
@@ -589,7 +589,7 @@
     <!-- ═══════════════════════════════════════════
          외부 라이브러리
     ═══════════════════════════════════════════ -->
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <script>
         // ────────────────────────────────────────────────
@@ -618,6 +618,13 @@
         //  페이지 초기화
         // ────────────────────────────────────────────────
         window.addEventListener('DOMContentLoaded', function () {
+            // ✅ Cloudflare 이메일 난독화 방지: JS로 이메일 조립 삽입
+            (function () {
+                const email = 'liab.on.ins' + '@' + 'gmail.com';
+                const el = document.getElementById('noticeEmail');
+                if (el) el.textContent = email;
+            })();
+
             console.log('🔍 Complete 페이지 로드됨');
 
             const savedData = sessionStorage.getItem('droneInsuranceData');

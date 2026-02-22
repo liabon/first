@@ -718,6 +718,7 @@ async function sendOtp(isResend = false) {
 
         if (data.success) {
             S.name = name; S.phone = phone; S.otpSent = true;
+            S.otpToken = data.otp_token || null;
             showOtpField(isResend);
         } else {
             showResult('❌', '발송 실패', data.message || '다시 시도해주세요.', null);
@@ -779,6 +780,7 @@ async function doAuth() {
                 name:   S.name || document.getElementById('a-name').value.trim(),
                 phone:  S.phone || document.getElementById('a-phone').value.replace(/\D/g,''),
                 otp,
+                otp_token: S.otpToken || null,
             }),
         });
         const data = await res.json();

@@ -16,7 +16,7 @@ const { Pool }   = require('pg');
 const { SolapiMessageService } = require('solapi');
 
 // ═══════════════════════════════════════════════════
-//  DB Pool (커넥션 재사용)
+//  DB Pool
 // ═══════════════════════════════════════════════════
 let _pool = null;
 function getPool() {
@@ -64,7 +64,7 @@ async function sendSolapiSms(to, text) {
 }
 
 // ═══════════════════════════════════════════════════
-//  이메일 (nodemailer)
+//  이메일
 // ═══════════════════════════════════════════════════
 function getTransporter() {
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) return null;
@@ -87,7 +87,7 @@ async function sendAdminEmail(subject, text) {
 }
 
 // ═══════════════════════════════════════════════════
-//  OTP: Stateless Token (서버리스 호환)
+//  OTP: Stateless Token
 // ═══════════════════════════════════════════════════
 const OTP_SECRET = process.env.SOLAPI_API_SECRET || 'fallback-secret-key';
 
@@ -137,7 +137,10 @@ async function fetchContractsFromDb(name, phone) {
                                 'drone_type', d.drone_type,
                                 'drone_type_name', d.drone_type_name,
                                 'weight', d.weight,
-                                'max_weight', d.max_weight
+                                'max_weight', d.max_weight,
+                                'plan', d.plan,
+                                'plan_name', d.plan_name,
+                                'price', d.price
                             ) ORDER BY d.drone_index
                         ) FILTER (WHERE d.id IS NOT NULL), '[]'
                     ) AS drones
@@ -152,35 +155,44 @@ async function fetchContractsFromDb(name, phone) {
         return rows.map(mapDbRowToContract);
     } catch (err) {
         console.error('[DB] 계약 조회 실패:', err.message);
-        return null; // null → 클라이언트 Mock fallback
+        return null;
     }
 }
 
 function mapDbRowToContract(row) {
-    const now   = new Date();
-    const start = row.coverage_start_date ? new Date(row.coverage_start_date) : null;
-    const end   = row.coverage_end_date   ? new Date(row.coverage_end_date)   : null;
+    const now = new Date();
+    let start = null;
+    let end   = null;
+    if (row.coverage_start_date) {
+        const t = row.coverage_start_time || '00:00';
+        start = new Date(row.coverage_start_date + 'T' + t);
+    }
+    if (row.coverage_end_date) {
+        const t = row.coverage_end_time || '23:59';
+        end = new Date(row.coverage_end_date + 'T' + t);
+    }
 
     let status = row.status || 'pending';
     if (status !== 'cancelled' && status !== 'terminated') {
-        if (!start)              status = 'pending';
-        else if (now < start)    status = 'pending';
-        else if (end && now > end) status = 'expired';
-        else                     status = 'active';
+        if (!start || isNaN(start))       status = 'pending';
+        else if (now < start)             status = 'pending';
+        else if (end && !isNaN(end) && now > end) status = 'expired';
+        else if (start && now >= start)   status = 'active';
     }
 
+    const dronesRaw = typeof row.drones === 'string' ? JSON.parse(row.drones) : (row.drones || []);
+    const firstDrone = dronesRaw[0] || {};
+
     return {
-        id:            `KBD-${String(row.id).padStart(8, '0')}`,
+        id:             'KBD-' + String(row.id).padStart(8, '0'),
         application_id: row.id,
-        product:       'KB손해보험 개인용 드론보험',
+        product:        'KB손해보험 개인용 드론보험',
         status,
-        plan:          (row.drone_plans && typeof row.drone_plans === 'string'
-                            ? JSON.parse(row.drone_plans) : row.drone_plans || []
-                       )[0]?.plan_name || '',
-        start_date:    row.coverage_start_date || '',
-        end_date:      row.coverage_end_date   || '',
-        total_premium: Number(row.total_premium) || 0,
-        drones: (typeof row.drones === 'string' ? JSON.parse(row.drones) : row.drones || []).map(d => ({
+        plan:           firstDrone.plan_name || '',
+        start_date:     row.coverage_start_date || '',
+        end_date:       row.coverage_end_date   || '',
+        total_premium:  Number(row.total_premium) || 0,
+        drones: dronesRaw.map(function(d) { return {
             index:      d.drone_index,
             model:      d.model,
             serial:     d.serial_number,
@@ -188,19 +200,18 @@ function mapDbRowToContract(row) {
             type_name:  d.drone_type_name,
             weight:     d.weight,
             max_weight: d.max_weight,
-        })),
-        can_cancel:    status === 'pending',
-        can_terminate: status === 'active',
-        created_at:    row.created_at ? new Date(row.created_at).toISOString().split('T')[0] : '',
+        }; }),
+        can_cancel:     status === 'pending',
+        can_terminate:  status === 'active',
+        created_at:     row.created_at ? new Date(row.created_at).toISOString().split('T')[0] : '',
     };
 }
 
 // ═══════════════════════════════════════════════════
-//  DB: application_id 조회 (contract_id → 실제 PK)
+//  contract_id → application PK
 // ═══════════════════════════════════════════════════
 function parseApplicationId(contractId) {
-    // 'KBD-00000123' → 123
-    const match = contractId.match(/KBD-0*(\d+)/);
+    var match = contractId.match(/KBD-0*(\d+)/);
     return match ? parseInt(match[1], 10) : null;
 }
 
@@ -211,7 +222,6 @@ async function saveDroneChangeRequest(name, phone, contractId, changes) {
     const pool = getPool();
     const appId = parseApplicationId(contractId);
 
-    // 1) contract_requests에 요청 저장
     const { rows } = await pool.query(
         `INSERT INTO contract_requests
             (application_id, contract_id, request_type, customer_name, customer_phone, request_data)
@@ -221,7 +231,6 @@ async function saveDroneChangeRequest(name, phone, contractId, changes) {
     );
     const requestId = rows[0].id;
 
-    // 2) 기존 드론 정보 조회 (변경 전 데이터)
     let oldDrones = [];
     if (appId) {
         const dRes = await pool.query(
@@ -232,16 +241,15 @@ async function saveDroneChangeRequest(name, phone, contractId, changes) {
         oldDrones = dRes.rows;
     }
 
-    // 3) drone_change_logs에 변경 전후 기록
     for (const change of changes) {
-        const idx = change.index;
-        const old = oldDrones.find(d => d.drone_index === idx) || {};
+        const idx = change.index != null ? change.index : 0;
+        const old = oldDrones.find(function(d) { return d.drone_index === idx; }) || {};
 
         const fields = [
-            { field: 'model',      oldVal: old.model,           newVal: change.model },
-            { field: 'serial',     oldVal: old.serial_number,   newVal: change.serial },
-            { field: 'type',       oldVal: old.drone_type,      newVal: change.type },
-            { field: 'weight',     oldVal: String(old.weight || ''),     newVal: String(change.weight || '') },
+            { field: 'model',      oldVal: old.model || '',           newVal: change.model || '' },
+            { field: 'serial',     oldVal: old.serial_number || '',   newVal: change.serial || '' },
+            { field: 'type',       oldVal: old.drone_type || '',      newVal: change.type || '' },
+            { field: 'weight',     oldVal: String(old.weight || ''),  newVal: String(change.weight || '') },
             { field: 'max_weight', oldVal: String(old.max_weight || ''), newVal: String(change.max_weight || '') },
         ];
 
@@ -260,7 +268,7 @@ async function saveDroneChangeRequest(name, phone, contractId, changes) {
 }
 
 // ═══════════════════════════════════════════════════
-//  DB: 계약 취소 요청 저장
+//  DB: 계약 취소
 // ═══════════════════════════════════════════════════
 async function saveCancelRequest(name, phone, contractId, reason) {
     const pool = getPool();
@@ -274,19 +282,17 @@ async function saveCancelRequest(name, phone, contractId, reason) {
         [appId, contractId, name, phone, reason || null]
     );
 
-    // 계약 상태 업데이트
     if (appId) {
         await pool.query(
             `UPDATE personal_drone_applications SET status = 'cancelled' WHERE id = $1`,
             [appId]
         );
     }
-
     return rows[0].id;
 }
 
 // ═══════════════════════════════════════════════════
-//  DB: 계약 해지 요청 저장
+//  DB: 계약 해지
 // ═══════════════════════════════════════════════════
 async function saveTerminateRequest(name, phone, contractId, reason, refundAccount) {
     const pool = getPool();
@@ -300,14 +306,12 @@ async function saveTerminateRequest(name, phone, contractId, reason, refundAccou
         [appId, contractId, name, phone, reason || null, refundAccount || null]
     );
 
-    // 계약 상태 업데이트
     if (appId) {
         await pool.query(
             `UPDATE personal_drone_applications SET status = 'terminated' WHERE id = $1`,
             [appId]
         );
     }
-
     return rows[0].id;
 }
 
@@ -344,7 +348,7 @@ module.exports = async (req, res) => {
 
         const code  = generateOTP();
         const token = createOtpToken(code, trimName, cleanPhone);
-        const smsText = `[배상온] 본인확인을 위해 인증번호 [${code}]를 입력해주세요.`;
+        const smsText = '[배상온] 본인확인을 위해 인증번호 [' + code + ']를 입력해주세요.';
 
         let smsSent = false;
         try {
@@ -353,12 +357,12 @@ module.exports = async (req, res) => {
         } catch (err) {
             console.error('[OTP] SMS 실패, fallback:', err.message);
             await sendAdminEmail(
-                `[OTP fallback] ${cleanPhone} → ${code}`,
-                `고객: ${trimName}\n번호: ${cleanPhone}\nOTP: ${code}\n\n⚠️ SMS 발송 실패\n오류: ${err.message}`
+                '[OTP fallback] ' + cleanPhone + ' → ' + code,
+                '고객: ' + trimName + '\n번호: ' + cleanPhone + '\nOTP: ' + code + '\n\n⚠️ SMS 발송 실패\n오류: ' + err.message
             );
         }
 
-        console.log(`[OTP] ${cleanPhone} | code=${code} | sent=${smsSent}`);
+        console.log('[OTP] ' + cleanPhone + ' | code=' + code + ' | sent=' + smsSent);
 
         return res.status(200).json({
             success: true,
@@ -397,7 +401,6 @@ module.exports = async (req, res) => {
 
         const contracts = await fetchContractsFromDb(trimName, cleanPhone);
 
-        // DB 조회 실패(null) → Mock fallback
         if (contracts === null) {
             return res.status(200).json({
                 success: true, message: '조회 완료',
@@ -407,12 +410,12 @@ module.exports = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            message: `${contracts.length}건의 계약을 조회했습니다.`,
+            message: contracts.length + '건의 계약을 조회했습니다.',
             contracts,
         });
     }
 
-    // ── change_drone_info: DB 저장 + 이메일 ──
+    // ── change_drone_info ──
     if (action === 'change_drone_info') {
         if (!name || !phone || !contract_id || !changes)
             return res.status(400).json({ success: false, message: '필수 정보가 누락되었습니다.' });
@@ -420,18 +423,18 @@ module.exports = async (req, res) => {
         let requestId = null;
         try {
             requestId = await saveDroneChangeRequest(name, phone, contract_id, changes);
-            console.log(`[DB] 드론변경 요청 저장 완료: request_id=${requestId}`);
+            console.log('[DB] 드론변경 요청 저장 완료: request_id=' + requestId);
         } catch (err) {
             console.error('[DB] 드론변경 요청 저장 실패:', err.message);
         }
 
         const detail = Array.isArray(changes)
-            ? changes.map((c, i) => `드론${i+1}: ${c.model} / ${c.serial} / ${c.type} / ${c.weight}kg / ${c.max_weight}kg`).join('\n')
+            ? changes.map(function(c, i) { return '드론' + (i+1) + ': ' + c.model + ' / ' + c.serial + ' / ' + c.type + ' / ' + c.weight + 'kg / ' + c.max_weight + 'kg'; }).join('\n')
             : JSON.stringify(changes);
 
         await sendAdminEmail(
-            `[드론정보변경] ${name} / ${contract_id}${requestId ? ` (요청#${requestId})` : ''}`,
-            `고객명: ${name}\n번호: ${phone}\n계약번호: ${contract_id}\n요청번호: ${requestId || 'DB저장실패'}\n\n변경내용:\n${detail}\n\n요청시각: ${new Date().toLocaleString('ko-KR')}`
+            '[드론정보변경] ' + name + ' / ' + contract_id + (requestId ? ' (요청#' + requestId + ')' : ''),
+            '고객명: ' + name + '\n번호: ' + phone + '\n계약번호: ' + contract_id + '\n요청번호: ' + (requestId || 'DB저장실패') + '\n\n변경내용:\n' + detail + '\n\n요청시각: ' + new Date().toLocaleString('ko-KR')
         );
 
         return res.status(200).json({
@@ -441,7 +444,7 @@ module.exports = async (req, res) => {
         });
     }
 
-    // ── cancel_contract: DB 저장 + 상태변경 + 이메일 ──
+    // ── cancel_contract ──
     if (action === 'cancel_contract') {
         if (!name || !phone || !contract_id)
             return res.status(400).json({ success: false, message: '필수 정보가 누락되었습니다.' });
@@ -449,14 +452,14 @@ module.exports = async (req, res) => {
         let requestId = null;
         try {
             requestId = await saveCancelRequest(name, phone, contract_id, reason);
-            console.log(`[DB] 계약취소 요청 저장 완료: request_id=${requestId}`);
+            console.log('[DB] 계약취소 요청 저장 완료: request_id=' + requestId);
         } catch (err) {
             console.error('[DB] 계약취소 요청 저장 실패:', err.message);
         }
 
         await sendAdminEmail(
-            `[계약취소] ${name} / ${contract_id}${requestId ? ` (요청#${requestId})` : ''}`,
-            `고객명: ${name}\n번호: ${phone}\n계약번호: ${contract_id}\n요청번호: ${requestId || 'DB저장실패'}\n취소사유: ${reason || '미입력'}\n\n요청시각: ${new Date().toLocaleString('ko-KR')}\n\n⚠️ 환불 처리 필요 (3~5 영업일)`
+            '[계약취소] ' + name + ' / ' + contract_id + (requestId ? ' (요청#' + requestId + ')' : ''),
+            '고객명: ' + name + '\n번호: ' + phone + '\n계약번호: ' + contract_id + '\n요청번호: ' + (requestId || 'DB저장실패') + '\n취소사유: ' + (reason || '미입력') + '\n\n요청시각: ' + new Date().toLocaleString('ko-KR') + '\n\n⚠️ 환불 처리 필요 (3~5 영업일)'
         );
 
         return res.status(200).json({
@@ -466,7 +469,7 @@ module.exports = async (req, res) => {
         });
     }
 
-    // ── terminate_contract: DB 저장 + 상태변경 + 이메일 ──
+    // ── terminate_contract ──
     if (action === 'terminate_contract') {
         if (!name || !phone || !contract_id)
             return res.status(400).json({ success: false, message: '필수 정보가 누락되었습니다.' });
@@ -474,14 +477,14 @@ module.exports = async (req, res) => {
         let requestId = null;
         try {
             requestId = await saveTerminateRequest(name, phone, contract_id, reason, refund_account);
-            console.log(`[DB] 계약해지 요청 저장 완료: request_id=${requestId}`);
+            console.log('[DB] 계약해지 요청 저장 완료: request_id=' + requestId);
         } catch (err) {
             console.error('[DB] 계약해지 요청 저장 실패:', err.message);
         }
 
         await sendAdminEmail(
-            `[계약해지] ${name} / ${contract_id}${requestId ? ` (요청#${requestId})` : ''}`,
-            `고객명: ${name}\n번호: ${phone}\n계약번호: ${contract_id}\n요청번호: ${requestId || 'DB저장실패'}\n해지사유: ${reason || '미입력'}\n환불계좌: ${refund_account || '원결제수단'}\n\n요청시각: ${new Date().toLocaleString('ko-KR')}\n\n⚠️ 미경과보험료 환불 처리 필요`
+            '[계약해지] ' + name + ' / ' + contract_id + (requestId ? ' (요청#' + requestId + ')' : ''),
+            '고객명: ' + name + '\n번호: ' + phone + '\n계약번호: ' + contract_id + '\n요청번호: ' + (requestId || 'DB저장실패') + '\n해지사유: ' + (reason || '미입력') + '\n환불계좌: ' + (refund_account || '원결제수단') + '\n\n요청시각: ' + new Date().toLocaleString('ko-KR') + '\n\n⚠️ 미경과보험료 환불 처리 필요'
         );
 
         return res.status(200).json({
@@ -491,5 +494,5 @@ module.exports = async (req, res) => {
         });
     }
 
-    return res.status(400).json({ success: false, message: `알 수 없는 action: ${action}` });
+    return res.status(400).json({ success: false, message: '알 수 없는 action: ' + action });
 };

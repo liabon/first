@@ -3,311 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>약관 동의 - KB손해보험 개인용 드론보험</title>
+    <title>약관 동의 - KB손해보험 업무용 드론보험</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --kb-yellow: #FFCD00;
-            --kb-gold: #FFB800;
-            --kb-dark: #1a1a1a;
-            --kb-gray: #666;
-            --kb-light-gray: #f8f9fa;
-            --kb-blue: #0066CC;
+            --kb-yellow: #FFCD00; --kb-gold: #FFB800;
+            --kb-dark: #1a1a1a; --kb-gray: #666;
+            --kb-light-gray: #f8f9fa; --kb-blue: #0066CC;
         }
-
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            color: var(--kb-dark);
-            line-height: 1.6;
-            background: #f8f9fa;
-        }
-
-        header {
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .kb-logo {
-            height: 50px;
-        }
-
-        .divider {
-            height: 40px;
-            width: 1px;
-            background: #ddd;
-        }
-
-        .agency-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .progress-section {
-            background: #fff;
-            padding: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .progress-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .progress-steps {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .progress-step {
-            text-align: center;
-            flex: 1;
-        }
-
-        .step-circle {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #ddd;
-            color: #999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.2rem;
-            margin: 0 auto 0.5rem;
-        }
-
-        .progress-step.active .step-circle {
-            background: var(--kb-gold);
-            color: var(--kb-dark);
-        }
-
-        .progress-step.completed .step-circle {
-            background: var(--kb-blue);
-            color: #fff;
-        }
-
-        .step-label {
-            font-size: 0.9rem;
-            color: #999;
-        }
-
-        .progress-step.active .step-label {
-            color: var(--kb-dark);
-            font-weight: 600;
-        }
-
-        .main-content {
-            max-width: 1000px;
-            margin: 3rem auto;
-            padding: 0 2rem;
-        }
-
-        .terms-card {
-            background: #fff;
-            border-radius: 20px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        }
-
-        .terms-title {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .agreement-all {
-            background: var(--kb-gold);
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-        }
-
-        .agreement-all label {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            cursor: pointer;
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-
-        .agreement-all input[type="checkbox"] {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-        }
-
-        .agreement-item {
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .agreement-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .agreement-header label {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1.1rem;
-            flex: 1;
-        }
-
-        .agreement-header input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-
-        .view-btn {
-            padding: 0.5rem 1rem;
-            background: var(--kb-blue);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .view-btn:hover {
-            background: #0052a3;
-        }
-
-        .agreement-content {
-            max-height: 300px;
-            overflow-y: auto;
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            line-height: 1.8;
-            display: none;
-        }
-
-        .agreement-content.show {
-            display: block;
-        }
-
-        .agreement-content h3 {
-            font-size: 1.1rem;
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--kb-blue);
-        }
-
-        .agreement-content h3:first-child {
-            margin-top: 0;
-        }
-
-        .agreement-content p {
-            margin-bottom: 1rem;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 3rem;
-        }
-
-        .btn {
-            padding: 1.2rem 3rem;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-secondary {
-            background: #e0e0e0;
-            color: var(--kb-dark);
-        }
-
-        .btn-primary {
-            background: var(--kb-gold);
-            color: var(--kb-dark);
-            box-shadow: 0 8px 25px rgba(255, 184, 0, 0.3);
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(255, 184, 0, 0.4);
-        }
-
-        .btn-primary:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        footer {
-            background: var(--kb-dark);
-            color: #fff;
-            padding: 3rem 2rem;
-            margin-top: 5rem;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .footer-content p {
-            margin-bottom: 0.5rem;
-            opacity: 0.8;
-            font-size: 0.95rem;
-        }
-
+        body { font-family: 'Noto Sans KR', sans-serif; color: var(--kb-dark); line-height: 1.6; background: #f8f9fa; }
+        header { background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .header-content { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo-section { display: flex; align-items: center; gap: 1.5rem; }
+        .kb-logo { height: 50px; }
+        .divider { height: 40px; width: 1px; background: #ddd; }
+        .agency-name { font-size: 1.5rem; font-weight: 700; }
+        .progress-section { background: #fff; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .progress-container { max-width: 800px; margin: 0 auto; }
+        .progress-steps { display: flex; justify-content: space-between; }
+        .progress-step { text-align: center; flex: 1; }
+        .step-circle { width: 50px; height: 50px; border-radius: 50%; background: #ddd; color: #999; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; margin: 0 auto 0.5rem; }
+        .progress-step.active .step-circle { background: var(--kb-gold); color: var(--kb-dark); }
+        .progress-step.completed .step-circle { background: var(--kb-blue); color: #fff; }
+        .step-label { font-size: 0.9rem; color: #999; }
+        .progress-step.active .step-label { color: var(--kb-dark); font-weight: 600; }
+        .main-content { max-width: 1000px; margin: 3rem auto; padding: 0 2rem; }
+        .terms-card { background: #fff; border-radius: 20px; padding: 3rem; margin-bottom: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .terms-title { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; text-align: center; }
+        .agreement-all { background: var(--kb-gold); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; }
+        .agreement-all label { display: flex; align-items: center; gap: 1rem; cursor: pointer; font-size: 1.3rem; font-weight: 700; }
+        .agreement-all input[type="checkbox"] { width: 24px; height: 24px; cursor: pointer; }
+        .agreement-item { border: 2px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .agreement-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .agreement-header label { display: flex; align-items: center; gap: 1rem; cursor: pointer; font-weight: 600; font-size: 1.1rem; flex: 1; }
+        .agreement-header input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; }
+        .view-btn { padding: 0.5rem 1rem; background: var(--kb-blue); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-family: 'Noto Sans KR', sans-serif; }
+        .view-btn:hover { background: #0052a3; }
+        .agreement-content { max-height: 300px; overflow-y: auto; background: #f8f9fa; padding: 1.5rem; border-radius: 8px; font-size: 0.95rem; line-height: 1.8; display: none; }
+        .agreement-content.show { display: block; }
+        .agreement-content h3 { font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--kb-blue); }
+        .agreement-content h3:first-child { margin-top: 0; }
+        .agreement-content p { margin-bottom: 1rem; }
+        .button-group { display: flex; gap: 1rem; justify-content: center; margin-top: 3rem; }
+        .btn { padding: 1.2rem 3rem; border: none; border-radius: 12px; font-size: 1.2rem; font-weight: 700; cursor: pointer; transition: all 0.3s; font-family: 'Noto Sans KR', sans-serif; }
+        .btn-secondary { background: #e0e0e0; color: var(--kb-dark); }
+        .btn-primary { background: var(--kb-gold); color: var(--kb-dark); box-shadow: 0 8px 25px rgba(255,184,0,0.3); }
+        .btn-primary:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 12px 35px rgba(255,184,0,0.4); }
+        .btn-primary:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; }
+        footer { background: var(--kb-dark); color: #fff; padding: 3rem 2rem; margin-top: 5rem; }
+        .footer-content { max-width: 1200px; margin: 0 auto; text-align: center; }
+        .footer-content p { margin-bottom: 0.5rem; opacity: 0.8; font-size: 0.95rem; }
         @media (max-width: 768px) {
-            .terms-card {
-                padding: 2rem 1.5rem;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
+            .terms-card { padding: 2rem 1.5rem; }
+            .button-group { flex-direction: column; }
+            .btn { width: 100%; }
         }
     </style>
 </head>
@@ -349,7 +99,6 @@
         <div class="terms-card">
             <h1 class="terms-title">약관 및 개인정보 수집·이용 동의</h1>
 
-            <!-- All Agree -->
             <div class="agreement-all">
                 <label>
                     <input type="checkbox" id="agreeAll">
@@ -357,7 +106,7 @@
                 </label>
             </div>
 
-            <!-- Agreement 1: 서비스 이용약관 -->
+            <!-- 서비스 이용약관 -->
             <div class="agreement-item">
                 <div class="agreement-header">
                     <label>
@@ -368,29 +117,23 @@
                 </div>
                 <div class="agreement-content">
                     <h3>제 1조 (목적)</h3>
-                    <p>이 약관은 배상온(이하 "회사"라 함)이 배상온(이하 "배상온"라 함)의 웹사이트 www.liab.co.kr (이하 "플랫폼"이라 함) 이용자들과 회원들에게 제공하는 보험서비스 등과 관련하여 당사자간의 권리․의무 및 책임사항을 규정함을 목적으로 합니다.</p>
-
+                    <p>이 약관은 배상온(이하 "회사"라 함)이 배상온(이하 "배상온"라 함)의 웹사이트 www.liab.co.kr (이하 "플랫폼"이라 함) 이용자들과 회원들에게 제공하는 보험서비스 등과 관련하여 당사자간의 권리·의무 및 책임사항을 규정함을 목적으로 합니다.</p>
                     <h3>제 2조 (용어의 정의)</h3>
                     <p>이 약관에서 사용되는 용어의 정의는 다음과 같습니다. "배상온"란 "배상온"가 "서비스"를 회원에게 제공하기 위하여 컴퓨터 등 정보통신설비를 이용하여 서비스를 거래할 수 있도록 설정한 가상의 영업장을 말합니다.</p>
                     <p>가입서비스라 함은 회원만이 이용할 수 있는 서비스로, "배상온"가 요구한 개인정보를 제공하여야 완전한 이용이 가능한 서비스(보험가입 및 금융상담 등)를 말합니다.</p>
-
                     <h3>제 4조 (서비스의 내용)</h3>
                     <p>배상온이 제공하는 서비스는 다음과 같습니다. 가. 보험상품정보 제공, 나. 보험료 계산, 다. 보험 상담, 라. 보험가입, 마. 기타 금융정보 제공, 바. 여행정보 제공</p>
-
                     <h3>제 7조 (회원가입 및 자격상실)</h3>
                     <p>이용자는 "배상온"가 요구하는 개인정보를 입력하고 본 약관에 대하여 동의 여부를 묻는 박스를 클릭하여 체크표시를 함으로써 가입서비스를 이용할 수 있는 회원자격을 얻게 됩니다.</p>
-
-                    <h3>제 11조 (환불 규정 내용)</h3>
-                    <p>회원은 "회사"에 환불을 요구할 수 있습니다. 환불은 "회사"가 안내하는 정책 및 방법에 따라 진행됩니다.</p>
+                    <h3>제 11조 (환불 규정)</h3>
                     <p>① 보험 개시 전 취소 회원 : 보험 개시 전 환불은 전액 환불로 진행됩니다. 단, 일부 결제 수수료가 차감될 수 있습니다.</p>
                     <p>② 보험 개시 후 취소 회원 : 보험 개시 후 환불은 귀국 일자를 기준으로 각 보험사의 규정에 따라 미경과된 보험료를 산출하며 산출된 금액에 따라 환불 처리됩니다.</p>
-
                     <h3>제 12조 (분쟁의 해결)</h3>
-                    <p>당사자는 서비스와 관련하여 분쟁이 발생한 경우에 이를 원만하게 해결하기 위하여 노력합니다. 당사자간 분쟁으로 인하여 소송이 제기될 경우 서울중앙지방법원을 관할법원으로 합니다.</p>
+                    <p>당사자간 분쟁으로 인하여 소송이 제기될 경우 서울중앙지방법원을 관할법원으로 합니다.</p>
                 </div>
             </div>
 
-            <!-- Agreement 2: 개인정보취급방침 -->
+            <!-- 개인정보취급방침 -->
             <div class="agreement-item">
                 <div class="agreement-header">
                     <label>
@@ -401,33 +144,25 @@
                 </div>
                 <div class="agreement-content">
                     <p>배상온(이하 "회사")는 배상온 서비스(이하 "서비스")를 제공함에 있어 서비스의 기획부터 종료까지 정보통신망 이용촉진 및 정보보호 등에 관한 법률(이하 '정보통신망법'), 개인정보보호법 등 국내의 개인정보 보호 법령을 철저히 준수합니다.</p>
-
                     <h3>1. 수집하는 개인정보의 항목</h3>
                     <p>회사는 고객이 입력한 정보를 기반으로 회원가입, 서비스의 제공, 원활한 고객상담 등을 위하여 다음과 같은 정보를 수집합니다.</p>
                     <p><strong>보험제휴 서비스를 위한 수집항목:</strong> 개인식별정보 (성명, 생년월일, 주소, 성별, 직업, 전화번호, 휴대전화번호, 전자우편주소), 보험계약정보, 보험금지급정보</p>
-
                     <h3>2. 개인정보의 이용 목적</h3>
                     <p>• 보험 상품의 제휴서비스를 위한 상품 소개 및 판매</p>
                     <p>• 보험회사의 상품판매와 관련하여 상담·체결·유지·관리·비교견적을 위한 조회</p>
                     <p>• 고객 관리, 서비스 관련 문의 및 불만사항 처리</p>
-
                     <h3>3. 개인정보 보유 및 이용 기간</h3>
                     <p>개인정보는 고객의 서비스의 이용 기간에만 활용되며, 회원 탈퇴 시 지체 없이 파기합니다.</p>
-
                     <h3>4. 개인정보의 제3자 제공</h3>
                     <p><strong>제공받는 자:</strong> KB손해보험</p>
                     <p><strong>제공목적:</strong> 보험계약체결·유지·관리·이행</p>
                     <p><strong>제공항목:</strong> 개인식별정보, 보험계약정보, 보험금지급정보</p>
-
                     <h3>5. 개인정보관리책임자</h3>
-                    <p>이름: 김리하</p>
-                    <p>소속: 배상온</p>
-                    <p>직위: 대표</p>
-                    <p>이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e08c898182ce8f8ece898e93a0878d81898cce838f8d">[email&#160;protected]</a></p>
+                    <p>이름: 김리하 / 소속: 배상온 / 직위: 대표 / 이메일: liab.on.ins@gmail.com</p>
                 </div>
             </div>
 
-            <!-- Agreement 3: 개인정보 수집이용 -->
+            <!-- 개인(신용)정보 수집이용 -->
             <div class="agreement-item">
                 <div class="agreement-header">
                     <label>
@@ -439,17 +174,15 @@
                 <div class="agreement-content">
                     <h3>개인(신용)정보의 수집·이용 목적</h3>
                     <p>보험계약의 인수심사·체결·유지·관리(부활 및 갱신 포함)·보험금 등 지급·심사·순보험요율의 산출·검증·민원 처리 및 분쟁 대응·적부 및 사고조사(보험사기 조사 포함)</p>
-
                     <h3>수집·이용할 개인(신용)정보의 내용</h3>
                     <p>• 개인식별정보(성명, 생년월일, 주민등록번호, 주소, 성별, 직업, 전화번호, 휴대전화번호, 전자우편주소)</p>
                     <p>• 보험계약정보, 피보험자의 질병 및 상해에 관한 정보, 보험금지급 관련 정보</p>
-
                     <h3>개인(신용)정보의 보유·이용 기간</h3>
                     <p>수집·이용 동의일로부터 거래종료 후 5년까지</p>
                 </div>
             </div>
 
-            <!-- Agreement 4: 개인정보 조회 -->
+            <!-- 개인(신용)정보 조회 -->
             <div class="agreement-item">
                 <div class="agreement-header">
                     <label>
@@ -461,14 +194,13 @@
                 <div class="agreement-content">
                     <h3>개인(신용)정보의 조회목적</h3>
                     <p>보험계약의 인수심사·체결·유지·관리(부활 및 갱신 포함), 보험금 등 지급·심사, 보험사고조사(보험사기조사 포함)</p>
-
                     <h3>조회할 개인(신용)정보</h3>
                     <p>• 개인식별정보</p>
                     <p>• 신용정보집중기관 및 보험요율산출기관에서 수집·관리하는 보험계약정보, 보험금지급 관련 정보</p>
                 </div>
             </div>
 
-            <!-- Agreement 5: 민감정보 -->
+            <!-- 민감정보 -->
             <div class="agreement-item">
                 <div class="agreement-header">
                     <label>
@@ -478,15 +210,15 @@
                     <button class="view-btn" onclick="toggleContent(this)">보기</button>
                 </div>
                 <div class="agreement-content">
-                    <p>당사 및 당사 업무수탁자는 「개인정보보호법」및「신용정보의 이용 및 보호에 관한 법률」에 따라 상기의 개인(신용)정보에 대한 개별 동의사항에 대하여 다음과 같이 귀하의 민감정보(질병·상해정보) 및 고유식별정보 (주민등록번호·외국인등록번호)를 처리(수집·이용, 조회, 제공)하고자 합니다.</p>
+                    <p>당사 및 당사 업무수탁자는 「개인정보보호법」및「신용정보의 이용 및 보호에 관한 법률」에 따라 상기의 개인(신용)정보에 대한 개별 동의사항에 대하여 다음과 같이 귀하의 민감정보(질병·상해정보) 및 고유식별정보(주민등록번호·외국인등록번호)를 처리(수집·이용, 조회, 제공)하고자 합니다.</p>
                 </div>
             </div>
 
-            <!-- Agreement 6: 마케팅 (선택) -->
+            <!-- 마케팅 (선택) -->
             <div class="agreement-item">
                 <div class="agreement-header">
                     <label>
-                        <input type="checkbox" class="agreement-check optional">
+                        <input type="checkbox" class="agreement-check optional" id="agreeMarketing">
                         <span>마케팅 목적의 개인정보 수집·이용 (선택)</span>
                     </label>
                     <button class="view-btn" onclick="toggleContent(this)">보기</button>
@@ -494,10 +226,8 @@
                 <div class="agreement-content">
                     <h3>개인정보의 수집·이용 목적</h3>
                     <p>당사의 상품·서비스 소개 및 판매, 사은판촉행사 안내 (방문, 우편, 전자우편, 전화, SMS 포함) 및 이를 위한 연락, 시장조사</p>
-
                     <h3>개인정보의 항목</h3>
                     <p>성명, 휴대폰 번호</p>
-
                     <h3>개인(신용)정보의 보유·이용기간</h3>
                     <p>• 당사와 보험계약 체결실적이 있는 고객 : 5년</p>
                     <p>• 당사와 보험계약 체결실적이 없는 고객 : 동의일로부터 2년</p>
@@ -514,7 +244,7 @@
     <footer>
         <div class="footer-content">
             <h3 style="margin-bottom: 1rem;">배상온 대리점</h3>
-            <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="432f2a22216d2c2d6d2a2d3003242e222a2f6d202c2e">[email&#160;protected]</a></p>
+            <p>📧 이메일: liab.on.ins@gmail.com</p>
             <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
             <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
             <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
@@ -522,22 +252,24 @@
         </div>
     </footer>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        // Toggle content visibility
+    <script>
+        // 페이지 재방문(이전 버튼) 시 버튼 상태 초기화
+        window.addEventListener('pageshow', function() {
+            const btn = document.getElementById('submitBtn');
+            if (btn) { btn.textContent = '다음'; checkSubmitButton(); }
+        });
+
         function toggleContent(button) {
             const content = button.closest('.agreement-item').querySelector('.agreement-content');
             content.classList.toggle('show');
             button.textContent = content.classList.contains('show') ? '닫기' : '보기';
         }
 
-        // Check all
         document.getElementById('agreeAll').addEventListener('change', function() {
-            const checkboxes = document.querySelectorAll('.agreement-check');
-            checkboxes.forEach(cb => cb.checked = this.checked);
+            document.querySelectorAll('.agreement-check').forEach(cb => cb.checked = this.checked);
             checkSubmitButton();
         });
 
-        // Individual checkboxes
         document.querySelectorAll('.agreement-check').forEach(checkbox => {
             checkbox.addEventListener('change', function() {
                 const allChecked = Array.from(document.querySelectorAll('.agreement-check')).every(cb => cb.checked);
@@ -546,33 +278,95 @@
             });
         });
 
-        // Check if all required agreements are checked
         function checkSubmitButton() {
-            const requiredChecks = document.querySelectorAll('.agreement-check.required');
-            const allRequiredChecked = Array.from(requiredChecks).every(cb => cb.checked);
-            document.getElementById('submitBtn').disabled = !allRequiredChecked;
+            const required = document.querySelectorAll('.agreement-check.required');
+            const ok = Array.from(required).every(cb => cb.checked);
+            document.getElementById('submitBtn').disabled = !ok;
         }
 
-        // Submit
-        document.getElementById('submitBtn').addEventListener('click', function() {
-            const savedData = sessionStorage.getItem('droneInsuranceData');
-            if (!savedData) {
+        // ── 다음 버튼: droneFormData(URLSearchParams) → businessDroneData(JSON) 변환 ──
+        document.getElementById('submitBtn').addEventListener('click', async function() {
+            const raw = sessionStorage.getItem('droneFormData');
+            if (!raw) {
                 alert('저장된 정보가 없습니다. 처음부터 다시 시작해주세요.');
-                window.location.href = '/personal-drone-insurance';
+                window.location.href = '/business-drone-insurance';
                 return;
             }
 
-            const formData = JSON.parse(savedData);
-            
-            // Add agreement info
-            formData.terms_agreed = true;
-            formData.marketing_agreed = document.querySelector('.agreement-check.optional').checked;
- 
-            // Save updated data
-            sessionStorage.setItem('droneInsuranceData', JSON.stringify(formData));
-            
-            // Move to complete page
-            window.location.href = '/personal-drone-insurance-complete';
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.textContent = '처리 중...';
+
+            const p = new URLSearchParams(raw);
+            const droneCount = parseInt(p.get('drone_count') || '1');
+
+            // 개인/법인 고객 정보 결정
+            const isCorpTab = !!(p.get('corp_number') || p.get('corp_name'));
+            const custName  = isCorpTab ? (p.get('corp_name')  || '') : (p.get('name')  || '');
+            const custPhone = isCorpTab ? (p.get('corp_phone') || '') : (p.get('phone') || '');
+            const custEmail = isCorpTab ? (p.get('corp_email') || '') : (p.get('email') || '');
+
+            // 드론별 배열 구성
+            const drones     = [];
+            const dronePlans = [];
+            for (let i = 0; i < droneCount; i++) {
+                drones.push({
+                    model:      p.get('drone_model_'  + i) || '',
+                    serial:     p.get('drone_serial_' + i) || '',
+                    reg:        p.get('drone_reg_'    + i) || '',
+                    weight:     p.get('drone_weight_' + i) || '',
+                    max_weight: p.get('drone_mtow_'   + i) || ''
+                });
+                dronePlans.push({
+                    plan_name:         p.get('plan_name_' + i)              || '',
+                    price:             p.get('plan_price_' + i)             || '0',
+                    coverage_personal: p.get('plan_coverage_personal_' + i) || '',
+                    coverage_property: p.get('plan_coverage_property_' + i) || ''
+                });
+            }
+
+            const businessData = {
+                // 고객
+                name:        custName,
+                phone:       custPhone,
+                email:       custEmail,
+                birth_date:  p.get('birth_date') || '',
+                gender:      p.get('gender')     || '',
+                corp_number: p.get('corp_number') || '',
+                corp_name:   p.get('corp_name')   || '',
+                // 보험기간
+                insurance_start: p.get('insurance_start') || '',
+                insurance_end:   p.get('insurance_end')   || '',
+                // 드론
+                drone_count:  droneCount,
+                drone_weight: p.get('drone_weight') || '',   // under_25kg / 25_100kg
+                drone_flag:   p.get('drone_flag')   || '',   // none / swarm / rental
+                drones:       drones,
+                drone_plans:  dronePlans,
+                // 플랜
+                selected_deductible: p.get('selected_deductible') || '10',
+                plan_total_price:    p.get('plan_total_price')    || '0',
+                // 약관
+                insurance_type:   '업무용 드론보험',
+                terms_agreed:     true,
+                marketing_agreed: document.getElementById('agreeMarketing')?.checked || false,
+                agreed_at:        new Date().toISOString()
+            };
+
+            // sessionStorage 먼저 저장 (API 실패해도 complete 페이지 이동)
+            sessionStorage.setItem('businessDroneData', JSON.stringify(businessData));
+
+            try {
+                await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(businessData)
+                });
+            } catch (e) {
+                console.error('API 오류 (무시):', e);
+            }
+
+            window.location.href = '/business-drone-insurance-complete';
         });
     </script>
 </body>

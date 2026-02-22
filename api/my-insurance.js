@@ -7,11 +7,14 @@
  *
  * 환경변수 (Vercel Dashboard → Settings → Environment Variables):
  *   SOLAPI_API_KEY    = NCSAJG4NTNBPPQAL
- *   SOLAPI_API_SECRET = <솔라피 콘솔 https://console.solapi.com/credentials 에서 복사>
- *   SOLAPI_SENDER     = 01084618712 (등록 완료된 발신번호)
+ *   SOLAPI_API_SECRET = 3RGHNPFUXTIQM7OAQY2SZRCU5PSMTL99
+ *   SOLAPI_SENDER     = 01084618712
  *   EMAIL_USER        = Gmail 주소 (OTP SMS 실패 시 fallback)
  *   EMAIL_PASS        = Gmail 앱 비밀번호
  *   ADMIN_EMAIL       = liab.on.ins@gmail.com
+ *
+ * ⚠️ Solapi 콘솔에서 API Key IP 설정을 "모든 IP 허용"으로 해야 함
+ *    (Vercel 서버리스는 IP가 유동적)
  *
  * ── 향후 연동 예정 ──
  *   DB   : liab_db_POSTGRES_URL (personal_drone_applications + drone_details)
@@ -29,9 +32,6 @@ const { SolapiMessageService } = require('solapi');
 //  npm install solapi
 // ═══════════════════════════════════════════════════
 
-/**
- * 솔라피 SDK 인스턴스 (lazy init)
- */
 let _messageService = null;
 function getSolapiService() {
     if (_messageService) return _messageService;
@@ -43,7 +43,7 @@ function getSolapiService() {
 }
 
 /**
- * 솔라피 SMS 단건 발송 (공식 SDK 사용)
+ * 솔라피 SMS 단건 발송 (공식 SDK)
  */
 async function sendSolapiSms(to, text) {
     const messageService = getSolapiService();
@@ -241,7 +241,7 @@ module.exports = async (req, res) => {
         const expires = Date.now() + 3 * 60 * 1000; // 3분
         otpStore[cleanPhone] = { code, expires, name: trimName };
 
-        const smsText = `[배상온 대리점] 본인확인 인증번호: ${code} (3분 이내 입력, 타인 노출 금지)`;
+        const smsText = `[배상온] 본인확인을 위해 인증번호 [${code}]를 입력해주세요.`;
 
         let smsSent = false;
         let smsError = null;

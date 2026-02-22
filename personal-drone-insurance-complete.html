@@ -538,7 +538,7 @@
                 • 견적서를 다운로드하거나 이메일로 받아보실 수 있습니다.<br>
                 • 가입을 원하시면 결제하기 버튼을 눌러주세요.<br>
                 • 견적서는 참고용이며, 최종 보험료는 심사 후 확정됩니다.<br>
-                • 문의사항: liab.on.ins@gmail.com
+                • 문의사항: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="eb87828a89c58485c5828598ab8c868a8287c5888486">[email&#160;protected]</a>
             </div>
         </div>
     </div>
@@ -589,15 +589,23 @@
     <!-- ═══════════════════════════════════════════
          외부 라이브러리
     ═══════════════════════════════════════════ -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <script>
         // ────────────────────────────────────────────────
         //  전역 상태
         // ────────────────────────────────────────────────
         let insuranceData = null;
-        let paymentWidget = null;       // 토스 결제위젯 인스턴스
-        let widgetRendered = false;     // 위젯 렌더 완료 여부
+        let paymentWidget = null;
+
+        /**
+         * 위젯 렌더 상태
+         *   'idle'      - 아직 렌더 안 됨
+         *   'rendering' - 렌더 진행 중 (이 상태에서는 결제 버튼 절대 활성화 금지)
+         *   'ready'     - 렌더 완전 완료 (결제 버튼 활성화 가능)
+         *   'error'     - 렌더 실패
+         */
+        let widgetState = 'idle';
 
         /**
          * 토스페이먼츠 클라이언트 키
@@ -739,48 +747,81 @@
                 return;
             }
 
-            // 모달 열기
+            // ── 모달 오픈 ──
             document.getElementById('paymentOverlay').classList.add('active');
             document.getElementById('modalAmount').textContent = `${totalPrice.toLocaleString()}원`;
 
-            // 위젯이 이미 렌더된 경우 재초기화 방지
-            if (widgetRendered) return;
+            // ── 이미 렌더 완료된 경우: 버튼 상태만 확인 후 반환 ──
+            if (widgetState === 'ready') {
+                // 버튼이 제대로 활성화 상태인지 재확인
+                const btn = document.getElementById('tossPayBtn');
+                btn.style.display = 'block';
+                btn.disabled = false;
+                btn.textContent = '결제하기';
+                return;
+            }
 
-            // ── 토스 위젯 초기화 ──
+            // ── 렌더 중인 경우: 중복 호출 방지 ──
+            if (widgetState === 'rendering') return;
+
+            // ── 최초 렌더 시작 ──
+            widgetState = 'rendering';
+
+            // 로딩 UI 초기화
+            document.getElementById('modalLoading').style.display = 'block';
+            document.getElementById('modalLoading').innerHTML = `
+                <div class="spinner"></div>
+                <p>결제 수단을 불러오는 중...</p>
+            `;
+            document.getElementById('toss-payment-method').style.display = 'none';
+            document.getElementById('toss-agreement').style.display = 'none';
+            document.getElementById('tossPayBtn').style.display = 'none';
+            document.getElementById('tossPayBtn').disabled = true;
+
             try {
                 /**
                  * customerKey: 구매자를 식별하는 고유값.
-                 * 실 운영에서는 로그인 사용자의 고유 ID(UUID 권장)를 사용하세요.
                  * 비회원은 PaymentWidget.ANONYMOUS 를 사용합니다.
+                 * 실 운영에서는 로그인 사용자의 고유 ID(UUID 권장)를 사용하세요.
                  */
-                const customerKey = PaymentWidget.ANONYMOUS; // 비회원 결제
+                const customerKey = PaymentWidget.ANONYMOUS;
                 paymentWidget = PaymentWidget(TOSS_CLIENT_KEY, customerKey);
 
-                // 결제 UI 렌더
+                // ① 결제 UI 렌더 (await로 완전히 기다림)
                 await paymentWidget.renderPaymentMethods(
                     '#toss-payment-method',
                     { value: totalPrice },
                     { variantKey: 'DEFAULT' }
                 );
 
-                // 약관 UI 렌더
+                // ② 약관 UI 렌더 (await로 완전히 기다림)
                 await paymentWidget.renderAgreement(
                     '#toss-agreement',
                     { variantKey: 'AGREEMENT' }
                 );
 
-                // 로딩 숨기기 & 위젯 보이기
+                // ③ 두 렌더가 모두 완료된 후에만 UI 전환
                 document.getElementById('modalLoading').style.display = 'none';
                 document.getElementById('toss-payment-method').style.display = 'block';
                 document.getElementById('toss-agreement').style.display = 'block';
-                document.getElementById('tossPayBtn').style.display = 'block';
-                document.getElementById('tossPayBtn').disabled = false;
 
-                widgetRendered = true;
+                const btn = document.getElementById('tossPayBtn');
+                btn.style.display = 'block';
+                btn.disabled = false;          // ← 렌더 완료 후 비로소 활성화
+                btn.textContent = '결제하기';
+
+                widgetState = 'ready';         // ← 상태 확정
+                console.log('✅ 토스 결제위젯 렌더 완료');
+
             } catch (err) {
-                console.error('토스 위젯 초기화 실패:', err);
+                console.error('❌ 토스 위젯 초기화 실패:', err);
+                widgetState = 'error';
                 document.getElementById('modalLoading').innerHTML = `
-                    <p style="color:#e74c3c;">결제 모듈을 불러오지 못했습니다.<br>잠시 후 다시 시도해주세요.</p>
+                    <p style="color:#e74c3c;font-weight:700;">결제 모듈을 불러오지 못했습니다.<br>잠시 후 다시 시도해주세요.</p>
+                    <button onclick="widgetState='idle'; openPaymentModal();"
+                        style="margin-top:1rem;padding:0.6rem 1.2rem;background:#3182f6;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:0.9rem;font-weight:700;">
+                        다시 시도
+                    </button>
                 `;
             }
         }
@@ -801,7 +842,11 @@
         //  결제 요청
         // ────────────────────────────────────────────────
         async function requestPayment() {
-            if (!paymentWidget) return;
+            // 위젯이 완전히 렌더 완료('ready')된 상태가 아니면 절대 실행 금지
+            if (widgetState !== 'ready' || !paymentWidget) {
+                alert('결제 UI가 아직 준비되지 않았습니다. 잠시 후 다시 시도해주세요.');
+                return;
+            }
 
             const totalPrice = parseInt(insuranceData.plan_total_price || 0);
 
@@ -1002,12 +1047,4 @@
                 }
             } catch (e) {
                 console.error('이메일 전송 오류:', e);
-                alert('네트워크 오류가 발생했습니다.');
-            } finally {
-                emailBtn.disabled = false;
-                emailBtn.textContent = '📧 이메일 전송';
-            }
-        }
-    </script>
-</body>
-</html>
+                alert(

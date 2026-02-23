@@ -6,7 +6,12 @@
     <title>KB손해보험 업무용 드론보험 가입 - 배상온 대리점</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
             --kb-yellow: #FFCD00;
             --kb-gold: #FFB800;
@@ -14,110 +19,724 @@
             --kb-gray: #666;
             --kb-light-gray: #f8f9fa;
         }
-        body { font-family: 'Noto Sans KR', sans-serif; color: var(--kb-dark); line-height: 1.6; background: var(--kb-light-gray); }
-        header { background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
-        .header-content { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-        .logo-section { display: flex; align-items: center; gap: 1.5rem; }
-        .kb-logo { height: 50px; }
-        .divider { height: 40px; width: 1px; background: #ddd; }
-        .agency-name { font-size: 1.5rem; font-weight: 700; }
-        .home-btn { padding: 0.7rem 1.3rem; background: var(--kb-gold); color: var(--kb-dark); border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; font-size: 0.95rem; }
-        .home-btn:hover { background: var(--kb-yellow); transform: translateY(-2px); }
 
-        .progress-section { background: #fff; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .progress-container { max-width: 800px; margin: 0 auto; }
-        .progress-steps { display: flex; justify-content: space-between; }
-        .progress-step { text-align: center; flex: 1; }
-        .step-circle { width: 50px; height: 50px; border-radius: 50%; background: #ddd; color: #999; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; margin: 0 auto 0.5rem; }
-        .progress-step.active .step-circle { background: var(--kb-gold); color: var(--kb-dark); }
-        .progress-step.completed .step-circle { background: var(--kb-gold); color: #fff; }
-        .step-label { font-size: 0.9rem; color: #999; }
-        .progress-step.active .step-label { color: var(--kb-dark); font-weight: 600; }
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            color: var(--kb-dark);
+            line-height: 1.6;
+            background: var(--kb-light-gray);
+        }
 
-        .main-content { max-width: 1000px; margin: 3rem auto; padding: 0 2rem; }
-        .section-card { background: #fff; border-radius: 20px; padding: 3rem; margin-bottom: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        .section-title { font-size: 2rem; font-weight: 800; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 3px solid var(--kb-gold); }
-        .form-group { margin-bottom: 2rem; }
-        .form-group label { display: block; margin-bottom: 0.8rem; font-weight: 700; font-size: 1.05rem; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 1rem; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 1rem; font-family: 'Noto Sans KR', sans-serif; transition: all 0.3s; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--kb-gold); box-shadow: 0 0 0 3px rgba(255, 184, 0, 0.1); }
-        .form-group small { display: block; margin-top: 0.5rem; color: var(--kb-gray); font-size: 0.9rem; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        header {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-        .drone-info-section { border: 2px solid var(--kb-gold); border-radius: 15px; padding: 2rem; margin-bottom: 2rem; background: #fffbf0; }
-        .drone-info-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-        .drone-number { font-size: 1.3rem; font-weight: 800; color: var(--kb-gold); }
-        .remove-drone-btn { padding: 0.5rem 1rem; background: #ff6b6b; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; }
-        .remove-drone-btn:hover { background: #ff5252; }
-        .notice-box { background: #fff9e6; border-left: 4px solid var(--kb-gold); padding: 1.5rem; margin: 2rem 0; border-radius: 8px; }
-        .notice-box strong { display: block; margin-bottom: 0.5rem; color: var(--kb-dark); }
-        .notice-box p { margin: 0.3rem 0; font-size: 0.95rem; color: var(--kb-gray); }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-        .drone-type-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1rem; }
-        .drone-type-card { border: 3px solid #e0e0e0; border-radius: 15px; padding: 2rem 1.5rem; text-align: center; cursor: pointer; transition: all 0.3s; }
-        .drone-type-card:hover { border-color: var(--kb-gold); transform: translateY(-5px); }
-        .drone-type-card.selected { border-color: var(--kb-gold); background: #fff9e6; }
-        .drone-type-card input[type="radio"] { display: none; }
-        .drone-type-icon { font-size: 3rem; margin-bottom: 1rem; }
-        .drone-type-name { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
 
-        .plan-category { margin-bottom: 3rem; }
-        .plan-category h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--kb-gold); }
-        .plan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .plan-card { border: 3px solid #e0e0e0; border-radius: 15px; padding: 2rem; cursor: pointer; transition: all 0.3s; }
-        .plan-card:hover { border-color: var(--kb-gold); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .plan-card.selected { border-color: var(--kb-gold); background: #fff9e6; }
-        .plan-card input[type="radio"] { display: none; }
-        .plan-name { font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; color: var(--kb-gold); }
-        .plan-coverage { margin-bottom: 1rem; }
-        .plan-coverage-item { padding: 0.5rem 0; font-size: 0.95rem; color: var(--kb-gray); }
-        .plan-price { font-size: 2rem; font-weight: 900; color: var(--kb-dark); margin-top: 1.5rem; text-align: right; }
-        .plan-price span { font-size: 1rem; font-weight: 400; }
+        .kb-logo {
+            height: 50px;
+        }
 
-        .button-group { display: flex; gap: 1rem; justify-content: center; margin-top: 3rem; }
-        .btn { padding: 1.2rem 3rem; border: none; border-radius: 12px; font-size: 1.2rem; font-weight: 700; cursor: pointer; transition: all 0.3s; font-family: 'Noto Sans KR', sans-serif; }
-        .btn-secondary { background: #e0e0e0; color: var(--kb-dark); }
-        .btn-secondary:hover { background: #d0d0d0; }
-        .btn-primary { background: var(--kb-gold); color: var(--kb-dark); box-shadow: 0 8px 25px rgba(255, 184, 0, 0.3); }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 35px rgba(255, 184, 0, 0.4); }
-        footer { background: var(--kb-dark); color: #fff; padding: 3rem 2rem; margin-top: 5rem; }
-        .footer-content { max-width: 1200px; margin: 0 auto; text-align: center; }
-        .footer-content p { margin-bottom: 0.5rem; opacity: 0.8; font-size: 0.95rem; }
+        .divider {
+            height: 40px;
+            width: 1px;
+            background: #ddd;
+        }
 
-        /* ── 개인/법인 탭 ── */
-        .customer-tabs { display: flex; gap: 0; margin-bottom: 2rem; border-bottom: 3px solid #e8e8e8; }
-        .customer-tab { flex: 1; padding: 1rem; text-align: center; font-size: 1.1rem; font-weight: 700; cursor: pointer; border: none; background: #f8f9fa; color: #999; border-radius: 12px 12px 0 0; transition: all 0.3s; font-family: 'Noto Sans KR', sans-serif; }
-        .customer-tab.active { background: var(--kb-gold); color: var(--kb-dark); position: relative; bottom: -3px; border-bottom: 3px solid var(--kb-gold); }
-        .customer-tab:hover:not(.active) { background: #fff9e6; color: var(--kb-dark); }
-        .customer-panel { display: none; }
-        .customer-panel.active { display: block; }
+        .agency-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
 
-        /* ── 사업자번호 검증 ── */
-        .biz-status { display: inline-block; margin-left: 0.5rem; font-size: 0.85rem; font-weight: 600; padding: 2px 8px; border-radius: 6px; }
-        .biz-status.valid { background: #d4edda; color: #155724; }
-        .biz-status.invalid { background: #f8d7da; color: #721c24; }
-        .biz-status.checking { background: #fff3cd; color: #856404; }
-        .verify-btn { padding: 0.7rem 1.2rem; background: #0066CC; color: #fff; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.9rem; font-family: 'Noto Sans KR', sans-serif; white-space: nowrap; transition: all 0.3s; }
-        .verify-btn:hover { background: #0052a3; }
-        .verify-btn:disabled { background: #aaa; cursor: not-allowed; }
-        .input-with-btn { display: flex; gap: 0.8rem; align-items: flex-start; }
-        .input-with-btn input { flex: 1; }
+        .home-btn {
+            padding: 0.7rem 1.3rem;
+            background: var(--kb-gold);
+            color: var(--kb-dark);
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.95rem;
+        }
 
-        /* ── 에러 ── */
-        .field-error { border-color: #e74c3c !important; background: #fff5f5 !important; }
+        .home-btn:hover {
+            background: var(--kb-yellow);
+            transform: translateY(-2px);
+        }
+
+        .progress-section {
+            background: #fff;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .progress-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-step {
+            text-align: center;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #ddd;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin: 0 auto 0.5rem;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--kb-gold);
+            color: var(--kb-dark);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--kb-gold);
+            color: #fff;
+        }
+
+        .step-label {
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        .progress-step.active .step-label {
+            color: var(--kb-dark);
+            font-weight: 600;
+        }
+
+        .main-content {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--kb-gold);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Noto Sans KR', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--kb-gold);
+            box-shadow: 0 0 0 3px rgba(255, 184, 0, 0.1);
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 0.5rem;
+            color: var(--kb-gray);
+            font-size: 0.9rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .drone-info-section {
+            border: 2px solid var(--kb-gold);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            background: #fffbf0;
+        }
+
+        .drone-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .drone-number {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--kb-gold);
+        }
+
+        .remove-drone-btn {
+            padding: 0.5rem 1rem;
+            background: #ff6b6b;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .remove-drone-btn:hover {
+            background: #ff5252;
+        }
+
+        .add-drone-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #fff;
+            border: 2px dashed var(--kb-gold);
+            border-radius: 12px;
+            color: var(--kb-gold);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 2rem;
+        }
+
+        .add-drone-btn:hover {
+            background: #fffbf0;
+        }
+
+        /* 고객 타입 탭 */
+        .customer-type-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e8e8e8;
+            padding-bottom: 0;
+        }
+
+        .type-tab {
+            flex: 1;
+            padding: 0.9rem 1rem;
+            border: 2px solid #e8e8e8;
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+            background: #f8f9fa;
+            color: #999;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .type-tab.active {
+            background: #FFB800;
+            color: #1a1a1a;
+            border-color: #FFB800;
+            position: relative;
+            bottom: -2px;
+        }
+
+        .type-tab:hover:not(.active) {
+            background: #fff9e6;
+            color: #1a1a1a;
+            border-color: #FFB800;
+        }
+
+        .notice-box {
+            background: #fff9e6;
+            border-left: 4px solid var(--kb-gold);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .notice-box strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--kb-dark);
+        }
+
+        .notice-box p {
+            margin: 0.3rem 0;
+            font-size: 0.95rem;
+            color: var(--kb-gray);
+        }
+
+        .drone-type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .drone-type-card {
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .drone-type-card:hover {
+            border-color: var(--kb-gold);
+            transform: translateY(-5px);
+        }
+
+        .drone-type-card.selected {
+            border-color: var(--kb-gold);
+            background: #fff9e6;
+        }
+
+        .drone-type-card input[type="radio"] {
+            display: none;
+        }
+
+        .drone-type-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .drone-type-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-category {
+            margin-bottom: 3rem;
+        }
+
+        .plan-category h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--kb-gold);
+        }
+
+        .plan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .plan-card {
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .plan-card:hover {
+            border-color: var(--kb-gold);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .plan-card.selected {
+            border-color: var(--kb-gold);
+            background: #fff9e6;
+        }
+
+        .plan-card input[type="radio"] {
+            display: none;
+        }
+
+        .plan-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--kb-gold);
+        }
+
+        .plan-coverage {
+            margin-bottom: 1rem;
+        }
+
+        .plan-coverage-item {
+            padding: 0.5rem 0;
+            font-size: 0.95rem;
+            color: var(--kb-gray);
+        }
+
+        .plan-price {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--kb-dark);
+            margin-top: 1.5rem;
+            text-align: right;
+        }
+
+        .plan-price span {
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+
+        .btn {
+            padding: 1.2rem 3rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: var(--kb-dark);
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-primary {
+            background: var(--kb-gold);
+            color: var(--kb-dark);
+            box-shadow: 0 8px 25px rgba(255, 184, 0, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 184, 0, 0.4);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        footer {
+            background: var(--kb-dark);
+            color: #fff;
+            padding: 3rem 2rem;
+            margin-top: 5rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-content p {
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
 
         @media (max-width: 768px) {
-            .section-card { padding: 2rem 1.5rem; }
-            .form-row { grid-template-columns: 1fr; }
-            .drone-type-grid, .plan-grid { grid-template-columns: 1fr; }
-            .button-group { flex-direction: column; }
-            .btn { width: 100%; }
-            .input-with-btn { flex-direction: column; }
+            .section-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .drone-type-grid,
+            .plan-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+    <style>
+        /* 헤더 모바일 최적화 */
+        .home-btn { white-space: nowrap; }
+        @media (max-width: 768px) {
+            .header-content { padding: 0.8rem 1rem; }
+            .kb-logo { height: 32px; }
+            .divider { height: 24px; }
+            .agency-name { font-size: 1rem; }
+            .home-btn { padding: 0.5rem 0.8rem; font-size: 0.8rem; }
         }
         @media (max-width: 400px) {
             .agency-name { font-size: 0.85rem; }
             .home-btn { padding: 0.4rem 0.6rem; font-size: 0.75rem; }
             .kb-logo { height: 26px; }
+        }
+
+        /* 고객 타입 탭 */
+        .customer-type-tabs { display:flex; gap:0.5rem; margin-bottom:1.5rem; border-bottom:2px solid #e8e8e8; }
+        .type-tab {
+            flex:1; padding:0.9rem 1rem; border:2px solid #e8e8e8; border-bottom:none;
+            border-radius:10px 10px 0 0; background:#f8f9fa; color:#999;
+            font-size:0.95rem; font-weight:600; cursor:pointer; transition:all 0.2s;
+            font-family:'Noto Sans KR',sans-serif;
+        }
+        .type-tab.active { background:#FFB800; color:#1a1a1a; border-color:#FFB800; position:relative; bottom:-2px; }
+        .type-tab:hover:not(.active) { background:#fff9e6; color:#1a1a1a; border-color:#FFB800; }
+
+        /* 가입물건 중량 카드 */
+        .weight-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1.5rem; }
+        .weight-card {
+            border:2px solid #e8e8e8; border-radius:12px; padding:1.2rem 1rem;
+            cursor:pointer; text-align:center; transition:all 0.2s; background:#fff;
+        }
+        .weight-card:hover { border-color:#FFB800; background:#fff9e6; }
+        .weight-card.selected { border-color:#FFB800; background:#FFB800; }
+        .weight-card input[type="radio"] { display:none; }
+        .weight-icon { font-size:2rem; margin-bottom:0.5rem; }
+        .weight-label { font-weight:700; font-size:0.9rem; color:#1a1a1a; line-height:1.4; }
+        .weight-sub { font-size:0.75rem; color:#666; margin-top:0.3rem; }
+        .weight-card.selected .weight-sub { color:#555; }
+
+        /* 드론 유형 체크 */
+        .drone-flag-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+        .flag-card {
+            border:2px solid #e8e8e8; border-radius:12px; padding:1rem;
+            cursor:pointer; text-align:center; transition:all 0.2s; background:#fff;
+        }
+        .flag-card:hover { border-color:#FFB800; background:#fff9e6; }
+        .flag-card.selected { border-color:#FFB800; background:#FFB800; }
+        .flag-card input[type="radio"] { display:none; }
+        .flag-icon { font-size:1.5rem; margin-bottom:0.4rem; }
+        .flag-label { font-weight:700; font-size:0.85rem; color:#1a1a1a; line-height:1.3; }
+
+        /* 견적 필요 안내 */
+        .quote-needed-box {
+            display:none; background:#fff3cd; border:2px solid #FFB800;
+            border-radius:12px; padding:1.5rem; margin-top:1.5rem; text-align:center;
+        }
+        .quote-needed-box.show { display:block; }
+        .quote-needed-box p { color:#856404; margin-bottom:1rem; font-weight:600; line-height:1.6; }
+        .btn-quote-request {
+            background:#FFB800; color:#1a1a1a; border:none; border-radius:8px;
+            padding:0.8rem 2rem; font-size:1rem; font-weight:700; cursor:pointer;
+            font-family:'Noto Sans KR',sans-serif; transition:all 0.2s;
+        }
+        .btn-quote-request:hover { background:#FFCD00; transform:translateY(-2px); }
+
+        /* 견적 의뢰 모달 */
+        .modal-overlay {
+            display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.7); z-index:9999;
+            overflow-y:auto; padding:2rem 1rem;
+        }
+        .modal-overlay.show { display:block; }
+        .modal-box {
+            background:#fff; width:100%; max-width:560px; border-radius:16px;
+            box-shadow:0 10px 40px rgba(0,0,0,0.3); margin:0 auto;
+        }
+        .modal-head {
+            background:linear-gradient(135deg,#FFB800,#FFCD00); padding:1.4rem 1.5rem;
+            border-radius:16px 16px 0 0; display:flex; justify-content:space-between; align-items:center;
+        }
+        .modal-head h2 { font-size:1.3rem; font-weight:700; color:#1a1a1a; margin:0; }
+        .modal-close-btn { background:none; border:none; font-size:1.8rem; cursor:pointer; color:#1a1a1a; line-height:1; padding:0; }
+        .modal-body { padding:1.5rem; }
+        .modal-alert { background:#fff9e6; border-left:4px solid #FFB800; padding:1rem 1.2rem; border-radius:8px; margin-bottom:1rem; }
+        .modal-alert p { margin:0.3rem 0; color:#555; font-size:0.88rem; line-height:1.6; }
+        .modal-contact { background:#f8f9fa; padding:0.7rem 1rem; border-radius:8px; margin-bottom:1rem; font-size:0.88rem; color:#444; }
+        .modal-section-title { font-weight:700; font-size:0.95rem; color:#1a1a1a; border-bottom:2px solid #FFB800; padding-bottom:0.4rem; margin:1rem 0 0.7rem; }
+        .modal-form-group { margin-bottom:0.8rem; }
+        .modal-form-group label { display:block; font-weight:600; font-size:0.88rem; margin-bottom:0.3rem; }
+        .modal-form-group input, .modal-form-group select, .modal-form-group textarea {
+            width:100%; padding:0.65rem 0.8rem; border:1.5px solid #ddd;
+            border-radius:8px; font-size:0.88rem; font-family:'Noto Sans KR',sans-serif;
+        }
+        .modal-form-group input:focus, .modal-form-group select:focus { border-color:#FFB800; outline:none; }
+        .modal-form-row { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; }
+        .drone-count-row { display:flex; align-items:center; gap:0.5rem; }
+        .drone-count-row input { flex:1; }
+        .privacy-scroll {
+            background:#f8f9fa; border:1px solid #ddd; border-radius:8px;
+            padding:0.8rem 1rem; max-height:130px; overflow-y:auto;
+            font-size:0.8rem; color:#666; line-height:1.7; margin-bottom:0.8rem;
+        }
+        .privacy-scroll p { margin:0.15rem 0; }
+        .agree-row { display:flex; align-items:center; gap:0.5rem; margin-bottom:1rem; }
+        .agree-row input[type="checkbox"] { width:18px; height:18px; cursor:pointer; }
+        .agree-row label { font-size:0.87rem; font-weight:600; cursor:pointer; }
+        .btn-submit-modal {
+            width:100%; padding:1rem; background:#FFB800; color:#1a1a1a;
+            border:none; border-radius:8px; font-size:1rem; font-weight:700;
+            cursor:pointer; font-family:'Noto Sans KR',sans-serif; transition:all 0.2s;
+        }
+        .btn-submit-modal:hover { background:#FFCD00; }
+
+        @media (max-width:480px) {
+            .modal-form-row { grid-template-columns:1fr; }
+            .weight-grid { grid-template-columns:1fr; }
+            .drone-flag-grid { grid-template-columns:1fr; }
+        }
+
+        /* ── 플랜 선택 섹션 ─────────────────────────────── */
+        .plan-section { display:none; }
+        .plan-section.show { display:block; }
+
+        .deductible-toggle {
+            display:flex; align-items:center; gap:0.8rem;
+            margin-bottom:1.8rem; justify-content:flex-end;
+        }
+        .deductible-label { font-weight:700; font-size:0.95rem; color:#666; }
+        .toggle-btns { display:flex; border:2px solid #e0e0e0; border-radius:10px; overflow:hidden; }
+        .toggle-btn {
+            padding:0.55rem 1.2rem; background:#fff; border:none; cursor:pointer;
+            font-weight:700; font-size:0.9rem; color:#999; font-family:'Noto Sans KR',sans-serif;
+            transition:all 0.2s;
+        }
+        .toggle-btn.active { background:#1a1a1a; color:#FFB800; }
+
+        /* 드론 아코디언 (2대 이상) */
+        .drone-plan-accordion { margin-bottom:1.2rem; }
+        .drone-accordion-header {
+            display:flex; justify-content:space-between; align-items:center;
+            background:#f8f9fa; border:2px solid #e0e0e0; border-radius:12px;
+            padding:1rem 1.4rem; cursor:pointer; transition:all 0.2s; user-select:none;
+        }
+        .drone-accordion-header.open { border-color:#FFB800; background:#fff9e6; border-radius:12px 12px 0 0; }
+        .drone-accordion-title { font-weight:700; font-size:1rem; color:#1a1a1a; }
+        .drone-accordion-badge {
+            font-size:0.82rem; font-weight:600; color:#FFB800;
+            background:#fff3cd; padding:0.2rem 0.6rem; border-radius:20px;
+        }
+        .drone-accordion-arrow { font-size:1rem; color:#999; transition:transform 0.2s; }
+        .drone-accordion-header.open .drone-accordion-arrow { transform:rotate(180deg); }
+        .drone-accordion-body {
+            display:none; border:2px solid #FFB800; border-top:none;
+            border-radius:0 0 12px 12px; padding:1.5rem;
+            background:#fff;
+        }
+        .drone-accordion-body.open { display:block; }
+
+        /* 플랜 테이블 */
+        .plan-table-wrap { overflow-x:auto; }
+        .plan-table {
+            width:100%; border-collapse:collapse; min-width:380px;
+        }
+        .plan-table th, .plan-table td {
+            border:1px solid #e8e8e8; padding:0.7rem 0.8rem;
+            text-align:center; font-size:0.92rem;
+        }
+        .plan-table thead th { background:#f8f9fa; font-weight:700; color:#666; font-size:0.85rem; }
+        .plan-table .row-label { text-align:left; font-weight:600; color:#1a1a1a; background:#fafafa; }
+        .plan-table .price-row td { font-weight:900; font-size:1.1rem; }
+        .plan-table .plan-col {
+            cursor:pointer; transition:background 0.15s;
+            position:relative;
+        }
+        .plan-table .plan-col:hover { background:#fff9e6; }
+        .plan-table .plan-col.selected { background:#e8f4ff; }
+        .plan-col-header { padding:0.6rem 0.5rem !important; }
+        .plan-radio-wrap { display:flex; flex-direction:column; align-items:center; gap:0.3rem; }
+        .plan-radio-wrap input[type="radio"] { width:18px; height:18px; accent-color:#3182f6; cursor:pointer; }
+        .plan-name-text { font-weight:800; font-size:1rem; color:#1a1a1a; }
+        .plan-price-text { font-weight:900; color:#3182f6; font-size:1.05rem; }
+        .coverage-label { font-size:0.82rem; color:#888; font-weight:500; }
+
+        /* 총 보험료 요약 */
+        .plan-total-box {
+            background:#1a1a1a; border-radius:12px; padding:1.2rem 1.5rem;
+            display:flex; justify-content:space-between; align-items:center;
+            margin-top:1.5rem;
+        }
+        .plan-total-label { color:#aaa; font-size:0.95rem; font-weight:600; }
+        .plan-total-amount { color:#FFB800; font-size:1.6rem; font-weight:900; }
+
+        @media (max-width:480px) {
+            .plan-table th, .plan-table td { padding:0.5rem 0.4rem; font-size:0.8rem; }
+            .plan-name-text { font-size:0.85rem; }
+            .plan-price-text { font-size:0.9rem; }
+            .plan-total-amount { font-size:1.2rem; }
+            .deductible-toggle { flex-wrap:wrap; justify-content:flex-start; }
+        }
+
+        /* ── 사업자번호 검증 ── */
+        .biz-number-row { display:flex; gap:0.6rem; align-items:flex-start; }
+        .biz-number-row input { flex:1; }
+        .verify-btn {
+            padding:0.85rem 1.2rem; background:#0066CC; color:#fff; border:none;
+            border-radius:12px; font-weight:700; cursor:pointer; font-size:0.9rem;
+            font-family:'Noto Sans KR',sans-serif; white-space:nowrap; transition:all 0.3s;
+        }
+        .verify-btn:hover { background:#0052a3; }
+        .verify-btn:disabled { background:#aaa; cursor:not-allowed; }
+        .biz-status {
+            display:inline-block; margin-left:0.5rem; font-size:0.82rem;
+            font-weight:600; padding:2px 8px; border-radius:6px;
+        }
+        .biz-status.valid { background:#d4edda; color:#155724; }
+        .biz-status.invalid { background:#f8d7da; color:#721c24; }
+        .biz-status.checking { background:#fff3cd; color:#856404; }
+
+        /* ── 에러 스타일 ── */
+        .field-error { border-color:#e74c3c !important; background:#fff5f5 !important; }
+
+        @media (max-width:480px) {
+            .biz-number-row { flex-direction:column; }
         }
     </style>
 </head>
@@ -129,216 +748,459 @@
                 <div class="divider"></div>
                 <div class="agency-name">배상온 대리점</div>
             </div>
-            <a href="/business-drone-insurance" class="home-btn">🏠 홈으로</a>
+            <a href="/" class="home-btn">🏠 홈으로</a>
         </div>
     </header>
 
     <div class="progress-section">
         <div class="progress-container">
             <div class="progress-steps">
-                <div class="progress-step completed"><div class="step-circle">1</div><div class="step-label">의무확인</div></div>
-                <div class="progress-step active"><div class="step-circle">2</div><div class="step-label">정보입력</div></div>
-                <div class="progress-step"><div class="step-circle">3</div><div class="step-label">약관동의</div></div>
-                <div class="progress-step"><div class="step-circle">4</div><div class="step-label">완료</div></div>
+                <div class="progress-step completed">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">의무확인</div>
+                </div>
+                <div class="progress-step active">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">정보입력</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">약관동의</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">완료</div>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="main-content">
         <form id="droneForm">
-            <!-- ═══ 고객정보 (개인/법인 탭) ═══ -->
-            <div class="section-card" id="sectionCustomer">
-                <h2 class="section-title">고객정보 입력</h2>
-                <div class="customer-tabs">
-                    <button type="button" class="customer-tab active" data-tab="personal">👤 개인</button>
-                    <button type="button" class="customer-tab" data-tab="corp">🏢 법인</button>
+
+            <!-- 고객정보 -->
+            <div class="section-card">
+                <h2 class="section-title" id="customerSectionTitle">고객정보 입력</h2>
+                <div class="customer-type-tabs">
+                    <button type="button" class="type-tab active" id="tabPersonal" onclick="switchType('personal')">👤 개인 / 개인사업자</button>
+                    <button type="button" class="type-tab" id="tabCorporate" onclick="switchType('corporate')">🏢 법인</button>
                 </div>
 
                 <!-- 개인 -->
-                <div class="customer-panel active" id="panelPersonal">
-                    <div class="form-group"><label>이름 *</label><input type="text" name="name" placeholder="홍길동"></div>
-                    <div class="form-row">
-                        <div class="form-group"><label>생년월일 *</label><input type="date" name="birth_date"></div>
-                        <div class="form-group"><label>성별 *</label><select name="gender"><option value="">선택하세요</option><option value="male">남성</option><option value="female">여성</option></select></div>
+                <div id="personalFields">
+                    <div class="form-group">
+                        <label>이름 *</label>
+                        <input type="text" name="name" id="personalName" required>
                     </div>
                     <div class="form-row">
-                        <div class="form-group"><label>연락처 *</label><input type="tel" name="phone" placeholder="010-0000-0000"></div>
-                        <div class="form-group"><label>이메일 *</label><input type="email" name="email" placeholder="example@email.com"></div>
+                        <div class="form-group">
+                            <label>생년월일 *</label>
+                            <input type="text" name="birth_date" id="birthDate" placeholder="YYMMDD (예: 901225)" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" required>
+                            <small>숫자 6자리 입력 (예: 901225)</small>
+                        </div>
+                        <div class="form-group">
+                            <label>성별 *</label>
+                            <select name="gender" id="personalGender" required>
+                                <option value="">선택하세요</option>
+                                <option value="male">남성</option>
+                                <option value="female">여성</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>연락처 *</label>
+                            <input type="tel" name="phone" id="personalPhone" placeholder="010-0000-0000" required>
+                        </div>
+                        <div class="form-group">
+                            <label>이메일 *</label>
+                            <input type="email" name="email" id="personalEmail" placeholder="example@email.com" required>
+                        </div>
                     </div>
                 </div>
 
                 <!-- 법인 -->
-                <div class="customer-panel" id="panelCorp">
+                <div id="corporateFields" style="display:none;">
                     <div class="form-group">
                         <label>사업자등록번호 * <span id="bizStatus"></span></label>
-                        <div class="input-with-btn">
+                        <div class="biz-number-row">
                             <input type="text" name="corp_number" id="corpNumber" placeholder="0000000000 (숫자 10자리)" maxlength="12" inputmode="numeric">
                             <button type="button" class="verify-btn" id="verifyBizBtn">조회</button>
                         </div>
                         <small>하이픈 없이 숫자 10자리 입력 (자동 포맷: 000-00-00000)</small>
                     </div>
-                    <div class="form-group"><label>법인명(상호) *</label><input type="text" name="corp_name" placeholder="(주)회사명"></div>
-                    <div class="form-group"><label>담당자 이름 *</label><input type="text" name="corp_contact_name" placeholder="담당자 성함"></div>
+                    <div class="form-group">
+                        <label>회사명 *</label>
+                        <input type="text" name="corp_name" id="corpName" placeholder="(주)회사명">
+                    </div>
+                    <div class="form-group">
+                        <label>담당자 이름 *</label>
+                        <input type="text" name="corp_contact_name" id="corpContactName" placeholder="담당자 성함">
+                    </div>
                     <div class="form-row">
-                        <div class="form-group"><label>연락처 *</label><input type="tel" name="corp_phone" placeholder="010-0000-0000"></div>
-                        <div class="form-group"><label>이메일 *</label><input type="email" name="corp_email" placeholder="example@company.com"></div>
+                        <div class="form-group">
+                            <label>담당자 연락처 *</label>
+                            <input type="tel" name="corp_phone" id="corpPhone" placeholder="010-0000-0000">
+                        </div>
+                        <div class="form-group">
+                            <label>담당자 이메일 *</label>
+                            <input type="email" name="corp_email" id="corpEmail" placeholder="example@email.com">
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ═══ 보험기간 ═══ -->
-            <div class="section-card" id="sectionPeriod">
+            <!-- 보험기간 -->
+            <div class="section-card">
                 <h2 class="section-title">보험기간</h2>
                 <div class="form-row">
-                    <div class="form-group"><label>보험시작일시 *</label><input type="datetime-local" name="insurance_start" id="insuranceStart"><small>현재시간 기준 30분 후부터 선택 가능합니다</small></div>
-                    <div class="form-group"><label>보험종료일시 *</label><input type="datetime-local" name="insurance_end" id="insuranceEnd"><small>자동으로 1년 후로 설정됩니다 (수정 가능)</small></div>
+                    <div class="form-group">
+                        <label>보험시작일시 *</label>
+                        <input type="datetime-local" name="insurance_start" id="insuranceStart" required>
+                        <small>보험시작일은 30분 단위로 선택 가능합니다</small>
+                    </div>
+                    <div class="form-group">
+                        <label>보험종료일시 *</label>
+                        <input type="datetime-local" name="insurance_end" id="insuranceEnd" required>
+                        <small>자동으로 1년 후로 설정됩니다 (수정 가능)</small>
+                    </div>
                 </div>
-                <div class="form-group"><label>가입 기간</label><input type="text" id="insuranceDuration" readonly style="background:#f8f9fa;font-weight:700;color:#FFB800;"></div>
-                <div class="form-group"><label>보험가입 소재지</label><input type="text" value="전국일원 (보험담보지역: 대한민국)" readonly style="background:#f8f9fa;"></div>
-                <div class="notice-box"><strong>📌 보험기간 안내</strong><p>• 드론보험기간은 1년을 초과할 수 없습니다</p></div>
+                <div class="form-group">
+                    <label>가입 기간</label>
+                    <input type="text" id="insuranceDuration" readonly style="background:#f8f9fa;font-weight:700;color:#FFB800;">
+                </div>
+                <div class="form-group">
+                    <label>보험가입 소재지</label>
+                    <input type="text" value="전국일원 (보험담보지역: 대한민국)" readonly style="background:#f8f9fa;">
+                </div>
+                <div class="notice-box">
+                    <strong>📌 보험기간 안내</strong>
+                    <p>• 드론보험기간은 1년을 초과할 수 없습니다.</p>
+                </div>
             </div>
 
-            <!-- ═══ 드론 대수 ═══ -->
-            <div class="section-card" id="sectionDroneCount">
+            <!-- 드론 대수 -->
+            <div class="section-card">
                 <h2 class="section-title">드론 대수</h2>
-                <div class="form-group"><label>보험 가입할 드론 대수 *</label><input type="number" name="drone_count" id="droneCount" min="1" max="10" value="1"><small>최대 10대까지 가입 가능합니다</small></div>
+                <div class="form-group">
+                    <label>보험 가입할 드론 대수 *</label>
+                    <input type="number" name="drone_count" id="droneCount" min="1" max="10" value="1" required oninput="updateDroneFields()">
+                    <small>최대 10대까지 가입 가능합니다</small>
+                </div>
             </div>
 
-            <!-- ═══ 드론 정보 ═══ -->
-            <div class="section-card" id="sectionDroneInfo">
+            <!-- 드론 정보 -->
+            <div class="section-card">
                 <h2 class="section-title">드론 정보</h2>
-                <div class="notice-box"><strong>⚠️ 필수 확인사항</strong><p>• 기체이륙중량은 이륙 시 최대중량입니다</p><p>• 시리얼번호, 무게정보는 반드시 확인해주세요</p></div>
+                <div class="notice-box">
+                    <strong>⚠️ 필수 확인사항</strong>
+                    <p>• 드론자체중량은 배터리 제외 무게입니다</p>
+                    <p>• 드론최대이륙중량은 이륙 시 최대중량입니다</p>
+                    <p>• 시리얼번호, 신고번호는 정확히 입력해주세요</p>
+                </div>
                 <div id="dronesContainer"></div>
             </div>
 
-            <!-- ═══ 가입물건 선택 ═══ -->
-            <div class="section-card" id="sectionDroneType">
+            <!-- 가입물건 선택 -->
+            <div class="section-card">
                 <h2 class="section-title">가입물건 선택</h2>
-                <div class="drone-type-grid">
-                    <label class="drone-type-card"><input type="radio" name="drone_type" value="camera"><div class="drone-type-icon">📷</div><div class="drone-type-name">촬영용 센서드론</div></label>
-                    <label class="drone-type-card"><input type="radio" name="drone_type" value="fpv"><div class="drone-type-icon">🎮</div><div class="drone-type-name">FPV/레이싱 드론</div></label>
-                    <label class="drone-type-card"><input type="radio" name="drone_type" value="toy"><div class="drone-type-icon">🎯</div><div class="drone-type-name">완구형 드론</div></label>
-                    <label class="drone-type-card"><input type="radio" name="drone_type" value="other"><div class="drone-type-icon">🚁</div><div class="drone-type-name">기타</div></label>
+
+                <div class="form-group">
+                    <label>자체중량 선택 *</label>
+                    <div class="weight-grid">
+                        <label class="weight-card" onclick="selectWeight(this,'under_25kg')">
+                            <input type="radio" name="drone_weight" value="under_25kg">
+                            <div class="weight-icon">🚁</div>
+                            <div class="weight-label">25kg 미만</div>
+                            <div class="weight-sub">의무/업무/영리</div>
+                        </label>
+                        <label class="weight-card" onclick="selectWeight(this,'25_100kg')">
+                            <input type="radio" name="drone_weight" value="25_100kg">
+                            <div class="weight-icon">🚁</div>
+                            <div class="weight-label">25kg 이상<br>100kg 미만</div>
+                            <div class="weight-sub">의무/업무/영리</div>
+                        </label>
+                        <label class="weight-card" onclick="selectWeight(this,'over_100kg')">
+                            <input type="radio" name="drone_weight" value="over_100kg">
+                            <div class="weight-icon">🚁</div>
+                            <div class="weight-label">100kg 이상</div>
+                            <div class="weight-sub">의무/업무/영리</div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>드론 유형 *</label>
+                    <div class="drone-flag-grid">
+                        <label class="flag-card" onclick="selectFlag(this,'swarm')">
+                            <input type="radio" name="drone_flag" value="swarm">
+                            <div class="flag-icon">🐝</div>
+                            <div class="flag-label">군집드론</div>
+                        </label>
+                        <label class="flag-card" onclick="selectFlag(this,'rental')">
+                            <input type="radio" name="drone_flag" value="rental">
+                            <div class="flag-icon">🏭</div>
+                            <div class="flag-label">임대사업자 드론</div>
+                        </label>
+                        <label class="flag-card" onclick="selectFlag(this,'none')">
+                            <input type="radio" name="drone_flag" value="none">
+                            <div class="flag-icon">✅</div>
+                            <div class="flag-label">해당없음</div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 견적 필요 안내 -->
+                <div class="quote-needed-box" id="quoteNeededBox">
+                    <p id="quoteNeededMsg">개별 견적이 필요합니다.<br>아래 버튼을 눌러 견적/가입 의뢰를 신청해주세요.</p>
+                    <button type="button" class="btn-quote-request" onclick="openQuoteModal()">📋 견적/가입 의뢰하기</button>
                 </div>
             </div>
 
-            <!-- ═══ 보험 플랜 선택 ═══ -->
-            <div class="section-card" id="sectionPlan">
-                <h2 class="section-title">보험 플랜 선택</h2>
-                <div class="plan-category" id="cameraDronePlans" style="display:none;">
-                    <h3>📷 촬영용/일반드론</h3>
-                    <div class="plan-grid">
-                        <label class="plan-card"><input type="radio" name="plan" value="camera-slim" data-price="49900"><div class="plan-name">슬림</div><div class="plan-coverage"><div class="plan-coverage-item">• 대인배상: 5천만원</div><div class="plan-coverage-item">• 대물배상: 5천만원</div><div class="plan-coverage-item">• 인당/사고당</div><div class="plan-coverage-item">• 자기부담금: 10만원</div></div><div class="plan-price">49,900<span>원/년/대</span></div></label>
-                        <label class="plan-card"><input type="radio" name="plan" value="camera-standard" data-price="69900"><div class="plan-name">일반</div><div class="plan-coverage"><div class="plan-coverage-item">• 대인배상: 1억원</div><div class="plan-coverage-item">• 대물배상: 1억원</div><div class="plan-coverage-item">• 누구나운전 포함</div><div class="plan-coverage-item">• 자기부담금: 10만원</div></div><div class="plan-price">69,900<span>원/년/대</span></div></label>
-                        <label class="plan-card"><input type="radio" name="plan" value="camera-premium" data-price="99900"><div class="plan-name">프리미엄</div><div class="plan-coverage"><div class="plan-coverage-item">• 대인배상: 5억원</div><div class="plan-coverage-item">• 대물배상: 5억원</div><div class="plan-coverage-item">• 누구나운전 + 구조비용</div><div class="plan-coverage-item">• 자기부담금: 10만원</div></div><div class="plan-price">99,900<span>원/년/대</span></div></label>
-                    </div>
-                </div>
-                <div class="plan-category" id="fpvDronePlans" style="display:none;">
-                    <h3>🎮 FPV드론, 프리스타일, 레이싱 드론</h3>
-                    <div class="plan-grid">
-                        <label class="plan-card"><input type="radio" name="plan" value="fpv-slim" data-price="59900"><div class="plan-name">슬림</div><div class="plan-coverage"><div class="plan-coverage-item">• 대인배상: 5천만원</div><div class="plan-coverage-item">• 대물배상: 5천만원</div><div class="plan-coverage-item">• 드론경기중 보장</div><div class="plan-coverage-item">• 자기부담금: 10만원</div></div><div class="plan-price">59,900<span>원/년/대</span></div></label>
-                        <label class="plan-card"><input type="radio" name="plan" value="fpv-standard" data-price="79900"><div class="plan-name">일반</div><div class="plan-coverage"><div class="plan-coverage-item">• 대인배상: 1억원</div><div class="plan-coverage-item">• 대물배상: 1억원</div><div class="plan-coverage-item">• 경기중 + 누구나운전</div><div class="plan-coverage-item">• 자기부담금: 10만원</div></div><div class="plan-price">79,900<span>원/년/대</span></div></label>
-                        <label class="plan-card"><input type="radio" name="plan" value="fpv-premium" data-price="109900"><div class="plan-name">프리미엄</div><div class="plan-coverage"><div class="plan-coverage-item">• 대인배상: 5억원</div><div class="plan-coverage-item">• 대물배상: 5억원</div><div class="plan-coverage-item">• 경기중 + 누구나 + 구조비</div><div class="plan-coverage-item">• 자기부담금: 10만원</div></div><div class="plan-price">109,900<span>원/년/대</span></div></label>
-                    </div>
-                </div>
-                <div class="plan-category" id="otherDronePlans" style="display:none;">
-                    <h3>🚁 완구형/기타 드론</h3>
-                    <div class="plan-grid">
-                        <label class="plan-card"><input type="radio" name="plan" value="other-slim" data-price="49900"><div class="plan-name">슬림</div><div class="plan-coverage"><div class="plan-coverage-item">• 대인배상: 5천만원</div><div class="plan-coverage-item">• 대물배상: 5천만원</div><div class="plan-coverage-item">• 기본 보장</div><div class="plan-coverage-item">• 자기부담금: 10만원</div></div><div class="plan-price">49,900<span>원/년/대</span></div></label>
-                        <label class="plan-card"><input type="radio" name="plan" value="other-standard" data-price="69900"><div class="plan-name">일반</div><div class="plan-coverage"><div class="plan-coverage-item">• 대인배상: 1억원</div><div class="plan-coverage-item">• 대물배상: 1억원</div><div class="plan-coverage-item">• 누구나운전 포함</div><div class="plan-coverage-item">• 자기부담금: 10만원</div></div><div class="plan-price">69,900<span>원/년/대</span></div></label>
-                        <label class="plan-card"><input type="radio" name="plan" value="other-premium" data-price="99900"><div class="plan-name">프리미엄</div><div class="plan-coverage"><div class="plan-coverage-item">• 대인배상: 5억원</div><div class="plan-coverage-item">• 대물배상: 5억원</div><div class="plan-coverage-item">• 누구나운전 + 구조비용</div><div class="plan-coverage-item">• 자기부담금: 10만원</div></div><div class="plan-price">99,900<span>원/년/대</span></div></label>
-                    </div>
+
+            <!-- 플랜 선택 섹션 -->
+            <div class="section-card plan-section" id="planSection">
+                <h2 class="section-title">플랜 선택</h2>
+                <div id="planSectionInner"></div>
+                <div class="plan-total-box" id="planTotalBox" style="display:none;">
+                    <span class="plan-total-label">총 보험료 (연간)</span>
+                    <span class="plan-total-amount" id="planTotalAmount">0원</span>
                 </div>
             </div>
 
             <div class="button-group">
-                <button type="button" class="btn btn-secondary" onclick="history.back()">이전</button>
+                <a href="/business-drone-insurance" class="btn btn-secondary">이전</a>
                 <button type="submit" class="btn btn-primary" id="submitBtn">다음 단계로</button>
             </div>
         </form>
     </div>
 
+    <!-- 견적 의뢰 모달 -->
+    <div class="modal-overlay" id="quoteModal">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h2>📋 견적 의뢰</h2>
+                <button class="modal-close-btn" onclick="closeQuoteModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-alert">
+                    <p><strong>고객님 죄송합니다.</strong></p>
+                    <p>군집드론 · 임대사업자드론 · 100kg 이상 드론은 온라인 가입이 불가하며, 별도 심사를 통해 견적을 산출해야 합니다.</p>
+                    <p>가입을 희망하시는 경우 아래 견적 신청을 작성하여 보내주시기 바랍니다.</p>
+                </div>
+                <div class="modal-contact">
+                    <strong>상담문의</strong>&nbsp;&nbsp;이메일: liab.on.ins@gmail.com
+                </div>
+
+                <div class="modal-section-title">온라인 견적신청</div>
+                <form id="quoteForm" onsubmit="submitQuote(event)">
+                    <div class="modal-form-group">
+                        <label>가입대상자 *</label>
+                        <select name="q_customer_type" required>
+                            <option value="">선택하세요</option>
+                            <option value="corporation">법인사업자</option>
+                            <option value="individual">개인사업자</option>
+                        </select>
+                    </div>
+                    <div class="modal-form-group">
+                        <label>회사명</label>
+                        <input type="text" name="q_company" placeholder="회사/단체명을 입력해주세요">
+                    </div>
+                    <div class="modal-form-group">
+                        <label>드론중량 25kg 미만</label>
+                        <div class="drone-count-row">
+                            <input type="number" name="q_under25" min="0" placeholder="대수">
+                            <span>대</span>
+                        </div>
+                    </div>
+                    <div class="modal-form-group">
+                        <label>드론중량 25kg ~ 100kg 미만</label>
+                        <div class="drone-count-row">
+                            <input type="number" name="q_25_100" min="0" placeholder="대수">
+                            <span>대</span>
+                        </div>
+                    </div>
+                    <div class="modal-form-group">
+                        <label>드론중량 100kg 이상</label>
+                        <div class="drone-count-row">
+                            <input type="number" name="q_over100" min="0" placeholder="대수">
+                            <span>대</span>
+                        </div>
+                    </div>
+                    <div class="modal-form-row">
+                        <div class="modal-form-group">
+                            <label>담당자명 *</label>
+                            <input type="text" name="q_manager" required>
+                        </div>
+                        <div class="modal-form-group">
+                            <label>담당자 연락처 *</label>
+                            <input type="tel" name="q_phone" placeholder="010-0000-0000" required>
+                        </div>
+                    </div>
+                    <div class="modal-form-group">
+                        <label>담당자 이메일 *</label>
+                        <input type="email" name="q_email" required>
+                    </div>
+                    <div class="modal-form-group">
+                        <label>보험상품</label>
+                        <input type="text" value="드론배상책임보험" readonly style="background:#f8f9fa;">
+                    </div>
+                    <div class="modal-form-group">
+                        <label>문의사항</label>
+                        <textarea name="q_inquiry" rows="3" placeholder="문의하실 내용을 입력해주세요"></textarea>
+                    </div>
+
+                    <div class="privacy-scroll">
+                        <p><strong>개인정보 수집 및 이용에 대한 안내</strong></p>
+                        <p>1. 바이인 및 배상온은 "정보통신망 이용촉진 및 정보보호"에 관한 법률을 준수하고 있습니다.</p>
+                        <p>2. 수집회사 : 바이인, 배상온</p>
+                        <p>3. 수집목적 : 보험상품 문의에 따른 안내</p>
+                        <p>4. 수집항목 : 회사명, 성명, 연락처, 이메일, 접속ip</p>
+                        <p>5. 보존기간 : 5년</p>
+                        <p>6. 보존근거 : 전자상거래 등에서의 소비자보호에 관한법률/신용정보의 이용 및 보호에 관한 법률</p>
+                        <p>7. 개인정보 수집 및 이용에 대한 미동의 시 온라인, 오프라인 보험상담이 제한됩니다.</p>
+                    </div>
+                    <div class="agree-row">
+                        <input type="checkbox" id="quoteAgree" required>
+                        <label for="quoteAgree">"위의 개인정보 수집 및 이용"에 동의합니다</label>
+                    </div>
+                    <button type="submit" class="btn-submit-modal">가입의뢰하기</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <footer>
         <div class="footer-content">
-            <h3 style="margin-bottom: 1rem;">배상온 대리점</h3>
+            <h3 style="margin-bottom:1rem;">배상온 대리점</h3>
             <p>📧 이메일: liab.on.ins@gmail.com</p>
             <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
             <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
             <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
-            <p style="margin-top: 1.5rem; opacity: 0.6;">© 2026 배상온 대리점. All rights reserved. | KB손해보험 공식 대리점</p>
+            <p style="margin-top:1.5rem;opacity:0.6;">© 2026 배상온 대리점. All rights reserved. | KB손해보험 공식 대리점</p>
         </div>
     </footer>
 
     <script>
-    // ═══════════════════════════════════════════════
-    //  전역 상태
-    // ═══════════════════════════════════════════════
-    var currentTab = 'personal';
-    var bizNumberValid = false;
+    // ── 드론 정보 동적 생성 ───────────────────────────────
+    function makeDroneField(i) {
+        const label = i === 0 ? '' : `<div class="drone-info-header"><span class="drone-number">드론 ${i+1}</span></div>`;
+        return `
+        <div class="drone-info-section" id="droneSection_${i}">
+            ${i > 0 ? `<div class="drone-info-header"><span class="drone-number">드론 ${i+1}</span></div>` : ''}
+            <div class="form-row">
+                <div class="form-group">
+                    <label>드론 모델명 ${i===0?'*':''}</label>
+                    <input type="text" name="drone_model_${i}" placeholder="예: DJI Mini 3 Pro" ${i===0?'required':''}>
+                </div>
+                <div class="form-group">
+                    <label>제작번호(시리얼번호) ${i===0?'*':''}</label>
+                    <input type="text" name="drone_serial_${i}" placeholder="시리얼번호를 입력해주세요" ${i===0?'required':''}>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>드론 신고번호</label>
+                    <input type="text" name="drone_reg_${i}" placeholder="드론 신고번호를 입력해주세요">
+                </div>
+                <div class="form-group">
+                    <label>드론 자체중량 (kg) ${i===0?'*':''}</label>
+                    <input type="number" name="drone_weight_${i}" placeholder="예: 0.895" step="0.001" min="0" ${i===0?'required':''}>
+                </div>
+            </div>
+            <div class="form-group" style="max-width:50%">
+                <label>드론 최대이륙중량 (kg) ${i===0?'*':''}</label>
+                <input type="number" name="drone_mtow_${i}" placeholder="예: 1.2" step="0.001" min="0" ${i===0?'required':''}>
+            </div>
+        </div>`;
+    }
 
-    // ═══════════════════════════════════════════════
-    //  자동 스크롤 헬퍼
-    // ═══════════════════════════════════════════════
-    function scrollToSection(id) {
-        var el = document.getElementById(id);
-        if (el) setTimeout(function(){ el.scrollIntoView({ behavior:'smooth', block:'start' }); }, 350);
-    }
-    function scrollToEl(el) {
-        if (el) setTimeout(function(){ el.scrollIntoView({ behavior:'smooth', block:'center' }); }, 350);
-    }
-    function scrollToNextSection(currentSectionId) {
-        var order = ['sectionCustomer','sectionPeriod','sectionDroneCount','sectionDroneInfo','sectionDroneType','sectionPlan'];
-        var idx = order.indexOf(currentSectionId);
-        if (idx >= 0 && idx < order.length - 1) {
-            scrollToSection(order[idx + 1]);
+    function updateDroneFields() {
+        const count = parseInt(document.getElementById('droneCount').value) || 1;
+        const container = document.getElementById('dronesContainer');
+        container.innerHTML = '';
+        for (let i = 0; i < count; i++) {
+            container.insertAdjacentHTML('beforeend', makeDroneField(i));
+        }
+        // 플랜 섹션이 표시 중이면 갱신
+        const planSec = document.getElementById('planSection');
+        if (planSec && planSec.classList.contains('show')) {
+            // 대수 줄면 초과 선택 제거
+            Object.keys(selectedPlans).forEach(k => { if (parseInt(k) >= count) delete selectedPlans[k]; });
+            renderPlanSection();
+            updateSubmitBtn();
         }
     }
-    function scrollToButton() {
-        setTimeout(function(){ document.querySelector('.button-group').scrollIntoView({ behavior:'smooth', block:'center' }); }, 350);
+
+    // ── 고객 유형 전환 ──────────────────────────────────
+    let currentType = 'personal';
+
+    function switchType(type) {
+        currentType = type;
+        const pFields = document.getElementById('personalFields');
+        const cFields = document.getElementById('corporateFields');
+        const tabP = document.getElementById('tabPersonal');
+        const tabC = document.getElementById('tabCorporate');
+        const title = document.getElementById('customerSectionTitle');
+
+        const personalIds = ['personalName','birthDate','personalGender','personalPhone','personalEmail'];
+        const corpIds = ['corpNumber','corpName','corpContactName','corpPhone','corpEmail'];
+
+        if (type === 'personal') {
+            pFields.style.display = 'block';
+            cFields.style.display = 'none';
+            tabP.classList.add('active'); tabC.classList.remove('active');
+            title.textContent = '고객정보 입력';
+            personalIds.forEach(id => { const el = document.getElementById(id); if(el) el.setAttribute('required',''); });
+            corpIds.forEach(id => { const el = document.getElementById(id); if(el) el.removeAttribute('required'); });
+        } else {
+            pFields.style.display = 'none';
+            cFields.style.display = 'block';
+            tabP.classList.remove('active'); tabC.classList.add('active');
+            title.textContent = '사업자정보 입력';
+            corpIds.forEach(id => { const el = document.getElementById(id); if(el) el.setAttribute('required',''); });
+            personalIds.forEach(id => { const el = document.getElementById(id); if(el) el.removeAttribute('required'); });
+        }
     }
 
-    // ═══════════════════════════════════════════════
-    //  개인/법인 탭
-    // ═══════════════════════════════════════════════
-    document.querySelectorAll('.customer-tab').forEach(function(tab) {
-        tab.addEventListener('click', function() {
-            currentTab = this.getAttribute('data-tab');
-            document.querySelectorAll('.customer-tab').forEach(function(t){ t.classList.remove('active'); });
-            document.querySelectorAll('.customer-panel').forEach(function(p){ p.classList.remove('active'); });
-            this.classList.add('active');
-            document.getElementById(currentTab === 'personal' ? 'panelPersonal' : 'panelCorp').classList.add('active');
+    // ── 생년월일 숫자만 입력 ─────────────────────────────
+    document.addEventListener('DOMContentLoaded', function() {
+        const bd = document.getElementById('birthDate');
+        if (bd) {
+            bd.addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
+            bd.addEventListener('keypress', function(e) { if(!/[0-9]/.test(e.key)) e.preventDefault(); });
+        }
+    });
+
+    // ── 사업자번호 자동 포맷 (000-00-00000) ───────────────
+    let bizNumberValid = false;
+    (function() {
+        const input = document.getElementById('corpNumber');
+        if (!input) return;
+        input.addEventListener('input', function() {
+            let raw = this.value.replace(/[^0-9]/g, '');
+            if (raw.length > 10) raw = raw.substring(0, 10);
+            let fmt = '';
+            if (raw.length <= 3) fmt = raw;
+            else if (raw.length <= 5) fmt = raw.substring(0,3) + '-' + raw.substring(3);
+            else fmt = raw.substring(0,3) + '-' + raw.substring(3,5) + '-' + raw.substring(5);
+            this.value = fmt;
             bizNumberValid = false;
             document.getElementById('bizStatus').innerHTML = '';
         });
-    });
-
-    // ═══════════════════════════════════════════════
-    //  사업자번호 포맷팅 (000-00-00000)
-    // ═══════════════════════════════════════════════
-    document.getElementById('corpNumber').addEventListener('input', function() {
-        var raw = this.value.replace(/[^0-9]/g, '');
-        if (raw.length > 10) raw = raw.substring(0, 10);
-        var formatted = '';
-        if (raw.length <= 3) formatted = raw;
-        else if (raw.length <= 5) formatted = raw.substring(0,3) + '-' + raw.substring(3);
-        else formatted = raw.substring(0,3) + '-' + raw.substring(3,5) + '-' + raw.substring(5);
-        this.value = formatted;
-        bizNumberValid = false;
-        document.getElementById('bizStatus').innerHTML = '';
-    });
+    })();
 
     function getCorpNumberRaw() {
-        return document.getElementById('corpNumber').value.replace(/[^0-9]/g, '');
+        const el = document.getElementById('corpNumber');
+        return el ? el.value.replace(/[^0-9]/g, '') : '';
     }
 
-    // ═══════════════════════════════════════════════
-    //  사업자번호 검증 (공공데이터 API)
-    // ═══════════════════════════════════════════════
+    // ── 사업자번호 공공데이터 API 검증 ────────────────────
     document.getElementById('verifyBizBtn').addEventListener('click', async function() {
-        var raw = getCorpNumberRaw();
-        var statusEl = document.getElementById('bizStatus');
-        var input = document.getElementById('corpNumber');
-        var btn = this;
+        const raw = getCorpNumberRaw();
+        const statusEl = document.getElementById('bizStatus');
+        const input = document.getElementById('corpNumber');
+        const btn = this;
 
         if (raw.length !== 10) {
             statusEl.innerHTML = '<span class="biz-status invalid">숫자 10자리를 입력해주세요</span>';
@@ -351,12 +1213,12 @@
         btn.disabled = true;
 
         try {
-            var resp = await fetch('/api/validate-business-number', {
+            const resp = await fetch('/api/validate-business-number', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ b_no: raw })
             });
-            var data = await resp.json();
+            const data = await resp.json();
 
             if (data.valid) {
                 bizNumberValid = true;
@@ -377,329 +1239,568 @@
         btn.disabled = false;
     });
 
-    // ═══════════════════════════════════════════════
-    //  보험기간 설정
-    // ═══════════════════════════════════════════════
-    function setupInsuranceDates() {
-        var si = document.getElementById('insuranceStart');
-        var ei = document.getElementById('insuranceEnd');
-        var di = document.getElementById('insuranceDuration');
-        function pad(n){ return String(n).padStart(2,'0'); }
-        function toL(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes()); }
-        function addY(d){ var r=new Date(d); r.setFullYear(r.getFullYear()+1); return r; }
-        function calcDur(){ if(!si.value||!ei.value){di.value='';return;} var s=new Date(si.value),e=new Date(ei.value); if(e<=s){di.value='';return;} var d=Math.round((e-s)/(864e5)); var m=Math.floor(d/30),r=d%30; di.value=(m>0?m+'개월 ':'')+r+'일 ('+d+'일)'; }
+    // ── 자동 스크롤 헬퍼 ───────────────────────────────────
+    function autoScrollTo(el) {
+        if (!el) return;
+        setTimeout(function() {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 350);
+    }
+    function autoScrollToNextCard(currentEl) {
+        if (!currentEl) return;
+        const card = currentEl.closest('.section-card');
+        if (!card) return;
+        const allCards = Array.from(document.querySelectorAll('.section-card'));
+        const idx = allCards.indexOf(card);
+        if (idx >= 0 && idx < allCards.length - 1) {
+            autoScrollTo(allCards[idx + 1]);
+        }
+    }
 
-        var now = new Date();
-        var minS = new Date(now.getTime() + 30*60000);
-        si.min = toL(minS); si.value = toL(minS);
-        var endD = addY(minS); endD.setHours(23,59,0,0);
-        ei.value = toL(endD); ei.min = toL(minS); ei.max = toL(endD);
+    // ── 연락처 자동 하이픈 포맷 (000-0000-0000) ───────────
+    function formatPhoneNumber(input) {
+        let raw = input.value.replace(/[^0-9]/g, '');
+        if (raw.length > 11) raw = raw.substring(0, 11);
+        let fmt = '';
+        if (raw.length <= 3) {
+            fmt = raw;
+        } else if (raw.length <= 7) {
+            fmt = raw.substring(0,3) + '-' + raw.substring(3);
+        } else {
+            fmt = raw.substring(0,3) + '-' + raw.substring(3,7) + '-' + raw.substring(7);
+        }
+        input.value = fmt;
+    }
+    function getPhoneRaw(input) {
+        return input ? input.value.replace(/[^0-9]/g, '') : '';
+    }
+    // 모든 tel 필드에 포맷 적용
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('input[type="tel"]').forEach(function(el) {
+            el.setAttribute('maxlength', '13'); // 000-0000-0000 = 13자
+            el.setAttribute('inputmode', 'numeric');
+            el.addEventListener('input', function() { formatPhoneNumber(this); });
+        });
+    });
+
+    // ── 보험기간 설정 ─────────────────────────────────────
+    function setupInsuranceDates() {
+        const startEl = document.getElementById('insuranceStart');
+        const endEl   = document.getElementById('insuranceEnd');
+        const durEl   = document.getElementById('insuranceDuration');
+
+        function pad(n) { return String(n).padStart(2,'0'); }
+        function toLocal(d) {
+            return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())
+                +'T'+pad(d.getHours())+':'+pad(d.getMinutes());
+        }
+        function round30(d) {
+            const ms = 30*60*1000;
+            return new Date(Math.ceil(d.getTime()/ms)*ms);
+        }
+        function addYear(d) {
+            const r = new Date(d);
+            r.setFullYear(r.getFullYear()+1);
+            return r;
+        }
+        function calcDur() {
+            if (!startEl.value || !endEl.value) { durEl.value=''; return; }
+            const s = new Date(startEl.value), e = new Date(endEl.value);
+            if (e<=s) { durEl.value=''; return; }
+            durEl.value = Math.round((e-s)/(1000*60*60*24)) + '일';
+        }
+
+        const minStart = round30(new Date(Date.now() + 30*60*1000));
+        startEl.min   = toLocal(minStart);
+        startEl.value = toLocal(minStart);
+        const initEnd = addYear(minStart);
+        endEl.value = toLocal(initEnd);
+        endEl.min   = toLocal(minStart);
+        endEl.max   = toLocal(initEnd);
         calcDur();
 
-        si.addEventListener('change', function(){
-            var sel = new Date(this.value);
-            var curMin = new Date(new Date().getTime()+30*60000);
-            if(sel < curMin){ alert('⚠️ 보험 시작일시는 현재 시간 기준 30분 후부터 선택 가능합니다.'); this.value=toL(curMin); return; }
-            var ne = addY(sel); ne.setHours(23,59,0,0);
-            ei.value=toL(ne); ei.min=toL(sel); ei.max=toL(ne); calcDur();
-            // → 다음 섹션 스크롤
-            scrollToNextSection('sectionPeriod');
+        startEl.addEventListener('change', function() {
+            const sel = new Date(this.value);
+            const rounded = round30(sel);
+            const curMin = round30(new Date(Date.now()+30*60*1000));
+            if (rounded < curMin) {
+                alert('⚠️ 보험 시작일시는 현재 시간 기준 30분 후부터 선택 가능합니다.');
+                this.value = toLocal(curMin); return;
+            }
+            this.value = toLocal(rounded);
+            const ne = addYear(rounded);
+            endEl.value = toLocal(ne); endEl.min = toLocal(rounded); endEl.max = toLocal(ne);
+            calcDur();
         });
-        ei.addEventListener('change', function(){
-            var s=new Date(si.value),sel=new Date(this.value);
-            if(sel<=s){ alert('⚠️ 종료일시는 시작일시 이후여야 합니다.'); var d=addY(s); d.setHours(23,59,0,0); this.value=toL(d); calcDur(); return; }
-            var mx=addY(s); mx.setHours(23,59,59,999);
-            if(sel>mx){ alert('⚠️ 보험 기간은 1년을 초과할 수 없습니다.'); mx.setHours(23,59,0,0); this.value=toL(mx); calcDur(); return; }
+
+        endEl.addEventListener('change', function() {
+            const s = new Date(startEl.value);
+            const rounded = round30(new Date(this.value));
+            const maxEnd = addYear(s);
+            if (rounded <= s) {
+                alert('⚠️ 종료일시는 시작일시보다 이후여야 합니다.');
+                this.value = toLocal(maxEnd); calcDur(); return;
+            }
+            if (rounded > maxEnd) {
+                alert('⚠️ 보험 기간은 1년을 초과할 수 없습니다.\n최대 종료일시로 자동 설정됩니다.');
+                this.value = toLocal(maxEnd); calcDur(); return;
+            }
+            this.value = toLocal(rounded);
             calcDur();
         });
     }
 
-    // ═══════════════════════════════════════════════
-    //  드론 섹션
-    // ═══════════════════════════════════════════════
-    function createDroneSection(idx) {
-        return '<div class="drone-info-section" data-drone-index="'+idx+'">' +
-            '<div class="drone-info-header"><span class="drone-number">드론 '+(idx+1)+'</span>' +
-            (idx>0?'<button type="button" class="remove-drone-btn" onclick="removeDrone('+idx+')">삭제</button>':'')+'</div>' +
-            '<div class="form-group"><label>드론 모델명 *</label><input type="text" name="drone_model_'+idx+'" placeholder="예: DJI Mini 3 Pro"></div>' +
-            '<div class="form-group"><label>제작번호 (시리얼번호) *</label><input type="text" name="drone_serial_'+idx+'" placeholder="시리얼번호 또는 \'없음\'"><small>시리얼번호가 없는 경우 \'없음\'으로 기재</small></div>' +
-            '<div class="form-row"><div class="form-group"><label>드론 자체중량 (kg) *</label><input type="number" name="drone_weight_'+idx+'" placeholder="예: 10" min="0.01" step="0.01"><small>배터리 제외 기체 무게</small></div>' +
-            '<div class="form-group"><label>드론 최대이륙중량 (kg) *</label><input type="number" name="drone_max_weight_'+idx+'" placeholder="예: 10" min="0.01" step="0.01"><small>이륙 시 최대 중량</small></div></div></div>';
-    }
+    // ── 가입물건 선택 ─────────────────────────────────────
+    let selectedWeight = '';
+    let selectedFlag   = '';
 
-    function updateDroneSections() {
-        var c = parseInt(document.getElementById('droneCount').value)||1;
-        var cont = document.getElementById('dronesContainer');
-        cont.innerHTML = '';
-        for(var i=0; i<c; i++) cont.innerHTML += createDroneSection(i);
-    }
-
-    function removeDrone(idx) {
-        var dc = document.getElementById('droneCount');
-        var c = parseInt(dc.value)-1; if(c<1)c=1; dc.value=c;
-        updateDroneSections();
-    }
-
-    // ═══════════════════════════════════════════════
-    //  가입물건/플랜
-    // ═══════════════════════════════════════════════
-    function showPlansForDroneType(type) {
-        document.getElementById('cameraDronePlans').style.display = 'none';
-        document.getElementById('fpvDronePlans').style.display = 'none';
-        document.getElementById('otherDronePlans').style.display = 'none';
-        document.querySelectorAll('input[name="plan"]').forEach(function(r){ r.checked=false; });
-        document.querySelectorAll('.plan-card').forEach(function(c){ c.classList.remove('selected'); });
-        if(type==='camera') document.getElementById('cameraDronePlans').style.display='block';
-        else if(type==='fpv') document.getElementById('fpvDronePlans').style.display='block';
-        else document.getElementById('otherDronePlans').style.display='block';
-    }
-
-    function updateTotalPrice() {
-        var dc = parseInt(document.getElementById('droneCount').value)||1;
-        var sel = document.querySelector('input[name="plan"]:checked');
-        if(!sel) return;
-        var base = parseInt(sel.getAttribute('data-price'));
-        var total = base * dc;
-        var pe = sel.closest('.plan-card').querySelector('.plan-price');
-        pe.innerHTML = dc>1
-            ? base.toLocaleString()+'<span>원/년/대</span><br><span style="font-size:1rem;color:var(--kb-gold);">총 '+total.toLocaleString()+'원 ('+dc+'대)</span>'
-            : base.toLocaleString()+'<span>원/년/대</span>';
-    }
-
-    // ═══════════════════════════════════════════════
-    //  섹션 완료 감지 → 자동 스크롤
-    // ═══════════════════════════════════════════════
-    function isCustomerComplete() {
-        if (currentTab === 'personal') {
-            var n=document.querySelector('[name="name"]'), b=document.querySelector('[name="birth_date"]'),
-                g=document.querySelector('[name="gender"]'), p=document.querySelector('[name="phone"]'),
-                e=document.querySelector('[name="email"]');
-            return n&&n.value&&b&&b.value&&g&&g.value&&p&&p.value&&e&&e.value;
-        } else {
-            var cn=document.querySelector('[name="corp_number"]'), cname=document.querySelector('[name="corp_name"]'),
-                ccon=document.querySelector('[name="corp_contact_name"]'), cp=document.querySelector('[name="corp_phone"]'),
-                ce=document.querySelector('[name="corp_email"]');
-            return cn&&getCorpNumberRaw().length===10&&cname&&cname.value&&ccon&&ccon.value&&cp&&cp.value&&ce&&ce.value;
+    function selectWeight(el, val) {
+        document.querySelectorAll('.weight-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        el.querySelector('input').checked = true;
+        selectedWeight = val;
+        checkQuoteNeeded();
+        // 드론유형 아직 미선택 → 드론유형 그리드로 스크롤
+        if (!selectedFlag) {
+            autoScrollTo(document.querySelector('.drone-flag-grid'));
         }
     }
 
-    function checkAutoScroll(el) {
-        if (!el) return;
-        var card = el.closest('.section-card');
-        if (!card) return;
-        var id = card.id;
-
-        // 고객정보 완료 → 보험기간
-        if (id === 'sectionCustomer' && isCustomerComplete()) { scrollToNextSection('sectionCustomer'); return; }
-
-        // 드론 대수 변경 → 드론 정보
-        if (id === 'sectionDroneCount') { scrollToNextSection('sectionDroneCount'); return; }
+    function selectFlag(el, val) {
+        document.querySelectorAll('.flag-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        el.querySelector('input').checked = true;
+        selectedFlag = val;
+        checkQuoteNeeded();
+        // 플랜 섹션이 보이면 스크롤
+        const planSec = document.getElementById('planSection');
+        if (planSec && planSec.classList.contains('show')) {
+            autoScrollTo(planSec);
+        }
     }
 
-    // ═══════════════════════════════════════════════
-    //  에러 헬퍼
-    // ═══════════════════════════════════════════════
-    function markError(el) { if(!el)return; el.classList.add('field-error'); setTimeout(function(){ el.classList.remove('field-error'); },4000); }
-    function markCardsError(cards) { cards.forEach(function(c){ c.style.border='3px solid #e74c3c'; setTimeout(function(){ c.style.border=''; },4000); }); }
+    function checkQuoteNeeded() {
+        const box       = document.getElementById('quoteNeededBox');
+        const msg       = document.getElementById('quoteNeededMsg');
+        const submitBtn = document.getElementById('submitBtn');
+        const planSec   = document.getElementById('planSection');
 
-    // ═══════════════════════════════════════════════
-    //  데이터 수집 (sessionStorage)
-    // ═══════════════════════════════════════════════
-    function collectFormDataWithIndividualPlans() {
-        var dc = parseInt(document.getElementById('droneCount').value)||1;
-        var droneTypeNames = { camera:'촬영용 센서드론', fpv:'FPV/레이싱 드론', toy:'완구형 드론', other:'기타 드론' };
+        const needQuote = (selectedFlag === 'swarm' || selectedFlag === 'rental' || selectedWeight === 'over_100kg');
 
-        var data = {
-            customer_type: currentTab,
-            insurance_start: document.querySelector('[name="insurance_start"]').value,
-            insurance_end: document.querySelector('[name="insurance_end"]').value,
-            drone_count: dc,
-            plan_mode: 'unified',
-            drones: [],
-            drone_plans: []
+        if (needQuote) {
+            let reason = '';
+            if (selectedFlag === 'swarm')   reason = '군집드론은';
+            else if (selectedFlag === 'rental') reason = '임대사업자 드론은';
+            else reason = '100kg 이상 드론은';
+            msg.innerHTML = `<strong>${reason} 온라인 가입이 불가합니다.</strong><br>별도 심사를 통해 견적을 산출해야 합니다.<br>아래 버튼을 눌러 견적/가입 의뢰를 신청해주세요.`;
+            box.classList.add('show');
+            planSec.classList.remove('show');
+        } else {
+            box.classList.remove('show');
+            if (selectedWeight && selectedFlag) {
+                renderPlanSection();
+                planSec.classList.add('show');
+                // 플랜 선택 완료 여부로 버튼 활성화
+                updateSubmitBtn();
+            }
+        }
+    }
+
+    // ── 모달 열기/닫기 ────────────────────────────────────
+    function openQuoteModal() {
+        document.getElementById('quoteModal').classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeQuoteModal() {
+        document.getElementById('quoteModal').classList.remove('show');
+        document.body.style.overflow = 'auto';
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('quoteModal');
+        if (modal) modal.addEventListener('click', function(e) {
+            if (e.target === modal) closeQuoteModal();
+        });
+    });
+
+    // ── 견적 폼 제출 ─────────────────────────────────────
+    async function submitQuote(e) {
+        e.preventDefault();
+        const f = e.target;
+        const data = {
+            customer_type: f.q_customer_type.value,
+            company_name: f.q_company.value,
+            drone_under_25kg: f.q_under25.value || 0,
+            drone_25_100kg: f.q_25_100.value || 0,
+            drone_over_100kg: f.q_over100.value || 0,
+            manager_name: f.q_manager.value,
+            manager_phone: f.q_phone.value,
+            manager_email: f.q_email.value,
+            inquiry: f.q_inquiry.value,
+            insurance_type: '업무용 드론보험 (견적 의뢰)',
+            request_type: 'business_quote'
         };
-
-        // 고객정보
-        if (currentTab === 'personal') {
-            data.name = document.querySelector('[name="name"]').value;
-            data.birth_date = document.querySelector('[name="birth_date"]').value;
-            data.gender = document.querySelector('[name="gender"]').value;
-            data.phone = document.querySelector('[name="phone"]').value;
-            data.email = document.querySelector('[name="email"]').value;
-        } else {
-            data.corp_number = getCorpNumberRaw(); // 하이픈 없이 저장
-            data.corp_name = document.querySelector('[name="corp_name"]').value;
-            data.corp_contact_name = document.querySelector('[name="corp_contact_name"]').value;
-            data.phone = document.querySelector('[name="corp_phone"]').value;
-            data.email = document.querySelector('[name="corp_email"]').value;
-        }
-
-        var droneTypeInput = document.querySelector('input[name="drone_type"]:checked');
-        var planInput = document.querySelector('input[name="plan"]:checked');
-        if(!droneTypeInput||!planInput) return null;
-
-        var planCard = planInput.closest('.plan-card');
-        var planName = planCard ? planCard.querySelector('.plan-name').textContent.trim() : '';
-        var planPrice = parseInt(planInput.dataset.price);
-
-        // 전체 레벨 정보 (구버전 호환)
-        data.drone_type = droneTypeInput.value;
-        data.plan = planInput.value;
-        data.plan_name = planName;
-        data.plan_price_per_drone = planPrice;
-        data.plan_total_price = planPrice * dc;
-
-        // 각 드론
-        for(var i=0; i<dc; i++) {
-            data.drones.push({
-                model: document.querySelector('[name="drone_model_'+i+'"]').value,
-                serial: document.querySelector('[name="drone_serial_'+i+'"]').value,
-                weight: document.querySelector('[name="drone_weight_'+i+'"]').value,
-                max_weight: document.querySelector('[name="drone_max_weight_'+i+'"]').value
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
             });
-            data.drone_plans.push({
-                drone_index: i,
-                drone_type: droneTypeInput.value,
-                drone_type_name: droneTypeNames[droneTypeInput.value],
-                plan: planInput.value,
-                plan_name: planName,
-                price: planPrice
-            });
+            if (res.ok) {
+                alert('견적 의뢰가 성공적으로 전송되었습니다.\n담당자가 확인 후 연락드리겠습니다.');
+                closeQuoteModal(); f.reset();
+            } else { alert('전송 중 오류가 발생했습니다. 다시 시도해주세요.'); }
+        } catch (err) {
+            alert('전송 중 오류가 발생했습니다.\n이메일(liab.on.ins@gmail.com)로 직접 문의해주세요.');
         }
-        return data;
     }
 
-    // ═══════════════════════════════════════════════
-    //  폼 제출 (항상 활성화, submit 시 검증)
-    // ═══════════════════════════════════════════════
+    // ── 에러 표시 헬퍼 ──────────────────────────────────────
+    function markFieldErr(el) {
+        if (!el) return;
+        el.classList.add('field-error');
+        setTimeout(function(){ el.classList.remove('field-error'); }, 5000);
+    }
+    function markCardGroupErr(cards) {
+        cards.forEach(function(c) {
+            c.style.border = '3px solid #e74c3c';
+            c.style.background = '#fff5f5';
+            setTimeout(function() { c.style.border = ''; c.style.background = ''; }, 5000);
+        });
+    }
+
+    // ── 폼 제출 (다음 단계로) ─────────────────────────────
     document.getElementById('droneForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        var form = this;
-        var dc = parseInt(document.getElementById('droneCount').value)||1;
 
-        // 기존 에러 제거
+        // 기존 에러 초기화
         document.querySelectorAll('.field-error').forEach(function(el){ el.classList.remove('field-error'); });
 
-        // 1단계: 필수 필드
-        var fields = [];
-        if (currentTab === 'personal') {
-            fields = [
-                {el: form.querySelector('[name="name"]'), l:'이름'},
-                {el: form.querySelector('[name="birth_date"]'), l:'생년월일'},
-                {el: form.querySelector('[name="gender"]'), l:'성별'},
-                {el: form.querySelector('[name="phone"]'), l:'연락처'},
-                {el: form.querySelector('[name="email"]'), l:'이메일'}
+        const form = this;
+        const count = parseInt(document.getElementById('droneCount').value) || 1;
+
+        // ─── 1단계: 고객정보 필드 검증 ───
+        let requiredFields = [];
+        if (currentType === 'personal') {
+            requiredFields = [
+                { el: document.getElementById('personalName'), label: '이름' },
+                { el: document.getElementById('birthDate'), label: '생년월일' },
+                { el: document.getElementById('personalGender'), label: '성별' },
+                { el: document.getElementById('personalPhone'), label: '연락처', isPhone: true },
+                { el: document.getElementById('personalEmail'), label: '이메일' }
             ];
         } else {
-            fields = [
-                {el: form.querySelector('[name="corp_number"]'), l:'사업자등록번호', isBiz:true},
-                {el: form.querySelector('[name="corp_name"]'), l:'법인명'},
-                {el: form.querySelector('[name="corp_contact_name"]'), l:'담당자 이름'},
-                {el: form.querySelector('[name="corp_phone"]'), l:'연락처'},
-                {el: form.querySelector('[name="corp_email"]'), l:'이메일'}
+            requiredFields = [
+                { el: document.getElementById('corpNumber'), label: '사업자등록번호', isBiz: true },
+                { el: document.getElementById('corpName'), label: '회사명' },
+                { el: document.getElementById('corpContactName'), label: '담당자 이름' },
+                { el: document.getElementById('corpPhone'), label: '연락처', isPhone: true },
+                { el: document.getElementById('corpEmail'), label: '이메일' }
             ];
         }
-        fields.push(
-            {el: form.querySelector('[name="insurance_start"]'), l:'보험시작일시'},
-            {el: form.querySelector('[name="insurance_end"]'), l:'보험종료일시'}
+
+        // 보험기간
+        requiredFields.push(
+            { el: document.getElementById('insuranceStart'), label: '보험시작일시' },
+            { el: document.getElementById('insuranceEnd'), label: '보험종료일시' }
         );
-        for(var i=0; i<dc; i++){
-            fields.push(
-                {el: form.querySelector('[name="drone_model_'+i+'"]'), l:'드론 '+(i+1)+' 모델명'},
-                {el: form.querySelector('[name="drone_serial_'+i+'"]'), l:'드론 '+(i+1)+' 시리얼번호'},
-                {el: form.querySelector('[name="drone_weight_'+i+'"]'), l:'드론 '+(i+1)+' 자체중량'},
-                {el: form.querySelector('[name="drone_max_weight_'+i+'"]'), l:'드론 '+(i+1)+' 최대이륙중량'}
+
+        // 드론 정보
+        for (let i = 0; i < count; i++) {
+            requiredFields.push(
+                { el: form.querySelector('[name="drone_model_'+i+'"]'), label: '드론 '+(i+1)+' 모델명' },
+                { el: form.querySelector('[name="drone_serial_'+i+'"]'), label: '드론 '+(i+1)+' 시리얼번호' },
+                { el: form.querySelector('[name="drone_weight_'+i+'"]'), label: '드론 '+(i+1)+' 자체중량' },
+                { el: form.querySelector('[name="drone_mtow_'+i+'"]'), label: '드론 '+(i+1)+' 최대이륙중량' }
             );
         }
 
-        var firstErr = null;
-        for(var k=0; k<fields.length; k++){
-            var f = fields[k];
-            if(!f.el) continue;
-            var val = f.isBiz ? getCorpNumberRaw() : (f.el.value||'').trim();
-            if(!val || (f.isBiz && val.length!==10)){
-                markError(f.el);
-                if(!firstErr) firstErr = f.el;
+        // 텍스트/select 필드 검증
+        let firstErr = null;
+        for (const f of requiredFields) {
+            if (!f.el) continue;
+            let val = '';
+            if (f.isBiz) val = getCorpNumberRaw();
+            else if (f.isPhone) val = getPhoneRaw(f.el);
+            else val = (f.el.value || '').trim();
+
+            if (!val || (f.isBiz && val.length !== 10)) {
+                markFieldErr(f.el);
+                if (!firstErr) firstErr = f.el;
             }
         }
-        if(firstErr){ scrollToEl(firstErr); firstErr.focus(); return; }
-
-        // 법인 사업자번호 검증 필수
-        if(currentTab==='corp' && !bizNumberValid){
-            var bizInput = document.getElementById('corpNumber');
-            markError(bizInput);
-            scrollToEl(bizInput);
-            document.getElementById('bizStatus').innerHTML='<span class="biz-status invalid">⚠️ 조회 버튼을 눌러 사업자번호를 확인해주세요</span>';
+        if (firstErr) {
+            firstErr.scrollIntoView({ behavior:'smooth', block:'center' });
+            firstErr.focus();
             return;
         }
 
-        // 2단계: 가입물건
-        if(!document.querySelector('input[name="drone_type"]:checked')){
-            markCardsError(document.querySelectorAll('.drone-type-card'));
-            scrollToSection('sectionDroneType');
+        // 법인 사업자번호 API 검증 확인
+        if (currentType === 'corporate' && !bizNumberValid) {
+            const bizInput = document.getElementById('corpNumber');
+            markFieldErr(bizInput);
+            bizInput.scrollIntoView({ behavior:'smooth', block:'center' });
+            document.getElementById('bizStatus').innerHTML = '<span class="biz-status invalid">⚠️ 조회 버튼을 눌러 사업자번호를 확인해주세요</span>';
             return;
         }
 
-        // 3단계: 플랜
-        if(!document.querySelector('input[name="plan"]:checked')){
-            var vis = document.querySelector('.plan-category[style*="block"]');
-            if(vis) markCardsError(vis.querySelectorAll('.plan-card'));
-            scrollToSection('sectionPlan');
+        // ─── 2단계: 가입물건 - 자체중량 ───
+        if (!selectedWeight) {
+            markCardGroupErr(document.querySelectorAll('.weight-card'));
+            document.querySelector('.weight-grid').scrollIntoView({ behavior:'smooth', block:'center' });
             return;
         }
 
-        // 4단계: 데이터 저장 → 다음
-        var data = collectFormDataWithIndividualPlans();
-        if(!data) return;
-        sessionStorage.setItem('droneInsuranceData', JSON.stringify(data));
+        // ─── 3단계: 가입물건 - 드론유형 ───
+        if (!selectedFlag) {
+            markCardGroupErr(document.querySelectorAll('.flag-card'));
+            document.querySelector('.drone-flag-grid').scrollIntoView({ behavior:'smooth', block:'center' });
+            return;
+        }
+
+        // 견적 필요 케이스 → 모달
+        const needQuote = (selectedFlag === 'swarm' || selectedFlag === 'rental' || selectedWeight === 'over_100kg');
+        if (needQuote) {
+            openQuoteModal();
+            return;
+        }
+
+        // ─── 4단계: 플랜 선택 ───
+        let allPlanSelected = true;
+        for (let i = 0; i < count; i++) {
+            if (!selectedPlans[i]) { allPlanSelected = false; break; }
+        }
+        if (!allPlanSelected) {
+            const planSec = document.getElementById('planSection');
+            if (planSec) {
+                planSec.scrollIntoView({ behavior:'smooth', block:'start' });
+                // 플랜 테이블 하이라이트
+                const planCols = planSec.querySelectorAll('.plan-col-header');
+                planCols.forEach(function(c) {
+                    c.style.background = '#fff5f5';
+                    setTimeout(function(){ c.style.background = ''; }, 5000);
+                });
+            }
+            return;
+        }
+
+        // ─── 5단계: 데이터 수집 & 저장 ───
+        const formData = new FormData(this);
+        const params = new URLSearchParams();
+        for (const [k,v] of formData.entries()) params.append(k,v);
+
+        // 연락처: 숫자만 저장
+        if (currentType === 'personal') {
+            params.set('phone', getPhoneRaw(document.getElementById('personalPhone')));
+            params.set('customer_type', 'personal');
+        } else {
+            params.set('corp_number', getCorpNumberRaw());
+            params.set('corp_phone', getPhoneRaw(document.getElementById('corpPhone')));
+            params.set('customer_type', 'corporate');
+        }
+
+        // 플랜 정보
+        params.set('selected_deductible', selectedDeductible);
+        const prices = PLAN_PRICES[selectedWeight]?.[selectedDeductible] || {};
+        for (let i = 0; i < count; i++) {
+            const plan = selectedPlans[i] || '';
+            params.set('plan_name_' + i, plan);
+            params.set('plan_price_' + i, prices[plan] || 0);
+            params.set('plan_coverage_personal_' + i, PLAN_COVERAGE[plan]?.personal || '');
+            params.set('plan_coverage_property_' + i, PLAN_COVERAGE[plan]?.property || '');
+        }
+        params.set('plan_total_price', Array.from({length:count}, (_,i) => prices[selectedPlans[i]]||0).reduce((a,b)=>a+b,0));
+        sessionStorage.setItem('droneFormData', params.toString());
         window.location.href = '/business-drone-insurance-terms';
     });
 
-    // ═══════════════════════════════════════════════
-    //  초기화 & 이벤트 바인딩
-    // ═══════════════════════════════════════════════
-    window.addEventListener('DOMContentLoaded', function() {
+
+    /* ================================================================
+       플랜 선택 JS
+    ================================================================ */
+    const PLAN_PRICES = {
+        'under_25kg': {
+            '10':  { '든든형': 466000, '안심형': 440000, '알뜰형': 353000 },
+            '100': { '든든형': 373000, '안심형': 352000, '알뜰형': 283000 }
+        },
+        '25_100kg': {
+            '10':  { '든든형': 720000, '안심형': 679000, '알뜰형': 545000 },
+            '100': { '든든형': 576000, '안심형': 543000, '알뜰형': 436000 }
+        }
+    };
+    const PLAN_COVERAGE = {
+        '든든형': { personal: '5억원', property: '5억원' },
+        '안심형': { personal: '3억원', property: '3억원' },
+        '알뜰형': { personal: '1억5천만원', property: '2천만원' }
+    };
+    const PLAN_NAMES = ['든든형', '안심형', '알뜰형'];
+
+    let selectedDeductible = '10'; // '10' or '100'
+    let selectedPlans = {};        // { droneIndex: '든든형' | '안심형' | '알뜰형' }
+
+    function setDeductible(val) {
+        selectedDeductible = val;
+        document.querySelectorAll('.toggle-btn').forEach(b => b.classList.toggle('active', b.dataset.val === val));
+        renderPlanSection();
+    }
+
+    function renderPlanSection() {
+        const inner = document.getElementById('planSectionInner');
+        const count = parseInt(document.getElementById('droneCount').value) || 1;
+
+        // 자기부담금 토글
+        let html = `
+            <div class="deductible-toggle">
+                <span class="deductible-label">자기부담금 선택</span>
+                <div class="toggle-btns">
+                    <button type="button" class="toggle-btn ${selectedDeductible==='10'?'active':''}" data-val="10" onclick="setDeductible('10')">10만원</button>
+                    <button type="button" class="toggle-btn ${selectedDeductible==='100'?'active':''}" data-val="100" onclick="setDeductible('100')">100만원</button>
+                </div>
+            </div>`;
+
+        if (count === 1) {
+            // 단일 드론: 플랜 테이블 바로 표시
+            html += buildPlanTable(0);
+        } else {
+            // 2대 이상: 드론별 아코디언
+            for (let i = 0; i < count; i++) {
+                const chosenPlan = selectedPlans[i] || '';
+                const badge = chosenPlan ? `<span class="drone-accordion-badge">${chosenPlan} 선택됨</span>` : `<span class="drone-accordion-badge" style="background:#f0f0f0;color:#999;">미선택</span>`;
+                const isOpen = (i === 0) || chosenPlan;
+                html += `
+                <div class="drone-plan-accordion" id="accordion_${i}">
+                    <div class="drone-accordion-header ${isOpen?'open':''}" onclick="toggleAccordion(${i})">
+                        <span class="drone-accordion-title">드론 ${i+1}</span>
+                        <div style="display:flex;align-items:center;gap:0.8rem;">
+                            ${badge}
+                            <span class="drone-accordion-arrow">▼</span>
+                        </div>
+                    </div>
+                    <div class="drone-accordion-body ${isOpen?'open':''}" id="accordionBody_${i}">
+                        ${buildPlanTable(i)}
+                    </div>
+                </div>`;
+            }
+        }
+
+        inner.innerHTML = html;
+        updateTotalBox();
+    }
+
+    function buildPlanTable(droneIdx) {
+        const prices = PLAN_PRICES[selectedWeight]?.[selectedDeductible] || {};
+        let cols = '';
+        PLAN_NAMES.forEach(planName => {
+            const price = prices[planName] || 0;
+            const cov   = PLAN_COVERAGE[planName];
+            const isSel = selectedPlans[droneIdx] === planName;
+            cols += `
+                <td class="plan-col ${isSel?'selected':''}" onclick="selectPlan(${droneIdx},'${planName}')">
+                    <div class="plan-radio-wrap">
+                        <input type="radio" name="plan_radio_${droneIdx}" value="${planName}" ${isSel?'checked':''} onchange="selectPlan(${droneIdx},'${planName}')">
+                        <span class="plan-name-text">${planName}</span>
+                        <span class="plan-price-text">${price.toLocaleString()}원</span>
+                    </div>
+                </td>`;
+        });
+
+        return `
+            <div class="plan-table-wrap">
+                <table class="plan-table">
+                    <thead>
+                        <tr>
+                            <th style="width:30%;text-align:left;">보험료</th>
+                            ${PLAN_NAMES.map(n => {
+                                const price = prices[n] || 0;
+                                const isSel = selectedPlans[droneIdx] === n;
+                                return `<th class="plan-col-header plan-col ${isSel?'selected':''}" onclick="selectPlan(${droneIdx},'${n}')" style="cursor:pointer;">
+                                    <div class="plan-radio-wrap">
+                                        <input type="radio" name="plan_radio_${droneIdx}" value="${n}" ${isSel?'checked':''} onchange="selectPlan(${droneIdx},'${n}')">
+                                        <span class="plan-name-text">${n}</span>
+                                        <span class="plan-price-text">${price.toLocaleString()}원</span>
+                                    </div>
+                                </th>`;
+                            }).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="row-label">보장내용</td>
+                            ${PLAN_NAMES.map(() => `<td></td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td class="row-label" style="padding-left:1.2rem;">대인 배상</td>
+                            ${PLAN_NAMES.map(n => `<td class="plan-col ${selectedPlans[droneIdx]===n?'selected':''}" onclick="selectPlan(${droneIdx},'${n}')">${PLAN_COVERAGE[n].personal}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td class="row-label" style="padding-left:1.2rem;">대물 배상</td>
+                            ${PLAN_NAMES.map(n => `<td class="plan-col ${selectedPlans[droneIdx]===n?'selected':''}" onclick="selectPlan(${droneIdx},'${n}')">${PLAN_COVERAGE[n].property}</td>`).join('')}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>`;
+    }
+
+    function selectPlan(droneIdx, planName) {
+        selectedPlans[droneIdx] = planName;
+        renderPlanSection();
+        // 아코디언이 열려있으면 유지
+        const body = document.getElementById('accordionBody_' + droneIdx);
+        const header = body ? body.previousElementSibling : null;
+        if (body && !body.classList.contains('open')) {
+            body.classList.add('open');
+            if (header) header.classList.add('open');
+        }
+        updateSubmitBtn();
+        // 모든 드론 플랜이 선택되었으면 → 다음 버튼으로 스크롤
+        const count = parseInt(document.getElementById('droneCount').value) || 1;
+        let allDone = true;
+        for (let i = 0; i < count; i++) { if (!selectedPlans[i]) { allDone = false; break; } }
+        if (allDone) {
+            autoScrollTo(document.querySelector('.button-group'));
+        }
+    }
+
+    function toggleAccordion(i) {
+        const body   = document.getElementById('accordionBody_' + i);
+        const header = document.querySelector('#accordion_' + i + ' .drone-accordion-header');
+        if (!body) return;
+        const isOpen = body.classList.toggle('open');
+        if (header) header.classList.toggle('open', isOpen);
+    }
+
+    function updateTotalBox() {
+        const count  = parseInt(document.getElementById('droneCount').value) || 1;
+        const prices = PLAN_PRICES[selectedWeight]?.[selectedDeductible] || {};
+        let total = 0;
+        let allSelected = true;
+        for (let i = 0; i < count; i++) {
+            const plan = selectedPlans[i];
+            if (plan && prices[plan]) {
+                total += prices[plan];
+            } else {
+                allSelected = false;
+            }
+        }
+        const box = document.getElementById('planTotalBox');
+        const amt = document.getElementById('planTotalAmount');
+        if (box && amt) {
+            if (total > 0) {
+                amt.textContent = total.toLocaleString() + '원';
+                box.style.display = 'flex';
+            } else {
+                box.style.display = 'none';
+            }
+        }
+    }
+
+    function updateSubmitBtn() {
+        // 버튼은 항상 활성화 - submit 시 검증
+    }
+
+    // ── 페이지 초기화 ──────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', function() {
         setupInsuranceDates();
-        updateDroneSections();
-
-        // 고객정보 필드 → 완료 시 자동 스크롤
-        document.querySelectorAll('#sectionCustomer input, #sectionCustomer select').forEach(function(el){
-            el.addEventListener('change', function(){ checkAutoScroll(this); });
-            el.addEventListener('blur', function(){ checkAutoScroll(this); });
-        });
-
-        // 드론 대수 변경
-        var dcInput = document.getElementById('droneCount');
-        dcInput.addEventListener('change', function(){
-            var c=parseInt(this.value); if(c<1||isNaN(c))c=1; if(c>10)c=10; this.value=c;
-            updateDroneSections(); updateTotalPrice();
-            scrollToNextSection('sectionDroneCount');
-        });
-        dcInput.addEventListener('input', function(){
-            var c=parseInt(this.value); if(c<1||isNaN(c))c=1; if(c>10)c=10; this.value=c;
-            updateDroneSections(); updateTotalPrice();
-        });
-
-        // 가입물건 카드 클릭 → 플랜 섹션으로
-        document.querySelectorAll('.drone-type-card').forEach(function(card){
-            card.addEventListener('click', function(){
-                document.querySelectorAll('.drone-type-card').forEach(function(c){ c.classList.remove('selected'); });
-                this.classList.add('selected');
-                var type = this.querySelector('input[type="radio"]').value;
-                showPlansForDroneType(type);
-                scrollToSection('sectionPlan');
-            });
-        });
-
-        // 플랜 카드 클릭 → 다음 버튼으로
-        document.querySelectorAll('.plan-card').forEach(function(card){
-            card.addEventListener('click', function(){
-                document.querySelectorAll('.plan-card').forEach(function(c){ c.classList.remove('selected'); });
-                this.classList.add('selected');
-                updateTotalPrice();
-                scrollToButton();
-            });
-        });
+        updateDroneFields();
     });
     </script>
 </body>

@@ -24,7 +24,7 @@ async function saveToDb(tableName, data) {
     const placeholders = keys.map((_, i) => `$${i + 1}`).join(', ');
     const columns      = keys.join(', ');
     const result = await db.query(
-      `INSERT INTO ${tableName} (${columns}) VALUES (${placeholders}) RETURNING id`,
+      `INSERT INTO ${tableName} (${columns}) VALUES (${placeholders}) RETURNING per_id`,
       values
     );
     return result.rows[0].id;
@@ -231,7 +231,7 @@ module.exports = async (req, res) => {
              total_premium, terms_agreed, agreed_at,
              source_page, status)
            VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
-           RETURNING id`,
+           RETURNING per_id`,
           [
             name || '', birth_date || '', gender || '', phone || '', email || '',
             start.date, start.time, end.date, end.time, null,
@@ -242,7 +242,7 @@ module.exports = async (req, res) => {
             'personal-drone-insurance-form', 'pending'
           ]
         );
-        const applicationId = appResult.rows[0].id;
+        const applicationId = appResult.rows[0].per_id;
 
         const dronesArr = Array.isArray(drones)      ? drones      : [];
         const plansArr  = Array.isArray(drone_plans)  ? drone_plans : [];
@@ -251,12 +251,12 @@ module.exports = async (req, res) => {
           const p = plansArr[i]  || {};
           await db.query(
             `INSERT INTO drone_details
-              (application_id, drone_index,
+              (per_id, drone_index,
                model, serial_number, registration_number, weight, max_weight,
                drone_type, drone_type_name, plan, plan_name, price)
              VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`,
             [
-              applicationId, i,
+              applicationId, i + 1,  // drone_index 1부터 시작 (PER-{n}-1, PER-{n}-2 ...)
               d.model || '', d.serial || '', d.registration || '',
               d.weight || '', d.max_weight || '',
               p.drone_type || d.type || '',

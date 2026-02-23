@@ -11,5 +11,11 @@
     { "source": "/personal-drone-insurance-complete", "destination": "/personal-drone-insurance-complete.html" },
     { "source": "/claims",                            "destination": "/claims.html" },
     { "source": "/my-insurance",                      "destination": "/my-insurance.html" }
-  ]
+  ],
+  "functions": {
+    "api/generate-pdf.js": {
+      "maxDuration": 60,
+      "memory": 3008
+    }
+  }
 }

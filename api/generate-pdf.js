@@ -213,7 +213,19 @@ function buildHTML(d) {
     </div>
   </div>
 
-  <!-- 보험조건 + (드론수 1이면 드론카드) 2열 -->
+  <!-- 보험조건 -->
+  ${count === 1 ? `
+  <div style="margin-bottom:8px;">
+    <div class="card">
+      <div class="card-title">📄 보험 조건</div>
+      <table>
+        <tr><td class="lb">가입물건</td><td class="vl" style="font-size:7.5pt;">${wLabel}</td></tr>
+        <tr class="alt"><td class="lb">드론 대수</td><td class="vl">${count}대</td></tr>
+        <tr><td class="lb">자기부담금</td><td class="vl">${deduct}</td></tr>
+      </table>
+    </div>
+  </div>
+  ` : `
   <div class="two-col">
     <div class="card">
       <div class="card-title">📄 보험 조건</div>
@@ -223,29 +235,13 @@ function buildHTML(d) {
         <tr><td class="lb">자기부담금</td><td class="vl">${deduct}</td></tr>
       </table>
     </div>
-    ${count === 1 ? `
-    <div class="drone-card" style="border:1.5px solid #e8e8e8;">
-      <div class="drone-header">
-        <span class="drone-title">드론 1</span>
-        ${plans[0] && plans[0].plan_name ? `<span class="plan-badge">${plans[0].plan_name}</span>` : ''}
-      </div>
-      <table class="inner-table">
-        <tr><td class="lb">모델명</td><td class="vl">${safe((drones[0]||{}).model)}</td></tr>
-        <tr class="alt"><td class="lb">시리얼번호</td><td class="vl">${safe((drones[0]||{}).serial)}</td></tr>
-        ${(drones[0]||{}).weight     ? `<tr><td class="lb">자체중량</td><td class="vl">${drones[0].weight}kg</td></tr>` : ''}
-        ${(drones[0]||{}).max_weight ? `<tr class="alt"><td class="lb">최대이륙중량</td><td class="vl">${drones[0].max_weight}kg</td></tr>` : ''}
-        ${(plans[0]||{}).coverage_personal ? `<tr><td class="lb">대인배상</td><td class="vl">${plans[0].coverage_personal}</td></tr>` : ''}
-        ${(plans[0]||{}).coverage_property ? `<tr class="alt"><td class="lb">대물배상</td><td class="vl">${plans[0].coverage_property}</td></tr>` : ''}
-        <tr class="price-row"><td class="lb">보험료</td><td class="vl price-val">${comma((plans[0]||{}).price)}원/년</td></tr>
-      </table>
-    </div>` : ''}
+    <div></div>
   </div>
+  `}
 
-  <!-- 드론 2대 이상: 별도 2열 그리드 -->
-  ${count >= 2 ? `
+  <!-- 드론 정보: 항상 표시 -->
   <div class="drone-section-title">🚁 드론 정보 (${count}대)</div>
   <div class="drone-grid">${droneCards}</div>
-  ` : ''}
 
   <!-- 연간 총 보험료 -->
   <div class="total-box">

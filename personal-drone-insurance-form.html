@@ -888,7 +888,7 @@
 
             <div class="button-group">
                 <button type="button" class="btn btn-secondary" onclick="history.back()">이전</button>
-                <button type="submit" class="btn btn-primary" id="submitBtn" disabled>다음 단계로</button>
+                <button type="submit" class="btn btn-primary" id="submitBtn">다음 단계로</button>
             </div>
         </form>
     </div>
@@ -1465,42 +1465,76 @@
             }
         }
 
-        // 폼 유효성 검사 (form.checkValidity() 제거 - 동적 필드와 충돌 방지)
+        // 폼 유효성 검사 (버튼 항상 활성화 — 제출 시 에러 위치로 스크롤)
         function checkFormValidity() {
-            const submitBtn = document.getElementById('submitBtn');
-            const mode = isSamePlan ? 'unified' : 'individual';
-            const droneCount = parseInt(document.getElementById('droneCount').value) || 1;
+            // 버튼은 항상 활성화 상태 유지
+            // 실제 검증은 submit 핸들러에서 수행
+        }
 
-            // 1. 고객 기본 정보 확인
-            const basicFields = ['name', 'birth_date', 'gender', 'phone', 'email', 'insurance_start', 'insurance_end'];
-            for (const fieldName of basicFields) {
-                const el = document.querySelector('[name="' + fieldName + '"]');
-                if (!el || !el.value.trim()) { submitBtn.disabled = true; return; }
-            }
-
-            // 2. 드론 기본 정보 확인
-            for (let i = 0; i < droneCount; i++) {
-                const fields = ['drone_model_' + i, 'drone_serial_' + i, 'drone_weight_' + i, 'drone_max_weight_' + i];
-                for (const fieldName of fields) {
-                    const el = document.querySelector('[name="' + fieldName + '"]');
-                    if (!el || !el.value.toString().trim()) { submitBtn.disabled = true; return; }
-                }
-            }
-
-            // 3. 가입물건 & 플랜 확인
-            if (mode === 'unified') {
-                const droneTypeSelected = document.querySelector('input[name="drone_type"]:checked');
-                const planSelected = document.querySelector('input[name="plan"]:checked');
-                submitBtn.disabled = !(droneTypeSelected && planSelected);
-            } else {
-                for (let i = 0; i < droneCount; i++) {
-                    const droneTypeSelected = document.querySelector('input[name="drone_type_' + i + '"]:checked');
-                    const planSelected = document.querySelector('input[name="plan_drone_' + i + '"]:checked');
-                    if (!droneTypeSelected || !planSelected) { submitBtn.disabled = true; return; }
-                }
-                submitBtn.disabled = false;
+        // ── 섹션 완료 시 다음 섹션으로 자동 스크롤 ──
+        function autoScrollToNextSection(currentEl) {
+            if (!currentEl) return;
+            var card = currentEl.closest('.section-card');
+            if (!card) return;
+            var allCards = Array.from(document.querySelectorAll('.section-card'));
+            var idx = allCards.indexOf(card);
+            if (idx >= 0 && idx < allCards.length - 1) {
+                var nextCard = allCards[idx + 1];
+                setTimeout(function() {
+                    nextCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 400);
             }
         }
+
+        // ── 섹션별 완성 여부 체크 후 자동 스크롤 ──
+        function checkSectionComplete(sectionCard) {
+            if (!sectionCard) return false;
+            var inputs = sectionCard.querySelectorAll('input[required], select[required], input:not([type="radio"]):not([type="hidden"]):not([readonly])');
+            var allFilled = true;
+            inputs.forEach(function(el) {
+                if (el.type === 'radio') {
+                    var name = el.name;
+                    if (!sectionCard.querySelector('input[name="' + name + '"]:checked')) allFilled = false;
+                } else if (!el.value || !el.value.trim()) {
+                    allFilled = false;
+                }
+            });
+            return allFilled;
+        }
+
+        // select 변경 시 섹션 완료 체크
+        document.querySelectorAll('#droneForm select').forEach(function(sel) {
+            sel.addEventListener('change', function() {
+                var card = this.closest('.section-card');
+                if (card && checkSectionComplete(card)) {
+                    autoScrollToNextSection(this);
+                }
+            });
+        });
+
+        // 라디오(가입물건) 선택 시 플랜 섹션으로 스크롤
+        document.querySelectorAll('.drone-type-card').forEach(function(card) {
+            card.addEventListener('click', function() {
+                var planSection = document.getElementById('unifiedPlans')?.closest('.section-card');
+                if (planSection) {
+                    setTimeout(function() {
+                        planSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 400);
+                }
+            });
+        });
+
+        // 플랜 선택 시 다음 버튼으로 스크롤
+        document.querySelectorAll('.plan-card').forEach(function(card) {
+            card.addEventListener('click', function() {
+                setTimeout(function() {
+                    var btnGroup = document.querySelector('.button-group');
+                    if (btnGroup) {
+                        btnGroup.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 400);
+            });
+        });
 
         // ── 에러 표시 헬퍼 ──
         function markError(el, isBox) {

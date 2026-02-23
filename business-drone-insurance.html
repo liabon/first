@@ -970,7 +970,7 @@
 
             <div class="button-group">
                 <button type="button" class="btn btn-secondary" onclick="history.back()">이전</button>
-                <button type="submit" class="btn btn-primary" id="submitBtn" disabled>다음 단계로</button>
+                <button type="submit" class="btn btn-primary" id="submitBtn">다음 단계로</button>
             </div>
         </form>
     </div>
@@ -1257,6 +1257,32 @@
         }
     }
 
+    // ── 연락처 자동 하이픈 포맷 (000-0000-0000) ───────────
+    function formatPhoneNumber(input) {
+        let raw = input.value.replace(/[^0-9]/g, '');
+        if (raw.length > 11) raw = raw.substring(0, 11);
+        let fmt = '';
+        if (raw.length <= 3) {
+            fmt = raw;
+        } else if (raw.length <= 7) {
+            fmt = raw.substring(0,3) + '-' + raw.substring(3);
+        } else {
+            fmt = raw.substring(0,3) + '-' + raw.substring(3,7) + '-' + raw.substring(7);
+        }
+        input.value = fmt;
+    }
+    function getPhoneRaw(input) {
+        return input ? input.value.replace(/[^0-9]/g, '') : '';
+    }
+    // 모든 tel 필드에 포맷 적용
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('input[type="tel"]').forEach(function(el) {
+            el.setAttribute('maxlength', '13'); // 000-0000-0000 = 13자
+            el.setAttribute('inputmode', 'numeric');
+            el.addEventListener('input', function() { formatPhoneNumber(this); });
+        });
+    });
+
     // ── 보험기간 설정 ─────────────────────────────────────
     function setupInsuranceDates() {
         const startEl = document.getElementById('insuranceStart');
@@ -1369,7 +1395,6 @@
             msg.innerHTML = `<strong>${reason} 온라인 가입이 불가합니다.</strong><br>별도 심사를 통해 견적을 산출해야 합니다.<br>아래 버튼을 눌러 견적/가입 의뢰를 신청해주세요.`;
             box.classList.add('show');
             planSec.classList.remove('show');
-            submitBtn.disabled = true;
         } else {
             box.classList.remove('show');
             if (selectedWeight && selectedFlag) {
@@ -1429,54 +1454,152 @@
         }
     }
 
+    // ── 에러 표시 헬퍼 ──────────────────────────────────────
+    function markFieldErr(el) {
+        if (!el) return;
+        el.classList.add('field-error');
+        setTimeout(function(){ el.classList.remove('field-error'); }, 5000);
+    }
+    function markCardGroupErr(cards) {
+        cards.forEach(function(c) {
+            c.style.border = '3px solid #e74c3c';
+            c.style.background = '#fff5f5';
+            setTimeout(function() { c.style.border = ''; c.style.background = ''; }, 5000);
+        });
+    }
+
     // ── 폼 제출 (다음 단계로) ─────────────────────────────
     document.getElementById('droneForm').addEventListener('submit', function(e) {
         e.preventDefault();
 
-        // 100kg 이상 + 해당없음 → 견적 팝업
-        if (selectedWeight === 'over_100kg' && selectedFlag === 'none') {
-            openQuoteModal(); return;
-        }
-        // 군집/임대 선택 시 막기
-        if (selectedFlag === 'swarm' || selectedFlag === 'rental') {
-            openQuoteModal(); return;
+        // 기존 에러 초기화
+        document.querySelectorAll('.field-error').forEach(function(el){ el.classList.remove('field-error'); });
+
+        const form = this;
+        const count = parseInt(document.getElementById('droneCount').value) || 1;
+
+        // ─── 1단계: 고객정보 필드 검증 ───
+        let requiredFields = [];
+        if (currentType === 'personal') {
+            requiredFields = [
+                { el: document.getElementById('personalName'), label: '이름' },
+                { el: document.getElementById('birthDate'), label: '생년월일' },
+                { el: document.getElementById('personalGender'), label: '성별' },
+                { el: document.getElementById('personalPhone'), label: '연락처', isPhone: true },
+                { el: document.getElementById('personalEmail'), label: '이메일' }
+            ];
+        } else {
+            requiredFields = [
+                { el: document.getElementById('corpNumber'), label: '사업자등록번호', isBiz: true },
+                { el: document.getElementById('corpName'), label: '회사명' },
+                { el: document.getElementById('corpContactName'), label: '담당자 이름' },
+                { el: document.getElementById('corpPhone'), label: '연락처', isPhone: true },
+                { el: document.getElementById('corpEmail'), label: '이메일' }
+            ];
         }
 
-        // 법인 탭: 사업자번호 검증 확인
-        if (currentType === 'corporate') {
-            const rawBiz = getCorpNumberRaw();
+        // 보험기간
+        requiredFields.push(
+            { el: document.getElementById('insuranceStart'), label: '보험시작일시' },
+            { el: document.getElementById('insuranceEnd'), label: '보험종료일시' }
+        );
+
+        // 드론 정보
+        for (let i = 0; i < count; i++) {
+            requiredFields.push(
+                { el: form.querySelector('[name="drone_model_'+i+'"]'), label: '드론 '+(i+1)+' 모델명' },
+                { el: form.querySelector('[name="drone_serial_'+i+'"]'), label: '드론 '+(i+1)+' 시리얼번호' },
+                { el: form.querySelector('[name="drone_weight_'+i+'"]'), label: '드론 '+(i+1)+' 자체중량' },
+                { el: form.querySelector('[name="drone_mtow_'+i+'"]'), label: '드론 '+(i+1)+' 최대이륙중량' }
+            );
+        }
+
+        // 텍스트/select 필드 검증
+        let firstErr = null;
+        for (const f of requiredFields) {
+            if (!f.el) continue;
+            let val = '';
+            if (f.isBiz) val = getCorpNumberRaw();
+            else if (f.isPhone) val = getPhoneRaw(f.el);
+            else val = (f.el.value || '').trim();
+
+            if (!val || (f.isBiz && val.length !== 10)) {
+                markFieldErr(f.el);
+                if (!firstErr) firstErr = f.el;
+            }
+        }
+        if (firstErr) {
+            firstErr.scrollIntoView({ behavior:'smooth', block:'center' });
+            firstErr.focus();
+            return;
+        }
+
+        // 법인 사업자번호 API 검증 확인
+        if (currentType === 'corporate' && !bizNumberValid) {
             const bizInput = document.getElementById('corpNumber');
-            if (rawBiz.length !== 10) {
-                bizInput.classList.add('field-error');
-                setTimeout(function(){ bizInput.classList.remove('field-error'); }, 4000);
-                document.getElementById('bizStatus').innerHTML = '<span class="biz-status invalid">숫자 10자리를 입력해주세요</span>';
-                bizInput.scrollIntoView({ behavior:'smooth', block:'center' });
-                return;
-            }
-            if (!bizNumberValid) {
-                bizInput.classList.add('field-error');
-                setTimeout(function(){ bizInput.classList.remove('field-error'); }, 4000);
-                document.getElementById('bizStatus').innerHTML = '<span class="biz-status invalid">⚠️ 조회 버튼을 눌러 사업자번호를 확인해주세요</span>';
-                bizInput.scrollIntoView({ behavior:'smooth', block:'center' });
-                return;
-            }
+            markFieldErr(bizInput);
+            bizInput.scrollIntoView({ behavior:'smooth', block:'center' });
+            document.getElementById('bizStatus').innerHTML = '<span class="biz-status invalid">⚠️ 조회 버튼을 눌러 사업자번호를 확인해주세요</span>';
+            return;
         }
 
+        // ─── 2단계: 가입물건 - 자체중량 ───
+        if (!selectedWeight) {
+            markCardGroupErr(document.querySelectorAll('.weight-card'));
+            document.querySelector('.weight-grid').scrollIntoView({ behavior:'smooth', block:'center' });
+            return;
+        }
+
+        // ─── 3단계: 가입물건 - 드론유형 ───
+        if (!selectedFlag) {
+            markCardGroupErr(document.querySelectorAll('.flag-card'));
+            document.querySelector('.drone-flag-grid').scrollIntoView({ behavior:'smooth', block:'center' });
+            return;
+        }
+
+        // 견적 필요 케이스 → 모달
+        const needQuote = (selectedFlag === 'swarm' || selectedFlag === 'rental' || selectedWeight === 'over_100kg');
+        if (needQuote) {
+            openQuoteModal();
+            return;
+        }
+
+        // ─── 4단계: 플랜 선택 ───
+        let allPlanSelected = true;
+        for (let i = 0; i < count; i++) {
+            if (!selectedPlans[i]) { allPlanSelected = false; break; }
+        }
+        if (!allPlanSelected) {
+            const planSec = document.getElementById('planSection');
+            if (planSec) {
+                planSec.scrollIntoView({ behavior:'smooth', block:'start' });
+                // 플랜 테이블 하이라이트
+                const planCols = planSec.querySelectorAll('.plan-col-header');
+                planCols.forEach(function(c) {
+                    c.style.background = '#fff5f5';
+                    setTimeout(function(){ c.style.background = ''; }, 5000);
+                });
+            }
+            return;
+        }
+
+        // ─── 5단계: 데이터 수집 & 저장 ───
         const formData = new FormData(this);
         const params = new URLSearchParams();
         for (const [k,v] of formData.entries()) params.append(k,v);
 
-        // 법인 사업자번호: 하이픈 제거하여 저장
-        if (currentType === 'corporate') {
-            params.set('corp_number', getCorpNumberRaw());
-            params.set('customer_type', 'corporate');
-        } else {
+        // 연락처: 숫자만 저장
+        if (currentType === 'personal') {
+            params.set('phone', getPhoneRaw(document.getElementById('personalPhone')));
             params.set('customer_type', 'personal');
+        } else {
+            params.set('corp_number', getCorpNumberRaw());
+            params.set('corp_phone', getPhoneRaw(document.getElementById('corpPhone')));
+            params.set('customer_type', 'corporate');
         }
 
-        // 플랜 선택 정보 추가
+        // 플랜 정보
         params.set('selected_deductible', selectedDeductible);
-        const count = parseInt(document.getElementById('droneCount').value) || 1;
         const prices = PLAN_PRICES[selectedWeight]?.[selectedDeductible] || {};
         for (let i = 0; i < count; i++) {
             const plan = selectedPlans[i] || '';
@@ -1671,19 +1794,7 @@
     }
 
     function updateSubmitBtn() {
-        const count = parseInt(document.getElementById('droneCount').value) || 1;
-        let allSelected = true;
-        for (let i = 0; i < count; i++) {
-            if (!selectedPlans[i]) { allSelected = false; break; }
-        }
-        const submitBtn = document.getElementById('submitBtn');
-        if (!submitBtn) return;
-        const needQuote = (selectedFlag === 'swarm' || selectedFlag === 'rental' || selectedWeight === 'over_100kg');
-        if (!needQuote && selectedWeight && selectedFlag && allSelected) {
-            submitBtn.disabled = false;
-        } else {
-            submitBtn.disabled = true;
-        }
+        // 버튼은 항상 활성화 - submit 시 검증
     }
 
     // ── 페이지 초기화 ──────────────────────────────────────

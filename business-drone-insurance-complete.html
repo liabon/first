@@ -182,32 +182,6 @@ var WEIGHT_LABELS = {
 };
 var insuranceData = null;
 
-/* ══════════════════════════════════════
-   ★ 테스트용 임시 데이터 — 배포 전 삭제
-══════════════════════════════════════ */
-(function injectTestData() {
-    var TEST = {
-        name: '김리하',
-        phone: '010-8461-8712',
-        email: 'liab.on.ins@gmail.com',
-        insurance_start: '2026-02-22T19:00',
-        insurance_end:   '2027-02-22T19:00',
-        drone_count: 2,
-        drone_weight: '25_100kg',
-        selected_deductible: '10',
-        plan_total_price: 1399000,
-        drones: [
-            { model: '모델명1',  serial: '시리얼번호1',  weight: '1',  max_weight: '1'  },
-            { model: '모델명12', serial: '시리얼번호22', weight: '22', max_weight: '22' }
-        ],
-        drone_plans: [
-            { plan_name: '안심형', price: 679000, coverage_personal: '3억원', coverage_property: '3억원' },
-            { plan_name: '든든형', price: 720000, coverage_personal: '5억원', coverage_property: '5억원' }
-        ]
-    };
-    sessionStorage.setItem('businessDroneData', JSON.stringify(TEST));
-})();
-
 /* ─── 초기화 ─── */
 window.addEventListener('DOMContentLoaded', function() {
     // 이메일

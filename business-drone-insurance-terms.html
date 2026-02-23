@@ -158,7 +158,7 @@
                     <p><strong>제공목적:</strong> 보험계약체결·유지·관리·이행</p>
                     <p><strong>제공항목:</strong> 개인식별정보, 보험계약정보, 보험금지급정보</p>
                     <h3>5. 개인정보관리책임자</h3>
-                    <p>이름: 김리하 / 소속: 배상온 / 직위: 대표 / 이메일: liab.on.ins@gmail.com</p>
+                    <p>이름: 김리하 / 소속: 배상온 / 직위: 대표 / 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f19d989093df9e9fdf989f82b1969c90989ddf929e9c">[email&#160;protected]</a></p>
                 </div>
             </div>
 
@@ -244,7 +244,7 @@
     <footer>
         <div class="footer-content">
             <h3 style="margin-bottom: 1rem;">배상온 대리점</h3>
-            <p>📧 이메일: liab.on.ins@gmail.com</p>
+            <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9bf7f2faf9b5f4f5b5f2f5e8dbfcf6faf2f7b5f8f4f6">[email&#160;protected]</a></p>
             <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
             <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
             <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
@@ -252,7 +252,7 @@
         </div>
     </footer>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // 페이지 재방문(이전 버튼) 시 버튼 상태 초기화
         window.addEventListener('pageshow', function() {
             const btn = document.getElementById('submitBtn');
@@ -265,9 +265,24 @@
             button.textContent = content.classList.contains('show') ? '닫기' : '보기';
         }
 
+        // ── 자동 스크롤: 필수 약관 모두 체크 시 다음 버튼으로 이동 ──
+        function scrollToButtonIfReady() {
+            const required = document.querySelectorAll('.agreement-check.required');
+            const ok = Array.from(required).every(cb => cb.checked);
+            if (ok) {
+                setTimeout(function() {
+                    var btnGroup = document.querySelector('.button-group');
+                    if (btnGroup) {
+                        btnGroup.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 300);
+            }
+        }
+
         document.getElementById('agreeAll').addEventListener('change', function() {
             document.querySelectorAll('.agreement-check').forEach(cb => cb.checked = this.checked);
             checkSubmitButton();
+            scrollToButtonIfReady();
         });
 
         document.querySelectorAll('.agreement-check').forEach(checkbox => {
@@ -275,6 +290,7 @@
                 const allChecked = Array.from(document.querySelectorAll('.agreement-check')).every(cb => cb.checked);
                 document.getElementById('agreeAll').checked = allChecked;
                 checkSubmitButton();
+                scrollToButtonIfReady();
             });
         });
 
@@ -300,13 +316,11 @@
             const p = new URLSearchParams(raw);
             const droneCount = parseInt(p.get('drone_count') || '1');
 
-            // 개인/법인 고객 정보 결정
             const isCorpTab = !!(p.get('corp_number') || p.get('corp_name'));
             const custName  = isCorpTab ? (p.get('corp_name')  || '') : (p.get('name')  || '');
             const custPhone = isCorpTab ? (p.get('corp_phone') || '') : (p.get('phone') || '');
             const custEmail = isCorpTab ? (p.get('corp_email') || '') : (p.get('email') || '');
 
-            // 드론별 배열 구성
             const drones     = [];
             const dronePlans = [];
             for (let i = 0; i < droneCount; i++) {
@@ -326,7 +340,6 @@
             }
 
             const businessData = {
-                // 고객
                 name:        custName,
                 phone:       custPhone,
                 email:       custEmail,
@@ -334,26 +347,22 @@
                 gender:      p.get('gender')     || '',
                 corp_number: p.get('corp_number') || '',
                 corp_name:   p.get('corp_name')   || '',
-                // 보험기간
+                corp_phone:  p.get('corp_phone')  || '',
                 insurance_start: p.get('insurance_start') || '',
                 insurance_end:   p.get('insurance_end')   || '',
-                // 드론
                 drone_count:  droneCount,
-                drone_weight: p.get('drone_weight') || '',   // under_25kg / 25_100kg
-                drone_flag:   p.get('drone_flag')   || '',   // none / swarm / rental
+                drone_weight: p.get('drone_weight') || '',
+                drone_flag:   p.get('drone_flag')   || '',
                 drones:       drones,
                 drone_plans:  dronePlans,
-                // 플랜
                 selected_deductible: p.get('selected_deductible') || '10',
                 plan_total_price:    p.get('plan_total_price')    || '0',
-                // 약관
                 insurance_type:   '업무용 드론보험',
                 terms_agreed:     true,
                 marketing_agreed: document.getElementById('agreeMarketing')?.checked || false,
                 agreed_at:        new Date().toISOString()
             };
 
-            // sessionStorage 먼저 저장 (API 실패해도 complete 페이지 이동)
             sessionStorage.setItem('businessDroneData', JSON.stringify(businessData));
 
             try {
@@ -362,8 +371,18 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(businessData)
                 });
-            } catch (e) {
-                console.error('API 오류 (무시):', e);
+            } catch (err) {
+                console.warn('API 호출 오류:', err);
+            }
+
+            try {
+                await fetch('/api/save-business-drone', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(businessData)
+                });
+            } catch (err) {
+                console.warn('DB 저장 오류:', err);
             }
 
             window.location.href = '/business-drone-insurance-complete';

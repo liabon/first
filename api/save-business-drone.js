@@ -69,7 +69,7 @@ module.exports = async function handler(req, res) {
         $12, $13, $14, $15,
         $16, $17,
         $18, $19, $20
-      ) RETURNING id`,
+      ) RETURNING biz_id`,
       [
         customerType,
         // 개인 필드
@@ -99,7 +99,7 @@ module.exports = async function handler(req, res) {
       ]
     );
 
-    const applicationId = masterResult.rows[0].id;
+    const applicationId = masterResult.rows[0].biz_id;
 
     // ── 2. 드론별 상세 저장 ───────────────────────────────
     const drones = d.drones      || [];
@@ -138,7 +138,7 @@ module.exports = async function handler(req, res) {
     // 응답: biz_id 반환 (어드민에서 BIZ-{id}로 조회 가능)
     return res.status(200).json({
       saved: true,
-      biz_id: `BIZ-${applicationId}`,
+      biz_key: `BIZ-${applicationId}`,
       application_id: applicationId,
       drone_count: droneCount
     });

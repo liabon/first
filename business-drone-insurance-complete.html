@@ -231,7 +231,33 @@ window.addEventListener('DOMContentLoaded', function() {
 
     displayInfo();
     buildPrintArea();
+    saveToDatabase();  // DB 저장 (비동기 — 실패해도 UI 영향 없음)
 });
+
+/* ─── DB 저장 (complete 페이지 진입 시 1회) ─── */
+async function saveToDatabase() {
+    if (!insuranceData) return;
+    // 중복 저장 방지: 이미 저장된 경우 스킵
+    try {
+        if (sessionStorage.getItem('biz_saved_id')) return;
+    } catch(e) {}
+    try {
+        var res = await fetch('/api/save-business-drone', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(insuranceData)
+        });
+        var data = await res.json();
+        if (data.saved && data.biz_id) {
+            // 저장 완료 표시 (중복 방지)
+            try { sessionStorage.setItem('biz_saved_id', data.biz_id); } catch(e) {}
+            console.log('[DB 저장 완료]', data.biz_id);
+        }
+    } catch(e) {
+        // DB 실패는 조용히 처리 — 사용자에게 에러 안 보임
+        console.warn('[DB 저장 실패]', e.message);
+    }
+}
 
 /* droneFormData(URLSearchParams) → JSON 문자열 변환 */
 function convertFormDataToJSON(raw) {

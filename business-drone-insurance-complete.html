@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>견적서 확인 - KB손해보험 업무용 드론보험</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root { --kb-yellow: #FFCD00; --kb-gold: #FFB800; --kb-dark: #1a1a1a; }
@@ -381,49 +382,164 @@ function buildPrintArea() {
         '</div>';
 }
 
-/* ─── PDF 다운로드 (서버사이드 pdfkit — /api/generate-pdf) ─── */
+/* ─── PDF 다운로드 (클라이언트 html2pdf — 개인형과 동일 방식) ─── */
 async function downloadPDF() {
     if (!insuranceData) { alert('보험 데이터가 없습니다.'); return; }
 
-    var btn = document.querySelector('.btn-pdf');
-    var origText = btn.textContent;
-    btn.disabled = true;
-    btn.textContent = '생성 중...';
+    var d      = insuranceData;
+    var today  = new Date();
+    var dateStr = today.getFullYear() + '. ' + (today.getMonth()+1) + '. ' + today.getDate() + '.';
+    var custName = d.corp_name || d.name || '';
+    var count  = parseInt(d.drone_count) || 1;
+    var drones = d.drones      || [];
+    var plans  = d.drone_plans || [];
+    var total  = parseInt(d.plan_total_price || 0);
+    var weightLabel = d.drone_weight ? (WEIGHT_LABELS[d.drone_weight] || d.drone_weight) : '-';
+
+    function safe(v) { return (v != null && v !== '') ? String(v) : '-'; }
+    function fmtDT(s) { return (s || '').replace('T', ' '); }
+    function comma(n) { return parseInt(n||0).toLocaleString('ko-KR'); }
+
+    // 드론별 카드 HTML (2열 그리드)
+    var droneCardsHTML = '';
+    for (var i = 0; i < count; i++) {
+        var dr = drones[i] || {};
+        var pl = plans[i]  || {};
+        droneCardsHTML += '<div style="background:#fff;border:1.5px solid #e8e8e8;border-radius:6px;overflow:hidden;">' +
+            '<div style="display:flex;align-items:center;gap:6px;padding:6px 10px 5px;border-bottom:2px solid #FFB800;">' +
+            '<span style="font-size:11px;font-weight:700;color:#FFB800;">드론 ' + (i+1) + '</span>' +
+            (pl.plan_name ? '<span style="background:#FFB800;color:#1a1a1a;font-size:8px;font-weight:700;padding:1px 7px;border-radius:10px;">' + pl.plan_name + '</span>' : '') +
+            '</div>' +
+            '<table style="width:100%;border-collapse:collapse;">' +
+            (dr.model     ? '<tr><td style="padding:4px 10px;font-size:8px;color:#666;width:42%;">모델명</td><td style="padding:4px 10px;font-size:8px;font-weight:700;">' + safe(dr.model) + '</td></tr>' : '') +
+            (dr.serial    ? '<tr style="background:#f8f9fa;"><td style="padding:4px 10px;font-size:8px;color:#666;">시리얼번호</td><td style="padding:4px 10px;font-size:8px;font-weight:700;">' + safe(dr.serial) + '</td></tr>' : '') +
+            (dr.weight    ? '<tr><td style="padding:4px 10px;font-size:8px;color:#666;">자체중량</td><td style="padding:4px 10px;font-size:8px;font-weight:700;">' + dr.weight + 'kg</td></tr>' : '') +
+            (dr.max_weight? '<tr style="background:#f8f9fa;"><td style="padding:4px 10px;font-size:8px;color:#666;">최대이륙중량</td><td style="padding:4px 10px;font-size:8px;font-weight:700;">' + dr.max_weight + 'kg</td></tr>' : '') +
+            (pl.coverage_personal ? '<tr><td style="padding:4px 10px;font-size:8px;color:#666;">대인배상</td><td style="padding:4px 10px;font-size:8px;font-weight:700;">' + pl.coverage_personal + '</td></tr>' : '') +
+            (pl.coverage_property ? '<tr style="background:#f8f9fa;"><td style="padding:4px 10px;font-size:8px;color:#666;">대물배상</td><td style="padding:4px 10px;font-size:8px;font-weight:700;">' + pl.coverage_property + '</td></tr>' : '') +
+            '<tr style="background:#fff9e6;"><td style="padding:4px 10px;font-size:8px;color:#666;">보험료</td><td style="padding:4px 10px;font-size:8px;font-weight:700;color:#b87000;">' + comma(pl.price) + '원/년</td></tr>' +
+            '</table></div>';
+    }
+
+    // 고객정보 행
+    var custHTML = '';
+    if (d.corp_name) {
+        custHTML += '<p style="margin:3px 0;font-size:10px;color:#1a1a1a;"><strong>법인명:</strong> ' + safe(d.corp_name) + '</p>';
+        if (d.corp_number) custHTML += '<p style="margin:3px 0;font-size:10px;color:#1a1a1a;"><strong>사업자번호:</strong> ' + safe(d.corp_number) + '</p>';
+    } else {
+        custHTML += '<p style="margin:3px 0;font-size:10px;color:#1a1a1a;"><strong>이름:</strong> ' + safe(d.name) + '</p>';
+    }
+    custHTML += '<p style="margin:3px 0;font-size:10px;color:#1a1a1a;"><strong>연락처:</strong> ' + safe(d.phone) + '</p>';
+    custHTML += '<p style="margin:3px 0;font-size:10px;color:#1a1a1a;"><strong>이메일:</strong> ' + safe(d.email) + '</p>';
+
+    // PDF HTML 생성
+    var element = document.createElement('div');
+    element.style.width = '210mm';
+    element.style.background = '#fff';
+    element.style.fontFamily = "'Noto Sans KR', sans-serif";
+    element.style.overflow = 'hidden';
+
+    element.innerHTML =
+        // 헤더
+        '<div style="background:#FFB800;padding:10px 20px 8px;text-align:center;">' +
+        '<h1 style="color:#1a1a1a;margin:0;font-size:13px;font-weight:900;line-height:1.2;">배상온 업무용 드론보험</h1>' +
+        '<p style="color:#1a1a1a;margin:3px 0 0;font-size:9px;">견적서</p>' +
+        '</div>' +
+
+        '<div style="padding:10px 16px;">' +
+
+        // 견적정보 + 고객정보 2열
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">' +
+        '<div style="background:#f8f9fa;padding:10px;border-radius:6px;border:1px solid #e8e8e8;">' +
+        '<h3 style="color:#FFB800;font-size:9px;font-weight:700;margin:0 0 6px 0;">📋 견적 정보</h3>' +
+        '<p style="margin:3px 0;font-size:8.5px;color:#1a1a1a;"><strong>견적일자:</strong> ' + dateStr + '</p>' +
+        '<p style="margin:3px 0;font-size:8.5px;color:#1a1a1a;"><strong>보험시작:</strong> ' + fmtDT(d.insurance_start) + '</p>' +
+        '<p style="margin:3px 0;font-size:8.5px;color:#1a1a1a;"><strong>보험종료:</strong> ' + fmtDT(d.insurance_end) + '</p>' +
+        '<p style="margin:3px 0;font-size:8.5px;color:#1a1a1a;"><strong>상품명:</strong> KB손해보험 업무용 드론보험</p>' +
+        '</div>' +
+        '<div style="background:#f8f9fa;padding:10px;border-radius:6px;border:1px solid #e8e8e8;">' +
+        '<h3 style="color:#FFB800;font-size:9px;font-weight:700;margin:0 0 6px 0;">👤 고객 정보</h3>' +
+        custHTML +
+        '</div></div>' +
+
+        // 보험조건 + 드론1 (count==1) 2열
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">' +
+        '<div style="background:#f8f9fa;padding:10px;border-radius:6px;border:1px solid #e8e8e8;">' +
+        '<h3 style="color:#FFB800;font-size:9px;font-weight:700;margin:0 0 6px 0;">📄 보험 조건</h3>' +
+        '<p style="margin:3px 0;font-size:8px;color:#1a1a1a;"><strong>가입물건:</strong> ' + weightLabel + '</p>' +
+        '<p style="margin:3px 0;font-size:8.5px;color:#1a1a1a;"><strong>드론 대수:</strong> ' + count + '대</p>' +
+        '<p style="margin:3px 0;font-size:8.5px;color:#1a1a1a;"><strong>자기부담금:</strong> ' + safe(d.selected_deductible) + '만원</p>' +
+        '</div>' +
+        // 드론1은 항상 오른쪽에
+        (function() {
+            var dr0 = drones[0]||{}, pl0 = plans[0]||{};
+            return '<div style="background:#fff;border:1.5px solid #e8e8e8;border-radius:6px;overflow:hidden;">' +
+            '<div style="display:flex;align-items:center;gap:6px;padding:6px 10px 5px;border-bottom:2px solid #FFB800;">' +
+            '<span style="font-size:11px;font-weight:700;color:#FFB800;">드론 1</span>' +
+            (pl0.plan_name ? '<span style="background:#FFB800;color:#1a1a1a;font-size:8px;font-weight:700;padding:1px 7px;border-radius:10px;">' + pl0.plan_name + '</span>' : '') +
+            '</div>' +
+            '<table style="width:100%;border-collapse:collapse;">' +
+            (dr0.model     ? '<tr><td style="padding:4px 10px;font-size:8px;color:#666;width:42%;">모델명</td><td style="padding:4px 10px;font-size:8px;font-weight:700;">' + safe(dr0.model) + '</td></tr>' : '') +
+            (dr0.serial    ? '<tr style="background:#f8f9fa;"><td style="padding:4px 10px;font-size:8px;color:#666;">시리얼번호</td><td style="padding:4px 10px;font-size:8px;font-weight:700;">' + safe(dr0.serial) + '</td></tr>' : '') +
+            (dr0.weight    ? '<tr><td style="padding:4px 10px;font-size:8px;color:#666;">자체중량</td><td style="padding:4px 10px;font-size:8px;font-weight:700;">' + dr0.weight + 'kg</td></tr>' : '') +
+            (dr0.max_weight? '<tr style="background:#f8f9fa;"><td style="padding:4px 10px;font-size:8px;color:#666;">최대이륙중량</td><td style="padding:4px 10px;font-size:8px;font-weight:700;">' + dr0.max_weight + 'kg</td></tr>' : '') +
+            (pl0.coverage_personal ? '<tr><td style="padding:4px 10px;font-size:8px;color:#666;">대인배상</td><td style="padding:4px 10px;font-size:8px;font-weight:700;">' + pl0.coverage_personal + '</td></tr>' : '') +
+            (pl0.coverage_property ? '<tr style="background:#f8f9fa;"><td style="padding:4px 10px;font-size:8px;color:#666;">대물배상</td><td style="padding:4px 10px;font-size:8px;font-weight:700;">' + pl0.coverage_property + '</td></tr>' : '') +
+            '<tr style="background:#fff9e6;"><td style="padding:4px 10px;font-size:8px;color:#666;">보험료</td><td style="padding:4px 10px;font-size:8px;font-weight:700;color:#b87000;">' + comma(pl0.price) + '원/년</td></tr>' +
+            '</table></div>';
+        })() +
+        '</div>' +
+
+        // 드론 2대 이상 → 2열 그리드
+        (count >= 2 ?
+            '<p style="font-size:9px;font-weight:700;color:#1a1a1a;margin:0 0 6px 0;">🚁 드론 정보 (' + count + '대)</p>' +
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">' + droneCardsHTML + '</div>'
+        : '') +
+
+        // 연간 총 보험료
+        '<div style="background:#FFB800;border-radius:8px;text-align:center;padding:8px 0 7px;margin-bottom:8px;">' +
+        '<p style="margin:0 0 2px;font-size:8.5px;font-weight:500;color:#1a1a1a;">연간 총 보험료</p>' +
+        '<p style="margin:0;font-size:17px;font-weight:900;color:#1a1a1a;">' + comma(total) + '원</p>' +
+        '</div>' +
+
+        // 유의사항
+        '<div style="background:#fff9e6;border-radius:6px;padding:7px 10px;font-size:7.5px;color:#555;line-height:1.7;margin-bottom:8px;">' +
+        '<strong style="color:#1a1a1a;display:block;font-size:8px;margin-bottom:2px;">유의사항</strong>' +
+        '※ 구체적인 보장/면책 및 보험금 지급은 약관에 따릅니다.<br>' +
+        '※ 본 견적서는 참고용이며, 최종 보험료는 심사 후 확정됩니다.' +
+        '</div>' +
+
+        // 푸터
+        '<div style="background:#1a1a1a;color:#fff;text-align:center;padding:8px 0;border-radius:6px;">' +
+        '<p style="margin:0;font-size:9px;font-weight:700;">배상온 대리점</p>' +
+        '<p style="margin:3px 0;font-size:7.5px;color:#aaa;">liab.on.ins@gmail.com | www.liab.co.kr</p>' +
+        '<p style="margin:0;font-size:7px;color:#888;">KB손해보험 공식 대리점</p>' +
+        '</div>' +
+
+        '</div>'; // padding div 닫기
+
+    var opt = {
+        margin: 0,
+        filename: 'KB_업무용드론보험_견적서_' + custName + '_' +
+                  today.getFullYear() +
+                  String(today.getMonth()+1).padStart(2,'0') +
+                  String(today.getDate()).padStart(2,'0') + '.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: {
+            scale: 2,
+            useCORS: true,
+            letterRendering: true,
+            scrollY: 0,
+            scrollX: 0
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
 
     try {
-        var res = await fetch('/api/generate-pdf', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(insuranceData)
-        });
-
-        if (!res.ok) {
-            var errJson = {};
-            try { errJson = await res.json(); } catch(e) {}
-            throw new Error(errJson.message || ('서버 오류 ' + res.status));
-        }
-
-        var blob = await res.blob();
-        var url  = URL.createObjectURL(blob);
-        var a    = document.createElement('a');
-        var today = new Date();
-        var custName = insuranceData.corp_name || insuranceData.name || '';
-        a.href     = url;
-        a.download = 'KB_업무용드론보험_견적서_' + custName + '_' +
-                     today.getFullYear() +
-                     String(today.getMonth()+1).padStart(2,'0') +
-                     String(today.getDate()).padStart(2,'0') + '.pdf';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-    } catch(err) {
+        await html2pdf().set(opt).from(element).save();
+    } catch (err) {
         console.error('PDF 오류:', err);
-        alert('PDF 생성 실패: ' + err.message);
-    } finally {
-        btn.disabled = false;
-        btn.textContent = origText;
+        alert('PDF 생성 오류: ' + err.message);
     }
 }
 /* ─── 이메일 ─── */

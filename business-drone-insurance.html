@@ -319,16 +319,16 @@
             noLabel.classList.remove('selected-ok', 'selected-wrong', 'hint');
             card.classList.remove('correct', 'wrong');
 
+            var correct = CORRECT[name];
+
             if (!selected) {
                 allAnswered = false;
-                // 미선택: 정답에 힌트 복원
                 var hintLabel = (correct === 'yes') ? yesLabel : noLabel;
                 hintLabel.classList.add('hint');
                 continue;
             }
 
             var val = selected.value;
-            var correct = CORRECT[name];
             var isCorrect = (val === correct);
 
             var selectedLabel = (val === 'yes') ? yesLabel : noLabel;
@@ -359,16 +359,7 @@
     }
 
     document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
-        radio.addEventListener('change', function() {
-            // Q1 "예" 선택 → Q2~Q5 자동 "아니오"
-            if (this.name === 'q1' && this.value === 'yes') {
-                for (var i = 2; i <= 5; i++) {
-                    var noRadio = document.querySelector('input[name="q' + i + '"][value="no"]');
-                    if (noRadio) noRadio.checked = true;
-                }
-            }
-            checkAnswers();
-        });
+        radio.addEventListener('change', checkAnswers);
     });
 
     btnNext.addEventListener('click', function() {

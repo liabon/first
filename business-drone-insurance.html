@@ -359,7 +359,22 @@
     }
 
     document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
-        radio.addEventListener('change', checkAnswers);
+        radio.addEventListener('change', function() {
+            checkAnswers();
+            // 현재 질문 번호 → 다음 카드로 스크롤
+            var qNum = parseInt(this.name.replace('q', ''));
+            var nextCard = document.getElementById('card' + (qNum + 1));
+            if (nextCard) {
+                setTimeout(function() {
+                    nextCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            } else {
+                // 마지막 질문 → 버튼으로 스크롤
+                setTimeout(function() {
+                    document.querySelector('.button-group').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            }
+        });
     });
 
     btnNext.addEventListener('click', function() {

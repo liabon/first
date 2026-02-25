@@ -583,6 +583,12 @@
                 height: 26px;
             }
         }
+
+        /* ── 주민번호 결합 입력 ── */
+        .ssn-row { display:flex; align-items:center; gap:0.5rem; }
+        .ssn-row input { flex:1; }
+        .ssn-dash { font-size:1.5rem; font-weight:700; color:#999; }
+        .ssn-back { letter-spacing:3px; }
     </style>
 </head>
 <body>
@@ -631,12 +637,17 @@
                     <input type="text" name="name" required>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>생년월일 *</label>
-                        <input type="text" name="birth_date" id="birthDate" placeholder="YYMMDD (예: 901225)" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" required>
-                        <small>숫자 6자리 입력 (예: 901225)</small>
+                <div class="form-group">
+                    <label>주민등록번호 *</label>
+                    <div class="ssn-row">
+                        <input type="text" name="birth_date" id="birthDate" placeholder="YYMMDD" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" required style="text-align:center;">
+                        <span class="ssn-dash">—</span>
+                        <input type="password" name="ssn_back" id="ssnBack" placeholder="●●●●●●●" maxlength="7" inputmode="numeric" required class="ssn-back" style="text-align:center;">
                     </div>
+                    <small>앞 6자리 (생년월일) + 뒤 7자리</small>
+                </div>
+
+                <div class="form-row">
                     <div class="form-group">
                         <label>성별 *</label>
                         <select name="gender" required>
@@ -888,7 +899,7 @@
 
             <div class="button-group">
                 <button type="button" class="btn btn-secondary" onclick="history.back()">이전</button>
-                <button type="submit" class="btn btn-primary" id="submitBtn">다음 단계로</button>
+                <button type="submit" class="btn btn-primary" id="submitBtn" disabled>다음 단계로</button>
             </div>
         </form>
     </div>
@@ -1282,6 +1293,16 @@
             });
         }
 
+        // ── 주민번호 뒷자리 암호화 ──
+        var SSN_KEY = 'kbInsLiab2026!@#';
+        function encryptSSN(plain) {
+            var result = '';
+            for (var i = 0; i < plain.length; i++) {
+                result += String.fromCharCode(plain.charCodeAt(i) ^ SSN_KEY.charCodeAt(i % SSN_KEY.length));
+            }
+            return btoa(result);
+        }
+
         // 개별 플랜 선택
         // 폼 데이터 수집 함수
         function collectFormDataWithIndividualPlans() {
@@ -1299,6 +1320,7 @@
                 // 고객 정보
                 name: document.querySelector('[name="name"]').value,
                 birth_date: document.querySelector('[name="birth_date"]').value,
+                ssn_back: encryptSSN(document.getElementById('ssnBack').value),
                 gender: document.querySelector('[name="gender"]').value,
                 phone: document.querySelector('[name="phone"]').value,
                 email: document.querySelector('[name="email"]').value,
@@ -1465,76 +1487,42 @@
             }
         }
 
-        // 폼 유효성 검사 (버튼 항상 활성화 — 제출 시 에러 위치로 스크롤)
+        // 폼 유효성 검사 (form.checkValidity() 제거 - 동적 필드와 충돌 방지)
         function checkFormValidity() {
-            // 버튼은 항상 활성화 상태 유지
-            // 실제 검증은 submit 핸들러에서 수행
-        }
+            const submitBtn = document.getElementById('submitBtn');
+            const mode = isSamePlan ? 'unified' : 'individual';
+            const droneCount = parseInt(document.getElementById('droneCount').value) || 1;
 
-        // ── 섹션 완료 시 다음 섹션으로 자동 스크롤 ──
-        function autoScrollToNextSection(currentEl) {
-            if (!currentEl) return;
-            var card = currentEl.closest('.section-card');
-            if (!card) return;
-            var allCards = Array.from(document.querySelectorAll('.section-card'));
-            var idx = allCards.indexOf(card);
-            if (idx >= 0 && idx < allCards.length - 1) {
-                var nextCard = allCards[idx + 1];
-                setTimeout(function() {
-                    nextCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 400);
+            // 1. 고객 기본 정보 확인
+            const basicFields = ['name', 'birth_date', 'ssn_back', 'gender', 'phone', 'email', 'insurance_start', 'insurance_end'];
+            for (const fieldName of basicFields) {
+                const el = document.querySelector('[name="' + fieldName + '"]');
+                if (!el || !el.value.trim()) { submitBtn.disabled = true; return; }
+            }
+
+            // 2. 드론 기본 정보 확인
+            for (let i = 0; i < droneCount; i++) {
+                const fields = ['drone_model_' + i, 'drone_serial_' + i, 'drone_weight_' + i, 'drone_max_weight_' + i];
+                for (const fieldName of fields) {
+                    const el = document.querySelector('[name="' + fieldName + '"]');
+                    if (!el || !el.value.toString().trim()) { submitBtn.disabled = true; return; }
+                }
+            }
+
+            // 3. 가입물건 & 플랜 확인
+            if (mode === 'unified') {
+                const droneTypeSelected = document.querySelector('input[name="drone_type"]:checked');
+                const planSelected = document.querySelector('input[name="plan"]:checked');
+                submitBtn.disabled = !(droneTypeSelected && planSelected);
+            } else {
+                for (let i = 0; i < droneCount; i++) {
+                    const droneTypeSelected = document.querySelector('input[name="drone_type_' + i + '"]:checked');
+                    const planSelected = document.querySelector('input[name="plan_drone_' + i + '"]:checked');
+                    if (!droneTypeSelected || !planSelected) { submitBtn.disabled = true; return; }
+                }
+                submitBtn.disabled = false;
             }
         }
-
-        // ── 섹션별 완성 여부 체크 후 자동 스크롤 ──
-        function checkSectionComplete(sectionCard) {
-            if (!sectionCard) return false;
-            var inputs = sectionCard.querySelectorAll('input[required], select[required], input:not([type="radio"]):not([type="hidden"]):not([readonly])');
-            var allFilled = true;
-            inputs.forEach(function(el) {
-                if (el.type === 'radio') {
-                    var name = el.name;
-                    if (!sectionCard.querySelector('input[name="' + name + '"]:checked')) allFilled = false;
-                } else if (!el.value || !el.value.trim()) {
-                    allFilled = false;
-                }
-            });
-            return allFilled;
-        }
-
-        // select 변경 시 섹션 완료 체크
-        document.querySelectorAll('#droneForm select').forEach(function(sel) {
-            sel.addEventListener('change', function() {
-                var card = this.closest('.section-card');
-                if (card && checkSectionComplete(card)) {
-                    autoScrollToNextSection(this);
-                }
-            });
-        });
-
-        // 라디오(가입물건) 선택 시 플랜 섹션으로 스크롤
-        document.querySelectorAll('.drone-type-card').forEach(function(card) {
-            card.addEventListener('click', function() {
-                var planSection = document.getElementById('unifiedPlans')?.closest('.section-card');
-                if (planSection) {
-                    setTimeout(function() {
-                        planSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 400);
-                }
-            });
-        });
-
-        // 플랜 선택 시 다음 버튼으로 스크롤
-        document.querySelectorAll('.plan-card').forEach(function(card) {
-            card.addEventListener('click', function() {
-                setTimeout(function() {
-                    var btnGroup = document.querySelector('.button-group');
-                    if (btnGroup) {
-                        btnGroup.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
-                }, 400);
-            });
-        });
 
         // ── 에러 표시 헬퍼 ──
         function markError(el, isBox) {
@@ -1580,7 +1568,8 @@
             // ── 1단계: 텍스트/select 필드 확인 ──
             const requiredFields = [
                 { name: 'name',           label: '이름' },
-                { name: 'birth_date',     label: '생년월일' },
+                { name: 'birth_date',     label: '주민번호 앞자리' },
+                { name: 'ssn_back',       label: '주민번호 뒷자리', len: 7 },
                 { name: 'gender',         label: '성별' },
                 { name: 'phone',          label: '연락처' },
                 { name: 'email',          label: '이메일' },
@@ -1601,7 +1590,7 @@
                 const el = form.querySelector('[name="' + field.name + '"]');
                 if (!el) continue;
                 const val = el.value ? el.value.toString().trim() : '';
-                if (!val) {
+                if (!val || (field.len && val.length !== field.len)) {
                     markError(el);
                     showInlineError(el, field.label + '을(를) 입력해주세요.');
                     if (!firstError) firstError = el;
@@ -1747,6 +1736,17 @@
                 });
             }
 
+            // ── 주민번호 뒷자리 숫자만 (7자리) ──
+            const ssnBackInput = document.getElementById('ssnBack');
+            if (ssnBackInput) {
+                ssnBackInput.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                    if (this.value.length > 7) this.value = this.value.substring(0, 7);
+                    checkFormValidity();
+                });
+                ssnBackInput.addEventListener('keypress', function(e) { if(!/[0-9]/.test(e.key)) e.preventDefault(); });
+            }
+
             // ── 정적 input/select에 이벤트 등록 ──
             document.querySelectorAll('#droneForm input:not([type="radio"]), #droneForm select').forEach(el => {
                 el.addEventListener('input', checkFormValidity);
@@ -1784,12 +1784,8 @@
     <footer>
         <div class="footer-content">
             <h3 style="margin-bottom: 1rem;">배상온 대리점</h3>
-            <p>📧 이메일: liab.on.ins@gmail.com</p>
+            <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c1ada8a0a3efaeafefa8afb281a6aca0a8adefa2aeac">[email&#160;protected]</a></p>
             <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
             <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
             <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
-            <p style="margin-top: 1.5rem; opacity: 0.6;">© 2026 배상온 대리점. All rights reserved. | KB손해보험 공식 대리점</p>
-        </div>
-    </footer>
-</body>
-</html>
+            <p style="margin-top: 1.5rem; opacity: 0.6;">© 2026 �

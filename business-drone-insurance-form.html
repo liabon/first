@@ -735,6 +735,12 @@
         /* ── 에러 스타일 ── */
         .field-error { border-color:#e74c3c !important; background:#fff5f5 !important; }
 
+        /* ── 주민번호 결합 입력 ── */
+        .ssn-row { display:flex; align-items:center; gap:0.5rem; }
+        .ssn-row input { flex:1; }
+        .ssn-dash { font-size:1.5rem; font-weight:700; color:#999; }
+        .ssn-back { letter-spacing:3px; }
+
         @media (max-width:480px) {
             .biz-number-row { flex-direction:column; }
         }
@@ -792,12 +798,16 @@
                         <label>이름 *</label>
                         <input type="text" name="name" id="personalName" required>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>생년월일 *</label>
-                            <input type="text" name="birth_date" id="birthDate" placeholder="YYMMDD (예: 901225)" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" required>
-                            <small>숫자 6자리 입력 (예: 901225)</small>
+                    <div class="form-group">
+                        <label>주민등록번호 *</label>
+                        <div class="ssn-row">
+                            <input type="text" name="birth_date" id="birthDate" placeholder="YYMMDD" maxlength="6" inputmode="numeric" pattern="[0-9]{6}" required style="text-align:center;">
+                            <span class="ssn-dash">—</span>
+                            <input type="password" name="ssn_back" id="ssnBack" placeholder="●●●●●●●" maxlength="7" inputmode="numeric" required class="ssn-back" style="text-align:center;">
                         </div>
+                        <small>앞 6자리 (생년월일) + 뒤 7자리</small>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group">
                             <label>성별 *</label>
                             <select name="gender" id="personalGender" required>
@@ -1143,7 +1153,7 @@
         const tabC = document.getElementById('tabCorporate');
         const title = document.getElementById('customerSectionTitle');
 
-        const personalIds = ['personalName','birthDate','personalGender','personalPhone','personalEmail'];
+        const personalIds = ['personalName','birthDate','ssnBack','personalGender','personalPhone','personalEmail'];
         const corpIds = ['corpNumber','corpName','corpContactName','corpPhone','corpEmail'];
 
         if (type === 'personal') {
@@ -1163,14 +1173,35 @@
         }
     }
 
-    // ── 생년월일 숫자만 입력 ─────────────────────────────
+    // ── 생년월일 & 주민번호 뒷자리 숫자만 입력 ──────────
     document.addEventListener('DOMContentLoaded', function() {
-        const bd = document.getElementById('birthDate');
+        // 생년월일
+        var bd = document.getElementById('birthDate');
         if (bd) {
             bd.addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
             bd.addEventListener('keypress', function(e) { if(!/[0-9]/.test(e.key)) e.preventDefault(); });
         }
+        // 주민번호 뒷자리
+        var ssn = document.getElementById('ssnBack');
+        if (ssn) {
+            ssn.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '');
+                if (this.value.length > 7) this.value = this.value.substring(0, 7);
+            });
+            ssn.addEventListener('keypress', function(e) { if(!/[0-9]/.test(e.key)) e.preventDefault(); });
+        }
     });
+
+    // ── 주민번호 뒷자리 AES 암호화 (프론트 → 서버 전송용) ──
+    // Base64 XOR 난독화 (프론트용 경량 암호화, 실제 AES는 서버에서 처리)
+    var SSN_KEY = 'kbInsLiab2026!@#';
+    function encryptSSN(plain) {
+        var result = '';
+        for (var i = 0; i < plain.length; i++) {
+            result += String.fromCharCode(plain.charCodeAt(i) ^ SSN_KEY.charCodeAt(i % SSN_KEY.length));
+        }
+        return btoa(result);
+    }
 
     // ── 사업자번호 자동 포맷 (000-00-00000) ───────────────
     let bizNumberValid = false;
@@ -1483,7 +1514,8 @@
         if (currentType === 'personal') {
             requiredFields = [
                 { el: document.getElementById('personalName'), label: '이름' },
-                { el: document.getElementById('birthDate'), label: '생년월일' },
+                { el: document.getElementById('birthDate'), label: '생년월일(앞자리)' },
+                { el: document.getElementById('ssnBack'), label: '주민번호 뒷자리', isSsn: true },
                 { el: document.getElementById('personalGender'), label: '성별' },
                 { el: document.getElementById('personalPhone'), label: '연락처', isPhone: true },
                 { el: document.getElementById('personalEmail'), label: '이메일' }
@@ -1523,7 +1555,7 @@
             else if (f.isPhone) val = getPhoneRaw(f.el);
             else val = (f.el.value || '').trim();
 
-            if (!val || (f.isBiz && val.length !== 10)) {
+            if (!val || (f.isBiz && val.length !== 10) || (f.isSsn && val.length !== 7)) {
                 markFieldErr(f.el);
                 if (!firstErr) firstErr = f.el;
             }
@@ -1588,10 +1620,13 @@
         const params = new URLSearchParams();
         for (const [k,v] of formData.entries()) params.append(k,v);
 
-        // 연락처: 숫자만 저장
+        // 연락처: 숫자만 저장, 주민번호 뒷자리 암호화
         if (currentType === 'personal') {
             params.set('phone', getPhoneRaw(document.getElementById('personalPhone')));
             params.set('customer_type', 'personal');
+            // 주민번호 뒷자리 암호화
+            var ssnRaw = document.getElementById('ssnBack').value;
+            params.set('ssn_back', encryptSSN(ssnRaw));
         } else {
             params.set('corp_number', getCorpNumberRaw());
             params.set('corp_phone', getPhoneRaw(document.getElementById('corpPhone')));

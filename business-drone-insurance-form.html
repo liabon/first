@@ -844,6 +844,11 @@
                         <input type="text" name="corp_name" id="corpName" placeholder="(주)회사명">
                     </div>
                     <div class="form-group">
+                        <label>법인등록번호 *</label>
+                        <input type="text" name="corp_reg_number" id="corpRegNumber" placeholder="000000-0000000" maxlength="14" inputmode="numeric">
+                        <small>하이픈 포함 13자리 (자동 포맷: 000000-0000000)</small>
+                    </div>
+                    <div class="form-group">
                         <label>담당자 이름 *</label>
                         <input type="text" name="corp_contact_name" id="corpContactName" placeholder="담당자 성함">
                     </div>
@@ -999,7 +1004,7 @@
                     <p>가입을 희망하시는 경우 아래 견적 신청을 작성하여 보내주시기 바랍니다.</p>
                 </div>
                 <div class="modal-contact">
-                    <strong>상담문의</strong>&nbsp;&nbsp;이메일: liab.on.ins@gmail.com
+                    <strong>상담문의</strong>&nbsp;&nbsp;이메일: <span class="js-email"></span>
                 </div>
 
                 <div class="modal-section-title">온라인 견적신청</div>
@@ -1083,7 +1088,7 @@
     <footer>
         <div class="footer-content">
             <h3 style="margin-bottom:1rem;">배상온 대리점</h3>
-            <p>📧 이메일: liab.on.ins@gmail.com</p>
+            <p>📧 이메일: <span class="js-email"></span></p>
             <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
             <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
             <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
@@ -1154,7 +1159,7 @@
         const title = document.getElementById('customerSectionTitle');
 
         const personalIds = ['personalName','birthDate','ssnBack','personalGender','personalPhone','personalEmail'];
-        const corpIds = ['corpNumber','corpName','corpContactName','corpPhone','corpEmail'];
+        const corpIds = ['corpNumber','corpRegNumber','corpName','corpContactName','corpPhone','corpEmail'];
 
         if (type === 'personal') {
             pFields.style.display = 'block';
@@ -1189,6 +1194,20 @@
                 if (this.value.length > 7) this.value = this.value.substring(0, 7);
             });
             ssn.addEventListener('keypress', function(e) { if(!/[0-9]/.test(e.key)) e.preventDefault(); });
+        }
+        // 법인등록번호 자동 포맷 (000000-0000000)
+        var crn = document.getElementById('corpRegNumber');
+        if (crn) {
+            crn.addEventListener('input', function() {
+                var raw = this.value.replace(/[^0-9]/g, '');
+                if (raw.length > 13) raw = raw.substring(0, 13);
+                if (raw.length > 6) {
+                    this.value = raw.substring(0, 6) + '-' + raw.substring(6);
+                } else {
+                    this.value = raw;
+                }
+            });
+            crn.addEventListener('keypress', function(e) { if(!/[0-9]/.test(e.key)) e.preventDefault(); });
         }
     });
 
@@ -1481,7 +1500,7 @@
                 closeQuoteModal(); f.reset();
             } else { alert('전송 중 오류가 발생했습니다. 다시 시도해주세요.'); }
         } catch (err) {
-            alert('전송 중 오류가 발생했습니다.\n이메일(liab.on.ins@gmail.com)로 직접 문의해주세요.');
+            alert('전송 중 오류가 발생했습니다.\n이메일(' + ['liab.on','ins@gm','ail.com'].join('') + ')로 직접 문의해주세요.');
         }
     }
 
@@ -1523,6 +1542,7 @@
         } else {
             requiredFields = [
                 { el: document.getElementById('corpNumber'), label: '사업자등록번호', isBiz: true },
+                { el: document.getElementById('corpRegNumber'), label: '법인등록번호', isCorpReg: true },
                 { el: document.getElementById('corpName'), label: '회사명' },
                 { el: document.getElementById('corpContactName'), label: '담당자 이름' },
                 { el: document.getElementById('corpPhone'), label: '연락처', isPhone: true },
@@ -1555,7 +1575,8 @@
             else if (f.isPhone) val = getPhoneRaw(f.el);
             else val = (f.el.value || '').trim();
 
-            if (!val || (f.isBiz && val.length !== 10) || (f.isSsn && val.length !== 7)) {
+            if (f.isCorpReg) val = val.replace(/[^0-9]/g, '');
+            if (!val || (f.isBiz && val.length !== 10) || (f.isSsn && val.length !== 7) || (f.isCorpReg && val.length !== 13)) {
                 markFieldErr(f.el);
                 if (!firstErr) firstErr = f.el;
             }
@@ -1629,6 +1650,7 @@
             params.set('ssn_back', encryptSSN(ssnRaw));
         } else {
             params.set('corp_number', getCorpNumberRaw());
+            params.set('corp_reg_number', document.getElementById('corpRegNumber').value.replace(/[^0-9]/g, ''));
             params.set('corp_phone', getPhoneRaw(document.getElementById('corpPhone')));
             params.set('customer_type', 'corporate');
         }
@@ -1829,14 +1851,37 @@
     }
 
     function updateSubmitBtn() {
-        // 버튼은 항상 활성화 - submit 시 검증
+        // 버튼 활성화/비활성화
+        const submitBtn = document.getElementById('submitBtn');
+        if (!submitBtn) return;
+        const needQuote = (selectedFlag === 'swarm' || selectedFlag === 'rental' || selectedWeight === 'over_100kg');
+        if (needQuote) { submitBtn.disabled = true; return; }
+        if (!selectedWeight || !selectedFlag) { submitBtn.disabled = true; return; }
+        const count = parseInt(document.getElementById('droneCount').value) || 1;
+        for (let i = 0; i < count; i++) {
+            if (!selectedPlans[i]) { submitBtn.disabled = true; return; }
+        }
+        submitBtn.disabled = false;
+        updateTotalBox();
     }
 
-    // ── 페이지 초기화 ──────────────────────────────────────
-    document.addEventListener('DOMContentLoaded', function() {
+    // ── 페이지 로드 시 초기화 ──
+    window.addEventListener('DOMContentLoaded', function() {
         setupInsuranceDates();
-        updateDroneFields();
+        renderPlanSection();
+        updateSubmitBtn();
+        // CloudFlare 이메일 보호 우회 - 동적 렌더링
+        var _u = 'liab.on' + '.ins', _d = 'gm' + 'ail.com', _e = _u + '@' + _d;
+        document.querySelectorAll('.js-email').forEach(function(el) {
+            var a = document.createElement('a');
+            a.href = 'mai' + 'lto:' + _e;
+            a.textContent = _e;
+            a.style.color = 'inherit';
+            el.appendChild(a);
+        });
     });
+
     </script>
+<script src="/notice-modal.js"></script>
 </body>
 </html>

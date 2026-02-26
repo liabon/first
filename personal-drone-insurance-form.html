@@ -1784,8 +1784,55 @@
     <footer>
         <div class="footer-content">
             <h3 style="margin-bottom: 1rem;">배상온 대리점</h3>
-            <p>📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c1ada8a0a3efaeafefa8afb281a6aca0a8adefa2aeac">[email&#160;protected]</a></p>
+            <p>📧 이메일: <span class="js-email"></span></p>
             <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
             <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
             <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
-            <p style="margin-top: 1.5rem; opacity: 0.6;">© 2026 �
+            <p style="margin-top: 1.5rem; opacity: 0.6;">© 2026 배상온. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- 카카오톡 플로팅 버튼 -->
+    <div id="kakaoFloat" style="position:fixed;bottom:20px;right:20px;z-index:9999;">
+        <a id="kakaoChatBtn" href="https://pf.kakao.com/_KxmnZn/chat" target="_blank" style="display:flex;align-items:center;justify-content:center;width:56px;height:56px;background:#FFE812;border-radius:50%;box-shadow:0 4px 12px rgba(0,0,0,0.15);text-decoration:none;font-size:1.6rem;position:relative;">
+            💬
+            <span id="kakaoDot" style="position:absolute;top:2px;right:2px;width:10px;height:10px;background:#ff3b30;border-radius:50%;border:2px solid #FFE812;"></span>
+        </a>
+    </div>
+
+    <script>
+        document.getElementById('kakaoChatBtn').addEventListener('click', function() {
+            var dot = document.getElementById('kakaoDot');
+            if (dot) dot.style.display = 'none';
+        });
+
+        // footer와 겹치지 않게 bottom 보정
+        (function() {
+            var floatEl  = document.getElementById('kakaoFloat');
+            var footerEl = document.querySelector('footer');
+            if (!floatEl || !footerEl) return;
+            function adjust() {
+                var ft = footerEl.getBoundingClientRect().top;
+                var wh = window.innerHeight;
+                floatEl.style.bottom = ft < wh ? (wh - ft + 20) + 'px' : '20px';
+            }
+            window.addEventListener('scroll', adjust);
+            window.addEventListener('resize', adjust);
+            adjust();
+        })();
+
+        // CloudFlare 이메일 보호 우회 - 동적 렌더링
+        (function() {
+            var _u = 'liab.on' + '.ins', _d = 'gm' + 'ail.com', _e = _u + '@' + _d;
+            document.querySelectorAll('.js-email').forEach(function(el) {
+                var a = document.createElement('a');
+                a.href = 'mai' + 'lto:' + _e;
+                a.textContent = _e;
+                a.style.color = 'inherit';
+                el.appendChild(a);
+            });
+        })();
+    </script>
+<script src="/notice-modal.js"></script>
+</body>
+</html>

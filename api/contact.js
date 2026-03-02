@@ -1,5 +1,7 @@
 const nodemailer = require('nodemailer');
 const { Pool } = require('pg');
+let ssnCrypto;
+try { ssnCrypto = require('./ssn-crypto'); } catch(e) { ssnCrypto = null; }
 
 // ──────────────────────────────────────────────
 // DB 연결 풀 (POSTGRES_URL 환경변수 필요)
@@ -222,18 +224,27 @@ module.exports = async (req, res) => {
         const start = parseDateTime(insurance_start);
         const end   = parseDateTime(insurance_end);
 
+        // ssn_back 암호화 처리
+        let ssnEncrypted = null;
+        if (req.body.ssn_back && ssnCrypto) {
+          try {
+            const ssnPlain = ssnCrypto.decryptFromFront(req.body.ssn_back);
+            ssnEncrypted = ssnCrypto.encryptForDB(ssnPlain);
+          } catch(e) { console.warn('ssn 암호화 실패:', e.message); }
+        }
+
         const appResult = await db.query(
           `INSERT INTO personal_drone_applications
-            (name, birth_date, gender, phone, email,
+            (name, birth_date, ssn_back, gender, phone, email,
              coverage_start_date, coverage_start_time,
              coverage_end_date,   coverage_end_time,
              coverage_location, drone_count, plan_mode,
              total_premium, terms_agreed, agreed_at,
              source_page, status)
-           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
+           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
            RETURNING per_id`,
           [
-            name || '', birth_date || '', gender || '', phone || '', email || '',
+            name || '', birth_date || '', ssnEncrypted, gender || '', phone || '', email || '',
             start.date, start.time, end.date, end.time, null,
             parseInt(drone_count) || 1,
             plan_selection_type || 'unified',

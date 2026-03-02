@@ -4,6 +4,8 @@
 // business_drone_applications + business_drone_details 에 저장
 
 const { Pool } = require('pg');
+let ssnCrypto;
+try { ssnCrypto = require('./ssn-crypto'); } catch(e) { ssnCrypto = null; }
 
 const WEIGHT_LABELS = {
   'under_25kg': '25kg 미만 (의무/업무/영리)',
@@ -49,39 +51,52 @@ module.exports = async function handler(req, res) {
       ? (WEIGHT_LABELS[d.drone_weight] || d.drone_weight)
       : null;
 
+    // ── ssn_back 암호화 ──
+    let ssnEncrypted = null;
+    if (d.ssn_back && ssnCrypto) {
+      try {
+        const ssnPlain = ssnCrypto.decryptFromFront(d.ssn_back);
+        ssnEncrypted = ssnCrypto.encryptForDB(ssnPlain);
+      } catch (e) { console.warn('[save-business-drone] ssn 암호화 실패:', e.message); }
+    }
+
     await client.query('BEGIN');
 
     // ── 1. 마스터 레코드 저장 ──────────────────────────────
     const masterResult = await client.query(`
       INSERT INTO business_drone_applications (
         status, source_page, customer_type,
-        name, birth_date, gender, phone, email,
-        corp_name, corp_number, corp_phone,
+        name, birth_date, ssn_back, gender, phone, email,
+        corp_name, corp_number, corp_reg_number, corp_contact_name, corp_phone, corp_email,
         insurance_start, insurance_end,
         drone_count, drone_weight, drone_weight_label, drone_flag,
         selected_deductible, total_premium,
         terms_agreed, marketing_agreed, agreed_at
       ) VALUES (
         'pending', 'business-drone-insurance', $1,
-        $2, $3, $4, $5, $6,
-        $7, $8, $9,
-        $10, $11,
-        $12, $13, $14, $15,
-        $16, $17,
-        $18, $19, $20
+        $2, $3, $4, $5, $6, $7,
+        $8, $9, $10, $11, $12, $13,
+        $14, $15,
+        $16, $17, $18, $19,
+        $20, $21,
+        $22, $23, $24
       ) RETURNING biz_id`,
       [
         customerType,
         // 개인 필드
         d.name       || null,
         d.birth_date || null,
+        ssnEncrypted,
         d.gender     || null,
         d.phone      || d.corp_phone || null,
-        d.email      || null,
+        d.email      || d.corp_email || null,
         // 법인 필드
-        d.corp_name   || null,
-        d.corp_number || null,
-        d.corp_phone  || null,
+        d.corp_name         || null,
+        d.corp_number       || null,
+        d.corp_reg_number   || null,
+        d.corp_contact_name || null,
+        d.corp_phone        || null,
+        d.corp_email        || null,
         // 보험 기간
         d.insurance_start ? d.insurance_start.replace('T', ' ') : null,
         d.insurance_end   ? d.insurance_end.replace('T', ' ')   : null,
@@ -122,7 +137,7 @@ module.exports = async function handler(req, res) {
           droneIndex,
           dr.model      || null,
           dr.serial     || null,
-          dr.reg_number || null,
+          dr.reg_number || dr.reg || null,
           dr.weight     ? parseFloat(dr.weight)     : null,
           dr.max_weight ? parseFloat(dr.max_weight) : null,
           pl.plan_name           || null,

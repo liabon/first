@@ -6,308 +6,106 @@
     <title>약관 동의 - KB손해보험 개인용 드론보험</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        :root { --kb-yellow:#FFCD00; --kb-gold:#FFB800; --kb-dark:#1a1a1a; --kb-blue:#0066CC; }
+        body { font-family:'Noto Sans KR',sans-serif; color:var(--kb-dark); line-height:1.6; background:#f4f5f7; padding-bottom:68px; }
 
-        :root {
-            --kb-yellow: #FFCD00;
-            --kb-gold: #FFB800;
-            --kb-dark: #1a1a1a;
-            --kb-gray: #666;
-            --kb-light-gray: #f8f9fa;
-            --kb-blue: #0066CC;
-        }
+        header { background:#fff; box-shadow:0 2px 10px rgba(0,0,0,0.06); position:sticky; top:0; z-index:1000; }
+        .header-content { max-width:1200px; margin:0 auto; padding:1.4rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+        .logo-section { display:flex; align-items:center; gap:1.4rem; }
+        .kb-logo { height:48px; }
+        .divider { height:38px; width:1px; background:#ddd; }
+        .agency-name { font-size:1.45rem; font-weight:700; }
 
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            color: var(--kb-dark);
-            line-height: 1.6;
-            background: #f8f9fa;
-        }
+        .progress-section { background:#fff; padding:1.8rem 2rem; box-shadow:0 2px 10px rgba(0,0,0,0.05); }
+        .progress-container { max-width:760px; margin:0 auto; }
+        .progress-steps { display:flex; justify-content:space-between; }
+        .progress-step { text-align:center; flex:1; }
+        .step-circle { width:48px; height:48px; border-radius:50%; background:#e0e0e0; color:#999; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.1rem; margin:0 auto 0.4rem; }
+        .progress-step.active .step-circle { background:var(--kb-gold); color:#1a1a1a; }
+        .progress-step.completed .step-circle { background:var(--kb-blue); color:#fff; }
+        .step-label { font-size:0.88rem; color:#aaa; }
+        .progress-step.active .step-label { color:var(--kb-dark); font-weight:600; }
 
-        header {
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+        .main-content { max-width:860px; margin:2.5rem auto; padding:0 1.5rem; }
+        .terms-card { background:#fff; border-radius:20px; padding:2.8rem 2.5rem; box-shadow:0 8px 30px rgba(0,0,0,0.07); }
+        .terms-title { font-size:1.85rem; font-weight:800; margin-bottom:2rem; text-align:center; }
 
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .agreement-all { background:linear-gradient(135deg,#fffbf0,#fff5d6); border:2px solid var(--kb-gold); border-radius:14px; padding:1.4rem 1.6rem; margin-bottom:1.8rem; position:relative; overflow:hidden; }
+        .agreement-all::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,var(--kb-gold),var(--kb-yellow)); }
+        .agreement-all label { display:flex; align-items:center; gap:0.9rem; cursor:pointer; user-select:none; font-size:1.1rem; font-weight:800; }
+        .agree-all-desc { margin-top:0.75rem; padding-top:0.75rem; border-top:1px dashed rgba(255,184,0,0.5); font-size:0.8rem; color:#7a5a00; line-height:1.75; }
 
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
+        input[type="checkbox"] { appearance:none; -webkit-appearance:none; width:22px; height:22px; border:2px solid #ccc; border-radius:6px; background:#fff; cursor:pointer; position:relative; flex-shrink:0; transition:all 0.18s; vertical-align:middle; }
+        input[type="checkbox"]:checked { background:var(--kb-gold); border-color:var(--kb-gold); }
+        input[type="checkbox"]::after { content:''; position:absolute; top:2px; left:6px; width:6px; height:10px; border:2.5px solid #fff; border-top:none; border-left:none; transform:rotate(45deg); opacity:0; transition:opacity 0.15s; }
+        input[type="checkbox"]:checked::after { opacity:1; }
 
-        .kb-logo {
-            height: 50px;
-        }
+        .agreement-item { border:2px solid #e8e8e8; border-radius:12px; padding:1.2rem 1.4rem; margin-bottom:1rem; transition:border-color 0.2s; }
+        .agreement-item:has(.agreement-check:checked) { border-color:#ffe082; background:#fffdf5; }
+        .agreement-header { display:flex; justify-content:space-between; align-items:center; gap:0.8rem; }
+        .agreement-header label { display:flex; align-items:center; gap:0.75rem; cursor:pointer; font-weight:600; font-size:0.97rem; flex:1; }
 
-        .divider {
-            height: 40px;
-            width: 1px;
-            background: #ddd;
-        }
+        .view-btn { padding:0.38rem 0.9rem; background:var(--kb-blue); color:#fff; border:none; border-radius:7px; cursor:pointer; font-size:0.82rem; font-family:'Noto Sans KR',sans-serif; white-space:nowrap; transition:background 0.2s; flex-shrink:0; }
+        .view-btn:hover { background:#0052a3; }
 
-        .agency-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
+        .agreement-content { display:none; margin-top:1rem; background:#f8f9fa; border-radius:8px; padding:1.2rem 1.4rem; font-size:0.88rem; line-height:1.85; max-height:260px; overflow-y:auto; border:1px solid #eee; }
+        .agreement-content.show { display:block; }
+        .agreement-content h3 { font-size:0.9rem; font-weight:700; color:var(--kb-blue); margin-top:1.1rem; margin-bottom:0.35rem; }
+        .agreement-content h3:first-child { margin-top:0; }
+        .agreement-content p { margin-bottom:0.55rem; color:#444; }
 
-        .progress-section {
-            background: #fff;
-            padding: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
+        .button-group { display:flex; gap:1rem; justify-content:center; margin-top:2.5rem; }
+        .btn { padding:1.1rem 3rem; border:none; border-radius:12px; font-size:1.1rem; font-weight:700; cursor:pointer; transition:all 0.3s; font-family:'Noto Sans KR',sans-serif; }
+        .btn-secondary { background:#e0e0e0; color:var(--kb-dark); }
+        .btn-primary { background:var(--kb-gold); color:var(--kb-dark); box-shadow:0 8px 24px rgba(255,184,0,0.3); }
+        .btn-primary:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 12px 32px rgba(255,184,0,0.4); }
+        .btn-primary:disabled { background:#ccc; cursor:not-allowed; box-shadow:none; }
 
-        .progress-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+        .sticky-bottom-bar { position:fixed; bottom:0; left:0; right:0; z-index:999; background:#fff; border-top:2px solid #eee; box-shadow:0 -4px 14px rgba(0,0,0,0.09); display:flex; }
+        .sticky-bottom-btn { flex:1; display:flex; align-items:center; justify-content:center; gap:7px; padding:0.92rem 1rem; background:none; border:none; font-size:0.93rem; font-weight:700; cursor:pointer; text-decoration:none; color:var(--kb-dark); font-family:'Noto Sans KR',sans-serif; position:relative; transition:background 0.2s,color 0.2s; }
+        .sticky-bottom-btn::after { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:0; height:3px; transition:width 0.25s; }
+        .sticky-bottom-btn.btn-notice { border-right:1px solid #e8e8e8; }
+        .sticky-bottom-btn.btn-notice::after { background:var(--kb-gold); }
+        .sticky-bottom-btn.btn-notice:hover { background:#fffbf0; color:#b48000; }
+        .sticky-bottom-btn.btn-notice:hover::after { width:80%; }
+        .sticky-bottom-btn.btn-terms { color:#6d28d9; }
+        .sticky-bottom-btn.btn-terms::after { background:#6d28d9; }
+        .sticky-bottom-btn.btn-terms:hover { background:#f5f0ff; }
+        .sticky-bottom-btn.btn-terms:hover::after { width:80%; }
 
-        .progress-steps {
-            display: flex;
-            justify-content: space-between;
-        }
+        .notice-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:10000; align-items:center; justify-content:center; padding:16px; }
+        .notice-overlay.active { display:flex; }
+        .notice-box { background:#fff; border-radius:20px; width:100%; max-width:600px; max-height:88vh; display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,0.25); overflow:hidden; animation:noticeIn 0.28s ease; }
+        @keyframes noticeIn { from{opacity:0;transform:scale(0.93) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
+        .notice-header { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; padding:1.3rem 1.8rem; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+        .notice-header h3 { font-size:1.05rem; font-weight:800; }
+        .notice-close-btn { background:rgba(255,255,255,0.2); border:none; color:#fff; width:32px; height:32px; border-radius:50%; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.2s; font-family:'Noto Sans KR',sans-serif; }
+        .notice-close-btn:hover { background:rgba(255,255,255,0.35); }
+        .notice-body { overflow-y:auto; padding:1.4rem 1.8rem; }
+        .notice-row { margin-bottom:1.2rem; padding-bottom:1.2rem; border-bottom:1px solid #f0f0f0; }
+        .notice-row:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+        .notice-row-title { display:flex; align-items:center; gap:8px; font-size:0.95rem; font-weight:700; margin-bottom:0.4rem; }
+        .notice-badge { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; flex-shrink:0; }
+        .notice-row p { color:#555; font-size:0.87rem; line-height:1.8; margin:0; }
+        .notice-footer { padding:0.9rem 1.8rem; border-top:1px solid #f0f0f0; text-align:center; flex-shrink:0; }
+        .notice-footer button { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; border:none; padding:0.65rem 2.5rem; border-radius:25px; font-size:0.95rem; font-weight:700; cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
 
-        .progress-step {
-            text-align: center;
-            flex: 1;
-        }
+        footer { background:var(--kb-dark); color:#fff; padding:2.8rem 2rem 1.8rem; margin-top:4rem; }
+        .footer-content { max-width:1100px; margin:0 auto; }
+        .footer-grid { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; margin-bottom:1.8rem; padding-bottom:1.8rem; border-bottom:1px solid rgba(255,255,255,0.1); }
+        .footer-col h4 { font-size:0.73rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--kb-gold); margin-bottom:0.9rem; padding-bottom:0.4rem; border-bottom:1px solid rgba(255,184,0,0.22); }
+        .footer-col p { color:#bbb; margin-bottom:0.35rem; font-size:0.85rem; line-height:1.6; }
+        .footer-col p strong { color:#ddd; font-weight:600; }
+        .footer-notice p { color:#666; font-size:0.8rem; line-height:1.9; margin-bottom:0.1rem; }
+        .footer-notice p strong { color:#888; }
 
-        .step-circle {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #ddd;
-            color: #999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.2rem;
-            margin: 0 auto 0.5rem;
-        }
-
-        .progress-step.active .step-circle {
-            background: var(--kb-gold);
-            color: var(--kb-dark);
-        }
-
-        .progress-step.completed .step-circle {
-            background: var(--kb-blue);
-            color: #fff;
-        }
-
-        .step-label {
-            font-size: 0.9rem;
-            color: #999;
-        }
-
-        .progress-step.active .step-label {
-            color: var(--kb-dark);
-            font-weight: 600;
-        }
-
-        .main-content {
-            max-width: 1000px;
-            margin: 3rem auto;
-            padding: 0 2rem;
-        }
-
-        .terms-card {
-            background: #fff;
-            border-radius: 20px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        }
-
-        .terms-title {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .agreement-all {
-            background: var(--kb-gold);
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-        }
-
-        .agreement-all label {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            cursor: pointer;
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-
-        .agreement-all input[type="checkbox"] {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-        }
-
-        .agreement-item {
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .agreement-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .agreement-header label {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1.1rem;
-            flex: 1;
-        }
-
-        .agreement-header input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-
-        .view-btn {
-            padding: 0.5rem 1rem;
-            background: var(--kb-blue);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .view-btn:hover {
-            background: #0052a3;
-        }
-
-        .agreement-content {
-            max-height: 300px;
-            overflow-y: auto;
-            background: #f8f9fa;
-            padding: 1.5rem;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            line-height: 1.8;
-            display: none;
-        }
-
-        .agreement-content.show {
-            display: block;
-        }
-
-        .agreement-content h3 {
-            font-size: 1.1rem;
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--kb-blue);
-        }
-
-        .agreement-content h3:first-child {
-            margin-top: 0;
-        }
-
-        .agreement-content p {
-            margin-bottom: 1rem;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 3rem;
-        }
-
-        .btn {
-            padding: 1.2rem 3rem;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.2rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-secondary {
-            background: #e0e0e0;
-            color: var(--kb-dark);
-        }
-
-        .btn-primary {
-            background: var(--kb-gold);
-            color: var(--kb-dark);
-            box-shadow: 0 8px 25px rgba(255, 184, 0, 0.3);
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(255, 184, 0, 0.4);
-        }
-
-        .btn-primary:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        footer {
-            background: var(--kb-dark);
-            color: #fff;
-            padding: 3rem 2rem;
-            margin-top: 5rem;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .footer-content p {
-            margin-bottom: 0.5rem;
-            opacity: 0.8;
-            font-size: 0.95rem;
-        }
-
-        @media (max-width: 768px) {
-            .terms-card {
-                padding: 2rem 1.5rem;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
+        @media (max-width:768px) {
+            .terms-card { padding:1.8rem 1.2rem; }
+            .button-group { flex-direction:column; }
+            .btn { width:100%; }
+            .footer-grid { grid-template-columns:1fr; gap:1.5rem; }
+            .sticky-bottom-btn { font-size:0.85rem; padding:0.85rem 0.5rem; }
         }
     </style>
 </head>
@@ -325,22 +123,10 @@
     <div class="progress-section">
         <div class="progress-container">
             <div class="progress-steps">
-                <div class="progress-step completed">
-                    <div class="step-circle">1</div>
-                    <div class="step-label">의무확인</div>
-                </div>
-                <div class="progress-step completed">
-                    <div class="step-circle">2</div>
-                    <div class="step-label">정보입력</div>
-                </div>
-                <div class="progress-step active">
-                    <div class="step-circle">3</div>
-                    <div class="step-label">약관동의</div>
-                </div>
-                <div class="progress-step">
-                    <div class="step-circle">4</div>
-                    <div class="step-label">완료</div>
-                </div>
+                <div class="progress-step completed"><div class="step-circle">1</div><div class="step-label">의무확인</div></div>
+                <div class="progress-step completed"><div class="step-circle">2</div><div class="step-label">정보입력</div></div>
+                <div class="progress-step active">   <div class="step-circle">3</div><div class="step-label">약관동의</div></div>
+                <div class="progress-step">          <div class="step-circle">4</div><div class="step-label">완료</div></div>
             </div>
         </div>
     </div>
@@ -349,161 +135,172 @@
         <div class="terms-card">
             <h1 class="terms-title">약관 및 개인정보 수집·이용 동의</h1>
 
-            <!-- All Agree -->
             <div class="agreement-all">
                 <label>
                     <input type="checkbox" id="agreeAll">
-                    <span>전체 동의하기</span>
+                    <span>✅ 전체 동의하기</span>
                 </label>
+                <div class="agree-all-desc">
+                    서비스 이용약관, 개인정보 처리방침, 개인(신용)정보 수집·이용, 제공, 조회,<br>
+                    민감정보 및 고유식별정보 처리, 실명확인 및 즉시 보험계약 체결 동의 포함<br>
+                    <strong>※ 선택 항목은 동의하지 않아도 보험가입이 가능합니다.</strong>
+                </div>
             </div>
 
-            <!-- Agreement 1: 서비스 이용약관 -->
+            <!-- 1. 서비스 이용약관 -->
             <div class="agreement-item">
                 <div class="agreement-header">
-                    <label>
-                        <input type="checkbox" class="agreement-check required" data-required="true">
-                        <span>서비스 이용약관 동의 (필수)</span>
-                    </label>
+                    <label><input type="checkbox" class="agreement-check required"><span>서비스 이용약관 동의 (필수)</span></label>
                     <button class="view-btn" onclick="toggleContent(this)">보기</button>
                 </div>
                 <div class="agreement-content">
-                    <h3>제 1조 (목적)</h3>
-                    <p>이 약관은 배상온(이하 "회사"라 함)이 배상온(이하 "배상온"라 함)의 웹사이트 www.liab.co.kr (이하 "플랫폼"이라 함) 이용자들과 회원들에게 제공하는 보험서비스 등과 관련하여 당사자간의 권리․의무 및 책임사항을 규정함을 목적으로 합니다.</p>
-
-                    <h3>제 2조 (용어의 정의)</h3>
-                    <p>이 약관에서 사용되는 용어의 정의는 다음과 같습니다. "배상온"란 "배상온"가 "서비스"를 회원에게 제공하기 위하여 컴퓨터 등 정보통신설비를 이용하여 서비스를 거래할 수 있도록 설정한 가상의 영업장을 말합니다.</p>
-                    <p>가입서비스라 함은 회원만이 이용할 수 있는 서비스로, "배상온"가 요구한 개인정보를 제공하여야 완전한 이용이 가능한 서비스(보험가입 및 금융상담 등)를 말합니다.</p>
-
-                    <h3>제 4조 (서비스의 내용)</h3>
-                    <p>배상온이 제공하는 서비스는 다음과 같습니다. 가. 보험상품정보 제공, 나. 보험료 계산, 다. 보험 상담, 라. 보험가입, 마. 기타 금융정보 제공, 바. 여행정보 제공</p>
-
-                    <h3>제 7조 (회원가입 및 자격상실)</h3>
-                    <p>이용자는 "배상온"가 요구하는 개인정보를 입력하고 본 약관에 대하여 동의 여부를 묻는 박스를 클릭하여 체크표시를 함으로써 가입서비스를 이용할 수 있는 회원자격을 얻게 됩니다.</p>
-
-                    <h3>제 11조 (환불 규정 내용)</h3>
-                    <p>회원은 "회사"에 환불을 요구할 수 있습니다. 환불은 "회사"가 안내하는 정책 및 방법에 따라 진행됩니다.</p>
-                    <p>① 보험 개시 전 취소 회원 : 보험 개시 전 환불은 전액 환불로 진행됩니다. 단, 일부 결제 수수료가 차감될 수 있습니다.</p>
-                    <p>② 보험 개시 후 취소 회원 : 보험 개시 후 환불은 귀국 일자를 기준으로 각 보험사의 규정에 따라 미경과된 보험료를 산출하며 산출된 금액에 따라 환불 처리됩니다.</p>
-
-                    <h3>제 12조 (분쟁의 해결)</h3>
-                    <p>당사자는 서비스와 관련하여 분쟁이 발생한 경우에 이를 원만하게 해결하기 위하여 노력합니다. 당사자간 분쟁으로 인하여 소송이 제기될 경우 서울중앙지방법원을 관할법원으로 합니다.</p>
+                    <p>본 서비스(liab.co.kr)는 보험상품 안내 및 가입 플랫폼이며, 보험모집 및 계약 체결은 보험대리점 '배상온'을 통해 이루어집니다.</p>
+                    <p>이용자는 보험상품 선택 후 보험료 결제를 완료함으로써 보험가입을 신청하며, 결제 완료 시 보험계약이 즉시 체결됩니다.</p>
+                    <p>보험료 결제는 전자결제대행사(PG)를 통해 처리되며, 결제된 보험료는 해당 보험사로 직접 정산됩니다.</p>
+                    <p>보험계약의 인수심사, 보장내용, 보험금 지급 등 보험계약의 최종 책임은 해당 보험사 및 보험대리점 기준에 따릅니다.</p>
+                    <p>가입증명서는 결제 완료 후 이메일 또는 문자로 발송됩니다. 청약철회, 해지 및 환불은 보험약관 및 관련 법령에 따릅니다.</p>
                 </div>
             </div>
 
-            <!-- Agreement 2: 개인정보취급방침 -->
+            <!-- 2. 개인정보처리방침 -->
             <div class="agreement-item">
                 <div class="agreement-header">
-                    <label>
-                        <input type="checkbox" class="agreement-check required" data-required="true">
-                        <span>개인정보취급방침 동의 (필수)</span>
-                    </label>
+                    <label><input type="checkbox" class="agreement-check required"><span>개인정보 처리방침 동의 (필수)</span></label>
                     <button class="view-btn" onclick="toggleContent(this)">보기</button>
                 </div>
                 <div class="agreement-content">
-                    <p>배상온(이하 "회사")는 배상온 서비스(이하 "서비스")를 제공함에 있어 서비스의 기획부터 종료까지 정보통신망 이용촉진 및 정보보호 등에 관한 법률(이하 '정보통신망법'), 개인정보보호법 등 국내의 개인정보 보호 법령을 철저히 준수합니다.</p>
-
-                    <h3>1. 수집하는 개인정보의 항목</h3>
-                    <p>회사는 고객이 입력한 정보를 기반으로 회원가입, 서비스의 제공, 원활한 고객상담 등을 위하여 다음과 같은 정보를 수집합니다.</p>
-                    <p><strong>보험제휴 서비스를 위한 수집항목:</strong> 개인식별정보 (성명, 생년월일, 주소, 성별, 직업, 전화번호, 휴대전화번호, 전자우편주소), 보험계약정보, 보험금지급정보</p>
-
-                    <h3>2. 개인정보의 이용 목적</h3>
-                    <p>• 보험 상품의 제휴서비스를 위한 상품 소개 및 판매</p>
-                    <p>• 보험회사의 상품판매와 관련하여 상담·체결·유지·관리·비교견적을 위한 조회</p>
-                    <p>• 고객 관리, 서비스 관련 문의 및 불만사항 처리</p>
-
-                    <h3>3. 개인정보 보유 및 이용 기간</h3>
-                    <p>개인정보는 고객의 서비스의 이용 기간에만 활용되며, 회원 탈퇴 시 지체 없이 파기합니다.</p>
-
-                    <h3>4. 개인정보의 제3자 제공</h3>
-                    <p><strong>제공받는 자:</strong> KB손해보험</p>
-                    <p><strong>제공목적:</strong> 보험계약체결·유지·관리·이행</p>
-                    <p><strong>제공항목:</strong> 개인식별정보, 보험계약정보, 보험금지급정보</p>
-
-                    <h3>5. 개인정보관리책임자</h3>
-                    <p>이름: 김리하</p>
-                    <p>소속: 배상온</p>
-                    <p>직위: 대표</p>
-                    <p>이메일: liab.on.ins@gmail.com</p>
+                    <p>보험대리점 배상온은 보험계약의 상담, 가입설계, 체결, 유지·관리, 보험금 지급, 민원처리 및 분쟁 대응을 위하여 개인정보를 처리합니다.</p>
+                    <p>수집 항목에는 성명, 생년월일, 주민등록번호, 주소, 성별, 직업, 전화번호, 휴대전화번호, 전자우편주소, 보험계약정보, 보험금지급정보 등이 포함될 수 있습니다.</p>
+                    <p>수집된 고유식별정보는 관련 법령에 따라 안전하게 관리되며, 주민등록번호는 DB에 AES-256 방식으로 암호화 저장되고 보험사 API 전송이 필요한 경우에 한하여 일시적으로 복호화 처리됩니다.</p>
+                    <p>본 서비스의 플랫폼 운영 및 결제 처리 업무는 바이인을 통해 수행될 수 있습니다.</p>
                 </div>
             </div>
 
-            <!-- Agreement 3: 개인정보 수집이용 -->
+            <!-- 3. 개인(신용)정보 수집·이용 -->
             <div class="agreement-item">
                 <div class="agreement-header">
-                    <label>
-                        <input type="checkbox" class="agreement-check required" data-required="true">
-                        <span>개인(신용)정보의 수집·이용 (필수)</span>
-                    </label>
+                    <label><input type="checkbox" class="agreement-check required"><span>개인(신용)정보 수집·이용 동의 (필수)</span></label>
                     <button class="view-btn" onclick="toggleContent(this)">보기</button>
                 </div>
                 <div class="agreement-content">
-                    <h3>개인(신용)정보의 수집·이용 목적</h3>
-                    <p>보험계약의 인수심사·체결·유지·관리(부활 및 갱신 포함)·보험금 등 지급·심사·순보험요율의 산출·검증·민원 처리 및 분쟁 대응·적부 및 사고조사(보험사기 조사 포함)</p>
-
-                    <h3>수집·이용할 개인(신용)정보의 내용</h3>
-                    <p>• 개인식별정보(성명, 생년월일, 주민등록번호, 주소, 성별, 직업, 전화번호, 휴대전화번호, 전자우편주소)</p>
-                    <p>• 보험계약정보, 피보험자의 질병 및 상해에 관한 정보, 보험금지급 관련 정보</p>
-
-                    <h3>개인(신용)정보의 보유·이용 기간</h3>
-                    <p>수집·이용 동의일로부터 거래종료 후 5년까지</p>
+                    <h3>수집·이용에 관한 사항</h3>
+                    <h3>수집·이용 목적</h3>
+                    <p>• 보험계약상담, 재무설계서비스, 보험계약 인수여부 판단 (건강진단 및 계약 적부조사 포함)</p>
+                    <p>• 다중이용업소 화재배상책임보험의 경우 가입대상 확인</p>
+                    <h3>보유 및 이용기간</h3>
+                    <p>• 동의일로부터 1년까지</p>
+                    <h3>수집·이용 항목</h3>
+                    <p><strong>고유식별정보</strong><br>주민등록번호, 외국인등록번호, 여권번호, 운전면허번호</p>
+                    <p><strong>민감정보</strong><br>피보험자의 질병·상해에 관한 정보 (진료기록, 상병명, 흡연여부 등), 교통법규 위반정보</p>
+                    <p><strong>개인(신용)정보</strong><br>
+                    ㄴ 일반개인정보: 성명, 주소, 생년월일, 이메일, 유·무선 전화번호, 성별, 국적, 직업, 국내거소신고번호, 운전여부, 연계정보(CI), 안전운전점수정보, 차량 관련 정보 및 자동차 관련 담보의 보험가입 여부<br>
+                    ㄴ 신용거래정보: 보험계약정보(상품종류, 기간, 보험가입금액 등), 보험금정보(보험금 지급사유, 지급금액 등)<br>
+                    ㄴ 신용능력정보: 다중이용업소정보 (상호, 업종, 영업장 면적 및 주소, 소방청 발급 일련번호), 소득 및 재산정보</p>
+                    <p>본 동의는 보험대리점 배상온을 통한 온라인 보험가입 설계 및 체결 절차에 적용되며, 입력된 주민등록번호 등 고유식별정보는 NICE평가정보(주)를 통한 실명확인 및 보험사 전송을 위해 사용됩니다. 주민등록번호는 DB에 AES-256 방식으로 암호화 저장되고, 보험사 API 전송 시에 한하여 일시적으로 복호화 처리됩니다.</p>
                 </div>
             </div>
 
-            <!-- Agreement 4: 개인정보 조회 -->
+            <!-- 4. 개인(신용)정보 제공 -->
             <div class="agreement-item">
                 <div class="agreement-header">
-                    <label>
-                        <input type="checkbox" class="agreement-check required" data-required="true">
-                        <span>개인(신용)정보의 조회 (필수)</span>
-                    </label>
+                    <label><input type="checkbox" class="agreement-check required"><span>개인(신용)정보 제공 동의 (필수)</span></label>
                     <button class="view-btn" onclick="toggleContent(this)">보기</button>
                 </div>
                 <div class="agreement-content">
-                    <h3>개인(신용)정보의 조회목적</h3>
-                    <p>보험계약의 인수심사·체결·유지·관리(부활 및 갱신 포함), 보험금 등 지급·심사, 보험사고조사(보험사기조사 포함)</p>
-
-                    <h3>조회할 개인(신용)정보</h3>
-                    <p>• 개인식별정보</p>
-                    <p>• 신용정보집중기관 및 보험요율산출기관에서 수집·관리하는 보험계약정보, 보험금지급 관련 정보</p>
+                    <h3>제공에 관한 사항</h3>
+                    <h3>제공받는 자</h3>
+                    <p>• 국내: 국내 재보험사, 종합신용정보집중기관, 소방청, 보험요율산출기관, 국토교통부, 티맵모빌리티</p>
+                    <p>• 국외: 국외 재보험사</p>
+                    <h3>제공받는 자의 이용목적</h3>
+                    <p>• 국내 재보험사 : 보험계약 인수여부 판단</p>
+                    <p>• 국외 재보험사 : 보험계약 인수여부 판단</p>
+                    <p>• 종합신용정보집중기관, 보험요율산출기관, 국토교통부 : 개인(신용)정보 조회</p>
+                    <p>• 소방청 : 다중이용업소 화재배상책임보험 가입대상 확인</p>
+                    <p>• 티맵모빌리티 : 안전운전점수 실적 조회</p>
+                    <h3>보유 및 이용기간</h3>
+                    <p>• 동의일로부터 1년까지</p>
+                    <p>※ 외국 재보험사의 국내지점이 보험계약 인수여부 판단 지원 등 업무를 위탁하기 위한 경우 별도의 동의없이 외국 소재 본점에 귀하의 정보를 이전할 수 있습니다.</p>
+                    <h3>제공 항목 — 국내</h3>
+                    <p><strong>고유식별정보</strong><br>주민등록번호, 외국인등록번호</p>
+                    <p><strong>민감정보</strong><br>피보험자의 질병·상해에 관한 정보 (진료기록, 상병명, 기왕증 등)</p>
+                    <p><strong>개인(신용)정보</strong><br>
+                    ㄴ 일반개인정보: 성명, 주소, 생년월일, 이메일, 유·무선 전화번호, 성별, 국적, 직업, 국내거소신고번호, 운전여부<br>
+                    ㄴ 신용거래정보: 보험계약정보(상품종류, 기간, 보험가입금액 등), 보험금정보(보험금 지급사유, 지급금액 등), 계약전알릴의무사항(취미 등)</p>
+                    <h3>제공 항목 — 국외</h3>
+                    <p><strong>개인(신용)정보</strong><br>
+                    ㄴ 일반개인정보: 성명, 연령<br>
+                    ㄴ 신용거래정보: 보험계약정보(상품종류, 기간, 보험가입금액 등)</p>
+                    <p>보험계약의 모집 및 체결은 보험대리점 배상온을 통해 이루어지며, 온라인 결제 및 플랫폼 운영 관련 기술 처리 업무는 바이인이 수행할 수 있습니다. 다만 보험료는 보험사로 직접 정산됩니다.</p>
                 </div>
             </div>
 
-            <!-- Agreement 5: 민감정보 -->
+            <!-- 5. 개인(신용)정보 조회 -->
             <div class="agreement-item">
                 <div class="agreement-header">
-                    <label>
-                        <input type="checkbox" class="agreement-check required" data-required="true">
-                        <span>민감정보 및 고유식별정보 처리 (필수)</span>
-                    </label>
+                    <label><input type="checkbox" class="agreement-check required"><span>개인(신용)정보 조회 동의 (필수)</span></label>
                     <button class="view-btn" onclick="toggleContent(this)">보기</button>
                 </div>
                 <div class="agreement-content">
-                    <p>당사 및 당사 업무수탁자는 「개인정보보호법」및「신용정보의 이용 및 보호에 관한 법률」에 따라 상기의 개인(신용)정보에 대한 개별 동의사항에 대하여 다음과 같이 귀하의 민감정보(질병·상해정보) 및 고유식별정보 (주민등록번호·외국인등록번호)를 처리(수집·이용, 조회, 제공)하고자 합니다.</p>
+                    <h3>조회에 관한 사항</h3>
+                    <h3>조회 대상 기관</h3>
+                    <p>종합신용정보집중기관, 보험요율산출기관, 국토교통부, 소방청, 티맵모빌리티</p>
+                    <h3>조회 목적</h3>
+                    <p>• 종합신용정보집중기관 : 보험계약 인수여부 결정을 위한 판단, 보험가입한도 조회, 실손 보험의 중복확인, 기존 보험계약과의 중요사항 비교설명</p>
+                    <p>• 보험요율산출기관, 국토교통부 : 보험계약 인수여부 결정을 위한 판단</p>
+                    <p>• 소방청 : 다중이용업소 화재배상책임보험 가입대상 확인</p>
+                    <p>• 티맵모빌리티 : 안전운전점수 실적 조회</p>
+                    <h3>조회 동의의 효력기간</h3>
+                    <p>• 동의일로부터 1년까지</p>
+                    <h3>조회 항목</h3>
+                    <p><strong>민감정보</strong><br>피보험자의 질병·상해에 관한 정보 (진료기록, 상병명 등), 교통법규 위반정보</p>
+                    <p><strong>개인(신용)정보</strong><br>
+                    ㄴ 일반개인정보: 성명, 국내거소신고번호, 안전운전점수정보<br>
+                    ㄴ 신용거래정보: 보험계약정보(상품종류, 기간, 보험료, 보험가입금액 등), 보험금정보(보험금 지급사유, 지급금액 등)<br>
+                    ㄴ 공공정보: 다중이용업소정보 (상호, 업종, 영업장 면적 및 주소, 소방청 발급 일련번호), 군운전경력정보, 자동차등록 관련 정보</p>
+                    <p>본인은 보험계약 체결을 위하여 NICE평가정보(주)를 통한 실명확인 절차에 동의하며, 실명확인 실패 시 보험가입이 제한될 수 있음을 이해합니다.</p>
                 </div>
             </div>
 
-            <!-- Agreement 6: 마케팅 (선택) -->
+            <!-- 6. 민감정보 및 고유식별정보 -->
             <div class="agreement-item">
                 <div class="agreement-header">
-                    <label>
-                        <input type="checkbox" class="agreement-check optional">
-                        <span>마케팅 목적의 개인정보 수집·이용 (선택)</span>
-                    </label>
+                    <label><input type="checkbox" class="agreement-check required"><span>민감정보 및 고유식별정보 처리 동의 (필수)</span></label>
+                    <button class="view-btn" onclick="toggleContent(this)">보기</button>
+                </div>
+                <div class="agreement-content">
+                    <p>당사 및 당사 업무수탁자는 「개인정보보호법」 및 「신용정보의 이용 및 보호에 관한 법률」에 따라 귀하의 민감정보(질병·상해정보) 및 고유식별정보(주민등록번호·외국인등록번호)를 처리(수집·이용, 조회, 제공)하고자 합니다.</p>
+                    <p>입력된 주민등록번호는 앞자리/뒷자리 분리 입력 방식으로 수집되며, NICE평가정보(주)를 통한 실명확인 후 보험계약 체결 및 보험사 API 전송 목적에 한하여 사용됩니다. 주민등록번호는 DB에 AES-256 방식으로 암호화 저장되고, 보험사 API 전송 시에 한하여 일시적으로 복호화 처리됩니다.</p>
+                </div>
+            </div>
+
+            <!-- 7. 실명확인 및 즉시 보험계약 체결 -->
+            <div class="agreement-item">
+                <div class="agreement-header">
+                    <label><input type="checkbox" class="agreement-check required"><span>실명확인 및 즉시 보험계약 체결 동의 (필수)</span></label>
+                    <button class="view-btn" onclick="toggleContent(this)">보기</button>
+                </div>
+                <div class="agreement-content">
+                    <p>본인은 NICE평가정보(주)를 통한 실명확인에 동의하며, 실명확인 실패 시 보험가입이 제한될 수 있음을 이해합니다.</p>
+                    <p>또한 결제 완료 시 보험계약이 즉시 체결되고, 가입증명서가 결제 후 이메일 또는 문자로 발송됨에 동의합니다.</p>
+                </div>
+            </div>
+
+            <!-- 8. 마케팅 (선택) -->
+            <div class="agreement-item">
+                <div class="agreement-header">
+                    <label><input type="checkbox" class="agreement-check optional" id="agreeMarketing"><span>마케팅 목적의 개인정보 수집·이용 (선택)</span></label>
                     <button class="view-btn" onclick="toggleContent(this)">보기</button>
                 </div>
                 <div class="agreement-content">
                     <h3>개인정보의 수집·이용 목적</h3>
                     <p>당사의 상품·서비스 소개 및 판매, 사은판촉행사 안내 (방문, 우편, 전자우편, 전화, SMS 포함) 및 이를 위한 연락, 시장조사</p>
-
                     <h3>개인정보의 항목</h3>
                     <p>성명, 휴대폰 번호</p>
-
                     <h3>개인(신용)정보의 보유·이용기간</h3>
                     <p>• 당사와 보험계약 체결실적이 있는 고객 : 5년</p>
                     <p>• 당사와 보험계약 체결실적이 없는 고객 : 동의일로부터 2년</p>
                 </div>
             </div>
-
             <div class="button-group">
                 <button type="button" class="btn btn-secondary" onclick="history.back()">이전</button>
                 <button type="button" class="btn btn-primary" id="submitBtn" disabled>다음</button>
@@ -511,113 +308,147 @@
         </div>
     </div>
 
+    <div class="notice-overlay" id="noticeOverlay" onclick="if(event.target===this)closeNotice()">
+        <div class="notice-box">
+            <div class="notice-header">
+                <h3>📋 알아두실사항</h3>
+                <button class="notice-close-btn" onclick="closeNotice()">✕</button>
+            </div>
+            <div class="notice-body">
+                <div class="notice-row"><div class="notice-row-title"><span class="notice-badge">1</span>계약 전 알릴 의무</div><p>보험계약 전 청약서에서 질문한 사항에 대해 사실대로 알려야 합니다. 고의 또는 중대한 과실로 알리지 않은 경우 계약이 해지되거나 보장이 제한될 수 있습니다.</p></div>
+                <div class="notice-row"><div class="notice-row-title"><span class="notice-badge">2</span>청약 철회 권리</div><p>보험증권을 받은 날부터 15일 이내에 청약을 철회할 수 있습니다. 단, 보험기간이 1년 미만이거나 보험기간이 이미 개시된 경우는 제외될 수 있습니다.</p></div>
+                <div class="notice-row"><div class="notice-row-title"><span class="notice-badge">3</span>보장하는 손해</div><p>드론 조종 중 발생한 타인의 신체 손해(대인) 및 재물 손해(대물)에 대한 법률상 배상책임을 보장합니다. 법률 비용(소송비, 변호사 비용 등)도 포함됩니다.</p></div>
+                <div class="notice-row"><div class="notice-row-title"><span class="notice-badge">4</span>보장하지 않는 손해</div><p>고의적 사고, 전쟁·천재지변, 피보험자 본인의 신체 손해, 가족·고용인 손해, 감염병 관련 손해, 사이버·전자적 사고는 보상되지 않습니다.</p></div>
+                <div class="notice-row"><div class="notice-row-title"><span class="notice-badge">5</span>보험금 청구 절차</div><p>사고 발생 시 즉시 배상온(liab.co.kr)에 사고 접수 후 필요 서류를 제출하세요. 보험사 심사 완료 후 7영업일 이내에 보험금이 지급됩니다.</p></div>
+                <div class="notice-row"><div class="notice-row-title"><span class="notice-badge">6</span>중복 계약 시 비례 보상</div><p>동일한 사고에 대해 복수의 보험계약이 있는 경우, 각 계약의 보상한도 비율에 따라 비례 보상됩니다.</p></div>
+                <div class="notice-row"><div class="notice-row-title"><span class="notice-badge">7</span>손해 방지 의무</div><p>보험사고 발생 시 손해 확대를 방지하기 위한 조치를 취해야 합니다. 의무를 이행하지 않은 경우 보상이 제한될 수 있습니다.</p></div>
+                <div class="notice-row"><div class="notice-row-title"><span class="notice-badge">8</span>소멸 시효</div><p>보험금 청구권은 사고 발생일로부터 3년이 지나면 소멸합니다. 기간 내에 청구하시기 바랍니다.</p></div>
+                <div class="notice-row"><div class="notice-row-title"><span class="notice-badge">9</span>분쟁 해결</div><p>보험 관련 분쟁 발생 시 금융감독원(국번없이 1332) 또는 한국소비자원에 조정을 신청할 수 있습니다.</p></div>
+            </div>
+            <div class="notice-footer"><button onclick="closeNotice()">확인</button></div>
+        </div>
+    </div>
+
+    <div class="sticky-bottom-bar">
+        <button class="sticky-bottom-btn btn-notice" onclick="openNotice()">
+            <span>📋</span> 알아두실사항
+        </button>
+        <a class="sticky-bottom-btn btn-terms" href="20260101_KB드론배상책임보험_개인용_보험약관_수정01.pdf" download>
+            <span>📄</span> 약관보기
+        </a>
+    </div>
+
     <footer>
         <div class="footer-content">
-            <h3 style="margin-bottom: 1rem;">배상온 대리점</h3>
-            <p>📧 이메일: liab.on.ins@gmail.com</p>
-            <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
-            <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
-            <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
-            <p style="margin-top: 1.5rem; opacity: 0.6;">© 2026 배상온 대리점. All rights reserved. | KB손해보험 공식 대리점</p>
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>보험모집 주체</h4>
+                    <p><strong>상호:</strong> 배상온</p>
+                    <p><strong>사업자등록번호:</strong> 507-18-15770</p>
+                    <p><strong>대표자:</strong> 김리하</p>
+                    <p><strong>보험대리점 등록번호:</strong> 제2026010037호</p>
+                    <p><strong>주소:</strong> 서울특별시 강남구 테헤란로 117, 9층</p>
+                    <p><strong>고객센터:</strong> 010-8461-8712</p>
+                    <p><strong>이메일:</strong> liab.on.ins@gmail.com</p>
+                </div>
+                <div class="footer-col">
+                    <h4>플랫폼 운영 및 결제 처리</h4>
+                    <p><strong>상호:</strong> 바이인</p>
+                    <p><strong>사업자등록번호:</strong> 501-63-18916</p>
+                    <p><strong>대표자:</strong> 김리하</p>
+                    <p><strong>통신판매업 신고번호:</strong> 제2026-서울동대문-0153호</p>
+                    <p><strong>주소:</strong> 서울특별시 동대문구 천호대로 301, 1706호</p>
+                </div>
+            </div>
+            <div class="footer-notice">
+                <p>※ 본 사이트(liab.co.kr)는 보험상품 안내 및 가입 플랫폼이며, 실제 보험계약의 모집 및 체결은 보험대리점 <strong>'배상온'</strong>을 통해 이루어집니다.</p>
+                <p>※ 결제 및 전자상거래 관련 서비스는 <strong>'바이인'</strong>이 운영합니다.</p>
+                <p>※ 보험상품의 보장내용 및 계약의 최종 책임은 해당 보험사 및 보험대리점 기준에 따릅니다.</p>
+            </div>
         </div>
     </footer>
 
     <script>
-        // 페이지 로드/재방문(이전 버튼) 시 버튼 상태 초기화
-        window.addEventListener('pageshow', function() {
-            const btn = document.getElementById('submitBtn');
-            if (btn) {
-                btn.textContent = '다음';
-                checkSubmitButton();
+        function toggleContent(btn) {
+            var item = btn.parentElement.parentElement;
+            var content = item.querySelector('.agreement-content');
+            var isOpen = content.classList.contains('show');
+            if (isOpen) {
+                content.classList.remove('show');
+                btn.textContent = '보기';
+            } else {
+                content.classList.add('show');
+                btn.textContent = '닫기';
             }
-        });
-        // Toggle content visibility
-        function toggleContent(button) {
-            const content = button.closest('.agreement-item').querySelector('.agreement-content');
-            content.classList.toggle('show');
-            button.textContent = content.classList.contains('show') ? '닫기' : '보기';
         }
 
-        // ── 자동 스크롤: 필수 약관 모두 체크 시 다음 버튼으로 이동 ──
-        function scrollToButtonIfReady() {
-            const requiredChecks = document.querySelectorAll('.agreement-check.required');
-            const allRequiredChecked = Array.from(requiredChecks).every(cb => cb.checked);
-            if (allRequiredChecked) {
+        document.getElementById('agreeAll').addEventListener('change', function() {
+            document.querySelectorAll('.agreement-check').forEach(function(cb) { cb.checked = this.checked; }, this);
+            checkSubmit(); scrollIfReady();
+        });
+
+        document.querySelectorAll('.agreement-check').forEach(function(cb) {
+            cb.addEventListener('change', function() {
+                var all = Array.from(document.querySelectorAll('.agreement-check')).every(function(c) { return c.checked; });
+                document.getElementById('agreeAll').checked = all;
+                checkSubmit(); scrollIfReady();
+            });
+        });
+
+        function checkSubmit() {
+            var required = document.querySelectorAll('.agreement-check.required');
+            var ok = Array.from(required).every(function(c) { return c.checked; });
+            document.getElementById('submitBtn').disabled = !ok;
+        }
+
+        function scrollIfReady() {
+            if (!document.getElementById('submitBtn').disabled) {
                 setTimeout(function() {
-                    const btnGroup = document.querySelector('.button-group');
-                    if (btnGroup) {
-                        btnGroup.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
+                    var bg = document.querySelector('.button-group');
+                    if (bg) bg.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }, 300);
             }
         }
 
-        // Check all
-        document.getElementById('agreeAll').addEventListener('change', function() {
-            const checkboxes = document.querySelectorAll('.agreement-check');
-            checkboxes.forEach(cb => cb.checked = this.checked);
-            checkSubmitButton();
-            scrollToButtonIfReady();
-        });
-
-        // Individual checkboxes
-        document.querySelectorAll('.agreement-check').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                const allChecked = Array.from(document.querySelectorAll('.agreement-check')).every(cb => cb.checked);
-                document.getElementById('agreeAll').checked = allChecked;
-                checkSubmitButton();
-                scrollToButtonIfReady();
-            });
-        });
-
-        // Check if all required agreements are checked
-        function checkSubmitButton() {
-            const requiredChecks = document.querySelectorAll('.agreement-check.required');
-            const allRequiredChecked = Array.from(requiredChecks).every(cb => cb.checked);
-            document.getElementById('submitBtn').disabled = !allRequiredChecked;
+        function openNotice() {
+            document.getElementById('noticeOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
+        function closeNotice() {
+            document.getElementById('noticeOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeNotice(); });
 
-        // Submit
+        window.addEventListener('pageshow', function() {
+            var btn = document.getElementById('submitBtn');
+            if (btn) { btn.textContent = '다음'; checkSubmit(); }
+        });
+
         document.getElementById('submitBtn').addEventListener('click', async function() {
-            const savedData = sessionStorage.getItem('droneInsuranceData');
+            var savedData = sessionStorage.getItem('droneInsuranceData');
             if (!savedData) {
                 alert('저장된 정보가 없습니다. 처음부터 다시 시작해주세요.');
                 window.location.href = '/personal-drone-insurance';
                 return;
             }
-
-            const formData = JSON.parse(savedData);
-            
-            // 약관 동의 정보 추가
-            formData.terms_agreed = true;
-            formData.marketing_agreed = document.getElementById('agreeMarketing')?.checked || false;
-            formData.agreed_at = new Date().toISOString();
-            formData.insurance_type = '개인용 드론보험';
-
-            // 버튼 비활성화 (중복 클릭 방지)
-            const btn = document.getElementById('submitBtn');
-            btn.disabled = true;
-            btn.textContent = '처리 중...';
-
-            // API 호출 전에 sessionStorage 먼저 저장
+            var btn = this;
+            btn.disabled = true; btn.textContent = '처리 중...';
+            var formData = JSON.parse(savedData);
+            formData.terms_agreed     = true;
+            formData.marketing_agreed = document.getElementById('agreeMarketing').checked;
+            formData.agreed_at        = new Date().toISOString();
+            formData.insurance_type   = '개인용 드론보험';
             sessionStorage.setItem('droneInsuranceData', JSON.stringify(formData));
-
             try {
-                const response = await fetch('/api/contact', {
+                var res = await fetch('/api/contact', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
                 });
-
-                if (!response.ok) {
-                    console.warn('API 오류:', response.status);
-                }
-            } catch (err) {
-                console.warn('API 호출 오류:', err);
-            }
-
-            // 완료 페이지로 이동
-            window.location.href = '/personal-drone-insurance-complete';
+                if (res.ok) { window.location.href = '/personal-drone-insurance-complete'; }
+                else { alert('오류가 발생했습니다. 다시 시도해주세요.'); btn.disabled = false; btn.textContent = '다음'; }
+            } catch(e) { window.location.href = '/personal-drone-insurance-complete'; }
         });
     </script>
 </body>

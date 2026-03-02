@@ -25,7 +25,7 @@
             line-height: 1.6;
         }
 
-        /* Header */
+        /* ─── Header ─── */
         header {
             background: #fff;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
@@ -49,10 +49,7 @@
             gap: 1.5rem;
         }
 
-        .kb-logo {
-            height: 50px;
-            width: auto;
-        }
+        .kb-logo { height: 50px; width: auto; }
 
         .divider {
             height: 40px;
@@ -81,17 +78,13 @@
             transform: translateY(-2px);
         }
 
-        /* Navigation */
         .header-nav {
             display: flex;
             gap: 2rem;
             align-items: center;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
+        .nav-links { display: flex; gap: 2rem; }
 
         .nav-links a {
             font-size: 0.95rem;
@@ -102,9 +95,7 @@
             position: relative;
         }
 
-        .nav-links a:hover {
-            color: var(--kb-gold);
-        }
+        .nav-links a:hover { color: var(--kb-gold); }
 
         .nav-links a.active {
             color: var(--kb-gold);
@@ -114,34 +105,17 @@
         .nav-links a.active::after {
             content: '';
             position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 100%;
-            height: 3px;
+            bottom: -8px; left: 0;
+            width: 100%; height: 3px;
             background: var(--kb-gold);
             border-radius: 2px;
         }
 
-        @media (max-width: 768px) {
-            .header-content {
-                padding: 1rem 1.5rem;
-            }
-            .kb-logo {
-                height: 35px;
-            }
-            .agency-name {
-                font-size: 1.1rem;
-            }
-            .nav-links {
-                display: none;
-            }
-        }
-
-        /* Hero Section */
+        /* ─── Hero ─── */
         .hero {
             background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             color: #fff;
-            padding: 5rem 2rem;
+            padding: 5rem 2rem 5.5rem;
             text-align: center;
         }
 
@@ -156,228 +130,281 @@
             opacity: 0.95;
         }
 
-        /* Selection Section */
+        /* ─── Selection Section ─── */
         .selection-section {
-            max-width: 1200px;
-            margin: 4rem auto;
-            padding: 0 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 2rem 5rem;
         }
 
         .section-title {
             text-align: center;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
+            font-size: 2.4rem;
+            font-weight: 800;
+            margin-bottom: 0.7rem;
             color: var(--kb-dark);
         }
 
         .section-subtitle {
             text-align: center;
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             color: var(--kb-gray);
-            margin-bottom: 4rem;
+            margin-bottom: 3.5rem;
         }
 
+        /* ─── Cards: always 2-column ─── */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 3rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
             margin-bottom: 3rem;
         }
 
         .drone-card {
             background: #fff;
-            border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            transition: all 0.3s;
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
             cursor: pointer;
             border: 3px solid transparent;
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        .drone-card:before {
+        .drone-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 6px;
-            background: linear-gradient(90deg, var(--kb-gold) 0%, var(--kb-yellow) 100%);
+        }
+
+        .drone-card.card-business::before {
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+        }
+
+        .drone-card.card-personal::before {
+            background: linear-gradient(90deg, var(--kb-gold), var(--kb-yellow));
         }
 
         .drone-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-            border-color: var(--kb-gold);
+            box-shadow: 0 24px 64px rgba(0,0,0,0.14);
+        }
+
+        .drone-card.card-business:hover { border-color: #8b5cf6; }
+        .drone-card.card-personal:hover { border-color: var(--kb-gold); }
+
+        .card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.38rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 1.6rem;
+            align-self: flex-start;
+        }
+
+        .badge-required {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .badge-leisure {
+            background: #fff8e6;
+            color: #92400e;
         }
 
         .card-icon {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, var(--kb-gold) 0%, var(--kb-yellow) 100%);
-            border-radius: 25px;
+            width: 96px; height: 96px;
+            border-radius: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 2rem;
-            font-size: 3.5rem;
+            margin: 0 auto 1.8rem;
+            font-size: 3.4rem;
         }
 
-        .card-badge {
-            display: inline-block;
-            background: #e8f5e9;
-            color: #2e7d32;
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
+        .card-business .card-icon {
+            background: linear-gradient(135deg, #ede9fe, #ddd6fe);
         }
 
-        .card-badge.required {
-            background: #fff3e0;
-            color: #e65100;
+        .card-personal .card-icon {
+            background: linear-gradient(135deg, #fff8e6, #fde68a);
         }
 
         .drone-card h3 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
+            font-size: 1.85rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
             color: var(--kb-dark);
             text-align: center;
         }
 
-        .drone-card p {
+        .drone-card .card-desc {
             color: var(--kb-gray);
-            margin-bottom: 2rem;
+            margin-bottom: 1.8rem;
             text-align: center;
             line-height: 1.8;
+            font-size: 0.97rem;
         }
 
         .features-list {
             list-style: none;
             padding: 0;
             margin-bottom: 2rem;
+            flex: 1;
         }
 
         .features-list li {
-            padding: 0.75rem 0;
-            padding-left: 1.5rem;
+            padding: 0.7rem 0 0.7rem 1.6rem;
             position: relative;
             color: var(--kb-dark);
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 0.96rem;
         }
 
-        .features-list li:before {
+        .features-list li:last-child { border-bottom: none; }
+
+        .features-list li::before {
             content: "✓";
             position: absolute;
             left: 0;
-            color: var(--kb-gold);
-            font-weight: bold;
+            font-weight: 800;
         }
+
+        .card-business .features-list li::before { color: #7c3aed; }
+        .card-personal .features-list li::before  { color: var(--kb-gold); }
 
         .select-btn {
             width: 100%;
-            padding: 1.2rem;
-            background: var(--kb-gold);
-            color: #fff;
+            padding: 1.15rem;
             border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
             text-decoration: none;
-            display: block;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: auto;
+            letter-spacing: -0.2px;
         }
 
-        .select-btn:hover {
-            background: var(--kb-yellow);
+        .card-business .select-btn {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff;
+        }
+
+        .card-business .select-btn:hover {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 184, 0, 0.4);
+            box-shadow: 0 8px 24px rgba(99,102,241,0.4);
         }
 
-        /* Info Box */
+        .card-personal .select-btn {
+            background: linear-gradient(135deg, var(--kb-gold), var(--kb-yellow));
+            color: #1a1a1a;
+        }
+
+        .card-personal .select-btn:hover {
+            background: linear-gradient(135deg, #e6a500, var(--kb-gold));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255,184,0,0.4);
+        }
+
+        /* ─── Info Box ─── */
         .info-box {
             background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
             border-left: 4px solid #1976d2;
-            padding: 2rem;
-            border-radius: 15px;
-            margin: 3rem auto;
-            max-width: 800px;
+            padding: 2rem 2.2rem;
+            border-radius: 16px;
+            margin: 0 auto;
+            max-width: 860px;
         }
 
         .info-box h4 {
-            color: #1976d2;
+            color: #1565c0;
             margin-bottom: 1rem;
-            font-size: 1.3rem;
+            font-size: 1.15rem;
+            font-weight: 700;
         }
 
         .info-box p {
             color: #0d47a1;
-            line-height: 1.8;
-        }
-
-        /* Footer */
-        footer {
-            background: var(--kb-dark);
-            color: #fff;
-            padding: 3rem 2rem 1.5rem;
-            margin-top: 4rem;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer-info {
-            margin-bottom: 2rem;
-        }
-
-        .footer-info h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            color: var(--kb-gold);
-        }
-
-        .footer-info p {
-            color: #aaa;
-            margin-bottom: 0.5rem;
+            line-height: 1.85;
             font-size: 0.95rem;
         }
 
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
+        .info-box p + p { margin-top: 0.75rem; }
 
-            .logo-section {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .divider {
-                display: none;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .cards-grid {
-                grid-template-columns: 1fr;
-            }
+        /* ─── Footer ─── */
+        footer {
+            background: var(--kb-dark);
+            color: #fff;
+            padding: 3rem 2rem 2rem;
+            margin-top: 5rem;
         }
 
-        /* ══ 카카오톡 실시간 상담 플로팅 버튼 ══ */
+        .footer-content {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-col h4 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.1px;
+            color: var(--kb-gold);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255,184,0,0.25);
+        }
+
+        .footer-col p {
+            color: #bbb;
+            margin-bottom: 0.4rem;
+            font-size: 0.87rem;
+            line-height: 1.65;
+        }
+
+        .footer-col p strong {
+            color: #ddd;
+            font-weight: 600;
+        }
+
+        .footer-notice { padding-top: 0.25rem; }
+
+        .footer-notice p {
+            color: #777;
+            font-size: 0.82rem;
+            line-height: 1.9;
+            margin-bottom: 0.15rem;
+        }
+
+        .footer-notice p strong { color: #999; }
+
+        /* ─── 카카오 플로팅 ─── */
         .kakao-float {
             position: fixed;
-            right: 24px;
-            bottom: 32px;
+            right: 24px; bottom: 32px;
             z-index: 900;
             display: flex;
             flex-direction: column;
@@ -385,10 +412,12 @@
             gap: 8px;
             animation: kk-enter 0.45s cubic-bezier(0.34,1.56,0.64,1) 0.9s both;
         }
+
         @keyframes kk-enter {
             from { opacity: 0; transform: translateY(16px) scale(0.75); }
             to   { opacity: 1; transform: translateY(0) scale(1); }
         }
+
         .kakao-tip {
             background: rgba(30,30,30,0.88);
             color: #fff;
@@ -403,19 +432,20 @@
             transition: opacity 0.2s, transform 0.2s;
             position: relative;
         }
+
         .kakao-tip::after {
             content: '';
             position: absolute;
-            bottom: -5px;
-            right: 18px;
+            bottom: -5px; right: 18px;
             border: 5px solid transparent;
             border-top-color: rgba(30,30,30,0.88);
             border-bottom: 0;
         }
+
         .kakao-float:hover .kakao-tip { opacity: 1; transform: translateY(0); }
+
         .kakao-btn {
-            width: 52px;
-            height: 52px;
+            width: 52px; height: 52px;
             background: #FEE500;
             border-radius: 50%;
             display: flex;
@@ -427,33 +457,104 @@
             position: relative;
             -webkit-tap-highlight-color: transparent;
         }
-        .kakao-btn:hover { transform: translateY(-3px) scale(1.07); box-shadow: 0 8px 24px rgba(0,0,0,0.22); }
+
+        .kakao-btn:hover  { transform: translateY(-3px) scale(1.07); box-shadow: 0 8px 24px rgba(0,0,0,0.22); }
         .kakao-btn:active { transform: scale(0.94); }
         .kakao-icon { font-size: 1.55rem; line-height: 1; display: block; }
+
         .kakao-dot {
             position: absolute;
-            top: 1px;
-            right: 1px;
-            width: 12px;
-            height: 12px;
+            top: 1px; right: 1px;
+            width: 12px; height: 12px;
             background: #e74c3c;
             border-radius: 50%;
             border: 2px solid #fff;
             animation: kk-dot 2s ease-in-out 1.5s 3;
         }
+
         @keyframes kk-dot {
             0%,100% { transform: scale(1); }
             50%      { transform: scale(1.4); opacity: 0.65; }
         }
+
+        /* ─── Responsive: 768px (tablet) ─── */
         @media (max-width: 768px) {
-            .kakao-float { right: 16px; bottom: 24px; }
-            .kakao-btn   { width: 46px; height: 46px; }
-            .kakao-icon  { font-size: 1.35rem; }
+            .header-content { padding: 1rem 1.2rem; }
+            .kb-logo        { height: 35px; }
+            .agency-name    { font-size: 1.1rem; }
+            .nav-links      { display: none; }
+            .logo-section   { gap: 0.8rem; }
+            .divider        { display: none; }
+
+            .hero           { padding: 3.5rem 1.5rem 4rem; }
+            .hero h1        { font-size: 2.2rem; }
+            .hero p         { font-size: 1.1rem; }
+
+            .selection-section  { padding: 3rem 1.2rem 4rem; }
+            .section-title      { font-size: 1.9rem; }
+            .section-subtitle   { font-size: 1rem; margin-bottom: 2.5rem; }
+
+            .cards-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+
+            .drone-card {
+                padding: 1.6rem 1.1rem;
+                border-radius: 18px;
+            }
+
+            .card-icon {
+                width: 68px; height: 68px;
+                font-size: 2.4rem;
+                border-radius: 16px;
+                margin-bottom: 1rem;
+            }
+
+            .drone-card h3       { font-size: 1.2rem; margin-bottom: 0.4rem; }
+            .drone-card .card-desc {
+                font-size: 0.8rem !important;
+                margin-bottom: 1rem !important;
+                line-height: 1.6 !important;
+            }
+
+            .features-list li { font-size: 0.8rem; padding: 0.5rem 0 0.5rem 1.2rem; }
+
+            .select-btn {
+                padding: 0.85rem 0.5rem;
+                font-size: 0.85rem;
+                border-radius: 10px;
+            }
+
+            .card-badge {
+                font-size: 0.7rem;
+                padding: 0.25rem 0.6rem;
+                margin-bottom: 1rem;
+            }
+
+            .info-box         { padding: 1.4rem 1.2rem; }
+            .footer-grid      { grid-template-columns: 1fr; gap: 1.8rem; }
+            .kakao-float      { right: 16px; bottom: 24px; }
+            .kakao-btn        { width: 46px; height: 46px; }
+            .kakao-icon       { font-size: 1.35rem; }
+        }
+
+        /* ─── Responsive: very small phones → stack ─── */
+        @media (max-width: 400px) {
+            .cards-grid { grid-template-columns: 1fr; gap: 1.3rem; }
+
+            .drone-card         { padding: 2rem 1.5rem; }
+            .card-icon          { width: 80px; height: 80px; font-size: 3rem; }
+            .drone-card h3      { font-size: 1.55rem; }
+            .drone-card .card-desc { font-size: 0.93rem !important; }
+            .features-list li   { font-size: 0.92rem; }
+            .select-btn         { font-size: 1rem; padding: 1rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
+
+    <!-- ─── Header ─── -->
     <header>
         <div class="header-content">
             <div class="logo-section">
@@ -472,7 +573,7 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- ─── Hero ─── -->
     <section class="hero">
         <div class="hero-content">
             <h1>🚁 드론보험</h1>
@@ -480,19 +581,20 @@
         </div>
     </section>
 
-    <!-- Selection Section -->
+    <!-- ─── Selection Section ─── -->
     <section class="selection-section">
         <h2 class="section-title">드론보험 선택</h2>
         <p class="section-subtitle">용도에 맞는 드론보험을 선택해주세요</p>
 
         <div class="cards-grid">
+
             <!-- 업무용 드론보험 -->
-            <div class="drone-card">
-                <span class="card-badge required">드론플레이 전용</span>
+            <div class="drone-card card-business">
+                <span class="card-badge badge-required">⚖️ 의무보험</span>
                 <div class="card-icon">🏢</div>
                 <h3>업무용 드론보험</h3>
-                <p>사업 목적으로 드론을 운영하시나요?<br>법적으로 의무 가입이 필요한 드론보험입니다</p>
-                
+                <p class="card-desc">사업 목적으로 드론을 운영하시나요?<br>법적으로 의무 가입이 필요한 드론보험입니다.</p>
+
                 <ul class="features-list">
                     <li>의무보험 (법적 가입 필수)</li>
                     <li>대인·대물 배상책임 보장</li>
@@ -501,16 +603,16 @@
                     <li>법규 준수 인증서 발급</li>
                 </ul>
 
-                <a href="/business-drone-insurance" class="select-btn">업무용 보험 가입하기</a>
+                <a href="/business-drone-insurance" class="select-btn">업무용 보험 가입하기 →</a>
             </div>
 
             <!-- 개인용 드론보험 -->
-            <div class="drone-card">
-                <span class="card-badge">드론플레이 전용</span>
+            <div class="drone-card card-personal">
+                <span class="card-badge badge-leisure">🎮 드론플레이 전용</span>
                 <div class="card-icon">🎮</div>
                 <h3>개인용 드론보험</h3>
-                <p>취미로 드론을 즐기시나요?<br>드론플레이(네이버카페) 회원 전용 상품입니다</p>
-                
+                <p class="card-desc">취미로 드론을 즐기시나요?<br>드론플레이(네이버카페) 회원 전용 상품입니다.</p>
+
                 <ul class="features-list">
                     <li>비의무 드론 (레저용)</li>
                     <li>드론플레이 카페 회원 전용</li>
@@ -519,65 +621,48 @@
                     <li>개인 배상책임 보장</li>
                 </ul>
 
-                <a href="/personal-drone-insurance" class="select-btn">개인용 보험 가입하기</a>
+                <a href="/personal-drone-insurance" class="select-btn">개인용 보험 가입하기 →</a>
             </div>
+
         </div>
 
+        <!-- 선택 가이드 -->
         <div class="info-box">
             <h4>💡 드론보험 선택 가이드</h4>
             <p><strong>업무용 (의무보험):</strong> 사업자등록증이 있거나 영리 목적으로 드론을 운영하는 경우 법적으로 의무 가입이 필요합니다. 상업용 촬영, 농업용 방제, 배송, 측량 등이 해당됩니다.</p>
-            <br>
             <p><strong>개인용 (드론플레이 전용):</strong> 순수 취미와 레저 목적으로 드론을 즐기시는 분들을 위한 상품입니다. 드론플레이 네이버 카페 회원님들께 제공되는 특별 상품으로, 비의무 드론에 적용됩니다.</p>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section class="selection-section" id="contact">
-        <div style="max-width: 600px; margin: 0 auto; background: #fff; padding: 3rem; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.08);">
-            <h2 style="text-align: center; margin-bottom: 2rem; color: var(--kb-dark);">드론보험 상담 신청</h2>
-            <form id="droneContactForm">
-                <div style="margin-bottom: 1.5rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">보험 종류 *</label>
-                    <select name="insuranceType" required style="width: 100%; padding: 1rem; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1rem;">
-                        <option value="">선택하세요</option>
-                        <option value="업무용">업무용 드론보험 (의무보험)</option>
-                        <option value="개인용">개인용 드론보험 (드론플레이 전용)</option>
-                    </select>
-                </div>
-                <div style="margin-bottom: 1.5rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">이름 *</label>
-                    <input type="text" name="name" required style="width: 100%; padding: 1rem; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1rem;">
-                </div>
-                <div style="margin-bottom: 1.5rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">연락처 *</label>
-                    <input type="tel" name="phone" required style="width: 100%; padding: 1rem; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1rem;">
-                </div>
-                <div style="margin-bottom: 1.5rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">이메일</label>
-                    <input type="email" name="email" style="width: 100%; padding: 1rem; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1rem;">
-                </div>
-                <div style="margin-bottom: 1.5rem;">
-                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">문의 내용</label>
-                    <textarea name="message" style="width: 100%; padding: 1rem; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1rem; min-height: 100px; resize: vertical;" placeholder="드론 모델명, 사용 목적 등을 입력해주세요"></textarea>
-                </div>
-                <button type="submit" class="select-btn">상담 신청하기</button>
-            </form>
-        </div>
-    </section>
-
-    <!-- Footer -->
+    <!-- ─── Footer ─── -->
     <footer>
         <div class="footer-content">
-            <div class="footer-info">
-                <h3>배상온 대리점</h3>
-                <p>📧 이메일: liab.on.ins@gmail.com</p>
-                <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
-                <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
-                <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>보험모집 주체</h4>
+                    <p><strong>상호:</strong> 배상온</p>
+                    <p><strong>사업자등록번호:</strong> 507-18-15770</p>
+                    <p><strong>대표자:</strong> 김리하</p>
+                    <p><strong>보험대리점 등록번호:</strong> 제2026010037호</p>
+                    <p><strong>주소:</strong> 서울특별시 강남구 테헤란로 117, 9층</p>
+                    <p><strong>고객센터:</strong> 010-8461-8712</p>
+                    <p><strong>이메일:</strong> liab.on.ins@gmail.com</p>
+                </div>
+                <div class="footer-col">
+                    <h4>플랫폼 운영 및 결제 처리</h4>
+                    <p><strong>상호:</strong> 바이인</p>
+                    <p><strong>사업자등록번호:</strong> 501-63-18916</p>
+                    <p><strong>대표자:</strong> 김리하</p>
+                    <p><strong>통신판매업 신고번호:</strong> 제2026-서울동대문-0153호</p>
+                    <p><strong>주소:</strong> 서울특별시 동대문구 천호대로 301, 1706호</p>
+                </div>
+            </div>
+            <div class="footer-notice">
+                <p>※ 본 사이트(liab.co.kr)는 보험상품 안내 및 가입 플랫폼이며, 실제 보험계약의 모집 및 체결은 보험대리점 <strong>'배상온'</strong>을 통해 이루어집니다.</p>
+                <p>※ 결제 및 전자상거래 관련 서비스는 <strong>'바이인'</strong>이 운영합니다.</p>
+                <p>※ 보험상품의 보장내용 및 계약의 최종 책임은 해당 보험사 및 보험대리점 기준에 따릅니다.</p>
             </div>
         </div>
-    </footer>
-
     </footer>
 
     <!-- ══ 카카오톡 실시간 상담 플로팅 버튼 ══ -->
@@ -595,37 +680,6 @@
     </div>
 
     <script>
-        // Form submission
-        document.getElementById('droneContactForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const btn = this.querySelector('button[type="submit"]');
-            btn.disabled = true;
-            btn.textContent = '전송 중...';
-
-            const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData.entries());
-
-            try {
-                const response = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                if (response.ok) {
-                    alert('상담 신청이 완료되었습니다. 빠른 시일 내에 연락드리겠습니다.');
-                    e.target.reset();
-                } else {
-                    alert('전송 중 오류가 발생했습니다. 다시 시도해주세요.');
-                }
-            } catch (error) {
-                alert('전송 중 오류가 발생했습니다.\n이메일로 직접 연락 주시기 바랍니다: liab.on.ins@gmail.com');
-            } finally {
-                btn.disabled = false;
-                btn.textContent = '상담 신청하기';
-            }
-        });
-
         // ── 카카오톡 플로팅 버튼 ──
         document.getElementById('kakaoChatBtn').addEventListener('click', function() {
             var dot = document.getElementById('kakaoDot');
@@ -640,11 +694,15 @@
             function adjust() {
                 var ft = footerEl.getBoundingClientRect().top;
                 var wh = window.innerHeight;
-                floatEl.style.bottom = ft < wh ? (32 + wh - ft) + 'px' : '';
+                floatEl.style.bottom = ft < wh
+                    ? (wh - ft + 16) + 'px'
+                    : '';
             }
             window.addEventListener('scroll', adjust, { passive: true });
-            window.addEventListener('resize', adjust, { passive: true });
+            window.addEventListener('resize', adjust);
+            adjust();
         })();
     </script>
+
 </body>
 </html>

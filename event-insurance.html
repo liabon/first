@@ -23,6 +23,7 @@
             font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             color: var(--kb-dark);
             line-height: 1.6;
+            padding-bottom: 60px;
         }
 
         /* Header */
@@ -268,36 +269,6 @@
             font-weight: 400;
         }
 
-        .file-upload {
-            border: 2px dashed var(--kb-gold);
-            border-radius: 10px;
-            padding: 2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: #fafafa;
-        }
-
-        .file-upload:hover {
-            background: #fff5e6;
-            border-color: var(--kb-yellow);
-        }
-
-        .file-upload input[type="file"] {
-            display: none;
-        }
-
-        .file-upload-label {
-            cursor: pointer;
-            color: var(--kb-gray);
-        }
-
-        .file-upload-label strong {
-            color: var(--kb-gold);
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-
         .submit-btn {
             width: 100%;
             padding: 1.5rem;
@@ -341,22 +312,333 @@
             margin: 0 auto;
         }
 
-        .footer-info {
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
             margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .footer-info h3 {
-            font-size: 1.3rem;
+        .footer-col h4 {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--kb-gold);
             margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255,184,0,0.3);
+        }
+
+        .footer-col p {
+            color: #bbb;
+            margin-bottom: 0.4rem;
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+
+        .footer-col p strong {
+            color: #ddd;
+            font-weight: 600;
+        }
+
+        .footer-notice {
+            padding-top: 0.5rem;
+        }
+
+        .footer-notice p {
+            color: #888;
+            font-size: 0.82rem;
+            line-height: 1.8;
+            margin-bottom: 0.3rem;
+        }
+
+        .footer-notice p strong {
+            color: #aaa;
+        }
+
+        @media (max-width: 600px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 1.8rem;
+            }
+        }
+
+        /* ========================================
+           STICKY SUB-BAR (알아두실사항 / 약관보기)
+           ======================================== */
+        .sticky-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 998;
+            background: #fff;
+            border-top: 2px solid #eee;
+            box-shadow: 0 -3px 12px rgba(0,0,0,0.10);
+        }
+
+        .sticky-bar-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
+        .sticky-bar-label {
+            font-size: 0.8rem;
+            color: #999;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            padding: 0 1rem 0 0;
+            border-right: 1px solid #e0e0e0;
+            white-space: nowrap;
+        }
+
+        .sticky-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            flex: 1;
+            padding: 0.85rem 1rem;
+            background: none;
+            border: none;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--kb-dark);
+            text-decoration: none;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .sticky-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--kb-gold);
+            transition: width 0.25s;
+        }
+
+        .sticky-btn:hover::after {
+            width: 80%;
+        }
+
+        .sticky-btn-notice {
+            border-right: 1px solid #e0e0e0;
+            color: #333;
+        }
+
+        .sticky-btn-notice:hover {
+            background: #fffbf0;
             color: var(--kb-gold);
         }
 
-        .footer-info p {
-            color: #aaa;
-            margin-bottom: 0.5rem;
-            font-size: 0.95rem;
+        .sticky-btn-terms {
+            color: #764ba2;
         }
 
+        .sticky-btn-terms:hover {
+            color: #764ba2;
+            background: #f8f4ff;
+        }
+
+        .sticky-btn-terms::after {
+            background: #764ba2;
+        }
+
+        .sticky-btn-icon {
+            font-size: 1rem;
+        }
+
+        /* ========================================
+           MODAL (알아두실사항 팝업)
+           ======================================== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.55);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #fff;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 620px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            overflow: hidden;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.93) translateY(20px); }
+            to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 1.5rem 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .modal-header h3 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+
+        .modal-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.35);
+        }
+
+        .modal-body {
+            overflow-y: auto;
+            padding: 1.8rem;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .notice-item {
+            margin-bottom: 1.6rem;
+            padding-bottom: 1.6rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .notice-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .notice-item-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--kb-dark);
+            margin-bottom: 0.7rem;
+        }
+
+        .notice-badge {
+            background: var(--kb-gold);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 20px;
+            flex-shrink: 0;
+        }
+
+        .notice-item p {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.75;
+        }
+
+        .notice-item ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 0.5rem;
+        }
+
+        .notice-item ul li {
+            padding: 0.35rem 0 0.35rem 1.2rem;
+            position: relative;
+            color: #555;
+            font-size: 0.93rem;
+            line-height: 1.7;
+        }
+
+        .notice-item ul li::before {
+            content: "·";
+            position: absolute;
+            left: 0;
+            color: var(--kb-gold);
+            font-weight: bold;
+            font-size: 1.2rem;
+            line-height: 1.4;
+        }
+
+        .notice-highlight {
+            background: #fff8e6;
+            border: 1px solid #ffe0a0;
+            border-radius: 10px;
+            padding: 1rem 1.2rem;
+            margin-top: 0.8rem;
+            font-size: 0.92rem;
+            color: #7a5c00;
+            line-height: 1.7;
+        }
+
+        .modal-footer {
+            padding: 1.2rem 1.8rem;
+            background: #f8f9fa;
+            flex-shrink: 0;
+            border-top: 1px solid #eee;
+        }
+
+        .modal-close-btn {
+            width: 100%;
+            padding: 0.9rem;
+            background: var(--kb-gold);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            background: var(--kb-yellow);
+        }
+
+        /* ========================================
+           RESPONSIVE
+           ======================================== */
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -376,12 +658,56 @@
                 font-size: 2rem;
             }
 
+            .hero p {
+                font-size: 1.1rem;
+            }
+
             .form-row {
                 grid-template-columns: 1fr;
             }
 
             .checkbox-group {
                 grid-template-columns: 1fr;
+            }
+
+            .info-card {
+                padding: 1.8rem;
+            }
+
+            .form-container {
+                padding: 1.8rem;
+            }
+
+            .sticky-bar-inner {
+                padding: 0 0.5rem;
+            }
+
+            .sticky-bar-label {
+                display: none;
+            }
+
+            .sticky-btn {
+                padding: 0.85rem 1rem;
+                font-size: 0.85rem;
+                flex: 1;
+                justify-content: center;
+            }
+
+            .modal-box {
+                max-height: 90vh;
+                border-radius: 16px;
+            }
+
+            .modal-header {
+                padding: 1.2rem 1.4rem;
+            }
+
+            .modal-body {
+                padding: 1.4rem;
+            }
+
+            .modal-footer {
+                padding: 1rem 1.4rem;
             }
         }
     </style>
@@ -398,6 +724,21 @@
             <a href="/" class="back-btn">← 홈으로</a>
         </div>
     </header>
+
+    <!-- Sticky Sub-Bar: 알아두실사항 / 약관보기 -->
+    <div class="sticky-bar">
+        <div class="sticky-bar-inner">
+            <span class="sticky-bar-label">안내</span>
+            <button class="sticky-btn sticky-btn-notice" onclick="openNoticeModal()">
+                <span class="sticky-btn-icon">📋</span>
+                알아두실사항
+            </button>
+            <a class="sticky-btn sticky-btn-terms" href="event-insurance-policy.pdf" download="행사주최자배상책임보험_약관.pdf">
+                <span class="sticky-btn-icon">📄</span>
+                약관보기
+            </a>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -424,7 +765,7 @@
         <div class="info-card">
             <h2>⚡ 빠른 처리를 위한 TIP</h2>
             <div class="highlight-box">
-                <strong>📄 사업자등록증 & 행사개요서 첨부 시 더욱 빠른 회신이 가능합니다!</strong>
+                <strong>📄 사업자등록증 &amp; 행사개요서 첨부 시 더욱 빠른 회신이 가능합니다!</strong>
                 <p>아래 질문서와 함께 사업자등록증과 행사개요서(또는 행사 계획서)를 첨부해주시면, 보다 정확하고 신속한 견적 안내가 가능합니다.</p>
             </div>
         </div>
@@ -568,7 +909,7 @@
                 <div class="form-section-title">📎 첨부서류 안내</div>
                 
                 <div class="highlight-box">
-                    <strong>📄 사업자등록증 & 행사개요서</strong>
+                    <strong>📄 사업자등록증 &amp; 행사개요서</strong>
                     <p>견적 신청 후, 아래 이메일로 사업자등록증과 행사개요서(또는 행사 계획서)를 보내주시면 더욱 정확하고 빠른 견적이 가능합니다.</p>
                     <p style="margin-top: 10px;"><strong>이메일:</strong> liab.on.ins@gmail.com</p>
                 </div>
@@ -605,30 +946,209 @@
     <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <div class="footer-info">
-                <h3>배상온 대리점</h3>
-                <p>📧 이메일: liab.on.ins@gmail.com</p>
-                <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
-                <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
-                <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>보험모집 주체</h4>
+                    <p><strong>상호:</strong> 배상온</p>
+                    <p><strong>사업자등록번호:</strong> 507-18-15770</p>
+                    <p><strong>대표자:</strong> 김리하</p>
+                    <p><strong>보험대리점 등록번호:</strong> 제2026010037호</p>
+                    <p><strong>주소:</strong> 서울특별시 강남구 테헤란로 117, 9층</p>
+                    <p><strong>고객센터:</strong> 010-8461-8712</p>
+                    <p><strong>이메일:</strong> liab.on.ins@gmail.com</p>
+                </div>
+                <div class="footer-col">
+                    <h4>플랫폼 운영 및 결제 처리</h4>
+                    <p><strong>상호:</strong> 바이인</p>
+                    <p><strong>사업자등록번호:</strong> 501-63-18916</p>
+                    <p><strong>대표자:</strong> 김리하</p>
+                    <p><strong>통신판매업 신고번호:</strong> 제2026-서울동대문-0153호</p>
+                    <p><strong>주소:</strong> 서울특별시 동대문구 천호대로 301, 1706호</p>
+                </div>
+            </div>
+            <div class="footer-notice">
+                <p>※ 본 사이트(liab.co.kr)는 보험상품 안내 및 가입 플랫폼이며, 실제 보험계약의 모집 및 체결은 보험대리점 <strong>'배상온'</strong>을 통해 이루어집니다.</p>
+                <p>※ 결제 및 전자상거래 관련 서비스는 <strong>'바이인'</strong>이 운영합니다.</p>
+                <p>※ 보험상품의 보장내용 및 계약의 최종 책임은 해당 보험사 및 보험대리점 기준에 따릅니다.</p>
             </div>
         </div>
     </footer>
 
+    <!-- ================================================
+         알아두실사항 MODAL
+         ================================================ -->
+    <div class="modal-overlay" id="noticeModal" onclick="handleOverlayClick(event)">
+        <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-header">
+                <h3 id="modalTitle">📋 알아두실사항</h3>
+                <button class="modal-close" onclick="closeNoticeModal()" aria-label="닫기">✕</button>
+            </div>
+            <div class="modal-body">
+
+                <div class="notice-item">
+                    <div class="notice-item-title">
+                        <span class="notice-badge">01</span>
+                        보험계약 전 알릴 의무
+                    </div>
+                    <p>계약자, 피보험자 또는 이들의 대리인은 청약할 때 청약서(질문서 포함)에서 질문한 사항에 대하여 알고 있는 사실을 반드시 사실대로 알려야 합니다.</p>
+                    <div class="notice-highlight">
+                        ⚠️ 사실과 다르게 알린 경우 보험금 지급이 거절되거나 보험계약이 해지될 수 있습니다.
+                    </div>
+                </div>
+
+                <div class="notice-item">
+                    <div class="notice-item-title">
+                        <span class="notice-badge">02</span>
+                        청약 철회
+                    </div>
+                    <p>계약자는 보험증권을 받은 날부터 <strong>15일 이내</strong>에 청약을 철회할 수 있습니다.</p>
+                    <ul>
+                        <li>보험기간이 90일 이내인 계약은 청약 철회 불가</li>
+                        <li>전문금융소비자가 체결한 계약은 청약 철회 불가</li>
+                        <li>청약한 날부터 30일이 초과된 계약은 청약 철회 불가</li>
+                        <li>철회 시 3영업일 이내에 납입 보험료 전액 환급</li>
+                    </ul>
+                </div>
+
+                <div class="notice-item">
+                    <div class="notice-item-title">
+                        <span class="notice-badge">03</span>
+                        보상하는 손해
+                    </div>
+                    <p>보험증권에 기재된 피보험자가 주최하는 행사 지역 내에서 보험기간 중 발생한 사고로 인하여 피해자에게 법률상 배상책임을 부담함으로써 입은 손해를 보상합니다.</p>
+                    <ul>
+                        <li>피보험자가 피해자에게 지급할 법률상 손해배상금</li>
+                        <li>손해 방지·경감을 위해 지출한 필요 비용</li>
+                        <li>소송비용, 변호사비용, 중재·화해·조정 관련 비용</li>
+                    </ul>
+                </div>
+
+                <div class="notice-item">
+                    <div class="notice-item-title">
+                        <span class="notice-badge">04</span>
+                        보상하지 않는 주요 손해
+                    </div>
+                    <ul>
+                        <li>계약자 또는 피보험자의 <strong>고의</strong>로 생긴 손해</li>
+                        <li>전쟁, 혁명, 내란, 테러, 폭동 등으로 생긴 손해</li>
+                        <li>지진, 홍수, 해일 등 천재지변으로 생긴 손해</li>
+                        <li>피보험자의 근로자가 업무 중 입은 신체장해</li>
+                        <li>전염병으로 인한 손해 (전염병 보장제외 특약 적용)</li>
+                        <li>사이버 사고로 인한 손해 (사이버위험 보장제외 특약 적용)</li>
+                        <li>핵연료물질 관련 방사성·폭발성 사고로 생긴 손해</li>
+                    </ul>
+                </div>
+
+                <div class="notice-item">
+                    <div class="notice-item-title">
+                        <span class="notice-badge">05</span>
+                        보험금 청구 및 지급 절차
+                    </div>
+                    <p>사고 발생 시 지체없이 회사에 통지하고 아래 서류를 제출하여야 합니다.</p>
+                    <ul>
+                        <li>보험금 청구서 (회사 양식)</li>
+                        <li>신분증 (사진이 부착된 정부기관 발행 신분증)</li>
+                        <li>손해배상금 및 비용 지급 증명 서류</li>
+                        <li>기타 회사가 요구하는 서류</li>
+                    </ul>
+                    <div class="notice-highlight">
+                        📌 서류 접수 후 지급할 보험금이 결정되면 <strong>7일 이내</strong>에 지급됩니다.
+                    </div>
+                </div>
+
+                <div class="notice-item">
+                    <div class="notice-item-title">
+                        <span class="notice-badge">06</span>
+                        다수계약의 비례보상
+                    </div>
+                    <p>이 계약에서 보장하는 위험과 같은 위험을 보장하는 다른 계약(공제계약 포함)이 있을 경우, 약관에서 정한 비율에 따라 보험금을 계산하여 지급합니다.</p>
+                </div>
+
+                <div class="notice-item">
+                    <div class="notice-item-title">
+                        <span class="notice-badge">07</span>
+                        손해방지 의무
+                    </div>
+                    <p>보험사고가 생긴 때에는 계약자 또는 피보험자는 아래 사항을 이행하여야 합니다.</p>
+                    <ul>
+                        <li>손해의 방지 또는 경감을 위하여 노력 (응급처치, 긴급호송 포함)</li>
+                        <li>손해배상책임 전부 또는 일부에 관한 지급·승인·화해 시 미리 회사의 동의 필요</li>
+                        <li>제3자로부터 손해배상을 받을 수 있는 경우 권리 보전 조치</li>
+                    </ul>
+                </div>
+
+                <div class="notice-item">
+                    <div class="notice-item-title">
+                        <span class="notice-badge">08</span>
+                        소멸시효
+                    </div>
+                    <p>보험금 청구권, 보험료 또는 환급금 반환청구권은 <strong>3년간</strong> 행사하지 않으면 소멸시효가 완성됩니다.</p>
+                </div>
+
+                <div class="notice-item">
+                    <div class="notice-item-title">
+                        <span class="notice-badge">09</span>
+                        분쟁 조정
+                    </div>
+                    <p>계약에 관하여 분쟁이 있는 경우 금융감독원장에게 조정을 신청할 수 있습니다.</p>
+                    <ul>
+                        <li>금융감독원 금융민원센터: 국번 없이 1332</li>
+                        <li>KB손해보험 고객콜센터: 1544-0114</li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="modal-close-btn" onclick="closeNoticeModal()">확인했습니다</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Form submission
+        // ================================================
+        // MODAL FUNCTIONS
+        // ================================================
+        function openNoticeModal() {
+            const modal = document.getElementById('noticeModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeNoticeModal() {
+            const modal = document.getElementById('noticeModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function handleOverlayClick(e) {
+            if (e.target === document.getElementById('noticeModal')) {
+                closeNoticeModal();
+            }
+        }
+
+        // Close modal with ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeNoticeModal();
+        });
+
+        // ================================================
+        // FORM SUBMISSION (existing logic preserved)
+        // ================================================
         document.getElementById('eventInsuranceForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const formData = new FormData(e.target);
             const data = Object.fromEntries(formData.entries());
             
+            // Collect checkboxes separately
+            const checkboxes = ['sportsGame','physicalActivity','fireworks','waterActivity','makingExperience','airBounce','bicycle','electricCart'];
+            const checkedItems = checkboxes.filter(name => document.querySelector(`[name="${name}"]`).checked);
+            data.eventDetails = checkedItems.join(', ');
+
             try {
                 const response = await fetch('/api/event-insurance', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
                 
@@ -636,10 +1156,10 @@
                     alert('견적 신청이 완료되었습니다.\n\n빠른 시일 내에 맞춤 견적을 안내해드리겠습니다.\n\n※ 사업자등록증과 행사개요서를 이메일(liab.on.ins@gmail.com)로 보내주시면 더욱 빠른 회신이 가능합니다.');
                     e.target.reset();
                 } else {
-                    alert('전송 중 오류가 발생했습니다. 다시 시도해주세요.');
+                    alert('신청 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
                 }
             } catch (error) {
-                alert('전송 중 오류가 발생했습니다.\n\n이메일로 직접 연락 주시기 바랍니다:\nliab.on.ins@gmail.com');
+                alert('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
             }
         });
     </script>

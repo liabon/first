@@ -664,17 +664,6 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>성별 *</label>
-                        <select name="gender" required>
-                            <option value="">선택하세요</option>
-                            <option value="male">남성</option>
-                            <option value="female">여성</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
                         <label>연락처 *</label>
                         <input type="tel" name="phone" placeholder="010-0000-0000" required>
                     </div>
@@ -914,7 +903,7 @@
 
             <div class="button-group">
                 <button type="button" class="btn btn-secondary" onclick="history.back()">이전</button>
-                <button type="submit" class="btn btn-primary" id="submitBtn" disabled>다음 단계로</button>
+                <button type="submit" class="btn btn-primary" id="submitBtn">다음 단계로</button>
             </div>
         </form>
     </div>
@@ -1336,7 +1325,7 @@
                 name: document.querySelector('[name="name"]').value,
                 birth_date: document.querySelector('[name="birth_date"]').value,
                 ssn_back: encryptSSN(document.getElementById('ssnBack').value),
-                gender: document.querySelector('[name="gender"]').value,
+
                 phone: document.querySelector('[name="phone"]').value,
                 email: document.querySelector('[name="email"]').value,
                 
@@ -1502,41 +1491,8 @@
             }
         }
 
-        // 폼 유효성 검사 (form.checkValidity() 제거 - 동적 필드와 충돌 방지)
         function checkFormValidity() {
-            const submitBtn = document.getElementById('submitBtn');
-            const mode = isSamePlan ? 'unified' : 'individual';
-            const droneCount = parseInt(document.getElementById('droneCount').value) || 1;
-
-            // 1. 고객 기본 정보 확인
-            const basicFields = ['name', 'birth_date', 'ssn_back', 'gender', 'phone', 'email', 'insurance_start', 'insurance_end'];
-            for (const fieldName of basicFields) {
-                const el = document.querySelector('[name="' + fieldName + '"]');
-                if (!el || !el.value.trim()) { submitBtn.disabled = true; return; }
-            }
-
-            // 2. 드론 기본 정보 확인
-            for (let i = 0; i < droneCount; i++) {
-                const fields = ['drone_model_' + i, 'drone_serial_' + i, 'drone_weight_' + i, 'drone_max_weight_' + i];
-                for (const fieldName of fields) {
-                    const el = document.querySelector('[name="' + fieldName + '"]');
-                    if (!el || !el.value.toString().trim()) { submitBtn.disabled = true; return; }
-                }
-            }
-
-            // 3. 가입물건 & 플랜 확인
-            if (mode === 'unified') {
-                const droneTypeSelected = document.querySelector('input[name="drone_type"]:checked');
-                const planSelected = document.querySelector('input[name="plan"]:checked');
-                submitBtn.disabled = !(droneTypeSelected && planSelected);
-            } else {
-                for (let i = 0; i < droneCount; i++) {
-                    const droneTypeSelected = document.querySelector('input[name="drone_type_' + i + '"]:checked');
-                    const planSelected = document.querySelector('input[name="plan_drone_' + i + '"]:checked');
-                    if (!droneTypeSelected || !planSelected) { submitBtn.disabled = true; return; }
-                }
-                submitBtn.disabled = false;
-            }
+            // 버튼 항상 활성화 - 미입력 시 제출 시점에 스크롤+빨간박스로 안내
         }
 
         // ── 에러 표시 헬퍼 ──
@@ -1585,7 +1541,6 @@
                 { name: 'name',           label: '이름' },
                 { name: 'birth_date',     label: '주민번호 앞자리' },
                 { name: 'ssn_back',       label: '주민번호 뒷자리', len: 7 },
-                { name: 'gender',         label: '성별' },
                 { name: 'phone',          label: '연락처' },
                 { name: 'email',          label: '이메일' },
                 { name: 'insurance_start',label: '보험시작일시' },
@@ -1807,7 +1762,7 @@
                     <p><strong>보험대리점 등록번호:</strong> 제2026010037호</p>
                     <p><strong>주소:</strong> 서울특별시 강남구 테헤란로 117, 9층</p>
                     <p><strong>고객센터:</strong> 010-8461-8712</p>
-                    <p><strong>이메일:</strong> liab.on.ins@gmail.com</p>
+                    <p><strong>이메일:</strong> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e98580888bc78687c780879aa98e84888085c78a8684">[email&#160;protected]</a></p>
                 </div>
                 <div class="footer-col">
                     <h4>플랫폼 운영 및 결제 처리</h4>
@@ -1874,7 +1829,7 @@
         </a>
     </div>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         document.getElementById('kakaoChatBtn').addEventListener('click', function() {
             var dot = document.getElementById('kakaoDot');
             if (dot) dot.style.display = 'none';
@@ -1897,7 +1852,7 @@
 
         // CloudFlare 이메일 보호 우회 - 동적 렌더링
         (function() {
-            var _u = 'liab.on' + '.ins', _d = 'gm' + 'ail.com', _e = _u + '@' + _d;
+            var _u = _e = 'liab.on.ins@gmail.com', _dummy1 = '', _dummy2 = '';
             document.querySelectorAll('.js-email').forEach(function(el) {
                 var a = document.createElement('a');
                 a.href = 'mai' + 'lto:' + _e;
@@ -1907,8 +1862,6 @@
             });
         })();
     </script>
-<script src="/notice-modal.js"></script>
-
 <script>
     function openInfoNotice() {
         document.getElementById('infoNoticeOverlay').classList.add('active');
@@ -1920,5 +1873,5 @@
     }
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeInfoNotice(); });
 </script>
-</body>
-</html>
+
+<

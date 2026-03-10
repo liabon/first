@@ -824,16 +824,6 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label>성별 *</label>
-                            <select name="gender" id="personalGender" required>
-                                <option value="">선택하세요</option>
-                                <option value="male">남성</option>
-                                <option value="female">여성</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
                             <label>연락처 *</label>
                             <input type="tel" name="phone" id="personalPhone" placeholder="010-0000-0000" required>
                         </div>
@@ -1111,7 +1101,7 @@
                     <p><strong>보험대리점 등록번호:</strong> 제2026010037호</p>
                     <p><strong>주소:</strong> 서울특별시 강남구 테헤란로 117, 9층</p>
                     <p><strong>고객센터:</strong> 010-8461-8712</p>
-                    <p><strong>이메일:</strong> liab.on.ins@gmail.com</p>
+                    <p><strong>이메일:</strong> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e38f8a8281cd8c8dcd8a8d90a3848e828a8fcd808c8e">[email&#160;protected]</a></p>
                 </div>
                 <div class="footer-col">
                     <h4>플랫폼 운영 및 결제 처리</h4>
@@ -1170,7 +1160,7 @@
         </a>
     </div>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // ── 드론 정보 동적 생성 ───────────────────────────────
     function makeDroneField(i) {
         const label = i === 0 ? '' : `<div class="drone-info-header"><span class="drone-number">드론 ${i+1}</span></div>`;
@@ -1609,7 +1599,7 @@
                 { el: document.getElementById('personalName'), label: '이름' },
                 { el: document.getElementById('birthDate'), label: '생년월일(앞자리)' },
                 { el: document.getElementById('ssnBack'), label: '주민번호 뒷자리', isSsn: true },
-                { el: document.getElementById('personalGender'), label: '성별' },
+
                 { el: document.getElementById('personalPhone'), label: '연락처', isPhone: true },
                 { el: document.getElementById('personalEmail'), label: '이메일' }
             ];
@@ -1957,7 +1947,6 @@
 
     </script>
 <script src="/notice-modal.js"></script>
-
 <script>
     function openInfoNotice() {
         document.getElementById('infoNoticeOverlay').classList.add('active');

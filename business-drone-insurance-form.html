@@ -1474,10 +1474,7 @@
         el.querySelector('input').checked = true;
         selectedWeight = val;
         checkQuoteNeeded();
-        // 드론유형 아직 미선택 → 드론유형 그리드로 스크롤
-        if (!selectedFlag) {
-            autoScrollTo(document.querySelector('.drone-flag-grid'));
-        }
+        // 자체중량만 선택시 스크롤 없음
     }
 
     function selectFlag(el, val) {
@@ -1486,9 +1483,9 @@
         el.querySelector('input').checked = true;
         selectedFlag = val;
         checkQuoteNeeded();
-        // 플랜 섹션이 보이면 스크롤
+        // 자체중량 + 드론유형 둘 다 선택됐을 때만 플랜으로 스크롤
         const planSec = document.getElementById('planSection');
-        if (planSec && planSec.classList.contains('show')) {
+        if (selectedWeight && val && planSec && planSec.classList.contains('show')) {
             autoScrollTo(planSec);
         }
     }
@@ -1915,16 +1912,9 @@
     }
 
     function updateSubmitBtn() {
-        // 버튼 활성화/비활성화
+        // 버튼 항상 활성화 (견적필요 케이스만 제외)
         const submitBtn = document.getElementById('submitBtn');
         if (!submitBtn) return;
-        const needQuote = (selectedFlag === 'swarm' || selectedFlag === 'rental' || selectedWeight === 'over_100kg');
-        if (needQuote) { submitBtn.disabled = true; return; }
-        if (!selectedWeight || !selectedFlag) { submitBtn.disabled = true; return; }
-        const count = parseInt(document.getElementById('droneCount').value) || 1;
-        for (let i = 0; i < count; i++) {
-            if (!selectedPlans[i]) { submitBtn.disabled = true; return; }
-        }
         submitBtn.disabled = false;
         updateTotalBox();
     }

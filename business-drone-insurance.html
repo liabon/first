@@ -6,383 +6,411 @@
     <title>KB손해보험 업무용 드론보험 의무확인 - 배상온 대리점</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root { --kb-gold: #FFB800; --kb-yellow: #FFCD00; --kb-dark: #1a1a1a; --green: #28a745; --red: #e74c3c; }
-        body { font-family: 'Noto Sans KR', sans-serif; color: var(--kb-dark); line-height: 1.6; background: #f8f9fa; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        :root { --kb-gold:#FFB800; --kb-yellow:#FFCD00; --kb-dark:#1a1a1a; --red:#e74c3c; }
+        body { font-family:'Noto Sans KR',sans-serif; color:var(--kb-dark); line-height:1.6; background:#f8f9fa; padding-bottom:68px; }
 
-        header { background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
-        .header-content { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-        .logo-section { display: flex; align-items: center; gap: 1.5rem; }
-        .kb-logo { height: 50px; }
-        .divider { height: 40px; width: 1px; background: #ddd; }
-        .agency-name { font-size: 1.5rem; font-weight: 700; }
-        .home-btn { padding: 0.7rem 1.3rem; background: var(--kb-gold); color: var(--kb-dark); border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; font-size: 0.95rem; white-space: nowrap; }
-        .home-btn:hover { background: var(--kb-yellow); transform: translateY(-2px); }
+        header { background:#fff; box-shadow:0 2px 10px rgba(0,0,0,0.05); position:sticky; top:0; z-index:1000; }
+        .header-content { max-width:1200px; margin:0 auto; padding:1.5rem 2rem; display:flex; justify-content:space-between; align-items:center; }
+        .logo-section { display:flex; align-items:center; gap:1.5rem; }
+        .kb-logo { height:50px; }
+        .divider { height:40px; width:1px; background:#ddd; }
+        .agency-name { font-size:1.5rem; font-weight:700; }
+        .home-btn { padding:0.7rem 1.3rem; background:var(--kb-gold); color:var(--kb-dark); border:none; border-radius:8px; font-weight:700; cursor:pointer; transition:all 0.3s; text-decoration:none; display:inline-block; font-size:0.95rem; white-space:nowrap; }
+        .home-btn:hover { background:var(--kb-yellow); transform:translateY(-2px); }
 
-        .progress-section { background: #fff; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .progress-container { max-width: 800px; margin: 0 auto; }
-        .progress-steps { display: flex; justify-content: space-between; }
-        .progress-step { text-align: center; flex: 1; }
-        .step-circle { width: 50px; height: 50px; border-radius: 50%; background: #ddd; color: #999; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; margin: 0 auto 0.5rem; }
-        .progress-step.active .step-circle { background: var(--kb-gold); color: var(--kb-dark); }
-        .step-label { font-size: 0.9rem; color: #999; }
-        .progress-step.active .step-label { color: var(--kb-dark); font-weight: 600; }
+        .progress-section { background:#fff; padding:2rem; box-shadow:0 2px 10px rgba(0,0,0,0.05); }
+        .progress-container { max-width:800px; margin:0 auto; }
+        .progress-steps { display:flex; justify-content:space-between; }
+        .progress-step { text-align:center; flex:1; }
+        .step-circle { width:50px; height:50px; border-radius:50%; background:#ddd; color:#999; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.2rem; margin:0 auto 0.5rem; }
+        .progress-step.active .step-circle { background:var(--kb-gold); color:var(--kb-dark); }
+        .step-label { font-size:0.9rem; color:#999; }
+        .progress-step.active .step-label { color:var(--kb-dark); font-weight:600; }
 
-        .hero { background: linear-gradient(180deg, #fff 0%, #f8f9fa 100%); padding: 3rem 1.5rem 2rem; text-align: center; }
-        .product-tag { display: inline-block; background: var(--kb-gold); color: var(--kb-dark); padding: 0.4rem 1.2rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; margin-bottom: 1.5rem; }
-        .hero-title { font-size: 1.8rem; font-weight: 900; line-height: 1.4; margin-bottom: 0.8rem; }
-        .hero-title .highlight { color: var(--kb-gold); }
-        .hero-subtitle { font-size: 1rem; color: #666; margin-bottom: 1rem; }
+        .hero { background:linear-gradient(180deg,#fff 0%,#f8f9fa 100%); padding:3rem 1.5rem 2rem; text-align:center; }
+        .product-tag { display:inline-block; background:var(--kb-gold); color:var(--kb-dark); padding:0.4rem 1.2rem; border-radius:20px; font-size:0.85rem; font-weight:700; margin-bottom:1.5rem; }
+        .hero-title { font-size:1.8rem; font-weight:900; line-height:1.4; margin-bottom:0.8rem; }
+        .hero-title .highlight { color:var(--kb-gold); }
+        .hero-subtitle { font-size:1rem; color:#666; }
 
-        .container { max-width: 700px; margin: 0 auto; padding: 0 1.5rem 3rem; }
+        .container { max-width:700px; margin:0 auto; padding:0 1.5rem 3rem; }
 
-        .check-card {
-            background: #fff; border: 2px solid #e8e8e8; border-radius: 16px;
-            padding: 2rem 1.5rem; margin-bottom: 1.2rem; transition: all 0.3s;
+        .check-card { background:#fff; border:2px solid #e8e8e8; border-radius:16px; padding:2rem 1.5rem; margin-bottom:1.2rem; transition:all 0.3s; }
+        .check-card.correct { border-color:var(--kb-gold); }
+        .check-card.wrong   { border-color:var(--red); background:#fff5f5; }
+
+        .q-header { display:flex; align-items:flex-start; gap:0.7rem; margin-bottom:1rem; }
+        .q-number { flex-shrink:0; background:var(--kb-gold); color:var(--kb-dark); width:30px; height:30px; border-radius:50%; text-align:center; line-height:30px; font-weight:800; font-size:0.9rem; margin-top:2px; }
+        .q-text { font-size:1rem; font-weight:700; line-height:1.6; }
+
+        .q-detail { background:#f8f9fa; border-radius:10px; padding:1rem 1.2rem; margin-bottom:1.2rem; font-size:0.88rem; color:#555; line-height:1.7; }
+        .q-detail strong { color:var(--kb-dark); }
+        .q-detail .detail-list { margin:0.5rem 0 0; padding:0; list-style:none; }
+        .q-detail .detail-list li { padding:0.2rem 0; }
+        .q-detail .detail-list li::before { content:'• '; color:var(--kb-gold); font-weight:700; }
+        .q-detail .detail-sub { margin-top:0.8rem; padding-top:0.8rem; border-top:1px solid #e0e0e0; font-size:0.82rem; color:#888; }
+
+        .radio-options { display:flex; gap:0.8rem; }
+        .radio-label { flex:1; display:flex; align-items:center; justify-content:center; padding:0.9rem; border:2px solid #e0e0e0; border-radius:10px; cursor:pointer; transition:all 0.25s; font-weight:700; font-size:1rem; background:#fff; user-select:none; }
+        .radio-label input { display:none; }
+        .radio-label:hover { border-color:var(--kb-gold); }
+        .radio-label.hint { border-color:#f0dfa0; }
+        .radio-label.selected-ok    { background:var(--kb-gold); border-color:var(--kb-gold); color:var(--kb-dark); }
+        .radio-label.selected-wrong { border-color:var(--red); background:#fff5f5; color:var(--red); }
+
+        .personal-redirect { display:none; margin-top:1.2rem; background:#f0f7ff; border:2px solid #4a90d9; border-radius:12px; padding:1.3rem 1.5rem; text-align:center; }
+        .personal-redirect.show { display:block; animation:fadeIn 0.3s ease; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+        .personal-redirect p { color:#1a4a7a; font-size:0.93rem; font-weight:600; margin-bottom:0.9rem; line-height:1.7; }
+        .personal-redirect a { display:inline-block; padding:0.75rem 1.8rem; background:#4a90d9; color:#fff; text-decoration:none; border-radius:10px; font-size:0.93rem; font-weight:700; }
+
+        .error-box { background:#fff5f5; border:2px solid #ffcccc; border-radius:12px; padding:1.2rem; margin:1.5rem 0; text-align:center; display:none; }
+        .error-box.show { display:block; }
+        .error-box p { color:#d63031; font-weight:600; font-size:0.95rem; line-height:1.6; }
+
+        .success-box { background:#fffdf5; border:2px solid var(--kb-gold); border-radius:12px; padding:1.2rem; margin:1.5rem 0; text-align:center; display:none; }
+        .success-box.show { display:block; }
+        .success-box p { color:var(--kb-dark); font-weight:600; font-size:0.95rem; }
+
+        .button-group { display:flex; gap:1rem; justify-content:center; margin-top:2rem; }
+        .btn { padding:1.2rem 3rem; border:none; border-radius:12px; font-size:1.2rem; font-weight:700; cursor:pointer; transition:all 0.3s; font-family:'Noto Sans KR',sans-serif; }
+        .btn-secondary { background:#e0e0e0; color:var(--kb-dark); text-decoration:none; display:inline-flex; align-items:center; }
+        .btn-primary { background:var(--kb-gold); color:var(--kb-dark); box-shadow:0 8px 25px rgba(255,184,0,0.3); }
+        .btn-primary:hover:not(:disabled) { transform:translateY(-3px); box-shadow:0 12px 35px rgba(255,184,0,0.4); }
+        .btn-primary:disabled { background:#ccc; color:#999; cursor:not-allowed; box-shadow:none; }
+
+        .info-box { background:#fff; border:2px solid #e8e8e8; border-radius:16px; padding:2rem 1.5rem; margin-top:2.5rem; text-align:center; }
+        .info-title { font-size:0.95rem; font-weight:700; color:#666; margin-bottom:1rem; }
+        .info-list { list-style:none; padding:0; margin:0 0 1.5rem; }
+        .info-list li { font-size:0.9rem; color:#888; padding:0.4rem 0; }
+        .btn-personal { display:inline-block; padding:0.8rem 2rem; background:#666; color:#fff; text-decoration:none; border-radius:10px; font-size:0.95rem; font-weight:700; }
+
+        /* 하단 고정 바 */
+        .sticky-bottom-bar { position:fixed; bottom:0; left:0; right:0; z-index:999; background:#fff; border-top:2px solid #eee; box-shadow:0 -4px 14px rgba(0,0,0,0.09); display:flex; }
+        .sticky-bottom-btn { flex:1; display:flex; align-items:center; justify-content:center; gap:7px; padding:0.92rem 1rem; background:none; border:none; font-size:0.93rem; font-weight:700; cursor:pointer; text-decoration:none; color:var(--kb-dark); font-family:'Noto Sans KR',sans-serif; position:relative; transition:background 0.2s; }
+        .sticky-bottom-btn::after { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:0; height:3px; transition:width 0.25s; }
+        .sticky-bottom-btn.btn-notice { border-right:1px solid #e8e8e8; }
+        .sticky-bottom-btn.btn-notice::after { background:var(--kb-gold); }
+        .sticky-bottom-btn.btn-notice:hover { background:#fffbf0; color:#b48000; }
+        .sticky-bottom-btn.btn-notice:hover::after { width:80%; }
+        .sticky-bottom-btn.btn-terms { color:#6d28d9; }
+        .sticky-bottom-btn.btn-terms::after { background:#6d28d9; }
+        .sticky-bottom-btn.btn-terms:hover { background:#f5f0ff; }
+        .sticky-bottom-btn.btn-terms:hover::after { width:80%; }
+
+        /* 모달 */
+        .notice-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:10000; align-items:center; justify-content:center; padding:16px; }
+        .notice-overlay.active { display:flex; }
+        .notice-box { background:#fff; border-radius:20px; width:100%; max-width:600px; max-height:88vh; display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,0.25); overflow:hidden; animation:noticeIn 0.28s ease; }
+        @keyframes noticeIn { from{opacity:0;transform:scale(0.93) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
+        .notice-header { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; padding:1.3rem 1.8rem; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+        .notice-header h3 { font-size:1.05rem; font-weight:800; }
+        .notice-close-btn { background:rgba(255,255,255,0.2); border:none; color:#fff; width:32px; height:32px; border-radius:50%; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; font-family:'Noto Sans KR',sans-serif; }
+        .notice-body { overflow-y:auto; padding:1.4rem 1.8rem; }
+        .notice-row { margin-bottom:1.2rem; padding-bottom:1.2rem; border-bottom:1px solid #f0f0f0; }
+        .notice-row:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+        .notice-row-title { display:flex; align-items:center; gap:8px; font-size:0.95rem; font-weight:700; margin-bottom:0.4rem; }
+        .notice-badge { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; flex-shrink:0; }
+        .notice-row p { color:#555; font-size:0.87rem; line-height:1.8; margin:0; }
+        .notice-footer { padding:0.9rem 1.8rem; border-top:1px solid #f0f0f0; text-align:center; flex-shrink:0; }
+        .notice-footer button { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; border:none; padding:0.65rem 2.5rem; border-radius:25px; font-size:0.95rem; font-weight:700; cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
+
+        /* 푸터 */
+        footer { background:var(--kb-dark); color:#fff; padding:2.8rem 2rem 1.8rem; margin-top:4rem; }
+        .footer-content { max-width:1100px; margin:0 auto; }
+        .footer-grid { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; margin-bottom:1.8rem; padding-bottom:1.8rem; border-bottom:1px solid rgba(255,255,255,0.1); }
+        .footer-col h4 { font-size:0.73rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--kb-gold); margin-bottom:0.9rem; padding-bottom:0.4rem; border-bottom:1px solid rgba(255,184,0,0.22); }
+        .footer-col p { color:#bbb; margin-bottom:0.35rem; font-size:0.85rem; line-height:1.6; }
+        .footer-col p strong { color:#ddd; font-weight:600; }
+        .footer-notice p { color:#666; font-size:0.8rem; line-height:1.9; margin-bottom:0.1rem; }
+        .footer-notice p strong { color:#888; }
+
+        @media (max-width:768px) {
+            .header-content { padding:0.8rem 1rem; }
+            .kb-logo { height:32px; }
+            .divider { height:24px; }
+            .agency-name { font-size:1rem; }
+            .home-btn { padding:0.5rem 0.8rem; font-size:0.8rem; }
+            .hero-title { font-size:1.5rem; }
+            .check-card { padding:1.5rem 1.2rem; }
+            .button-group { flex-direction:column; }
+            .btn { width:100%; text-align:center; }
+            .footer-grid { grid-template-columns:1fr; gap:1.5rem; }
+            .sticky-bottom-btn { font-size:0.85rem; padding:0.85rem 0.5rem; }
         }
-        .check-card:hover { border-color: #ccc; }
-        .check-card.correct { border-color: var(--kb-gold); background: #fff; }
-        .check-card.wrong { border-color: var(--red); background: #fff5f5; }
-
-        .q-header { display: flex; align-items: flex-start; gap: 0.7rem; margin-bottom: 1rem; }
-        .q-number {
-            flex-shrink: 0; background: var(--kb-gold); color: var(--kb-dark);
-            width: 30px; height: 30px; border-radius: 50%; text-align: center;
-            line-height: 30px; font-weight: 800; font-size: 0.9rem; margin-top: 2px;
-        }
-        .q-text { font-size: 1rem; font-weight: 700; color: var(--kb-dark); line-height: 1.6; }
-
-        .q-detail {
-            background: #f8f9fa; border-radius: 10px; padding: 1rem 1.2rem;
-            margin-bottom: 1.2rem; font-size: 0.88rem; color: #555; line-height: 1.7;
-        }
-        .q-detail strong { color: var(--kb-dark); }
-        .q-detail .detail-list { margin: 0.5rem 0 0 0; padding: 0; list-style: none; }
-        .q-detail .detail-list li { padding: 0.2rem 0; }
-        .q-detail .detail-list li::before { content: '• '; color: var(--kb-gold); font-weight: 700; }
-        .q-detail .detail-sub {
-            margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid #e0e0e0;
-            font-size: 0.82rem; color: #888;
-        }
-        .q-detail .detail-sub strong { color: #666; }
-
-        .radio-options { display: flex; gap: 0.8rem; }
-        .radio-label {
-            flex: 1; display: flex; align-items: center; justify-content: center;
-            padding: 0.9rem; border: 2px solid #e0e0e0; border-radius: 10px;
-            cursor: pointer; transition: all 0.25s; font-weight: 700; font-size: 1rem;
-            background: #fff; user-select: none;
-        }
-        .radio-label input { display: none; }
-        .radio-label:hover { border-color: var(--kb-gold); }
-        /* 정답 힌트: 테두리만 */
-        .radio-label.hint { border-color: #f0dfa0; background: #fff; }
-        /* 선택 완료: 골드 채움 */
-        .radio-label.selected-ok { background: var(--kb-gold); border-color: var(--kb-gold); color: var(--kb-dark); }
-        /* 오답 선택 */
-        .radio-label.selected-wrong { border-color: var(--red); background: #fff5f5; color: var(--red); }
-
-        .error-box {
-            background: #fff5f5; border: 2px solid #ffcccc; border-radius: 12px;
-            padding: 1.2rem; margin: 1.5rem 0; text-align: center; display: none;
-        }
-        .error-box.show { display: block; }
-        .error-box p { color: #d63031; font-weight: 600; font-size: 0.95rem; line-height: 1.6; }
-
-        .success-box {
-            background: #fffdf5; border: 2px solid var(--kb-gold); border-radius: 12px;
-            padding: 1.2rem; margin: 1.5rem 0; text-align: center; display: none;
-        }
-        .success-box.show { display: block; }
-        .success-box p { color: var(--kb-dark); font-weight: 600; font-size: 0.95rem; line-height: 1.6; }
-
-        .button-group { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; }
-        .btn {
-            padding: 1.2rem 3rem; border: none; border-radius: 12px; font-size: 1.2rem;
-            font-weight: 700; cursor: pointer; transition: all 0.3s;
-            font-family: 'Noto Sans KR', sans-serif;
-        }
-        .btn-secondary { background: #e0e0e0; color: var(--kb-dark); text-decoration: none; display: inline-flex; align-items: center; }
-        .btn-secondary:hover { background: #d0d0d0; }
-        .btn-primary { background: var(--kb-gold); color: var(--kb-dark); box-shadow: 0 8px 25px rgba(255, 184, 0, 0.3); }
-        .btn-primary:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 12px 35px rgba(255, 184, 0, 0.4); }
-        .btn-primary:disabled { background: #ccc; color: #999; cursor: not-allowed; box-shadow: none; }
-
-        .info-box {
-            background: #fff; border: 2px solid #e8e8e8; border-radius: 16px;
-            padding: 2rem 1.5rem; margin-top: 2.5rem; text-align: center;
-        }
-        .info-title { font-size: 0.95rem; font-weight: 700; color: #666; margin-bottom: 1rem; }
-        .info-list { list-style: none; padding: 0; margin: 0 0 1.5rem 0; }
-        .info-list li { font-size: 0.9rem; color: #888; padding: 0.4rem 0; }
-        .btn-personal {
-            display: inline-block; padding: 0.8rem 2rem; background: #666; color: #fff;
-            text-decoration: none; border-radius: 10px; font-size: 0.95rem; font-weight: 700; transition: all 0.3s;
-        }
-        .btn-personal:hover { background: var(--kb-dark); transform: translateY(-2px); }
-
-        footer { background: var(--kb-dark); color: #fff; padding: 3rem 2rem; margin-top: 4rem; }
-        .footer-content { max-width: 1200px; margin: 0 auto; text-align: center; }
-        .footer-content p { margin-bottom: 0.5rem; opacity: 0.8; font-size: 0.95rem; }
-
-        @media (max-width: 768px) {
-            .header-content { padding: 0.8rem 1rem; }
-            .kb-logo { height: 32px; }
-            .divider { height: 24px; }
-            .agency-name { font-size: 1rem; }
-            .home-btn { padding: 0.5rem 0.8rem; font-size: 0.8rem; }
-            .hero-title { font-size: 1.5rem; }
-            .check-card { padding: 1.5rem 1.2rem; }
-            .button-group { flex-direction: column; }
-            .btn { width: 100%; text-align: center; }
-        }
-        @media (max-width: 400px) {
-            .agency-name { font-size: 0.85rem; }
-            .home-btn { padding: 0.4rem 0.6rem; font-size: 0.75rem; }
-            .kb-logo { height: 26px; }
+        @media (max-width:400px) {
+            .agency-name { font-size:0.85rem; }
+            .kb-logo { height:26px; }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <div class="logo-section">
-                <img src="kb-logo.png" alt="KB손해보험" class="kb-logo">
-                <div class="divider"></div>
-                <div class="agency-name">배상온 대리점</div>
-            </div>
-            <a href="/" class="home-btn">🏠 홈으로</a>
-        </div>
-    </header>
 
-    <div class="progress-section">
-        <div class="progress-container">
-            <div class="progress-steps">
-                <div class="progress-step active"><div class="step-circle">1</div><div class="step-label">의무확인</div></div>
-                <div class="progress-step"><div class="step-circle">2</div><div class="step-label">정보입력</div></div>
-                <div class="progress-step"><div class="step-circle">3</div><div class="step-label">약관동의</div></div>
-                <div class="progress-step"><div class="step-circle">4</div><div class="step-label">완료</div></div>
+<header>
+    <div class="header-content">
+        <div class="logo-section">
+            <img src="kb-logo.png" alt="KB손해보험" class="kb-logo">
+            <div class="divider"></div>
+            <div class="agency-name">배상온 대리점</div>
+        </div>
+        <a href="/" class="home-btn">🏠 홈으로</a>
+    </div>
+</header>
+
+<div class="progress-section">
+    <div class="progress-container">
+        <div class="progress-steps">
+            <div class="progress-step active"><div class="step-circle">1</div><div class="step-label">의무확인</div></div>
+            <div class="progress-step"><div class="step-circle">2</div><div class="step-label">정보입력</div></div>
+            <div class="progress-step"><div class="step-circle">3</div><div class="step-label">약관동의</div></div>
+            <div class="progress-step"><div class="step-circle">4</div><div class="step-label">완료</div></div>
+        </div>
+    </div>
+</div>
+
+<section class="hero">
+    <div class="product-tag">업무용 의무보험</div>
+    <h1 class="hero-title"><span class="highlight">KB손해보험</span><br>업무용 드론배상책임보험</h1>
+    <p class="hero-subtitle">가입 전 아래 사항을 확인해주세요</p>
+</section>
+
+<main class="container">
+
+    <!-- 질문 1 -->
+    <div class="check-card" id="card1">
+        <div class="q-header">
+            <span class="q-number">1</span>
+            <span class="q-text">아래 의무가입 대상만 가입이 가능함을 확인하셨습니까?</span>
+        </div>
+        <div class="q-detail">
+            <strong>의무보험 가입대상</strong>
+            <ul class="detail-list">
+                <li>국가, 지방자치단체, 공공기관</li>
+                <li>초경량비행장치(드론)를 사용한 영리사업</li>
+            </ul>
+            <div class="detail-sub">
+                <strong>영리사업이란?</strong> 항공사업법 제2조에 따른 초경량비행장치사용사업에 사용되는 경우(타인의 요청에 따라 유상으로 방제, 사진촬영, 측량, 탐사, 조종교육 등)를 말합니다. 유상운송, 대여업, 레저스포츠 등은 가입이 제한됩니다.
             </div>
+        </div>
+        <div class="radio-options">
+            <label class="radio-label hint" id="q1_yes"><input type="radio" name="q1" value="yes"><span>예</span></label>
+            <label class="radio-label" id="q1_no"><input type="radio" name="q1" value="no"><span>아니오</span></label>
+        </div>
+        <div class="personal-redirect" id="personalRedirect">
+            <p>✈️ 취미·레저 목적으로 드론을 사용하시나요?<br>비의무가입자(취미/레저)인 경우 <strong>개인용 드론보험</strong>으로 가입하세요.</p>
+            <a href="/personal-drone-insurance">🎮 개인용 드론보험 바로가기</a>
         </div>
     </div>
 
-    <section class="hero">
-        <div class="product-tag">업무용 의무보험</div>
-        <h1 class="hero-title">
-            <span class="highlight">KB손해보험</span><br>
-            업무용 드론배상책임보험
-        </h1>
-        <p class="hero-subtitle">가입 전 아래 사항을 확인해주세요</p>
-    </section>
+    <!-- 질문 2 -->
+    <div class="check-card" id="card2">
+        <div class="q-header">
+            <span class="q-number">2</span>
+            <span class="q-text">수상용 드론입니까?</span>
+        </div>
+        <div class="radio-options">
+            <label class="radio-label" id="q2_yes"><input type="radio" name="q2" value="yes"><span>예</span></label>
+            <label class="radio-label hint" id="q2_no"><input type="radio" name="q2" value="no"><span>아니오</span></label>
+        </div>
+    </div>
 
-    <main class="container">
+    <!-- 질문 3 -->
+    <div class="check-card" id="card3">
+        <div class="q-header">
+            <span class="q-number">3</span>
+            <span class="q-text">최근 3년간 귀사가 부담한 손해배상액(합의금 포함)이 있습니까?</span>
+        </div>
+        <div class="radio-options">
+            <label class="radio-label" id="q3_yes"><input type="radio" name="q3" value="yes"><span>예</span></label>
+            <label class="radio-label hint" id="q3_no"><input type="radio" name="q3" value="no"><span>아니오</span></label>
+        </div>
+    </div>
 
-        <!-- 질문 1: 정답 = 예 -->
-        <div class="check-card" id="card1">
-            <div class="q-header">
-                <span class="q-number">1</span>
-                <span class="q-text">아래 의무가입 대상만 가입이 가능함을 확인하셨습니까?</span>
+    <div class="error-box" id="errorBox"><p id="errorMsg"></p></div>
+    <div class="success-box" id="successBox"><p>✅ 모든 확인이 완료되었습니다. 다음 단계로 진행해주세요.</p></div>
+
+    <div class="button-group">
+        <a href="/" class="btn btn-secondary">이전</a>
+        <button class="btn btn-primary" id="btnNext" disabled onclick="goNext()">다음 단계로</button>
+    </div>
+
+    <div class="info-box" id="infoBox">
+        <p class="info-title">취미·레저 목적으로 드론을 사용하시나요?</p>
+        <ul class="info-list"><li>비의무가입자(취미/레저)인 경우 개인용 드론보험에 가입하세요</li></ul>
+        <a href="/personal-drone-insurance" class="btn-personal">🎮 개인용 드론보험 가입하기</a>
+    </div>
+
+</main>
+
+<!-- 알아두실사항 모달 -->
+<div class="notice-overlay" id="noticeOverlay" onclick="if(event.target===this)closeNotice()">
+    <div class="notice-box">
+        <div class="notice-header">
+            <h3>📋 알아두실사항</h3>
+            <button class="notice-close-btn" onclick="closeNotice()">✕</button>
+        </div>
+        <div class="notice-body">
+            <div class="notice-row"><div class="notice-row-title"><span class="notice-badge">1</span>계약 전 알릴 의무</div><p>보험계약 전 청약서에서 질문한 사항에 대해 사실대로 알려야 합니다. 고의 또는 중대한 과실로 알리지 않은 경우 계약이 해지되거나 보장이 제한될 수 있습니다.</p></div>
+            <div class="notice-row"><div class="notice-row-title"><span class="notice-badge">2</span>청약 철회 권리</div><p>보험증권을 받은 날부터 15일 이내에 청약을 철회할 수 있습니다. 단, 보험기간이 1년 미만이거나 이미 개시된 경우는 제외될 수 있습니다.</p></div>
+            <div class="notice-row"><div class="notice-row-title"><span class="notice-badge">3</span>보장하는 손해</div><p>드론 조종 중 발생한 타인의 신체 손해(대인) 및 재물 손해(대물)에 대한 법률상 배상책임을 보장합니다. 법률 비용(소송비, 변호사 비용 등)도 포함됩니다.</p></div>
+            <div class="notice-row"><div class="notice-row-title"><span class="notice-badge">4</span>보장하지 않는 손해</div><p>고의적 사고, 전쟁·천재지변, 피보험자 본인의 신체 손해, 가족·고용인 손해, 감염병 관련 손해, 사이버·전자적 사고는 보상되지 않습니다.</p></div>
+            <div class="notice-row"><div class="notice-row-title"><span class="notice-badge">5</span>보험금 청구 절차</div><p>사고 발생 시 즉시 배상온(liab.co.kr)에 사고 접수 후 필요 서류를 제출하세요. 보험사 심사 완료 후 7영업일 이내 지급됩니다.</p></div>
+            <div class="notice-row"><div class="notice-row-title"><span class="notice-badge">6</span>중복 계약 시 비례 보상</div><p>동일한 사고에 대해 복수의 보험계약이 있는 경우, 각 계약의 보상한도 비율에 따라 비례 보상됩니다.</p></div>
+            <div class="notice-row"><div class="notice-row-title"><span class="notice-badge">7</span>손해 방지 의무</div><p>보험사고 발생 시 손해 확대를 방지하기 위한 조치를 취해야 합니다. 이행하지 않은 경우 보상이 제한될 수 있습니다.</p></div>
+            <div class="notice-row"><div class="notice-row-title"><span class="notice-badge">8</span>소멸 시효</div><p>보험금 청구권은 사고 발생일로부터 3년이 지나면 소멸합니다.</p></div>
+            <div class="notice-row"><div class="notice-row-title"><span class="notice-badge">9</span>분쟁 해결</div><p>보험 관련 분쟁 발생 시 금융감독원(국번없이 1332) 또는 한국소비자원에 조정을 신청할 수 있습니다.</p></div>
+        </div>
+        <div class="notice-footer"><button onclick="closeNotice()">확인</button></div>
+    </div>
+</div>
+
+<!-- 하단 고정 바 -->
+<div class="sticky-bottom-bar">
+    <button class="sticky-bottom-btn btn-notice" onclick="openNotice()"><span>📋</span> 알아두실사항</button>
+    <a class="sticky-bottom-btn btn-terms" href="20260101_5_드론배상책임보험_보험약관_v2_수정01.pdf" download><span>📄</span> 약관보기</a>
+</div>
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>보험모집 주체</h4>
+                <p><strong>상호:</strong> 배상온</p>
+                <p><strong>사업자등록번호:</strong> 507-18-15770</p>
+                <p><strong>대표자:</strong> 김리하</p>
+                <p><strong>보험대리점 등록번호:</strong> 제2026010037호</p>
+                <p><strong>주소:</strong> 서울특별시 강남구 테헤란로 117, 9층</p>
+                <p><strong>고객센터:</strong> 010-8461-8712</p>
+                <p><strong>이메일:</strong> liab.on.ins@gmail.com</p>
             </div>
-            <div class="q-detail">
-                <strong>의무보험 가입대상</strong>
-                <ul class="detail-list">
-                    <li>국가, 지방자치단체, 공공기관</li>
-                    <li>초경량비행장치(드론)를 사용한 영리사업</li>
-                </ul>
-                <div class="detail-sub">
-                    <strong>영리사업이란?</strong> 항공사업법 제2조에 따른 초경량비행장치사용사업에 사용되는 경우(타인의 요청에 따라 유상으로 방제, 사진촬영, 측량, 탐사, 조종교육 등에 해당되는 업무)를 말합니다. 유상운송, 대여업, 레저스포츠 등은 가입이 제한됩니다.
-                </div>
-            </div>
-            <div class="radio-options">
-                <label class="radio-label hint" id="q1_yes"><input type="radio" name="q1" value="yes"><span>예</span></label>
-                <label class="radio-label" id="q1_no"><input type="radio" name="q1" value="no"><span>아니오</span></label>
+            <div class="footer-col">
+                <h4>플랫폼 운영 및 결제 처리</h4>
+                <p><strong>상호:</strong> 바이인</p>
+                <p><strong>사업자등록번호:</strong> 501-63-18916</p>
+                <p><strong>대표자:</strong> 김리하</p>
+                <p><strong>통신판매업 신고번호:</strong> 제2026-서울동대문-0153호</p>
+                <p><strong>주소:</strong> 서울특별시 동대문구 천호대로 301, 1706호</p>
             </div>
         </div>
-
-        <!-- 질문 2: 정답 = 아니오 -->
-        <div class="check-card" id="card2">
-            <div class="q-header">
-                <span class="q-number">2</span>
-                <span class="q-text">수상용 드론입니까?</span>
-            </div>
-            <div class="radio-options">
-                <label class="radio-label" id="q2_yes"><input type="radio" name="q2" value="yes"><span>예</span></label>
-                <label class="radio-label hint" id="q2_no"><input type="radio" name="q2" value="no"><span>아니오</span></label>
-            </div>
+        <div class="footer-notice">
+            <p>※ 본 사이트(liab.co.kr)는 보험상품 안내 및 가입 플랫폼이며, 실제 보험계약의 모집 및 체결은 보험대리점 <strong>'배상온'</strong>을 통해 이루어집니다.</p>
+            <p>※ 결제 및 전자상거래 관련 서비스는 <strong>'바이인'</strong>이 운영합니다.</p>
+            <p>※ 보험상품의 보장내용 및 계약의 최종 책임은 해당 보험사 및 보험대리점 기준에 따릅니다.</p>
         </div>
+    </div>
+</footer>
 
-        <!-- 질문 3: 정답 = 아니오 -->
-        <div class="check-card" id="card3">
-            <div class="q-header">
-                <span class="q-number">3</span>
-                <span class="q-text">최근 3년간 귀사가 부담한 손해배상액(합의금 포함)이 있습니까?</span>
-            </div>
-            <div class="radio-options">
-                <label class="radio-label" id="q3_yes"><input type="radio" name="q3" value="yes"><span>예</span></label>
-                <label class="radio-label hint" id="q3_no"><input type="radio" name="q3" value="no"><span>아니오</span></label>
-            </div>
-        </div>
+<script>
+var CORRECT = { q1:'yes', q2:'no', q3:'no' };
+var ERROR_MSG = {
+    q1: '⚠️ 의무가입 대상이 아닌 경우 온라인 가입이 불가합니다.<br>취미·레저 목적이면 <strong>개인용 드론보험</strong>을 이용해주세요.',
+    q2: '⚠️ 수상용 드론은 별도 상담이 필요합니다.<br>📧 liab.on.ins@gmail.com',
+    q3: '⚠️ 최근 3년 내 손해배상 이력이 있는 경우<br>별도 심사가 필요합니다. 📧 liab.on.ins@gmail.com'
+};
 
-        <!-- 질문 4: 정답 = 아니오 -->
-        <div class="check-card" id="card4">
-            <div class="q-header">
-                <span class="q-number">4</span>
-                <span class="q-text">드론조종 자격자가 10명 이상인가요?</span>
-            </div>
-            <div class="radio-options">
-                <label class="radio-label" id="q4_yes"><input type="radio" name="q4" value="yes"><span>예</span></label>
-                <label class="radio-label hint" id="q4_no"><input type="radio" name="q4" value="no"><span>아니오</span></label>
-            </div>
-        </div>
+function goNext() {
+    window.location.href = '/business-drone-insurance-form';
+}
 
-        <!-- 질문 5: 정답 = 아니오 -->
-        <div class="check-card" id="card5">
-            <div class="q-header">
-                <span class="q-number">5</span>
-                <span class="q-text">드론운항사업을 시작한 기간이 11년 이상인가요?</span>
-            </div>
-            <div class="radio-options">
-                <label class="radio-label" id="q5_yes"><input type="radio" name="q5" value="yes"><span>예</span></label>
-                <label class="radio-label hint" id="q5_no"><input type="radio" name="q5" value="no"><span>아니오</span></label>
-            </div>
-        </div>
+function openNotice() {
+    document.getElementById('noticeOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+function closeNotice() {
+    document.getElementById('noticeOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeNotice(); });
 
-        <!-- 에러 메시지 -->
-        <div class="error-box" id="errorBox">
-            <p id="errorMsg"></p>
-        </div>
-
-        <!-- 성공 메시지 -->
-        <div class="success-box" id="successBox">
-            <p>✅ 모든 확인이 완료되었습니다. 다음 단계로 진행해주세요.</p>
-        </div>
-
-        <!-- 버튼 -->
-        <div class="button-group">
-            <a href="/" class="btn btn-secondary">이전</a>
-            <button class="btn btn-primary" id="btnNext" disabled>다음 단계로</button>
-        </div>
-
-        <!-- 개인용 안내 -->
-        <div class="info-box">
-            <p class="info-title">취미·레저 목적으로 드론을 사용하시나요?</p>
-            <ul class="info-list">
-                <li>비의무가입자(취미/레저)인 경우 개인용 드론보험에 가입하세요</li>
-            </ul>
-            <a href="/personal-drone-insurance" class="btn-personal">🎮 개인용 드론보험 가입하기</a>
-        </div>
-    </main>
-
-    <footer>
-        <div class="footer-content">
-            <h3 style="margin-bottom:1rem;">배상온 대리점</h3>
-            <p>📧 이메일: liab.on.ins@gmail.com</p>
-            <p>📍 주소: 서울특별시 동대문구 천호대로 301, 1706호</p>
-            <p>사업자등록번호: 501-63-18916 | 통신판매업 신고번호: 제2026-서울동대문-0153호</p>
-            <p>대표자: 김리하 | 배상온 | 대리점등록번호: 제2026010037호</p>
-            <p style="margin-top:1.5rem;opacity:0.6;">© 2026 배상온 대리점. All rights reserved. | KB손해보험 공식 대리점</p>
-        </div>
-    </footer>
-
-    <script>
-    var CORRECT = { q1: 'yes', q2: 'no', q3: 'no', q4: 'no', q5: 'no' };
-
-    var ERROR_MSG = {
-        q1: '⚠️ 의무가입 대상이 아닌 경우 온라인 가입이 불가합니다.<br>취미·레저 목적이면 <strong>개인용 드론보험</strong>을 이용해주세요.',
-        q2: '⚠️ 수상용 드론은 별도 상담이 필요합니다.<br>📧 liab.on.ins@gmail.com',
-        q3: '⚠️ 최근 3년 내 손해배상 이력이 있는 경우<br>별도 심사가 필요합니다. 📧 liab.on.ins@gmail.com',
-        q4: '⚠️ 드론조종 자격자가 10명 이상인 경우<br>별도 견적이 필요합니다. 📧 liab.on.ins@gmail.com',
-        q5: '⚠️ 드론운항사업 기간이 11년 이상인 경우<br>별도 견적이 필요합니다. 📧 liab.on.ins@gmail.com'
-    };
-
-    var btnNext = document.getElementById('btnNext');
-    var errorBox = document.getElementById('errorBox');
-    var errorMsgEl = document.getElementById('errorMsg');
+function checkAnswers() {
+    var btnNext    = document.getElementById('btnNext');
+    var errorBox   = document.getElementById('errorBox');
     var successBox = document.getElementById('successBox');
+    var errorMsg   = document.getElementById('errorMsg');
 
-    function checkAnswers() {
-        var allAnswered = true;
-        var allCorrect = true;
-        var firstWrong = null;
+    errorBox.classList.remove('show');
+    successBox.classList.remove('show');
 
-        errorBox.classList.remove('show');
-        successBox.classList.remove('show');
-
-        for (var i = 1; i <= 5; i++) {
-            var name = 'q' + i;
-            var card = document.getElementById('card' + i);
-            var selected = document.querySelector('input[name="' + name + '"]:checked');
-            var yesLabel = document.getElementById(name + '_yes');
-            var noLabel = document.getElementById(name + '_no');
-
-            yesLabel.classList.remove('selected-ok', 'selected-wrong', 'hint');
-            noLabel.classList.remove('selected-ok', 'selected-wrong', 'hint');
-            card.classList.remove('correct', 'wrong');
-
-            var correct = CORRECT[name];
-
-            if (!selected) {
-                allAnswered = false;
-                var hintLabel = (correct === 'yes') ? yesLabel : noLabel;
-                hintLabel.classList.add('hint');
-                continue;
-            }
-
-            var val = selected.value;
-            var isCorrect = (val === correct);
-
-            var selectedLabel = (val === 'yes') ? yesLabel : noLabel;
-            selectedLabel.classList.add(isCorrect ? 'selected-ok' : 'selected-wrong');
-            card.classList.add(isCorrect ? 'correct' : 'wrong');
-
-            if (!isCorrect) {
-                allCorrect = false;
-                if (!firstWrong) firstWrong = name;
-            }
-        }
-
-        if (!allAnswered) {
-            btnNext.disabled = true;
-            return;
-        }
-
-        if (allCorrect) {
-            btnNext.disabled = false;
-            successBox.classList.add('show');
-            successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        } else {
-            btnNext.disabled = true;
-            errorMsgEl.innerHTML = ERROR_MSG[firstWrong] || '⚠️ 온라인 가입이 불가합니다.';
-            errorBox.classList.add('show');
-            errorBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+    // 1번 아니오 선택 시 즉시 종료
+    var q1 = document.querySelector('input[name="q1"]:checked');
+    if (q1 && q1.value === 'no') {
+        btnNext.disabled = true;
+        return;
     }
 
-    document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
-        radio.addEventListener('change', function() {
-            checkAnswers();
-            // 현재 질문 번호 → 다음 카드로 스크롤
-            var qNum = parseInt(this.name.replace('q', ''));
-            var nextCard = document.getElementById('card' + (qNum + 1));
-            if (nextCard) {
-                setTimeout(function() {
-                    nextCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 300);
-            } else {
-                // 마지막 질문 → 버튼으로 스크롤
-                setTimeout(function() {
-                    document.querySelector('.button-group').scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 300);
-            }
-        });
-    });
+    var allAnswered = true;
+    var allCorrect  = true;
+    var firstWrong  = null;
 
-    btnNext.addEventListener('click', function() {
-        if (!this.disabled) {
-            window.location.href = '/business-drone-insurance-form';
+    for (var i = 1; i <= 3; i++) {
+        var name     = 'q' + i;
+        var card     = document.getElementById('card' + i);
+        var selected = document.querySelector('input[name="' + name + '"]:checked');
+        var yesLbl   = document.getElementById(name + '_yes');
+        var noLbl    = document.getElementById(name + '_no');
+
+        yesLbl.classList.remove('selected-ok','selected-wrong','hint');
+        noLbl.classList.remove('selected-ok','selected-wrong','hint');
+        card.classList.remove('correct','wrong');
+
+        if (!selected) {
+            allAnswered = false;
+            var correct = CORRECT[name];
+            (correct === 'yes' ? yesLbl : noLbl).classList.add('hint');
+            continue;
+        }
+
+        var val       = selected.value;
+        var isCorrect = (val === CORRECT[name]);
+        (val === 'yes' ? yesLbl : noLbl).classList.add(isCorrect ? 'selected-ok' : 'selected-wrong');
+        card.classList.add(isCorrect ? 'correct' : 'wrong');
+
+        if (!isCorrect) { allCorrect = false; if (!firstWrong) firstWrong = name; }
+    }
+
+    if (!allAnswered) { btnNext.disabled = true; return; }
+
+    if (allCorrect) {
+        btnNext.disabled = false;
+        successBox.classList.add('show');
+        successBox.scrollIntoView({ behavior:'smooth', block:'center' });
+    } else {
+        btnNext.disabled = true;
+        errorMsg.innerHTML = ERROR_MSG[firstWrong] || '⚠️ 온라인 가입이 불가합니다.';
+        errorBox.classList.add('show');
+        errorBox.scrollIntoView({ behavior:'smooth', block:'center' });
+    }
+}
+
+document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+        var qName = this.name;
+        var val   = this.value;
+
+        // 1번 아니오 → 안내 표시, 스크롤 없음
+        if (qName === 'q1') {
+            var box = document.getElementById('personalRedirect');
+            if (val === 'no') { box.classList.add('show'); }
+            else              { box.classList.remove('show'); }
+        }
+
+        checkAnswers();
+
+        // 다음 카드로 스크롤 (1번 아니오 제외)
+        if (!(qName === 'q1' && val === 'no')) {
+            var qNum     = parseInt(qName.replace('q',''));
+            var nextCard = document.getElementById('card' + (qNum + 1));
+            setTimeout(function() {
+                if (nextCard) {
+                    nextCard.scrollIntoView({ behavior:'smooth', block:'center' });
+                } else {
+                    document.querySelector('.button-group').scrollIntoView({ behavior:'smooth', block:'center' });
+                }
+            }, 300);
         }
     });
-    </script>
-<script src="/notice-modal.js"></script>
+});
+</script>
 </body>
 </html>

@@ -18,7 +18,7 @@
             --kb-dark: #1a1a1a;
         }
 
-        body {
+        body { padding-bottom: 68px;
             font-family: 'Noto Sans KR', sans-serif;
             color: var(--kb-dark);
             line-height: 1.6;
@@ -304,6 +304,27 @@
             .header-content { padding: 1rem; }
             .agency-name { font-size: 1.1rem; }
         }
+
+        .sticky-bottom-bar { position:fixed; bottom:0; left:0; right:0; z-index:9000; background:#fff; border-top:2px solid #eee; box-shadow:0 -4px 14px rgba(0,0,0,0.09); display:flex; }
+        .sticky-bottom-btn { flex:1; display:flex; align-items:center; justify-content:center; gap:7px; padding:0.92rem 1rem; background:none; border:none; font-size:0.93rem; font-weight:700; cursor:pointer; text-decoration:none; color:#1a1a1a; font-family:'Noto Sans KR',sans-serif; transition:background 0.2s,color 0.2s; }
+        .sticky-bottom-btn.sbb-notice { border-right:1px solid #e8e8e8; }
+        .sticky-bottom-btn.sbb-notice:hover { background:#fffbf0; color:#b48000; }
+        .sticky-bottom-btn.sbb-terms { color:#6d28d9; }
+        .sticky-bottom-btn.sbb-terms:hover { background:#f5f0ff; }
+        .info-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:10000; align-items:center; justify-content:center; padding:16px; }
+        .info-overlay.active { display:flex; }
+        .info-modal { background:#fff; border-radius:20px; width:100%; max-width:600px; max-height:88vh; display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,0.25); overflow:hidden; }
+        .info-modal-header { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; padding:1.3rem 1.8rem; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+        .info-modal-header h3 { font-size:1.05rem; font-weight:800; }
+        .info-modal-close { background:rgba(255,255,255,0.2); border:none; color:#fff; width:32px; height:32px; border-radius:50%; font-size:1rem; cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
+        .info-modal-body { overflow-y:auto; padding:1.4rem 1.8rem; -webkit-overflow-scrolling:touch; }
+        .info-row { margin-bottom:1.2rem; padding-bottom:1.2rem; border-bottom:1px solid #f0f0f0; }
+        .info-row:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+        .info-row-title { display:flex; align-items:center; gap:8px; font-size:0.95rem; font-weight:700; margin-bottom:0.4rem; }
+        .info-badge { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; flex-shrink:0; }
+        .info-row p { color:#555; font-size:0.87rem; line-height:1.8; margin:0; }
+        .info-modal-footer { padding:0.9rem 1.8rem; border-top:1px solid #f0f0f0; text-align:center; flex-shrink:0; }
+        .info-modal-footer button { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; border:none; padding:0.65rem 2.5rem; border-radius:25px; font-size:0.95rem; font-weight:700; cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
     </style>
 </head>
 <body>
@@ -366,382 +387,56 @@
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script>
-        let insuranceData = null;
+    <!-- 알아두실사항 모달 -->
+    <div class="info-overlay" id="infoNoticeOverlay" onclick="if(event.target===this)closeInfoNotice()">
+        <div class="info-modal">
+            <div class="info-modal-header">
+                <h3>📋 알아두실사항</h3>
+                <button class="info-modal-close" onclick="closeInfoNotice()">✕</button>
+            </div>
+            <div class="info-modal-body">
+                <p style="font-size:0.82rem;color:#888;margin-bottom:1.2rem;line-height:1.7;">본 안내는 보험약관 및 상품설명서의 주요 내용을 요약한 것으로, 자세한 사항은 해당 보험사의 약관 및 상품설명서를 반드시 확인하시기 바랍니다.</p>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">1</span>보험모집 주체 및 서비스 구조 안내</div><p>보험모집 주체: 배상온 보험대리점(등록번호: 제2026010037호)<br>본 사이트(liab.co.kr)는 보험상품 안내 및 가입 플랫폼이며, 실제 보험계약의 모집 및 체결은 보험대리점 '배상온'을 통해 이루어집니다.<br>보험계약의 인수(승낙) 및 보장, 보험금 지급의 최종 책임은 해당 보험사에 있습니다.<br>보험료 결제 대금은 전자결제대행사(PG)를 통해 해당 보험사로 직접 정산되며, 배상온 및 플랫폼 운영사는 보험료를 보관하거나 수취하지 않습니다.<br>결제 및 전자상거래 관련 서비스는 '바이인'이 운영합니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">2</span>설명의무 및 확인의무</div><p>보험대리점은 보험상품에 대하여 중요한 사항을 설명할 의무가 있습니다.<br>계약자는 보험가입 전 상품설명서 및 약관의 주요 내용을 충분히 설명받고 확인하시기 바랍니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">3</span>기존 계약 해지 후 신규 가입 유의사항</div><p>기존 보험계약을 해지하고 새로운 보험계약을 체결하는 경우, 질병이력·연령증가 등으로 가입이 거절되거나 보험료가 인상될 수 있으며 보장내용이 달라질 수 있습니다.<br>상품에 따라 면책기간, 감액기간, 보험금 지급제한기간이 새로 적용되거나 보장 제한 등 불이익이 발생할 수 있습니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">4</span>보험금 지급 제한</div><p>약관상 면책사유, 지급제한, 지급한도 등 조건에 따라 보험금 지급이 제한될 수 있습니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">5</span>계약의 무효</div><p>계약 체결 시 보험사고가 이미 발생한 경우 계약은 무효가 될 수 있습니다.<br>무효 및 보험료 반환 등 세부사항은 해당 보험사의 약관에 따릅니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">6</span>보장개시일 안내</div><p>보장은 보험사가 청약을 승낙하고 제1회 보험료가 납입된 때부터 약관에서 정한 바에 따라 개시됩니다.<br>보장개시 및 책임개시 관련 상세 기준은 해당 보험사의 약관을 따릅니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">7</span>비례보상(중복 가입 시)</div><p>동일한 위험을 보장하는 다른 보험(공제 포함)이 있는 경우, 각 계약의 보상책임액 비율에 따라 비례보상될 수 있습니다(약관 기준).</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">8</span>계약 전·후 알릴 의무</div><p><strong>계약 전:</strong> 계약자 및 피보험자는 직업, 병력 등 보험사가 질문한 중요한 사항을 사실대로 알려야 하며, 위반 시 계약 해지 또는 보험금 지급 거절 등의 불이익이 발생할 수 있습니다.<br><strong>계약 후:</strong> 위험이 변경되거나 약관이 정한 주요 변경사항(목적물 이전, 구조 변경, 동일 위험의 다른 보험 체결 등)이 발생하면 지체 없이 보험사에 알릴 의무가 있습니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">9</span>청약철회 및 계약 취소</div><p>청약철회: 계약자는 보험증권을 받은 날부터 15일 이내에 청약을 철회할 수 있으며(단, 청약일로부터 30일 초과 시 제한 등 예외 존재), 세부 기준은 약관 및 관련 법령에 따릅니다.<br>청약철회 제한 사례: 진단계약, 보장기간 90일 이내 계약, 보증보험, 법률에 따른 의무보험, 자동차 책임보험, 전문금융소비자 계약 등(상품별 상이).<br>품질보증(계약 취소): 약관 및 청약서 미교부, 중요한 사항 미설명, 자필서명 누락 등 일정 사유가 있는 경우 계약 성립일로부터 3개월 이내 취소가 가능할 수 있습니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">10</span>해약환급금 안내</div><p>해약환급금은 중도해지 시 지급되는 금액으로, 상품 구조 및 비용 공제 등으로 인해 납입보험료보다 적거나 없을 수 있습니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">11</span>예금자보호 및 세제혜택</div><p>예금자보호 여부 및 한도, 세제혜택 적용 여부는 상품별로 다를 수 있으므로 약관 및 상품설명서를 확인하시기 바랍니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">12</span>개인정보보호 안내</div><p>보험계약 관련 개인정보는 계약의 체결, 유지, 보험금 지급 등을 위하여 관련 법령 및 동의 범위 내에서 수집·이용·제공됩니다.<br>제3자 제공(보험사 등) 및 위탁(플랫폼/PG 등) 관련 사항은 개인정보처리방침 및 동의서 내용을 따릅니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">13</span>보험모집질서 및 부당이익 제공 금지</div><p>보험계약 체결과 관련한 특별이익 제공행위 등은 보험업법에 따라 처벌될 수 있습니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">14</span>보험사기 예방 안내</div><p>보험사기는 형법 및 관련 법령에 따라 처벌될 수 있습니다. (금융감독원: 국번없이 1332)</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">15</span>상담 및 분쟁조정 안내</div><p>보험상담 및 보험 관련 불만/분쟁은 우선 보험사 고객센터로 문의하시기 바랍니다.<br>처리결과에 이의가 있을 경우 금융감독원(1332)을 통해 민원 또는 분쟁조정 신청이 가능합니다.</p></div>
+                <p style="font-size:0.8rem;color:#aaa;margin-top:1rem;padding-top:1rem;border-top:1px solid #f0f0f0;">[보험대리점 정보] 배상온 보험대리점(등록번호: 제2026010037호)<br>※ 본 안내는 요약본이며, 세부 내용은 보험약관 및 상품설명서가 우선합니다.</p>
+            </div>
+            <div class="info-modal-footer"><button onclick="closeInfoNotice()">확인</button></div>
+        </div>
+    </div>
 
-        window.addEventListener('DOMContentLoaded', function() {
-            console.log('🔍 Complete 페이지 로드됨');
-            
-            const savedData = sessionStorage.getItem('droneInsuranceData');
-            console.log('📦 SessionStorage 데이터:', savedData);
-            
-            if (!savedData) {
-                console.error('❌ 저장된 정보가 없습니다!');
-                alert('저장된 정보가 없습니다.');
-                window.location.href = '/personal-drone-insurance';
-                return;
-            }
+    <!-- 하단 고정 바 -->
+    <div class="sticky-bottom-bar">
+        <button class="sticky-bottom-btn sbb-notice" onclick="openInfoNotice()">
+            <span>📋</span> 알아두실사항
+        </button>
+        <a class="sticky-bottom-btn sbb-terms" href="20260101_KB드론배상책임보험_개인용_보험약관_수정01.pdf" download>
+            <span>📄</span> 약관보기
+        </a>
+    </div>
 
-            insuranceData = JSON.parse(savedData);
-            console.log('✅ 파싱된 데이터:', insuranceData);
-            
-            displayInfo();
-        });
-
-        function displayInfo() {
-            console.log('🎨 displayInfo 함수 시작');
-            console.log('📊 insuranceData:', insuranceData);
-            
-            const container = document.getElementById('insuranceInfo');
-            console.log('📦 Container:', container);
-            
-            const droneTypes = {
-                'camera': '촬영용 센서드론',
-                'fpv': 'FPV/레이싱 드론',
-                'toy': '완구형 드론',
-                'other': '기타 드론'
-            };
-
-            // 날짜 포맷 함수: 2026-02-19T11:00 → 2026-02-19 (11:00)
-            function formatDateTime(dateTimeStr) {
-                if (!dateTimeStr) return '';
-                const [date, time] = dateTimeStr.split('T');
-                return `${date} (${time})`;
-            }
-
-            let html = `
-                <div class="info-row">
-                    <span class="info-label">가입자명</span>
-                    <span class="info-value">${insuranceData.name || '미입력'}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">연락처</span>
-                    <span class="info-value">${insuranceData.phone || '미입력'}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">이메일</span>
-                    <span class="info-value">${insuranceData.email || '미입력'}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">보험기간</span>
-                    <span class="info-value">${formatDateTime(insuranceData.insurance_start)} ~ ${formatDateTime(insuranceData.insurance_end)}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">드론 대수</span>
-                    <span class="info-value">${insuranceData.drone_count}대</span>
-                </div>
-            `;
-            
-            console.log('📝 기본 정보 HTML 생성 완료');
-            console.log('🚁 drone_plans:', insuranceData.drone_plans);
-            
-            // 드론별 상세 정보 표시
-            if (insuranceData.drone_plans && insuranceData.drone_plans.length > 0) {
-                console.log('✅ 개별 플랜 모드');
-                insuranceData.drone_plans.forEach((dronePlan, index) => {
-                    const drone = insuranceData.drones[index];
-                    
-                    // 드론 종류 이름 결정 (우선순위: drone_type_name > droneTypes 매핑 > drone.type 직접 사용)
-                    let droneTypeName = '미입력';
-                    if (dronePlan.drone_type_name) {
-                        droneTypeName = dronePlan.drone_type_name;
-                    } else if (dronePlan.drone_type && droneTypes[dronePlan.drone_type]) {
-                        droneTypeName = droneTypes[dronePlan.drone_type];
-                    } else if (drone && drone.type && droneTypes[drone.type]) {
-                        droneTypeName = droneTypes[drone.type];
-                    }
-                    
-                    console.log(`📋 드론 ${index + 1} 표시:`, {
-                        drone_type: dronePlan.drone_type,
-                        drone_type_name: dronePlan.drone_type_name,
-                        결정된_이름: droneTypeName
-                    });
-                    
-                    const cov = getCoverageInfo(dronePlan.plan);
-                    html += `
-                        <div style="margin: 1.5rem 0; padding: 1.5rem; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #FFB800;">
-                            <h3 style="margin: 0 0 1rem 0; color: #FFB800; font-size: 1.1rem;">드론 ${index + 1}</h3>
-                            <div class="info-row">
-                                <span class="info-label">모델명</span>
-                                <span class="info-value">${drone.model || '미입력'}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">시리얼번호</span>
-                                <span class="info-value">${drone.serial || '미입력'}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">자체중량</span>
-                                <span class="info-value">${drone.weight ? drone.weight + 'kg' : '미입력'}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">최대이륙중량</span>
-                                <span class="info-value">${drone.max_weight ? drone.max_weight + 'kg' : '미입력'}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">드론 종류</span>
-                                <span class="info-value">${droneTypeName}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">플랜</span>
-                                <span class="info-value">${dronePlan.plan_name || '미입력'}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">보험료</span>
-                                <span class="info-value" style="color: #FFB800; font-weight: 700;">${parseInt(dronePlan.price).toLocaleString()}원/년</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">대인배상</span>
-                                <span class="info-value">${cov.personal || '미입력'}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">대물배상</span>
-                                <span class="info-value">${cov.property || '미입력'}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">기본보장</span>
-                                <span class="info-value">${cov.additional || '미입력'}</span>
-                            </div>
-                        </div>
-                    `;
-                });
-            } else {
-                console.log('📌 통합 플랜 모드 (구버전 호환)');
-                // 구버전 데이터 호환 (통합 모드)
-                html += `
-                    <div class="info-row">
-                        <span class="info-label">드론 종류</span>
-                        <span class="info-value">${droneTypes[insuranceData.drone_type] || '미입력'}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">선택 플랜</span>
-                        <span class="info-value">${insuranceData.plan_name || '미입력'}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">보험료(1대당)</span>
-                        <span class="info-value">${parseInt(insuranceData.plan_price_per_drone || 0).toLocaleString()}원/년</span>
-                    </div>
-                `;
-            }
-
-            console.log('📝 HTML 생성 완료, container에 삽입');
-            container.innerHTML = html;
-            
-            const totalPrice = parseInt(insuranceData.plan_total_price || 0);
-            console.log('💰 총 보험료:', totalPrice);
-            document.getElementById('totalPrice').textContent = `${totalPrice.toLocaleString()}원`;
-            
-            console.log('✅ displayInfo 완료');
-        }
-
-        async function downloadPDF() {
-            const droneTypes = {
-                'camera': '촬영용 센서드론',
-                'fpv': 'FPV/레이싱 드론',
-                'toy': '완구형 드론',
-                'other': '기타 드론'
-            };
-
-            // 날짜 포맷 함수
-            function formatDateTime(dateTimeStr) {
-                if (!dateTimeStr) return '';
-                const [date, time] = dateTimeStr.split('T');
-                return `${date} (${time})`;
-            }
-
-            const today = new Date();
-            const dateStr = `${today.getFullYear()}. ${String(today.getMonth()+1)}. ${String(today.getDate())}.`;
-
-            // 드론별 정보 HTML 생성 (개별 플랜 포함)
-            let dronesHTML = '';
-            if (insuranceData.drone_plans && insuranceData.drone_plans.length > 0) {
-                dronesHTML = insuranceData.drone_plans.map((dronePlan, i) => {
-                    const drone = insuranceData.drones[i];
-                    const coverage = getCoverageInfo(dronePlan.plan);
-                    
-                    return `
-                    <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 10px; page-break-inside: avoid;">
-                        <h3 style="color: #FFB800; font-size: 12px; font-weight: 700; margin: 0 0 6px 0;">🚁 드론 ${i + 1}</h3>
-                        <p style="margin: 3px 0; font-size: 10px; line-height: 1.3; color: #1a1a1a;"><strong>모델명:</strong> ${drone.model || '미입력'}</p>
-                        <p style="margin: 3px 0; font-size: 10px; line-height: 1.3; color: #1a1a1a;"><strong>시리얼번호:</strong> ${drone.serial || '미입력'}</p>
-                        <p style="margin: 3px 0; font-size: 10px; line-height: 1.3; color: #1a1a1a;"><strong>드론 종류:</strong> ${dronePlan.drone_type_name || droneTypes[dronePlan.drone_type] || '미입력'}</p>
-                        <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
-                            <p style="margin: 3px 0; font-size: 10px; line-height: 1.3; color: #FFB800; font-weight: 700;"><strong>선택 플랜:</strong> ${dronePlan.plan_name}</p>
-                            <div style="border-left: 3px solid #FFB800; padding-left: 8px; margin: 6px 0;">
-                                <p style="margin: 3px 0; font-size: 9px; line-height: 1.3; color: #1a1a1a;">대인배상: ${coverage.personal}</p>
-                                <p style="margin: 3px 0; font-size: 9px; line-height: 1.3; color: #1a1a1a;">대물배상: ${coverage.property}</p>
-                                <p style="margin: 3px 0; font-size: 9px; line-height: 1.3; color: #1a1a1a;">기본보장: ${coverage.additional}</p>
-                            </div>
-                            <p style="margin: 6px 0 0 0; font-size: 10px; line-height: 1.3; color: #FFB800; font-weight: 700;"><strong>보험료:</strong> ${parseInt(dronePlan.price).toLocaleString()}원/년</p>
-                        </div>
-                    </div>
-                    `;
-                }).join('');
-            } else {
-                // 구버전 호환 (통합 모드)
-                const coverage = getCoverageInfo(insuranceData.plan);
-                dronesHTML = `
-                    <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; margin-bottom: 10px;">
-                        <p style="margin: 3px 0; font-size: 10px;"><strong>드론 종류:</strong> ${droneTypes[insuranceData.drone_type]}</p>
-                        <p style="margin: 3px 0; font-size: 10px;"><strong>선택 플랜:</strong> ${insuranceData.plan_name}</p>
-                        <div style="border-left: 3px solid #FFB800; padding-left: 8px; margin: 6px 0;">
-                            <p style="margin: 3px 0; font-size: 9px;">대인배상: ${coverage.personal}</p>
-                            <p style="margin: 3px 0; font-size: 9px;">대물배상: ${coverage.property}</p>
-                            <p style="margin: 3px 0; font-size: 9px;">기본보장: ${coverage.additional}</p>
-                        </div>
-                    </div>
-                `;
-            }
-
-            // PDF용 HTML 엘리먼트 생성
-            const element = document.createElement('div');
-            element.style.width = '210mm';
-            element.style.maxHeight = '297mm';
-            element.style.background = '#fff';
-            element.style.fontFamily = "'Noto Sans KR', sans-serif";
-            element.style.margin = '0';
-            element.style.padding = '0';
-            element.style.overflow = 'hidden';
-            
-            element.innerHTML = `
-                <div style="background: linear-gradient(135deg, #FFB800 0%, #FFCD00 100%); padding: 10px 30px; text-align: center;">
-                    <h1 style="color: #1a1a1a; margin: 0; font-size: 16px; font-weight: 900; line-height: 1.1;">배상온 개인용드론보험 견적서</h1>
-                </div>
-                
-                <div style="padding: 20px 35px;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-                        <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; page-break-inside: avoid;">
-                            <h3 style="color: #FFB800; font-size: 12px; font-weight: 700; margin: 0 0 6px 0;">📋 견적 정보</h3>
-                            <p style="margin: 3px 0; font-size: 10px; line-height: 1.3; color: #1a1a1a;"><strong>견적일자:</strong> ${dateStr}</p>
-                            <p style="margin: 3px 0; font-size: 10px; line-height: 1.3; color: #1a1a1a;"><strong>보험기간:</strong> ${formatDateTime(insuranceData.insurance_start)} ~ ${formatDateTime(insuranceData.insurance_end)}</p>
-                            <p style="margin: 3px 0; font-size: 10px; line-height: 1.3; color: #1a1a1a;"><strong>상품명:</strong> KB손해보험 개인용 드론보험</p>
-                        </div>
-                        
-                        <div style="background: #f8f9fa; padding: 12px; border-radius: 6px; page-break-inside: avoid;">
-                            <h3 style="color: #FFB800; font-size: 12px; font-weight: 700; margin: 0 0 6px 0;">👤 고객 정보</h3>
-                            <p style="margin: 3px 0; font-size: 10px; line-height: 1.3; color: #1a1a1a;"><strong>이름:</strong> ${insuranceData.name}</p>
-                            <p style="margin: 3px 0; font-size: 10px; line-height: 1.3; color: #1a1a1a;"><strong>연락처:</strong> ${insuranceData.phone}</p>
-                            <p style="margin: 3px 0; font-size: 10px; line-height: 1.3; color: #1a1a1a;"><strong>이메일:</strong> ${insuranceData.email}</p>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-bottom: 10px;">
-                        <h3 style="color: #FFB800; font-size: 12px; font-weight: 700; margin: 0 0 10px 0;">🚁 드론 정보 (${insuranceData.drone_count}대)</h3>
-                        ${dronesHTML}
-                    </div>
-                    
-                    <div style="background: linear-gradient(135deg, #FFB800 0%, #FFCD00 100%); padding: 12px 25px; border-radius: 8px; text-align: center; margin-bottom: 10px; page-break-inside: avoid;">
-                        <p style="margin: 0 0 4px 0; font-size: 10px; font-weight: 600; color: #1a1a1a;">연간 보험료</p>
-                        <p style="margin: 0; font-size: 18px; font-weight: 900; color: #1a1a1a; line-height: 1;">${parseInt(insuranceData.plan_total_price).toLocaleString()}원</p>
-                    </div>
-                    </div>
-                    
-                    <div style="background: #fff9e6; padding: 10px; border-radius: 6px; font-size: 9px; color: #666; line-height: 1.4; margin-bottom: 10px; page-break-inside: avoid;">
-                        <p style="margin: 0 0 3px 0; font-weight: 700; color: #1a1a1a; font-size: 10px;">유의사항</p>
-                        <p style="margin: 2px 0;">※ 구체적인 보장/면책 및 보험금 지급은 약관에 따릅니다.</p>
-                        <p style="margin: 2px 0;">※ 본 견적서는 참고용이며, 최종 보험료는 심사 후 확정됩니다.</p>
-                    </div>
-                </div>
-                
-                <div style="background: #1a1a1a; color: #fff; padding: 10px 20px; text-align: center; page-break-inside: avoid;">
-                    <p style="margin: 0; font-size: 11px; font-weight: 700; line-height: 1.2;">배상온 대리점</p>
-                    <p style="margin: 4px 0; font-size: 9px; line-height: 1.2;">📧 liab.on.ins@gmail.com | 🌐 www.liab.co.kr</p>
-                    <p style="margin: 4px 0 0 0; font-size: 9px; opacity: 0.7; line-height: 1.2;">KB손해보험 공식 대리점</p>
-                </div>
-            `;
-
-            const opt = {
-                margin: 0,
-                filename: `KB_드론보험_견적서_${insuranceData.name}_${today.getFullYear()}${String(today.getMonth()+1).padStart(2,'0')}${String(today.getDate()).padStart(2,'0')}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2,
-                    useCORS: true,
-                    letterRendering: true,
-                    scrollY: 0,
-                    scrollX: 0
-                },
-                jsPDF: { 
-                    unit: 'mm', 
-                    format: 'a4', 
-                    orientation: 'portrait'
-                }
-            };
-
-            try {
-                await html2pdf().set(opt).from(element).save();
-            } catch (error) {
-                console.error('PDF 생성 오류:', error);
-                alert('PDF 생성 중 오류가 발생했습니다.');
-            }
-        }
-
-        function getCoverageInfo(plan) {
-            if (!plan) return { personal: '미입력', property: '미입력', additional: '미입력' };
-            
-            let coverage = { personal: '', property: '', additional: '' };
-
-            if (plan.includes('slim')) {
-                coverage.personal = '50,000,000원';
-                coverage.property = '50,000,000원';
-            } else if (plan.includes('standard')) {
-                coverage.personal = '100,000,000원';
-                coverage.property = '100,000,000원';
-            } else if (plan.includes('premium')) {
-                coverage.personal = '500,000,000원';
-                coverage.property = '500,000,000원';
-            }
-
-            if (plan.includes('camera')) {
-                if (plan.includes('slim')) coverage.additional = '기본충실';
-                else if (plan.includes('standard')) coverage.additional = '누구나운전 포함';
-                else if (plan.includes('premium')) coverage.additional = '누구나운전 + 구조비용';
-            } else if (plan.includes('fpv')) {
-                if (plan.includes('slim')) coverage.additional = '드론경기중 보장';
-                else if (plan.includes('standard')) coverage.additional = '드론경기중 + 누구나운전';
-                else if (plan.includes('premium')) coverage.additional = '드론경기중 + 누구나운전 + 구조비용';
-            } else {
-                if (plan.includes('slim')) coverage.additional = '기본 보장';
-                else if (plan.includes('standard')) coverage.additional = '누구나운전 포함';
-                else if (plan.includes('premium')) coverage.additional = '누구나운전 + 구조비용';
-            }
-
-            return coverage;
-        }
-
-        async function sendEmail() {
-            if (!insuranceData) {
-                alert('보험 정보가 없습니다.');
-                return;
-            }
-            const emailBtn = document.querySelector('.btn-email');
-            emailBtn.disabled = true;
-            emailBtn.textContent = '전송 중...';
-            try {
-                const response = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        ...insuranceData,
-                        insurance_type: '개인용 드론보험',
-                        request_type: 'quote_email',
-                        send_to_customer: true
-                    })
-                });
-
-                if (response.ok) {
-                    alert(`견적서가 ${insuranceData.email}로 전송되었습니다.`);
-                } else {
-                    alert('이메일 전송 중 오류가 발생했습니다. 다시 시도해주세요.');
-                }
-            } catch (e) {
-                console.error('이메일 전송 오류:', e);
-                alert('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-            } finally {
-                emailBtn.disabled = false;
-                emailBtn.textContent = '📧 이메일 전송';
-            }
-        }
-    </script>
+<script>
+    function openInfoNotice() {
+        document.getElementById('infoNoticeOverlay').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeInfoNotice() {
+        document.getElementById('infoNoticeOverlay').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeInfoNotice(); });
+</script>
 </body>
 </html>

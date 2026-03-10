@@ -20,7 +20,7 @@
             --kb-light-gray: #f8f9fa;
         }
 
-        body {
+        body { padding-bottom: 68px;
             font-family: 'Noto Sans KR', sans-serif;
             color: var(--kb-dark);
             line-height: 1.6;
@@ -511,6 +511,30 @@
                 width: 100%;
             }
         }
+
+        /* 하단 고정 바 */
+        .sticky-bottom-bar { position:fixed; bottom:0; left:0; right:0; z-index:9000; background:#fff; border-top:2px solid #eee; box-shadow:0 -4px 14px rgba(0,0,0,0.09); display:flex; }
+        .sticky-bottom-btn { flex:1; display:flex; align-items:center; justify-content:center; gap:7px; padding:0.92rem 1rem; background:none; border:none; font-size:0.93rem; font-weight:700; cursor:pointer; text-decoration:none; color:#1a1a1a; font-family:'Noto Sans KR',sans-serif; transition:background 0.2s,color 0.2s; }
+        .sticky-bottom-btn.sbb-notice { border-right:1px solid #e8e8e8; }
+        .sticky-bottom-btn.sbb-notice:hover { background:#fffbf0; color:#b48000; }
+        .sticky-bottom-btn.sbb-terms  { color:#6d28d9; }
+        .sticky-bottom-btn.sbb-terms:hover  { background:#f5f0ff; }
+
+        /* 알아두실사항 모달 */
+        .info-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:10000; align-items:center; justify-content:center; padding:16px; }
+        .info-overlay.active { display:flex; }
+        .info-modal { background:#fff; border-radius:20px; width:100%; max-width:600px; max-height:88vh; display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,0.25); overflow:hidden; }
+        .info-modal-header { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; padding:1.3rem 1.8rem; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+        .info-modal-header h3 { font-size:1.05rem; font-weight:800; }
+        .info-modal-close { background:rgba(255,255,255,0.2); border:none; color:#fff; width:32px; height:32px; border-radius:50%; font-size:1rem; cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
+        .info-modal-body { overflow-y:auto; padding:1.4rem 1.8rem; -webkit-overflow-scrolling:touch; }
+        .info-row { margin-bottom:1.2rem; padding-bottom:1.2rem; border-bottom:1px solid #f0f0f0; }
+        .info-row:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+        .info-row-title { display:flex; align-items:center; gap:8px; font-size:0.95rem; font-weight:700; margin-bottom:0.4rem; }
+        .info-badge { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:700; flex-shrink:0; }
+        .info-row p { color:#555; font-size:0.87rem; line-height:1.8; margin:0; }
+        .info-modal-footer { padding:0.9rem 1.8rem; border-top:1px solid #f0f0f0; text-align:center; flex-shrink:0; }
+        .info-modal-footer button { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; border:none; padding:0.65rem 2.5rem; border-radius:25px; font-size:0.95rem; font-weight:700; cursor:pointer; font-family:'Noto Sans KR',sans-serif; }
     </style>
     <style>
         /* 헤더 모바일 최적화 */
@@ -1095,6 +1119,46 @@
             <p style="margin-top:1.5rem;opacity:0.6;">© 2026 배상온 대리점. All rights reserved. | KB손해보험 공식 대리점</p>
         </div>
     </footer>
+
+    <!-- 알아두실사항 모달 -->
+    <div class="info-overlay" id="infoNoticeOverlay" onclick="if(event.target===this)closeInfoNotice()">
+        <div class="info-modal">
+            <div class="info-modal-header">
+                <h3>📋 알아두실사항</h3>
+                <button class="info-modal-close" onclick="closeInfoNotice()">✕</button>
+            </div>
+            <div class="info-modal-body">
+                <p style="font-size:0.82rem;color:#888;margin-bottom:1.2rem;line-height:1.7;">본 안내는 보험약관 및 상품설명서의 주요 내용을 요약한 것으로, 자세한 사항은 해당 보험사의 약관 및 상품설명서를 반드시 확인하시기 바랍니다.</p>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">1</span>보험모집 주체 및 서비스 구조 안내</div><p>보험모집 주체: 배상온 보험대리점(등록번호: 제2026010037호)<br>본 사이트(liab.co.kr)는 보험상품 안내 및 가입 플랫폼이며, 실제 보험계약의 모집 및 체결은 보험대리점 '배상온'을 통해 이루어집니다.<br>보험계약의 인수(승낙) 및 보장, 보험금 지급의 최종 책임은 해당 보험사에 있습니다.<br>보험료 결제 대금은 전자결제대행사(PG)를 통해 해당 보험사로 직접 정산되며, 배상온 및 플랫폼 운영사는 보험료를 보관하거나 수취하지 않습니다.<br>결제 및 전자상거래 관련 서비스는 '바이인'이 운영합니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">2</span>설명의무 및 확인의무</div><p>보험대리점은 보험상품에 대하여 중요한 사항을 설명할 의무가 있습니다.<br>계약자는 보험가입 전 상품설명서 및 약관의 주요 내용을 충분히 설명받고 확인하시기 바랍니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">3</span>기존 계약 해지 후 신규 가입 유의사항</div><p>기존 보험계약을 해지하고 새로운 보험계약을 체결하는 경우, 질병이력·연령증가 등으로 가입이 거절되거나 보험료가 인상될 수 있으며 보장내용이 달라질 수 있습니다.<br>상품에 따라 면책기간, 감액기간, 보험금 지급제한기간이 새로 적용되거나 보장 제한 등 불이익이 발생할 수 있습니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">4</span>보험금 지급 제한</div><p>약관상 면책사유, 지급제한, 지급한도 등 조건에 따라 보험금 지급이 제한될 수 있습니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">5</span>계약의 무효</div><p>계약 체결 시 보험사고가 이미 발생한 경우 계약은 무효가 될 수 있습니다.<br>무효 및 보험료 반환 등 세부사항은 해당 보험사의 약관에 따릅니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">6</span>보장개시일 안내</div><p>보장은 보험사가 청약을 승낙하고 제1회 보험료가 납입된 때부터 약관에서 정한 바에 따라 개시됩니다.<br>보장개시 및 책임개시 관련 상세 기준은 해당 보험사의 약관을 따릅니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">7</span>비례보상(중복 가입 시)</div><p>동일한 위험을 보장하는 다른 보험(공제 포함)이 있는 경우, 각 계약의 보상책임액 비율에 따라 비례보상될 수 있습니다(약관 기준).</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">8</span>계약 전·후 알릴 의무</div><p><strong>계약 전:</strong> 계약자 및 피보험자는 직업, 병력 등 보험사가 질문한 중요한 사항을 사실대로 알려야 하며, 위반 시 계약 해지 또는 보험금 지급 거절 등의 불이익이 발생할 수 있습니다.<br><strong>계약 후:</strong> 위험이 변경되거나 약관이 정한 주요 변경사항(목적물 이전, 구조 변경, 동일 위험의 다른 보험 체결 등)이 발생하면 지체 없이 보험사에 알릴 의무가 있습니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">9</span>청약철회 및 계약 취소</div><p>청약철회: 계약자는 보험증권을 받은 날부터 15일 이내에 청약을 철회할 수 있으며(단, 청약일로부터 30일 초과 시 제한 등 예외 존재), 세부 기준은 약관 및 관련 법령에 따릅니다.<br>청약철회 제한 사례: 진단계약, 보장기간 90일 이내 계약, 보증보험, 법률에 따른 의무보험, 자동차 책임보험, 전문금융소비자 계약 등(상품별 상이).<br>품질보증(계약 취소): 약관 및 청약서 미교부, 중요한 사항 미설명, 자필서명 누락 등 일정 사유가 있는 경우 계약 성립일로부터 3개월 이내 취소가 가능할 수 있습니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">10</span>해약환급금 안내</div><p>해약환급금은 중도해지 시 지급되는 금액으로, 상품 구조 및 비용 공제 등으로 인해 납입보험료보다 적거나 없을 수 있습니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">11</span>예금자보호 및 세제혜택</div><p>예금자보호 여부 및 한도, 세제혜택 적용 여부는 상품별로 다를 수 있으므로 약관 및 상품설명서를 확인하시기 바랍니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">12</span>개인정보보호 안내</div><p>보험계약 관련 개인정보는 계약의 체결, 유지, 보험금 지급 등을 위하여 관련 법령 및 동의 범위 내에서 수집·이용·제공됩니다.<br>제3자 제공(보험사 등) 및 위탁(플랫폼/PG 등) 관련 사항은 개인정보처리방침 및 동의서 내용을 따릅니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">13</span>보험모집질서 및 부당이익 제공 금지</div><p>보험계약 체결과 관련한 특별이익 제공행위 등은 보험업법에 따라 처벌될 수 있습니다.</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">14</span>보험사기 예방 안내</div><p>보험사기는 형법 및 관련 법령에 따라 처벌될 수 있습니다. (금융감독원: 국번없이 1332)</p></div>
+                <div class="info-row"><div class="info-row-title"><span class="info-badge">15</span>상담 및 분쟁조정 안내</div><p>보험상담 및 보험 관련 불만/분쟁은 우선 보험사 고객센터로 문의하시기 바랍니다.<br>처리결과에 이의가 있을 경우 금융감독원(1332)을 통해 민원 또는 분쟁조정 신청이 가능합니다.</p></div>
+                <p style="font-size:0.8rem;color:#aaa;margin-top:1rem;padding-top:1rem;border-top:1px solid #f0f0f0;">[보험대리점 정보] 배상온 보험대리점(등록번호: 제2026010037호)<br>※ 본 안내는 요약본이며, 세부 내용은 보험약관 및 상품설명서가 우선합니다.</p>
+            </div>
+            <div class="info-modal-footer"><button onclick="closeInfoNotice()">확인</button></div>
+        </div>
+    </div>
+
+    <!-- 하단 고정 바 -->
+    <div class="sticky-bottom-bar">
+        <button class="sticky-bottom-btn sbb-notice" onclick="openInfoNotice()">
+            <span>📋</span> 알아두실사항
+        </button>
+        <a class="sticky-bottom-btn sbb-terms" href="20260101_5_드론배상책임보험_보험약관_v2_수정01.pdf" download>
+            <span>📄</span> 약관보기
+        </a>
+    </div>
 
     <script>
     // ── 드론 정보 동적 생성 ───────────────────────────────
@@ -1883,5 +1947,17 @@
 
     </script>
 <script src="/notice-modal.js"></script>
+
+<script>
+    function openInfoNotice() {
+        document.getElementById('infoNoticeOverlay').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeInfoNotice() {
+        document.getElementById('infoNoticeOverlay').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeInfoNotice(); });
+</script>
 </body>
 </html>

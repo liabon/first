@@ -1,5 +1,20 @@
 {
   "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/(.*\\.pdf)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/pdf"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "attachment"
+        }
+      ]
+    }
+  ],
   "rewrites": [
     {
       "source": "/event-insurance",

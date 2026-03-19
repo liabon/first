@@ -582,7 +582,7 @@
     </section>
 
     <!-- ─── Selection Section ─── -->
-    <section class="selection-section">
+    <section class="selection-section" id="selectionSection">
         <h2 class="section-title">드론보험 선택</h2>
         <p class="section-subtitle">용도에 맞는 드론보험을 선택해주세요</p>
 
@@ -655,6 +655,8 @@
                     <p><strong>대표자:</strong> 김리하</p>
                     <p><strong>통신판매업 신고번호:</strong> 제2026-서울동대문-0153호</p>
                     <p><strong>주소:</strong> 서울특별시 동대문구 천호대로 301, 1706호</p>
+                    <p><strong>고객센터:</strong> 010-8461-8712</p>
+                    <p><strong>이메일:</strong> buyinn@naver.com</p>
                 </div>
             </div>
             <div class="footer-notice">
@@ -680,6 +682,13 @@
     </div>
 
     <script>
+        // ── 페이지 진입 시 선택 섹션으로 자동 스크롤 ──
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('selectionSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 600);
+        });
+
         // ── 카카오톡 플로팅 버튼 ──
         document.getElementById('kakaoChatBtn').addEventListener('click', function() {
             var dot = document.getElementById('kakaoDot');

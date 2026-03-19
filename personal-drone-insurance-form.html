@@ -644,7 +644,7 @@
     <div class="main-content">
         <form id="droneForm">
             <!-- Customer Info -->
-            <div class="section-card">
+            <div class="section-card" id="sec-customer">
                 <h2 class="section-title">고객정보 입력</h2>
                 
                 <div class="form-group">
@@ -675,7 +675,7 @@
             </div>
 
             <!-- Insurance Period -->
-            <div class="section-card">
+            <div class="section-card" id="sec-period">
                 <h2 class="section-title">보험기간</h2>
                 
                 <div class="form-row">
@@ -708,7 +708,7 @@
             </div>
 
             <!-- Drone Count -->
-            <div class="section-card">
+            <div class="section-card" id="sec-count">
                 <h2 class="section-title">드론 대수</h2>
                 
                 <div class="form-group">
@@ -719,7 +719,7 @@
             </div>
 
             <!-- Drone Details -->
-            <div class="section-card">
+            <div class="section-card" id="sec-drones">
                 <h2 class="section-title">드론 정보</h2>
                 
                 <div class="notice-box">
@@ -734,7 +734,7 @@
             </div>
 
             <!-- Drone Type Selection -->
-            <div class="section-card">
+            <div class="section-card" id="sec-type">
                 <h2 class="section-title">가입물건 선택</h2>
                 
                 <div class="drone-type-grid">
@@ -762,7 +762,7 @@
             </div>
 
             <!-- Plan Selection -->
-            <div class="section-card">
+            <div class="section-card" id="sec-plan">
                 <h2 class="section-title">보험 플랜 선택</h2>
 
                 <!-- 2대 이상일 때만 표시되는 토글 -->
@@ -901,7 +901,7 @@
 
             </div>
 
-            <div class="button-group">
+            <div class="button-group" id="sec-submit">
                 <button type="button" class="btn btn-secondary" onclick="history.back()">이전</button>
                 <button type="submit" class="btn btn-primary" id="submitBtn">다음 단계로</button>
             </div>
@@ -1633,10 +1633,30 @@
             console.log('✅ 데이터 검증 완료');
             console.log('📊 저장할 데이터:', JSON.stringify(data, null, 2));
             
-            // 4단계: 다음 페이지로 이동
+            // 4단계: 데이터 저장 (sessionStorage + localStorage 테이블)
             sessionStorage.setItem('droneInsuranceData', JSON.stringify(data));
-            console.log('💾 SessionStorage 저장 완료');
-            
+
+            // localStorage 테이블에 누적 저장
+            try {
+                var table = JSON.parse(localStorage.getItem('droneInsuranceTable') || '[]');
+                data._savedAt = new Date().toISOString();
+                data._id = Date.now();
+                table.push(data);
+                localStorage.setItem('droneInsuranceTable', JSON.stringify(table));
+                console.log('💾 localStorage 테이블 저장 완료 (총 ' + table.length + '건)');
+            } catch(e) { console.warn('localStorage 저장 실패:', e); }
+
+            // 서버 API 저장 시도 (실패해도 계속 진행)
+            fetch('/api/insurance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(function(r) {
+                console.log('✅ 서버 저장 완료:', r.status);
+            }).catch(function(e) {
+                console.warn('서버 저장 미연결 (로컬 저장으로 대체):', e.message);
+            });
+
             window.location.href = '/personal-drone-insurance-terms';
         });
 
@@ -1728,6 +1748,57 @@
             updateDroneSections();
             // 동적으로 생성된 필드에도 이벤트 등록
             bindDynamicFields();
+
+            // ── 섹션 자동 스크롤 ──
+            function scrollToNext(sectionId) {
+                setTimeout(function() {
+                    var el = document.getElementById(sectionId);
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 350);
+            }
+
+            // 고객정보 → 보험기간: 이메일 입력 완료 시
+            var emailInput = document.querySelector('[name="email"]');
+            if (emailInput) {
+                emailInput.addEventListener('blur', function() {
+                    var name = document.querySelector('[name="name"]').value;
+                    var phone = document.querySelector('[name="phone"]').value;
+                    var ssn = document.getElementById('birthDate').value;
+                    var ssnBack = document.getElementById('ssnBack').value;
+                    if (name && phone && ssn.length === 6 && ssnBack.length === 7 && this.value) {
+                        scrollToNext('sec-period');
+                    }
+                });
+            }
+
+            // 보험기간 → 드론 대수: 종료일 입력 후
+            var endInput = document.getElementById('insuranceEnd');
+            if (endInput) {
+                endInput.addEventListener('change', function() {
+                    if (document.getElementById('insuranceStart').value && this.value) {
+                        scrollToNext('sec-count');
+                    }
+                });
+            }
+
+            // 드론 대수 → 드론 정보: 대수 변경 시
+            document.getElementById('droneCount').addEventListener('change', function() {
+                scrollToNext('sec-drones');
+            });
+
+            // 드론 타입 선택 → 플랜 선택
+            document.querySelectorAll('.drone-type-card').forEach(function(card) {
+                card.addEventListener('click', function() {
+                    scrollToNext('sec-plan');
+                });
+            });
+
+            // 플랜 선택 → 제출 버튼
+            document.querySelectorAll('.plan-card').forEach(function(card) {
+                card.addEventListener('click', function() {
+                    scrollToNext('sec-submit');
+                });
+            });
         });
 
         // ── 동적 생성 필드에 이벤트 등록 (드론 대수 변경 시마다 호출) ──
@@ -1762,7 +1833,7 @@
                     <p><strong>보험대리점 등록번호:</strong> 제2026010037호</p>
                     <p><strong>주소:</strong> 서울특별시 강남구 테헤란로 117, 9층</p>
                     <p><strong>고객센터:</strong> 010-8461-8712</p>
-                    <p><strong>이메일:</strong> <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e98580888bc78687c780879aa98e84888085c78a8684">[email&#160;protected]</a></p>
+                    <p><strong>이메일:</strong> liab.on.ins@gmail.com</p>
                 </div>
                 <div class="footer-col">
                     <h4>플랫폼 운영 및 결제 처리</h4>
@@ -1771,6 +1842,8 @@
                     <p><strong>대표자:</strong> 김리하</p>
                     <p><strong>통신판매업 신고번호:</strong> 제2026-서울동대문-0153호</p>
                     <p><strong>주소:</strong> 서울특별시 동대문구 천호대로 301, 1706호</p>
+                    <p><strong>고객센터:</strong> 010-8461-8712</p>
+                    <p><strong>이메일:</strong> buyinn@naver.com</p>
                 </div>
             </div>
             <div class="footer-notice">
@@ -1816,7 +1889,7 @@
         <button class="sticky-bottom-btn sbb-notice" onclick="openInfoNotice()">
             <span>📋</span> 알아두실사항
         </button>
-        <a class="sticky-bottom-btn sbb-terms" href="20260101_KB드론배상책임보험_개인용_보험약관_수정01.pdf" download>
+        <a class="sticky-bottom-btn sbb-terms" href="20260101 KB드론배상책임보험(개인용)보험약관_수정01.pdf" download="20260101 KB드론배상책임보험(개인용)보험약관_수정01.pdf">
             <span>📄</span> 약관보기
         </a>
     </div>

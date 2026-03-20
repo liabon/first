@@ -750,6 +750,23 @@
         /* ── 에러 스타일 ── */
         .field-error { border-color:#e74c3c !important; background:#fff5f5 !important; }
 
+        /* ── 자체중량 범위 오류 ── */
+        .weight-range-error {
+            display:none; background:#fff5f5; border:1.5px solid #e74c3c;
+            border-radius:8px; padding:0.65rem 1rem; margin-top:0.7rem;
+            color:#c0392b; font-size:0.87rem; font-weight:600; line-height:1.5;
+        }
+
+        /* ── 동일/개별 모드 토글 탭 ── */
+        .mode-toggle-wrap { display:flex; gap:0.6rem; margin-bottom:1.5rem; flex-wrap:wrap; }
+        .mode-tab {
+            padding:0.6rem 1.2rem; border:2px solid #e0e0e0; border-radius:10px;
+            background:#f8f9fa; color:#999; font-size:0.9rem; font-weight:700;
+            cursor:pointer; font-family:'Noto Sans KR',sans-serif; transition:all 0.2s;
+        }
+        .mode-tab.active { background:#FFB800; color:#1a1a1a; border-color:#FFB800; }
+        .mode-tab:hover:not(.active) { background:#fff9e6; color:#1a1a1a; border-color:#FFB800; }
+
         /* ── 주민번호 결합 입력 ── */
         .ssn-row { display:flex; align-items:center; gap:0.5rem; }
         .ssn-row input { flex:1; }
@@ -800,7 +817,7 @@
         <form id="droneForm">
 
             <!-- 고객정보 -->
-            <div class="section-card">
+            <div class="section-card" id="sec-customer">
                 <h2 class="section-title" id="customerSectionTitle">고객정보 입력</h2>
                 <div class="customer-type-tabs">
                     <button type="button" class="type-tab active" id="tabPersonal" onclick="switchType('personal')">👤 개인 / 개인사업자</button>
@@ -871,7 +888,7 @@
             </div>
 
             <!-- 보험기간 -->
-            <div class="section-card">
+            <div class="section-card" id="sec-period">
                 <h2 class="section-title">보험기간</h2>
                 <div class="form-row">
                     <div class="form-group">
@@ -900,7 +917,7 @@
             </div>
 
             <!-- 드론 대수 -->
-            <div class="section-card">
+            <div class="section-card" id="sec-count">
                 <h2 class="section-title">드론 대수</h2>
                 <div class="form-group">
                     <label>보험 가입할 드론 대수 *</label>
@@ -910,7 +927,7 @@
             </div>
 
             <!-- 드론 정보 -->
-            <div class="section-card">
+            <div class="section-card" id="sec-drones">
                 <h2 class="section-title">드론 정보</h2>
                 <div class="notice-box">
                     <strong>⚠️ 필수 확인사항</strong>
@@ -922,59 +939,9 @@
             </div>
 
             <!-- 가입물건 선택 -->
-            <div class="section-card">
+            <div class="section-card" id="sec-insured">
                 <h2 class="section-title">가입물건 선택</h2>
-
-                <div class="form-group">
-                    <label>자체중량 선택 *</label>
-                    <div class="weight-grid">
-                        <label class="weight-card" onclick="selectWeight(this,'under_25kg')">
-                            <input type="radio" name="drone_weight" value="under_25kg">
-                            <div class="weight-icon">🚁</div>
-                            <div class="weight-label">25kg 미만</div>
-                            <div class="weight-sub">의무/업무/영리</div>
-                        </label>
-                        <label class="weight-card" onclick="selectWeight(this,'25_100kg')">
-                            <input type="radio" name="drone_weight" value="25_100kg">
-                            <div class="weight-icon">🚁</div>
-                            <div class="weight-label">25kg 이상<br>100kg 미만</div>
-                            <div class="weight-sub">의무/업무/영리</div>
-                        </label>
-                        <label class="weight-card" onclick="selectWeight(this,'over_100kg')">
-                            <input type="radio" name="drone_weight" value="over_100kg">
-                            <div class="weight-icon">🚁</div>
-                            <div class="weight-label">100kg 이상</div>
-                            <div class="weight-sub">의무/업무/영리</div>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>드론 유형 *</label>
-                    <div class="drone-flag-grid">
-                        <label class="flag-card" onclick="selectFlag(this,'swarm')">
-                            <input type="radio" name="drone_flag" value="swarm">
-                            <div class="flag-icon">🐝</div>
-                            <div class="flag-label">군집드론</div>
-                        </label>
-                        <label class="flag-card" onclick="selectFlag(this,'rental')">
-                            <input type="radio" name="drone_flag" value="rental">
-                            <div class="flag-icon">🏭</div>
-                            <div class="flag-label">임대사업자 드론</div>
-                        </label>
-                        <label class="flag-card" onclick="selectFlag(this,'none')">
-                            <input type="radio" name="drone_flag" value="none">
-                            <div class="flag-icon">✅</div>
-                            <div class="flag-label">해당없음</div>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- 견적 필요 안내 -->
-                <div class="quote-needed-box" id="quoteNeededBox">
-                    <p id="quoteNeededMsg">개별 견적이 필요합니다.<br>아래 버튼을 눌러 견적/가입 의뢰를 신청해주세요.</p>
-                    <button type="button" class="btn-quote-request" onclick="openQuoteModal()">📋 견적/가입 의뢰하기</button>
-                </div>
+                <div id="insuredContainer"></div>
             </div>
 
 
@@ -1110,6 +1077,8 @@
                     <p><strong>대표자:</strong> 김리하</p>
                     <p><strong>통신판매업 신고번호:</strong> 제2026-서울동대문-0153호</p>
                     <p><strong>주소:</strong> 서울특별시 동대문구 천호대로 301, 1706호</p>
+                    <p><strong>고객센터:</strong> 010-8461-8712</p>
+                    <p><strong>이메일:</strong> buyinn@naver.com</p>
                 </div>
             </div>
             <div class="footer-notice">
@@ -1163,7 +1132,6 @@
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // ── 드론 정보 동적 생성 ───────────────────────────────
     function makeDroneField(i) {
-        const label = i === 0 ? '' : `<div class="drone-info-header"><span class="drone-number">드론 ${i+1}</span></div>`;
         return `
         <div class="drone-info-section" id="droneSection_${i}">
             ${i > 0 ? `<div class="drone-info-header"><span class="drone-number">드론 ${i+1}</span></div>` : ''}
@@ -1180,11 +1148,12 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>드론 신고번호</label>
-                    <input type="text" name="drone_reg_${i}" placeholder="드론 신고번호를 입력해주세요">
+                    <input type="text" name="drone_reg_${i}" placeholder="없으면 '없음' 입력">
                 </div>
                 <div class="form-group">
                     <label>드론 자체중량 (kg) ${i===0?'*':''}</label>
-                    <input type="number" name="drone_weight_${i}" placeholder="예: 0.895" step="0.001" min="0" ${i===0?'required':''}>
+                    <input type="number" id="drone_weight_${i}" name="drone_weight_${i}" placeholder="예: 0.895" step="0.001" min="0" ${i===0?'required':''} oninput="validateWeightMatch(${i})">
+                    <div class="weight-range-error" id="weight_error_${i}"></div>
                 </div>
             </div>
             <div class="form-group" style="max-width:50%">
@@ -1195,20 +1164,23 @@
     }
 
     function updateDroneFields() {
+        saveDroneData(); // 대수 변경 전 현재 입력값 보존
         const count = parseInt(document.getElementById('droneCount').value) || 1;
         const container = document.getElementById('dronesContainer');
         container.innerHTML = '';
         for (let i = 0; i < count; i++) {
             container.insertAdjacentHTML('beforeend', makeDroneField(i));
         }
-        // 플랜 섹션이 표시 중이면 갱신
-        const planSec = document.getElementById('planSection');
-        if (planSec && planSec.classList.contains('show')) {
-            // 대수 줄면 초과 선택 제거
-            Object.keys(selectedPlans).forEach(k => { if (parseInt(k) >= count) delete selectedPlans[k]; });
-            renderPlanSection();
-            updateSubmitBtn();
-        }
+        restoreDroneData(); // 보존했던 입력값 복원
+        // 대수 변경 시 초과 선택 제거
+        Object.keys(selectedWeights).forEach(k => { if (parseInt(k) >= count) delete selectedWeights[k]; });
+        Object.keys(selectedFlags).forEach(k => { if (parseInt(k) >= count) delete selectedFlags[k]; });
+        Object.keys(selectedDeductibles).forEach(k => { if (parseInt(k) >= count) delete selectedDeductibles[k]; });
+        Object.keys(selectedPlans).forEach(k => { if (parseInt(k) >= count) delete selectedPlans[k]; });
+        // 1대이면 same 모드로 리셋
+        if (count === 1) { isSameInsured = true; isSamePlan = true; }
+        renderInsuredSection();
+        checkAndRenderPlan();
     }
 
     // ── 고객 유형 전환 ──────────────────────────────────
@@ -1357,18 +1329,23 @@
     function autoScrollTo(el) {
         if (!el) return;
         setTimeout(function() {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            var rect = el.getBoundingClientRect();
+            if (rect.top > 80) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }, 350);
     }
-    function autoScrollToNextCard(currentEl) {
-        if (!currentEl) return;
-        const card = currentEl.closest('.section-card');
-        if (!card) return;
-        const allCards = Array.from(document.querySelectorAll('.section-card'));
-        const idx = allCards.indexOf(card);
-        if (idx >= 0 && idx < allCards.length - 1) {
-            autoScrollTo(allCards[idx + 1]);
-        }
+
+    // ID로 다음 섹션 스크롤 (아래 방향만)
+    function scrollToNext(sectionId) {
+        setTimeout(function() {
+            var el = document.getElementById(sectionId);
+            if (!el) return;
+            var rect = el.getBoundingClientRect();
+            if (rect.top > 80) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 350);
     }
 
     // ── 연락처 자동 하이픈 포맷 (000-0000-0000) ───────────
@@ -1445,6 +1422,8 @@
             const ne = addYear(rounded);
             endEl.value = toLocal(ne); endEl.min = toLocal(rounded); endEl.max = toLocal(ne);
             calcDur();
+            // 시작일 선택 → 드론 대수로 스크롤
+            scrollToNext('sec-count');
         });
 
         endEl.addEventListener('change', function() {
@@ -1461,59 +1440,298 @@
             }
             this.value = toLocal(rounded);
             calcDur();
+            // 종료일 수정 → 드론 대수로 스크롤
+            scrollToNext('sec-count');
         });
     }
 
-    // ── 가입물건 선택 ─────────────────────────────────────
-    let selectedWeight = '';
-    let selectedFlag   = '';
+    // ── 드론 정보 보존 ──────────────────────────────────────
+    let droneData = {};  // { droneIdx: { model, serial, reg, weight, mtow } }
 
-    function selectWeight(el, val) {
-        document.querySelectorAll('.weight-card').forEach(c => c.classList.remove('selected'));
-        el.classList.add('selected');
-        el.querySelector('input').checked = true;
-        selectedWeight = val;
-        checkQuoteNeeded();
-        // 자체중량만 선택시 스크롤 없음
-    }
-
-    function selectFlag(el, val) {
-        document.querySelectorAll('.flag-card').forEach(c => c.classList.remove('selected'));
-        el.classList.add('selected');
-        el.querySelector('input').checked = true;
-        selectedFlag = val;
-        checkQuoteNeeded();
-        // 자체중량 + 드론유형 둘 다 선택됐을 때만 플랜으로 스크롤
-        const planSec = document.getElementById('planSection');
-        if (selectedWeight && val && planSec && planSec.classList.contains('show')) {
-            autoScrollTo(planSec);
+    function saveDroneData() {
+        const c = parseInt(document.getElementById('droneCount').value) || 1;
+        const container = document.getElementById('dronesContainer');
+        if (!container) return;
+        for (let i = 0; i < c; i++) {
+            droneData[i] = {
+                model:  container.querySelector('[name="drone_model_' + i + '"]')?.value || '',
+                serial: container.querySelector('[name="drone_serial_' + i + '"]')?.value || '',
+                reg:    container.querySelector('[name="drone_reg_' + i + '"]')?.value || '',
+                weight: container.querySelector('#drone_weight_' + i)?.value || '',
+                mtow:   container.querySelector('[name="drone_mtow_' + i + '"]')?.value || '',
+            };
         }
     }
 
-    function checkQuoteNeeded() {
-        const box       = document.getElementById('quoteNeededBox');
-        const msg       = document.getElementById('quoteNeededMsg');
-        const submitBtn = document.getElementById('submitBtn');
-        const planSec   = document.getElementById('planSection');
+    function restoreDroneData() {
+        const container = document.getElementById('dronesContainer');
+        if (!container) return;
+        Object.keys(droneData).forEach(i => {
+            const d = droneData[i];
+            if (!d) return;
+            const m = container.querySelector('[name="drone_model_' + i + '"]');
+            const s = container.querySelector('[name="drone_serial_' + i + '"]');
+            const r = container.querySelector('[name="drone_reg_' + i + '"]');
+            const w = container.querySelector('#drone_weight_' + i);
+            const t = container.querySelector('[name="drone_mtow_' + i + '"]');
+            if (m && d.model)  m.value = d.model;
+            if (s && d.serial) s.value = d.serial;
+            if (r && d.reg)    r.value = d.reg;
+            if (w && d.weight) w.value = d.weight;
+            if (t && d.mtow)   t.value = d.mtow;
+        });
+    }
 
-        const needQuote = (selectedFlag === 'swarm' || selectedFlag === 'rental' || selectedWeight === 'over_100kg');
+    // ── 가입물건 선택 (드론별) ──────────────────────────────
+    let selectedWeights     = {};  // droneIdx → 'under_25kg' | '25_100kg' | 'over_100kg'
+    let selectedFlags       = {};  // droneIdx → 'swarm' | 'rental' | 'none'
+    let selectedDeductibles = {};  // droneIdx → '10' | '100'
+    let selectedPlans       = {};  // droneIdx → '든든형' | '안심형' | '알뜰형'
 
-        if (needQuote) {
-            let reason = '';
-            if (selectedFlag === 'swarm')   reason = '군집드론은';
-            else if (selectedFlag === 'rental') reason = '임대사업자 드론은';
-            else reason = '100kg 이상 드론은';
-            msg.innerHTML = `<strong>${reason} 온라인 가입이 불가합니다.</strong><br>별도 심사를 통해 견적을 산출해야 합니다.<br>아래 버튼을 눌러 견적/가입 의뢰를 신청해주세요.`;
+    let isSameInsured = true;  // 가입물건 동일 여부 (2대+)
+    let isSamePlan    = true;  // 플랜 동일 여부 (2대+)
+
+    // 자체중량(kg) → 범주 변환
+    function getWeightRange(kg) {
+        if (kg < 25)  return 'under_25kg';
+        if (kg < 100) return '25_100kg';
+        return 'over_100kg';
+    }
+
+    // 드론 정보의 자체중량 vs 가입물건 범주 비교 검증
+    function validateWeightMatch(droneIdx) {
+        const wInput = document.getElementById('drone_weight_' + droneIdx);
+        const selW   = selectedWeights[droneIdx];
+        const errEl1 = document.getElementById('weight_error_' + droneIdx);
+        const errEl2 = document.getElementById('insured_weight_error_' + droneIdx);
+        const hide = () => {
+            if (errEl1) errEl1.style.display = 'none';
+            if (errEl2) errEl2.style.display = 'none';
+        };
+        if (!wInput || !wInput.value || !selW) { hide(); return true; }
+        const kg = parseFloat(wInput.value);
+        if (isNaN(kg) || kg <= 0) { hide(); return true; }
+        const expected = getWeightRange(kg);
+        const labels = { under_25kg: '25kg 미만', '25_100kg': '25kg 이상 100kg 미만', over_100kg: '100kg 이상' };
+        if (expected !== selW) {
+            const msg = `⚠️ 드론 ${droneIdx+1} 자체중량(${kg}kg)이 선택한 가입물건 범위(${labels[selW]})와 맞지 않습니다. ${labels[expected]}을(를) 선택해주세요.`;
+            if (errEl1) { errEl1.textContent = msg; errEl1.style.display = 'block'; }
+            if (errEl2) { errEl2.textContent = msg; errEl2.style.display = 'block'; }
+            return false;
+        }
+        hide();
+        return true;
+    }
+
+    function selectWeight(droneIdx, el, val) {
+        const grid = el.closest('.weight-grid');
+        if (grid) grid.querySelectorAll('.weight-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        el.querySelector('input').checked = true;
+        selectedWeights[droneIdx] = val;
+        // 동일 모드면 모든 드론에 복사
+        if (isSameInsured) {
+            const cnt = parseInt(document.getElementById('droneCount').value) || 1;
+            for (let i = 0; i < cnt; i++) selectedWeights[i] = val;
+        }
+        validateWeightMatch(droneIdx);
+        updateInsuredBadge(droneIdx);
+        updateQuoteNeededBox(droneIdx);
+        checkAndRenderPlan();
+    }
+
+    function selectFlag(droneIdx, el, val) {
+        const grid = el.closest('.drone-flag-grid');
+        if (grid) grid.querySelectorAll('.flag-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        el.querySelector('input').checked = true;
+        selectedFlags[droneIdx] = val;
+        // 동일 모드면 모든 드론에 복사
+        if (isSameInsured) {
+            const cnt = parseInt(document.getElementById('droneCount').value) || 1;
+            for (let i = 0; i < cnt; i++) selectedFlags[i] = val;
+        }
+        updateInsuredBadge(droneIdx);
+        updateQuoteNeededBox(droneIdx);
+        checkAndRenderPlan();
+    }
+
+    function updateInsuredBadge(droneIdx) {
+        const badge = document.querySelector('#insured_accordion_' + droneIdx + ' .drone-accordion-badge');
+        if (!badge) return;
+        const w = selectedWeights[droneIdx] || '';
+        const f = selectedFlags[droneIdx] || '';
+        if (w && f) {
+            const wL = { under_25kg: '25kg미만', '25_100kg': '25~100kg', over_100kg: '100kg이상' }[w] || '';
+            const fL = { swarm: '군집드론', rental: '임대사업자', none: '해당없음' }[f] || '';
+            badge.textContent = `${wL} / ${fL}`;
+            badge.style.background = '';
+            badge.style.color = '';
+        } else {
+            badge.textContent = '미선택';
+            badge.style.background = '#f0f0f0';
+            badge.style.color = '#999';
+        }
+    }
+
+    function updateQuoteNeededBox(droneIdx) {
+        const box = document.getElementById('quote_needed_' + droneIdx);
+        const msg = document.getElementById('quote_needed_msg_' + droneIdx);
+        if (!box) return;
+        const w = selectedWeights[droneIdx] || '';
+        const f = selectedFlags[droneIdx] || '';
+        const need = (f === 'swarm' || f === 'rental' || w === 'over_100kg');
+        if (need) {
+            const reason = f === 'swarm' ? '군집드론은' : f === 'rental' ? '임대사업자 드론은' : '100kg 이상 드론은';
+            if (msg) msg.innerHTML = `<strong>${reason} 온라인 가입이 불가합니다.</strong><br>별도 심사를 통해 견적을 산출해야 합니다.<br>아래 버튼을 눌러 견적/가입 의뢰를 신청해주세요.`;
             box.classList.add('show');
-            planSec.classList.remove('show');
         } else {
             box.classList.remove('show');
-            if (selectedWeight && selectedFlag) {
-                renderPlanSection();
-                planSec.classList.add('show');
-                // 플랜 선택 완료 여부로 버튼 활성화
-                updateSubmitBtn();
+        }
+    }
+
+    // 가입물건 패널 HTML 생성 (드론 1대 or 아코디언 내부)
+    function buildInsuredPanel(droneIdx) {
+        const w = selectedWeights[droneIdx] || '';
+        const f = selectedFlags[droneIdx] || '';
+        const need = (f === 'swarm' || f === 'rental' || w === 'over_100kg');
+        const quoteReason = need ? (f === 'swarm' ? '군집드론은' : f === 'rental' ? '임대사업자 드론은' : '100kg 이상 드론은') : '';
+        return `
+        <div class="form-group">
+            <label>자체중량 선택 *</label>
+            <div class="weight-grid">
+                <label class="weight-card ${w==='under_25kg'?'selected':''}" onclick="selectWeight(${droneIdx},this,'under_25kg')">
+                    <input type="radio" name="drone_weight_cat_${droneIdx}" value="under_25kg" ${w==='under_25kg'?'checked':''}>
+                    <div class="weight-icon">🚁</div><div class="weight-label">25kg 미만</div><div class="weight-sub">의무/업무/영리</div>
+                </label>
+                <label class="weight-card ${w==='25_100kg'?'selected':''}" onclick="selectWeight(${droneIdx},this,'25_100kg')">
+                    <input type="radio" name="drone_weight_cat_${droneIdx}" value="25_100kg" ${w==='25_100kg'?'checked':''}>
+                    <div class="weight-icon">🚁</div><div class="weight-label">25kg 이상<br>100kg 미만</div><div class="weight-sub">의무/업무/영리</div>
+                </label>
+                <label class="weight-card ${w==='over_100kg'?'selected':''}" onclick="selectWeight(${droneIdx},this,'over_100kg')">
+                    <input type="radio" name="drone_weight_cat_${droneIdx}" value="over_100kg" ${w==='over_100kg'?'checked':''}>
+                    <div class="weight-icon">🚁</div><div class="weight-label">100kg 이상</div><div class="weight-sub">의무/업무/영리</div>
+                </label>
+            </div>
+            <div class="weight-range-error" id="insured_weight_error_${droneIdx}"></div>
+        </div>
+        <div class="form-group">
+            <label>드론 유형 *</label>
+            <div class="drone-flag-grid">
+                <label class="flag-card ${f==='swarm'?'selected':''}" onclick="selectFlag(${droneIdx},this,'swarm')">
+                    <input type="radio" name="drone_flag_cat_${droneIdx}" value="swarm" ${f==='swarm'?'checked':''}><div class="flag-icon">🐝</div><div class="flag-label">군집드론</div>
+                </label>
+                <label class="flag-card ${f==='rental'?'selected':''}" onclick="selectFlag(${droneIdx},this,'rental')">
+                    <input type="radio" name="drone_flag_cat_${droneIdx}" value="rental" ${f==='rental'?'checked':''}><div class="flag-icon">🏭</div><div class="flag-label">임대사업자 드론</div>
+                </label>
+                <label class="flag-card ${f==='none'?'selected':''}" onclick="selectFlag(${droneIdx},this,'none')">
+                    <input type="radio" name="drone_flag_cat_${droneIdx}" value="none" ${f==='none'?'checked':''}><div class="flag-icon">✅</div><div class="flag-label">해당없음</div>
+                </label>
+            </div>
+        </div>
+        <div class="quote-needed-box ${need?'show':''}" id="quote_needed_${droneIdx}">
+            <p id="quote_needed_msg_${droneIdx}">${need?`<strong>${quoteReason} 온라인 가입이 불가합니다.</strong><br>별도 심사를 통해 견적을 산출해야 합니다.<br>아래 버튼을 눌러 견적/가입 의뢰를 신청해주세요.`:''}</p>
+            <button type="button" class="btn-quote-request" onclick="openQuoteModal()">📋 견적/가입 의뢰하기</button>
+        </div>`;
+    }
+
+    // 가입물건 모드 토글
+    function toggleInsuredMode(same) {
+        isSameInsured = same;
+        if (same) {
+            // 동일 모드: 드론 0 선택을 나머지에 복사
+            const cnt = parseInt(document.getElementById('droneCount').value) || 1;
+            for (let i = 1; i < cnt; i++) {
+                selectedWeights[i] = selectedWeights[0] || '';
+                selectedFlags[i]   = selectedFlags[0]   || '';
             }
+        }
+        renderInsuredSection();
+        checkAndRenderPlan();
+    }
+
+    // 가입물건 섹션 렌더
+    function renderInsuredSection() {
+        const count = parseInt(document.getElementById('droneCount').value) || 1;
+        const container = document.getElementById('insuredContainer');
+        if (!container) return;
+        let html = '';
+
+        // 2대 이상: 동일/개별 토글 버튼 표시
+        if (count >= 2) {
+            html += `
+            <div class="mode-toggle-wrap">
+                <button type="button" class="mode-tab ${isSameInsured?'active':''}" onclick="toggleInsuredMode(true)">✅ 모든 드론 동일한 가입물건</button>
+                <button type="button" class="mode-tab ${!isSameInsured?'active':''}" onclick="toggleInsuredMode(false)">⚙️ 가입물건이 달라요</button>
+            </div>`;
+        }
+
+        if (count === 1 || isSameInsured) {
+            // 단일 또는 동일 모드: 드론 0 패널 하나만 표시
+            html += buildInsuredPanel(0);
+        } else {
+            // 개별 모드: 드론별 아코디언
+            for (let i = 0; i < count; i++) {
+                const w = selectedWeights[i] || '';
+                const f = selectedFlags[i] || '';
+                const isComplete = w && f;
+                let badgeHtml = isComplete
+                    ? (() => {
+                        const wL = { under_25kg:'25kg미만','25_100kg':'25~100kg',over_100kg:'100kg이상' }[w]||'';
+                        const fL = { swarm:'군집드론',rental:'임대사업자',none:'해당없음' }[f]||'';
+                        return `<span class="drone-accordion-badge">${wL} / ${fL}</span>`;
+                    })()
+                    : `<span class="drone-accordion-badge" style="background:#f0f0f0;color:#999;">미선택</span>`;
+                const open = !isComplete;
+                html += `
+                <div class="drone-plan-accordion" id="insured_accordion_${i}">
+                    <div class="drone-accordion-header ${open?'open':''}" onclick="toggleInsuredAccordion(${i})">
+                        <span class="drone-accordion-title">드론 ${i+1}</span>
+                        <div style="display:flex;align-items:center;gap:0.8rem;">${badgeHtml}<span class="drone-accordion-arrow">▼</span></div>
+                    </div>
+                    <div class="drone-accordion-body ${open?'open':''}" id="insured_body_${i}">
+                        ${buildInsuredPanel(i)}
+                    </div>
+                </div>`;
+            }
+        }
+        container.innerHTML = html;
+    }
+
+    function toggleInsuredAccordion(i) {
+        const body   = document.getElementById('insured_body_' + i);
+        const header = document.querySelector('#insured_accordion_' + i + ' .drone-accordion-header');
+        if (!body) return;
+        const isOpen = body.classList.toggle('open');
+        if (header) header.classList.toggle('open', isOpen);
+    }
+
+    // 플랜 섹션 표시 여부 결정
+    function checkAndRenderPlan() {
+        const count   = parseInt(document.getElementById('droneCount').value) || 1;
+        const planSec = document.getElementById('planSection');
+        // 동일 모드: 드론 0 선택을 나머지에 전파
+        if (isSameInsured && count > 1) {
+            const w0 = selectedWeights[0]||'', f0 = selectedFlags[0]||'';
+            for (let i = 1; i < count; i++) {
+                selectedWeights[i] = w0;
+                selectedFlags[i]   = f0;
+            }
+        }
+        let allComplete = true, anyQuote = false;
+        for (let i = 0; i < count; i++) {
+            const w = selectedWeights[i]||'', f = selectedFlags[i]||'';
+            if (!w || !f) allComplete = false;
+            if (f==='swarm'||f==='rental'||w==='over_100kg') anyQuote = true;
+        }
+        if (!anyQuote && allComplete) {
+            const wasHidden = !planSec.classList.contains('show');
+            planSec.classList.add('show');
+            renderPlanSection();
+            updateSubmitBtn();
+            if (wasHidden) autoScrollTo(planSec);
+        } else {
+            planSec.classList.remove('show');
         }
     }
 
@@ -1657,22 +1875,62 @@
             return;
         }
 
-        // ─── 2단계: 가입물건 - 자체중량 ───
-        if (!selectedWeight) {
-            markCardGroupErr(document.querySelectorAll('.weight-card'));
-            document.querySelector('.weight-grid').scrollIntoView({ behavior:'smooth', block:'center' });
-            return;
+        // 동일 모드 전파 (제출 전 확정)
+        if (isSameInsured && count > 1) {
+            const w0 = selectedWeights[0]||'', f0 = selectedFlags[0]||'';
+            for (let i = 1; i < count; i++) { selectedWeights[i] = w0; selectedFlags[i] = f0; }
+        }
+        if (isSamePlan && count > 1) {
+            const d0 = selectedDeductibles[0]||'10', p0 = selectedPlans[0]||'';
+            for (let i = 1; i < count; i++) { selectedDeductibles[i] = d0; selectedPlans[i] = p0; }
         }
 
-        // ─── 3단계: 가입물건 - 드론유형 ───
-        if (!selectedFlag) {
-            markCardGroupErr(document.querySelectorAll('.flag-card'));
-            document.querySelector('.drone-flag-grid').scrollIntoView({ behavior:'smooth', block:'center' });
+        // ─── 2단계: 가입물건 - 드론별 자체중량 선택 ───
+        for (let i = 0; i < count; i++) {
+            if (!selectedWeights[i]) {
+                const body = document.getElementById('insured_body_' + i) || document.getElementById('insuredContainer');
+                if (body) {
+                    const grid = body.querySelector('.weight-grid');
+                    if (grid) {
+                        markCardGroupErr(grid.querySelectorAll('.weight-card'));
+                        grid.scrollIntoView({ behavior:'smooth', block:'center' });
+                    }
+                }
+                return;
+            }
+        }
+
+        // ─── 3단계: 가입물건 - 드론별 유형 선택 ───
+        for (let i = 0; i < count; i++) {
+            if (!selectedFlags[i]) {
+                const body = document.getElementById('insured_body_' + i) || document.getElementById('insuredContainer');
+                if (body) {
+                    const grid = body.querySelector('.drone-flag-grid');
+                    if (grid) {
+                        markCardGroupErr(grid.querySelectorAll('.flag-card'));
+                        grid.scrollIntoView({ behavior:'smooth', block:'center' });
+                    }
+                }
+                return;
+            }
+        }
+
+        // ─── 자체중량 범위 검증 ───
+        let weightRangeErr = false;
+        for (let i = 0; i < count; i++) {
+            if (!validateWeightMatch(i)) weightRangeErr = true;
+        }
+        if (weightRangeErr) {
+            const firstErr = document.querySelector('.weight-range-error[style*="block"]');
+            if (firstErr) firstErr.scrollIntoView({ behavior:'smooth', block:'center' });
             return;
         }
 
         // 견적 필요 케이스 → 모달
-        const needQuote = (selectedFlag === 'swarm' || selectedFlag === 'rental' || selectedWeight === 'over_100kg');
+        const needQuote = Array.from({length:count}, (_,i) => {
+            const w = selectedWeights[i]||'', f = selectedFlags[i]||'';
+            return f==='swarm'||f==='rental'||w==='over_100kg';
+        }).some(Boolean);
         if (needQuote) {
             openQuoteModal();
             return;
@@ -1687,9 +1945,7 @@
             const planSec = document.getElementById('planSection');
             if (planSec) {
                 planSec.scrollIntoView({ behavior:'smooth', block:'start' });
-                // 플랜 테이블 하이라이트
-                const planCols = planSec.querySelectorAll('.plan-col-header');
-                planCols.forEach(function(c) {
+                planSec.querySelectorAll('.plan-col-header').forEach(function(c) {
                     c.style.background = '#fff5f5';
                     setTimeout(function(){ c.style.background = ''; }, 5000);
                 });
@@ -1706,7 +1962,6 @@
         if (currentType === 'personal') {
             params.set('phone', getPhoneRaw(document.getElementById('personalPhone')));
             params.set('customer_type', 'personal');
-            // 주민번호 뒷자리 암호화
             var ssnRaw = document.getElementById('ssnBack').value;
             params.set('ssn_back', encryptSSN(ssnRaw));
         } else {
@@ -1716,17 +1971,25 @@
             params.set('customer_type', 'corporate');
         }
 
-        // 플랜 정보
-        params.set('selected_deductible', selectedDeductible);
-        const prices = PLAN_PRICES[selectedWeight]?.[selectedDeductible] || {};
+        // 플랜 정보 (드론별 개별 저장)
+        let totalPrice = 0;
         for (let i = 0; i < count; i++) {
             const plan = selectedPlans[i] || '';
+            const w    = selectedWeights[i] || '';
+            const ded  = selectedDeductibles[i] || '10';
+            const f    = selectedFlags[i] || '';
+            const prices = PLAN_PRICES[w]?.[ded] || {};
+            const price  = prices[plan] || 0;
             params.set('plan_name_' + i, plan);
-            params.set('plan_price_' + i, prices[plan] || 0);
+            params.set('plan_price_' + i, price);
             params.set('plan_coverage_personal_' + i, PLAN_COVERAGE[plan]?.personal || '');
             params.set('plan_coverage_property_' + i, PLAN_COVERAGE[plan]?.property || '');
+            params.set('drone_weight_cat_' + i, w);
+            params.set('drone_deductible_' + i, ded);
+            params.set('drone_flag_' + i, f);
+            totalPrice += price;
         }
-        params.set('plan_total_price', Array.from({length:count}, (_,i) => prices[selectedPlans[i]]||0).reduce((a,b)=>a+b,0));
+        params.set('plan_total_price', totalPrice);
         sessionStorage.setItem('droneFormData', params.toString());
         window.location.href = '/business-drone-insurance-terms';
     });
@@ -1752,48 +2015,82 @@
     };
     const PLAN_NAMES = ['든든형', '안심형', '알뜰형'];
 
-    let selectedDeductible = '10'; // '10' or '100'
-    let selectedPlans = {};        // { droneIndex: '든든형' | '안심형' | '알뜰형' }
+    // 플랜 모드 토글
+    function togglePlanMode(same) {
+        isSamePlan = same;
+        if (same) {
+            // 동일 모드: 드론 0 선택을 나머지에 복사
+            const cnt = parseInt(document.getElementById('droneCount').value) || 1;
+            for (let i = 1; i < cnt; i++) {
+                selectedDeductibles[i] = selectedDeductibles[0] || '10';
+                selectedPlans[i]       = selectedPlans[0] || '';
+            }
+        }
+        renderPlanSection();
+    }
 
-    function setDeductible(val) {
-        selectedDeductible = val;
-        document.querySelectorAll('.toggle-btn').forEach(b => b.classList.toggle('active', b.dataset.val === val));
+    // 자기부담금 설정
+    function setDeductible(droneIdx, val) {
+        selectedDeductibles[droneIdx] = val;
+        // 동일 플랜 모드면 모든 드론에 복사
+        if (isSamePlan) {
+            const cnt = parseInt(document.getElementById('droneCount').value) || 1;
+            for (let i = 0; i < cnt; i++) selectedDeductibles[i] = val;
+        }
         renderPlanSection();
     }
 
     function renderPlanSection() {
         const inner = document.getElementById('planSectionInner');
         const count = parseInt(document.getElementById('droneCount').value) || 1;
+        let html = '';
 
-        // 자기부담금 토글
-        let html = `
+        // 2대 이상: 동일/개별 플랜 토글 버튼 표시
+        if (count >= 2) {
+            html += `
+            <div class="mode-toggle-wrap">
+                <button type="button" class="mode-tab ${isSamePlan?'active':''}" onclick="togglePlanMode(true)">✅ 모든 드론 동일한 플랜</button>
+                <button type="button" class="mode-tab ${!isSamePlan?'active':''}" onclick="togglePlanMode(false)">⚙️ 플랜이 달라요</button>
+            </div>`;
+        }
+
+        if (count === 1 || isSamePlan) {
+            // 단일 또는 동일 모드: 드론 0 기준으로 하나만 표시
+            const ded = selectedDeductibles[0] || '10';
+            html += `
             <div class="deductible-toggle">
                 <span class="deductible-label">자기부담금 선택</span>
                 <div class="toggle-btns">
-                    <button type="button" class="toggle-btn ${selectedDeductible==='10'?'active':''}" data-val="10" onclick="setDeductible('10')">10만원</button>
-                    <button type="button" class="toggle-btn ${selectedDeductible==='100'?'active':''}" data-val="100" onclick="setDeductible('100')">100만원</button>
+                    <button type="button" class="toggle-btn ${ded==='10'?'active':''}" onclick="setDeductible(0,'10')">10만원</button>
+                    <button type="button" class="toggle-btn ${ded==='100'?'active':''}" onclick="setDeductible(0,'100')">100만원</button>
                 </div>
             </div>`;
-
-        if (count === 1) {
-            // 단일 드론: 플랜 테이블 바로 표시
             html += buildPlanTable(0);
         } else {
-            // 2대 이상: 드론별 아코디언
+            // 개별 모드: 드론별 아코디언 (자기부담금 + 플랜 각각)
             for (let i = 0; i < count; i++) {
-                const chosenPlan = selectedPlans[i] || '';
-                const badge = chosenPlan ? `<span class="drone-accordion-badge">${chosenPlan} 선택됨</span>` : `<span class="drone-accordion-badge" style="background:#f0f0f0;color:#999;">미선택</span>`;
-                const isOpen = (i === 0) || chosenPlan;
+                const w = selectedWeights[i]||'', f = selectedFlags[i]||'';
+                if (f==='swarm'||f==='rental'||w==='over_100kg') continue; // 견적필요 드론 제외
+                const ded    = selectedDeductibles[i] || '10';
+                const chosen = selectedPlans[i] || '';
+                const badge  = chosen
+                    ? `<span class="drone-accordion-badge">${chosen} 선택됨</span>`
+                    : `<span class="drone-accordion-badge" style="background:#f0f0f0;color:#999;">미선택</span>`;
+                const isOpen = !chosen || i === 0;
                 html += `
                 <div class="drone-plan-accordion" id="accordion_${i}">
                     <div class="drone-accordion-header ${isOpen?'open':''}" onclick="toggleAccordion(${i})">
                         <span class="drone-accordion-title">드론 ${i+1}</span>
-                        <div style="display:flex;align-items:center;gap:0.8rem;">
-                            ${badge}
-                            <span class="drone-accordion-arrow">▼</span>
-                        </div>
+                        <div style="display:flex;align-items:center;gap:0.8rem;">${badge}<span class="drone-accordion-arrow">▼</span></div>
                     </div>
                     <div class="drone-accordion-body ${isOpen?'open':''}" id="accordionBody_${i}">
+                        <div class="deductible-toggle">
+                            <span class="deductible-label">자기부담금 선택</span>
+                            <div class="toggle-btns">
+                                <button type="button" class="toggle-btn ${ded==='10'?'active':''}" onclick="setDeductible(${i},'10')">10만원</button>
+                                <button type="button" class="toggle-btn ${ded==='100'?'active':''}" onclick="setDeductible(${i},'100')">100만원</button>
+                            </div>
+                        </div>
                         ${buildPlanTable(i)}
                     </div>
                 </div>`;
@@ -1805,21 +2102,9 @@
     }
 
     function buildPlanTable(droneIdx) {
-        const prices = PLAN_PRICES[selectedWeight]?.[selectedDeductible] || {};
-        let cols = '';
-        PLAN_NAMES.forEach(planName => {
-            const price = prices[planName] || 0;
-            const cov   = PLAN_COVERAGE[planName];
-            const isSel = selectedPlans[droneIdx] === planName;
-            cols += `
-                <td class="plan-col ${isSel?'selected':''}" onclick="selectPlan(${droneIdx},'${planName}')">
-                    <div class="plan-radio-wrap">
-                        <input type="radio" name="plan_radio_${droneIdx}" value="${planName}" ${isSel?'checked':''} onchange="selectPlan(${droneIdx},'${planName}')">
-                        <span class="plan-name-text">${planName}</span>
-                        <span class="plan-price-text">${price.toLocaleString()}원</span>
-                    </div>
-                </td>`;
-        });
+        const w   = selectedWeights[droneIdx] || 'under_25kg';
+        const ded = selectedDeductibles[droneIdx] || '10';
+        const prices = PLAN_PRICES[w]?.[ded] || {};
 
         return `
             <div class="plan-table-wrap">
@@ -1860,22 +2145,28 @@
 
     function selectPlan(droneIdx, planName) {
         selectedPlans[droneIdx] = planName;
+        // 동일 플랜 모드면 모든 드론에 복사
+        if (isSamePlan) {
+            const cnt = parseInt(document.getElementById('droneCount').value) || 1;
+            for (let i = 0; i < cnt; i++) selectedPlans[i] = planName;
+        }
         renderPlanSection();
-        // 아코디언이 열려있으면 유지
-        const body = document.getElementById('accordionBody_' + droneIdx);
+        const body   = document.getElementById('accordionBody_' + droneIdx);
         const header = body ? body.previousElementSibling : null;
         if (body && !body.classList.contains('open')) {
             body.classList.add('open');
             if (header) header.classList.add('open');
         }
         updateSubmitBtn();
-        // 모든 드론 플랜이 선택되었으면 → 다음 버튼으로 스크롤
+        // 모든 (견적불필요) 드론 플랜이 선택되면 → 다음 버튼으로 스크롤
         const count = parseInt(document.getElementById('droneCount').value) || 1;
         let allDone = true;
-        for (let i = 0; i < count; i++) { if (!selectedPlans[i]) { allDone = false; break; } }
-        if (allDone) {
-            autoScrollTo(document.querySelector('.button-group'));
+        for (let i = 0; i < count; i++) {
+            const w = selectedWeights[i]||'', f = selectedFlags[i]||'';
+            const needQ = f==='swarm'||f==='rental'||w==='over_100kg';
+            if (!needQ && !selectedPlans[i]) { allDone = false; break; }
         }
+        if (allDone) autoScrollTo(document.querySelector('.button-group'));
     }
 
     function toggleAccordion(i) {
@@ -1887,17 +2178,17 @@
     }
 
     function updateTotalBox() {
-        const count  = parseInt(document.getElementById('droneCount').value) || 1;
-        const prices = PLAN_PRICES[selectedWeight]?.[selectedDeductible] || {};
-        let total = 0;
-        let allSelected = true;
+        const count = parseInt(document.getElementById('droneCount').value) || 1;
+        let total = 0, allSelected = true;
         for (let i = 0; i < count; i++) {
+            const w   = selectedWeights[i] || '';
+            const f   = selectedFlags[i] || '';
+            const ded = selectedDeductibles[i] || '10';
             const plan = selectedPlans[i];
-            if (plan && prices[plan]) {
-                total += prices[plan];
-            } else {
-                allSelected = false;
-            }
+            if (f==='swarm'||f==='rental'||w==='over_100kg') { allSelected = false; continue; }
+            const prices = PLAN_PRICES[w]?.[ded] || {};
+            if (plan && prices[plan]) total += prices[plan];
+            else allSelected = false;
         }
         const box = document.getElementById('planTotalBox');
         const amt = document.getElementById('planTotalAmount');
@@ -1912,18 +2203,71 @@
     }
 
     function updateSubmitBtn() {
-        // 버튼 항상 활성화 (견적필요 케이스만 제외)
         const submitBtn = document.getElementById('submitBtn');
         if (!submitBtn) return;
         submitBtn.disabled = false;
         updateTotalBox();
     }
 
+    // ── 고객정보 완료 체크 ────────────────────────────────
+    function checkCustomerComplete() {
+        var ok = false;
+        if (currentType === 'personal') {
+            var name  = (document.getElementById('personalName')?.value || '').trim();
+            var bd    = document.getElementById('birthDate')?.value || '';
+            var ssn   = document.getElementById('ssnBack')?.value || '';
+            var phone = getPhoneRaw(document.getElementById('personalPhone'));
+            var email = (document.getElementById('personalEmail')?.value || '').trim();
+            ok = name && bd.length === 6 && ssn.length === 7 && phone.length >= 10 && email;
+        } else {
+            var corpNum  = getCorpNumberRaw();
+            var corpName = (document.getElementById('corpName')?.value || '').trim();
+            var cEmail   = (document.getElementById('corpEmail')?.value || '').trim();
+            ok = corpNum.length === 10 && bizNumberValid && corpName && cEmail;
+        }
+        if (ok) scrollToNext('sec-period');
+    }
+
+    // 드론 정보 전부 입력됐는지 체크 → 가입물건으로 스크롤
+    function checkDroneInfoComplete() {
+        var count = parseInt(document.getElementById('droneCount').value) || 1;
+        var container = document.getElementById('dronesContainer');
+        if (!container) return;
+        for (var i = 0; i < count; i++) {
+            var model  = (container.querySelector('[name="drone_model_' + i + '"]')?.value || '').trim();
+            var serial = (container.querySelector('[name="drone_serial_' + i + '"]')?.value || '').trim();
+            var weight = container.querySelector('#drone_weight_' + i)?.value || '';
+            var mtow   = container.querySelector('[name="drone_mtow_' + i + '"]')?.value || '';
+            if (!model || !serial || !weight || !mtow) return;
+        }
+        scrollToNext('sec-insured');
+    }
+
     // ── 페이지 로드 시 초기화 ──
     window.addEventListener('DOMContentLoaded', function() {
         setupInsuranceDates();
-        renderPlanSection();
+        updateDroneFields(); // dronesContainer + insuredContainer + plan 초기화
         updateSubmitBtn();
+
+        // ① 고객정보 → 보험기간: 이메일 blur 시 완료 체크
+        ['personalEmail', 'corpEmail'].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.addEventListener('blur', checkCustomerComplete);
+        });
+
+        // ② 드론 대수 변경 → 드론 정보로 스크롤
+        document.getElementById('droneCount').addEventListener('change', function() {
+            scrollToNext('sec-drones');
+        });
+
+        // ③ 드론 정보 입력 완료 → 가입물건으로 스크롤 (blur 위임)
+        document.getElementById('dronesContainer').addEventListener('blur', function(e) {
+            var n = e.target.name || '';
+            if (n.startsWith('drone_') || e.target.id.startsWith('drone_weight_')) {
+                checkDroneInfoComplete();
+            }
+        }, true);
+
         // CloudFlare 이메일 보호 우회 - 동적 렌더링
         var _e = 'liab.on.ins@gmail.com';
         document.querySelectorAll('.js-email').forEach(function(el) {

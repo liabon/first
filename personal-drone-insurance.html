@@ -335,6 +335,28 @@
         document.body.style.overflow = '';
     }
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeInfoNotice(); });
+
+    // bfcache(뒤로 캐시)로 복원될 때 폼 초기화
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+            // 라디오 버튼 초기화
+            document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
+                radio.checked = false;
+            });
+            // 스타일 초기화
+            ['q1', 'q2'].forEach(function(q) {
+                var num = q.replace('q', '');
+                document.getElementById(q + '_yes').classList.remove('selected-ok', 'selected-wrong');
+                document.getElementById(q + '_no').classList.remove('selected-ok', 'selected-wrong');
+                document.getElementById('card' + num).classList.remove('correct', 'wrong');
+            });
+            // 박스 초기화
+            document.getElementById('businessRedirect').classList.remove('show');
+            document.getElementById('errorBox').classList.remove('show');
+            document.getElementById('successBox').classList.remove('show');
+            document.getElementById('btnNext').disabled = true;
+        }
+    });
     </script>
 </body>
 </html>

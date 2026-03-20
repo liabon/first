@@ -1,7 +1,7 @@
 // api/save-business-drone.js
 // POST /api/save-business-drone
-// business-drone-insurance-complete.html 에서 호출
-// drone_applications + business_drone_details 에 저장
+// business-drone-insurance-terms.html 에서 호출
+// drone_applications (customer_type='individual'|'corporate') + business_drone_details 저장
 
 const { Pool } = require('pg');
 let ssnCrypto;
@@ -24,6 +24,16 @@ function getPool() {
   return pool;
 }
 
+// "2026-03-20T09:00" → { date: "2026-03-20", time: "09:00" }
+function splitDateTime(dtStr) {
+  if (!dtStr) return { date: null, time: null };
+  const parts = dtStr.replace('T', ' ').split(' ');
+  return {
+    date: parts[0] || null,
+    time: parts[1] ? parts[1].slice(0, 5) : null
+  };
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -44,46 +54,53 @@ module.exports = async function handler(req, res) {
     const isCorp       = !!(d.corp_name);
     const customerType = isCorp ? 'corporate' : 'individual';
     const droneCount   = parseInt(d.drone_count) || 1;
+    const planMode     = d.plan_mode || 'individual';
     const totalPremium = parseInt(d.plan_total_price || 0);
     const weightLabel  = d.drone_weight
       ? (WEIGHT_LABELS[d.drone_weight] || d.drone_weight)
       : null;
 
+    // ssn_back 암호화
     let ssnEncrypted = null;
     if (d.ssn_back && ssnCrypto) {
       try {
-        const ssnPlain = ssnCrypto.decryptFromFront(d.ssn_back);
-        ssnEncrypted = ssnCrypto.encryptForDB(ssnPlain);
-      } catch (e) { console.warn('[save-business-drone] ssn 암호화 실패:', e.message); }
+        const plain = ssnCrypto.decryptFromFront(d.ssn_back);
+        ssnEncrypted = ssnCrypto.encryptForDB(plain);
+      } catch(e) { console.warn('[save-business-drone] ssn 암호화 실패:', e.message); }
     }
+
+    const start = splitDateTime(d.insurance_start);
+    const end   = splitDateTime(d.insurance_end);
 
     await client.query('BEGIN');
 
-    // ── 1. 마스터 레코드 저장 ──
+    // ── 1. 마스터 저장 ──
     const masterResult = await client.query(`
       INSERT INTO drone_applications (
         status, source_page, customer_type,
-        name, birth_date, ssn_back, gender, phone, email,
+        name, birth_date, ssn_back, phone, email,
         corp_name, corp_number, corp_reg_number, corp_contact_name, corp_phone, corp_email,
-        coverage_start, coverage_end,
+        coverage_start_date, coverage_start_time,
+        coverage_end_date,   coverage_end_time,
+        plan_mode,
         drone_count, drone_weight, drone_weight_label, drone_flag,
         selected_deductible, total_premium,
         terms_agreed, marketing_agreed, agreed_at
       ) VALUES (
         'pending', 'business-drone-insurance', $1,
-        $2, $3, $4, $5, $6, $7,
-        $8, $9, $10, $11, $12, $13,
-        $14, $15,
-        $16, $17, $18, $19,
-        $20, $21,
-        $22, $23, $24
+        $2, $3, $4, $5, $6,
+        $7, $8, $9, $10, $11, $12,
+        $13, $14, $15, $16,
+        $17,
+        $18, $19, $20, $21,
+        $22, $23,
+        $24, $25, $26
       ) RETURNING app_id`,
       [
         customerType,
         d.name       || null,
         d.birth_date || null,
         ssnEncrypted,
-        d.gender     || null,
         d.phone      || d.corp_phone || null,
         d.email      || d.corp_email || null,
         d.corp_name         || null,
@@ -92,8 +109,9 @@ module.exports = async function handler(req, res) {
         d.corp_contact_name || null,
         d.corp_phone        || null,
         d.corp_email        || null,
-        d.insurance_start ? d.insurance_start.replace('T', ' ') : null,
-        d.insurance_end   ? d.insurance_end.replace('T', ' ')   : null,   // coverage_start / coverage_end
+        start.date, start.time,
+        end.date,   end.time,
+        planMode,
         droneCount,
         d.drone_weight || null,
         weightLabel,
@@ -115,7 +133,6 @@ module.exports = async function handler(req, res) {
     for (let i = 0; i < droneCount; i++) {
       const dr = drones[i] || {};
       const pl = plans[i]  || {};
-      const droneIndex = i + 1;
 
       await client.query(`
         INSERT INTO business_drone_details (
@@ -126,7 +143,7 @@ module.exports = async function handler(req, res) {
         ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
         [
           applicationId,
-          droneIndex,
+          i + 1,
           dr.model      || null,
           dr.serial     || null,
           dr.reg_number || dr.reg || null,
@@ -141,6 +158,7 @@ module.exports = async function handler(req, res) {
     }
 
     await client.query('COMMIT');
+    console.log('[save-business-drone] 저장 완료: app_id=' + applicationId);
 
     return res.status(200).json({
       saved: true,

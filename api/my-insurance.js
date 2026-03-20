@@ -3,7 +3,7 @@
  * 계약 조회 / 변경 / 취소 / 해지 API (DB 연동)
  *
  * 환경변수:
- *   liab_db_POSTGRES_URL  = PostgreSQL 연결 URL
+ *   liab_db_POSTGRES_URL
  *   SOLAPI_API_KEY / SOLAPI_API_SECRET / SOLAPI_SENDER
  *   EMAIL_USER / EMAIL_PASS / ADMIN_EMAIL
  */
@@ -142,12 +142,13 @@ async function fetchContractsFromDb(name, phone) {
                                 'plan_name', d.plan_name,
                                 'price', d.price
                             ) ORDER BY d.drone_index
-                        ) FILTER (WHERE d.id IS NOT NULL), '[]'
+                        ) FILTER (WHERE d.drone_index IS NOT NULL), '[]'
                     ) AS drones
-             FROM personal_drone_applications a
-             LEFT JOIN drone_details d ON d.application_id = a.id
+             FROM drone_applications a
+             LEFT JOIN drone_details d ON d.app_id = a.app_id
              WHERE a.name = $1 AND a.phone = $2
-             GROUP BY a.id
+               AND a.customer_type = 'individual'
+             GROUP BY a.app_id
              ORDER BY a.created_at DESC`,
             [name, phone]
         );
@@ -163,34 +164,28 @@ function mapDbRowToContract(row) {
     const now = new Date();
     let start = null;
     let end   = null;
-    if (row.coverage_start_date) {
-        const t = row.coverage_start_time || '00:00';
-        start = new Date(row.coverage_start_date + 'T' + t);
-    }
-    if (row.coverage_end_date) {
-        const t = row.coverage_end_time || '23:59';
-        end = new Date(row.coverage_end_date + 'T' + t);
-    }
+    if (row.coverage_start) start = new Date(row.coverage_start);
+    if (row.coverage_end)   end   = new Date(row.coverage_end);
 
     let status = row.status || 'pending';
     if (status !== 'cancelled' && status !== 'terminated') {
-        if (!start || isNaN(start))       status = 'pending';
-        else if (now < start)             status = 'pending';
-        else if (end && !isNaN(end) && now > end) status = 'expired';
-        else if (start && now >= start)   status = 'active';
+        if (!start || isNaN(start))                        status = 'pending';
+        else if (now < start)                              status = 'pending';
+        else if (end && !isNaN(end) && now > end)          status = 'expired';
+        else if (start && now >= start)                    status = 'active';
     }
 
     const dronesRaw = typeof row.drones === 'string' ? JSON.parse(row.drones) : (row.drones || []);
     const firstDrone = dronesRaw[0] || {};
 
     return {
-        id:             'KBD-' + String(row.id).padStart(8, '0'),
-        application_id: row.id,
+        id:             'KBD-' + String(row.app_id).padStart(8, '0'),
+        application_id: row.app_id,
         product:        'KB손해보험 개인용 드론보험',
         status,
         plan:           firstDrone.plan_name || '',
-        start_date:     row.coverage_start_date || '',
-        end_date:       row.coverage_end_date   || '',
+        start_date:     row.coverage_start ? row.coverage_start.slice(0, 10) : '',
+        end_date:       row.coverage_end   ? row.coverage_end.slice(0, 10)   : '',
         total_premium:  Number(row.total_premium) || 0,
         drones: dronesRaw.map(function(d) { return {
             index:      d.drone_index,
@@ -201,9 +196,9 @@ function mapDbRowToContract(row) {
             weight:     d.weight,
             max_weight: d.max_weight,
         }; }),
-        can_cancel:     status === 'pending',
-        can_terminate:  status === 'active',
-        created_at:     row.created_at ? new Date(row.created_at).toISOString().split('T')[0] : '',
+        can_cancel:    status === 'pending',
+        can_terminate: status === 'active',
+        created_at:    row.created_at ? new Date(row.created_at).toISOString().split('T')[0] : '',
     };
 }
 
@@ -224,18 +219,18 @@ async function saveDroneChangeRequest(name, phone, contractId, changes) {
 
     const { rows } = await pool.query(
         `INSERT INTO contract_requests
-            (application_id, contract_id, request_type, customer_name, customer_phone, request_data)
+            (app_id, contract_id, request_type, customer_name, customer_phone, request_data)
          VALUES ($1, $2, 'drone_change', $3, $4, $5)
-         RETURNING id`,
+         RETURNING req_id`,
         [appId, contractId, name, phone, JSON.stringify(changes)]
     );
-    const requestId = rows[0].id;
+    const requestId = rows[0].req_id;
 
     let oldDrones = [];
     if (appId) {
         const dRes = await pool.query(
             `SELECT drone_index, model, serial_number, drone_type, weight, max_weight
-             FROM drone_details WHERE application_id = $1 ORDER BY drone_index`,
+             FROM drone_details WHERE app_id = $1 ORDER BY drone_index`,
             [appId]
         );
         oldDrones = dRes.rows;
@@ -246,17 +241,17 @@ async function saveDroneChangeRequest(name, phone, contractId, changes) {
         const old = oldDrones.find(function(d) { return d.drone_index === idx; }) || {};
 
         const fields = [
-            { field: 'model',      oldVal: old.model || '',           newVal: change.model || '' },
-            { field: 'serial',     oldVal: old.serial_number || '',   newVal: change.serial || '' },
-            { field: 'type',       oldVal: old.drone_type || '',      newVal: change.type || '' },
-            { field: 'weight',     oldVal: String(old.weight || ''),  newVal: String(change.weight || '') },
+            { field: 'model',      oldVal: old.model || '',              newVal: change.model || '' },
+            { field: 'serial',     oldVal: old.serial_number || '',      newVal: change.serial || '' },
+            { field: 'type',       oldVal: old.drone_type || '',         newVal: change.type || '' },
+            { field: 'weight',     oldVal: String(old.weight || ''),     newVal: String(change.weight || '') },
             { field: 'max_weight', oldVal: String(old.max_weight || ''), newVal: String(change.max_weight || '') },
         ];
 
         for (const f of fields) {
             if (f.oldVal !== f.newVal) {
                 await pool.query(
-                    `INSERT INTO drone_change_logs (request_id, drone_index, field_name, old_value, new_value)
+                    `INSERT INTO drone_change_logs (req_id, drone_index, field_name, old_value, new_value)
                      VALUES ($1, $2, $3, $4, $5)`,
                     [requestId, idx, f.field, f.oldVal || null, f.newVal || null]
                 );
@@ -276,19 +271,23 @@ async function saveCancelRequest(name, phone, contractId, reason) {
 
     const { rows } = await pool.query(
         `INSERT INTO contract_requests
-            (application_id, contract_id, request_type, customer_name, customer_phone, reason)
+            (app_id, contract_id, request_type, customer_name, customer_phone, reason)
          VALUES ($1, $2, 'cancel', $3, $4, $5)
-         RETURNING id`,
+         RETURNING req_id`,
         [appId, contractId, name, phone, reason || null]
     );
 
     if (appId) {
         await pool.query(
-            `UPDATE personal_drone_applications SET status = 'cancelled' WHERE id = $1`,
+            `UPDATE drone_applications SET status = 'cancelled' WHERE app_id = $1`,
+            [appId]
+        );
+        await pool.query(
+            `UPDATE drone_policies SET status = 'cancelled' WHERE app_id = $1`,
             [appId]
         );
     }
-    return rows[0].id;
+    return rows[0].req_id;
 }
 
 // ═══════════════════════════════════════════════════
@@ -300,19 +299,23 @@ async function saveTerminateRequest(name, phone, contractId, reason, refundAccou
 
     const { rows } = await pool.query(
         `INSERT INTO contract_requests
-            (application_id, contract_id, request_type, customer_name, customer_phone, reason, refund_account)
+            (app_id, contract_id, request_type, customer_name, customer_phone, reason, refund_account)
          VALUES ($1, $2, 'terminate', $3, $4, $5, $6)
-         RETURNING id`,
+         RETURNING req_id`,
         [appId, contractId, name, phone, reason || null, refundAccount || null]
     );
 
     if (appId) {
         await pool.query(
-            `UPDATE personal_drone_applications SET status = 'terminated' WHERE id = $1`,
+            `UPDATE drone_applications SET status = 'terminated' WHERE app_id = $1`,
+            [appId]
+        );
+        await pool.query(
+            `UPDATE drone_policies SET status = 'terminated' WHERE app_id = $1`,
             [appId]
         );
     }
-    return rows[0].id;
+    return rows[0].req_id;
 }
 
 // ═══════════════════════════════════════════════════

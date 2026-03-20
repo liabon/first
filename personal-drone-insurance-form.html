@@ -1749,11 +1749,16 @@
             // 동적으로 생성된 필드에도 이벤트 등록
             bindDynamicFields();
 
-            // ── 섹션 자동 스크롤 ──
+            // ── 섹션 자동 스크롤 (아래 방향만, 위로 스크롤 방지) ──
             function scrollToNext(sectionId) {
                 setTimeout(function() {
                     var el = document.getElementById(sectionId);
-                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    if (!el) return;
+                    var rect = el.getBoundingClientRect();
+                    // 섹션이 현재 뷰포트보다 아래에 있는 경우만 스크롤
+                    if (rect.top > 80) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
                 }, 350);
             }
 

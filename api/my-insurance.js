@@ -52,9 +52,7 @@ async function sendSolapiSms(to, text) {
     const cleanTo     = to.replace(/\D/g, '');
     const cleanSender = sender.replace(/\D/g, '');
     try {
-        const result = await messageService.send({
-            to: cleanTo, from: cleanSender, text,
-        });
+        const result = await messageService.send({ to: cleanTo, from: cleanSender, text });
         console.log('[Solapi] SMS 발송 성공 →', cleanTo);
         return result;
     } catch (err) {
@@ -96,12 +94,9 @@ function generateOTP() {
 }
 
 function createOtpToken(code, name, phone) {
-    const payload = JSON.stringify({
-        code, name, phone,
-        expires: Date.now() + 3 * 60 * 1000,
-    });
-    const key = crypto.createHash('sha256').update(OTP_SECRET).digest();
-    const iv  = crypto.randomBytes(16);
+    const payload = JSON.stringify({ code, name, phone, expires: Date.now() + 3 * 60 * 1000 });
+    const key    = crypto.createHash('sha256').update(OTP_SECRET).digest();
+    const iv     = crypto.randomBytes(16);
     const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
     let enc = cipher.update(payload, 'utf8', 'hex');
     enc += cipher.final('hex');
@@ -111,8 +106,8 @@ function createOtpToken(code, name, phone) {
 function decryptOtpToken(token) {
     try {
         const [ivHex, enc] = token.split(':');
-        const key = crypto.createHash('sha256').update(OTP_SECRET).digest();
-        const iv  = Buffer.from(ivHex, 'hex');
+        const key     = crypto.createHash('sha256').update(OTP_SECRET).digest();
+        const iv      = Buffer.from(ivHex, 'hex');
         const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
         let dec = decipher.update(enc, 'hex', 'utf8');
         dec += decipher.final('utf8');
@@ -131,16 +126,16 @@ async function fetchContractsFromDb(name, phone) {
                     COALESCE(
                         json_agg(
                             json_build_object(
-                                'drone_index', d.drone_index,
-                                'model', d.model,
-                                'serial_number', d.serial_number,
-                                'drone_type', d.drone_type,
-                                'drone_type_name', d.drone_type_name,
-                                'weight', d.weight,
-                                'max_weight', d.max_weight,
-                                'plan', d.plan,
-                                'plan_name', d.plan_name,
-                                'price', d.price
+                                'drone_index',    d.drone_index,
+                                'model',          d.model,
+                                'serial_number',  d.serial_number,
+                                'drone_type',     d.drone_type,
+                                'drone_type_name',d.drone_type_name,
+                                'weight',         d.weight,
+                                'max_weight',     d.max_weight,
+                                'plan',           d.plan,
+                                'plan_name',      d.plan_name,
+                                'price',          d.price
                             ) ORDER BY d.drone_index
                         ) FILTER (WHERE d.drone_index IS NOT NULL), '[]'
                     ) AS drones
@@ -164,18 +159,25 @@ function mapDbRowToContract(row) {
     const now = new Date();
     let start = null;
     let end   = null;
-    if (row.coverage_start) start = new Date(row.coverage_start);
-    if (row.coverage_end)   end   = new Date(row.coverage_end);
+
+    if (row.coverage_start_date) {
+        const t = row.coverage_start_time || '00:00';
+        start = new Date(row.coverage_start_date + 'T' + t);
+    }
+    if (row.coverage_end_date) {
+        const t = row.coverage_end_time || '23:59';
+        end = new Date(row.coverage_end_date + 'T' + t);
+    }
 
     let status = row.status || 'pending';
     if (status !== 'cancelled' && status !== 'terminated') {
-        if (!start || isNaN(start))                        status = 'pending';
-        else if (now < start)                              status = 'pending';
-        else if (end && !isNaN(end) && now > end)          status = 'expired';
-        else if (start && now >= start)                    status = 'active';
+        if (!start || isNaN(start))               status = 'pending';
+        else if (now < start)                     status = 'pending';
+        else if (end && !isNaN(end) && now > end) status = 'expired';
+        else if (start && now >= start)           status = 'active';
     }
 
-    const dronesRaw = typeof row.drones === 'string' ? JSON.parse(row.drones) : (row.drones || []);
+    const dronesRaw  = typeof row.drones === 'string' ? JSON.parse(row.drones) : (row.drones || []);
     const firstDrone = dronesRaw[0] || {};
 
     return {
@@ -184,8 +186,10 @@ function mapDbRowToContract(row) {
         product:        'KB손해보험 개인용 드론보험',
         status,
         plan:           firstDrone.plan_name || '',
-        start_date:     row.coverage_start ? row.coverage_start.slice(0, 10) : '',
-        end_date:       row.coverage_end   ? row.coverage_end.slice(0, 10)   : '',
+        start_date:     row.coverage_start_date || '',
+        start_time:     row.coverage_start_time || '',
+        end_date:       row.coverage_end_date   || '',
+        end_time:       row.coverage_end_time   || '',
         total_premium:  Number(row.total_premium) || 0,
         drones: dronesRaw.map(function(d) { return {
             index:      d.drone_index,
@@ -206,15 +210,15 @@ function mapDbRowToContract(row) {
 //  contract_id → application PK
 // ═══════════════════════════════════════════════════
 function parseApplicationId(contractId) {
-    var match = contractId.match(/KBD-0*(\d+)/);
+    const match = contractId.match(/KBD-0*(\d+)/);
     return match ? parseInt(match[1], 10) : null;
 }
 
 // ═══════════════════════════════════════════════════
-//  DB: 드론 변경 이력 저장
+//  DB: 드론 변경 요청
 // ═══════════════════════════════════════════════════
 async function saveDroneChangeRequest(name, phone, contractId, changes) {
-    const pool = getPool();
+    const pool  = getPool();
     const appId = parseApplicationId(contractId);
 
     const { rows } = await pool.query(
@@ -239,7 +243,6 @@ async function saveDroneChangeRequest(name, phone, contractId, changes) {
     for (const change of changes) {
         const idx = change.index != null ? change.index : 0;
         const old = oldDrones.find(function(d) { return d.drone_index === idx; }) || {};
-
         const fields = [
             { field: 'model',      oldVal: old.model || '',              newVal: change.model || '' },
             { field: 'serial',     oldVal: old.serial_number || '',      newVal: change.serial || '' },
@@ -247,7 +250,6 @@ async function saveDroneChangeRequest(name, phone, contractId, changes) {
             { field: 'weight',     oldVal: String(old.weight || ''),     newVal: String(change.weight || '') },
             { field: 'max_weight', oldVal: String(old.max_weight || ''), newVal: String(change.max_weight || '') },
         ];
-
         for (const f of fields) {
             if (f.oldVal !== f.newVal) {
                 await pool.query(
@@ -258,7 +260,6 @@ async function saveDroneChangeRequest(name, phone, contractId, changes) {
             }
         }
     }
-
     return requestId;
 }
 
@@ -266,7 +267,7 @@ async function saveDroneChangeRequest(name, phone, contractId, changes) {
 //  DB: 계약 취소
 // ═══════════════════════════════════════════════════
 async function saveCancelRequest(name, phone, contractId, reason) {
-    const pool = getPool();
+    const pool  = getPool();
     const appId = parseApplicationId(contractId);
 
     const { rows } = await pool.query(
@@ -276,16 +277,9 @@ async function saveCancelRequest(name, phone, contractId, reason) {
          RETURNING req_id`,
         [appId, contractId, name, phone, reason || null]
     );
-
     if (appId) {
-        await pool.query(
-            `UPDATE drone_applications SET status = 'cancelled' WHERE app_id = $1`,
-            [appId]
-        );
-        await pool.query(
-            `UPDATE drone_policies SET status = 'cancelled' WHERE app_id = $1`,
-            [appId]
-        );
+        await pool.query(`UPDATE drone_applications SET status = 'cancelled' WHERE app_id = $1`, [appId]);
+        await pool.query(`UPDATE drone_policies     SET status = 'cancelled' WHERE app_id = $1`, [appId]);
     }
     return rows[0].req_id;
 }
@@ -294,7 +288,7 @@ async function saveCancelRequest(name, phone, contractId, reason) {
 //  DB: 계약 해지
 // ═══════════════════════════════════════════════════
 async function saveTerminateRequest(name, phone, contractId, reason, refundAccount) {
-    const pool = getPool();
+    const pool  = getPool();
     const appId = parseApplicationId(contractId);
 
     const { rows } = await pool.query(
@@ -304,16 +298,9 @@ async function saveTerminateRequest(name, phone, contractId, reason, refundAccou
          RETURNING req_id`,
         [appId, contractId, name, phone, reason || null, refundAccount || null]
     );
-
     if (appId) {
-        await pool.query(
-            `UPDATE drone_applications SET status = 'terminated' WHERE app_id = $1`,
-            [appId]
-        );
-        await pool.query(
-            `UPDATE drone_policies SET status = 'terminated' WHERE app_id = $1`,
-            [appId]
-        );
+        await pool.query(`UPDATE drone_applications SET status = 'terminated' WHERE app_id = $1`, [appId]);
+        await pool.query(`UPDATE drone_policies     SET status = 'terminated' WHERE app_id = $1`, [appId]);
     }
     return rows[0].req_id;
 }
@@ -326,22 +313,17 @@ module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     if (req.method === 'OPTIONS') return res.status(200).end();
-    if (req.method !== 'POST') {
+    if (req.method !== 'POST')
         return res.status(405).json({ success: false, message: 'POST 요청만 허용됩니다.' });
-    }
 
-    const {
-        action, name, phone, otp, otp_token,
-        contract_id, changes, reason, refund_account,
-    } = req.body || {};
+    const { action, name, phone, otp, otp_token, contract_id, changes, reason, refund_account } = req.body || {};
 
-    if (!action) {
+    if (!action)
         return res.status(400).json({ success: false, message: 'action 파라미터가 필요합니다.' });
-    }
 
     // ── send_otp ──
     if (action === 'send_otp') {
-        const trimName   = (name || '').trim();
+        const trimName   = (name  || '').trim();
         const cleanPhone = (phone || '').replace(/\D/g, '');
 
         if (!trimName || trimName.length < 2)
@@ -349,8 +331,8 @@ module.exports = async (req, res) => {
         if (cleanPhone.length !== 11 || !cleanPhone.startsWith('0'))
             return res.status(400).json({ success: false, message: '올바른 휴대폰 번호(11자리)를 입력해주세요.' });
 
-        const code  = generateOTP();
-        const token = createOtpToken(code, trimName, cleanPhone);
+        const code    = generateOTP();
+        const token   = createOtpToken(code, trimName, cleanPhone);
         const smsText = '[배상온] 본인확인을 위해 인증번호 [' + code + ']를 입력해주세요.';
 
         let smsSent = false;
@@ -365,13 +347,9 @@ module.exports = async (req, res) => {
             );
         }
 
-        console.log('[OTP] ' + cleanPhone + ' | code=' + code + ' | sent=' + smsSent);
-
         return res.status(200).json({
             success: true,
-            message: smsSent
-                ? '인증번호를 발송했습니다. 3분 이내에 입력해주세요.'
-                : '인증번호 발송에 문제가 발생했습니다. 담당자에게 문의해주세요.',
+            message:   smsSent ? '인증번호를 발송했습니다. 3분 이내에 입력해주세요.' : '인증번호 발송에 문제가 발생했습니다. 담당자에게 문의해주세요.',
             sms_sent:  smsSent,
             otp_token: token,
         });
@@ -379,7 +357,7 @@ module.exports = async (req, res) => {
 
     // ── verify_and_fetch ──
     if (action === 'verify_and_fetch') {
-        const trimName   = (name || '').trim();
+        const trimName   = (name  || '').trim();
         const cleanPhone = (phone || '').replace(/\D/g, '');
         const trimOtp    = (otp   || '').trim();
 
@@ -394,22 +372,17 @@ module.exports = async (req, res) => {
                 return res.status(400).json({ success: false, message: '인증 정보가 유효하지 않습니다. 다시 요청해주세요.' });
             if (Date.now() > payload.expires)
                 return res.status(400).json({ success: false, message: '인증번호가 만료되었습니다. 재발송해주세요.' });
-            if (payload.code !== trimOtp)
+            if (payload.code  !== trimOtp)
                 return res.status(400).json({ success: false, message: '인증번호가 올바르지 않습니다.' });
-            if (payload.name !== trimName)
+            if (payload.name  !== trimName)
                 return res.status(400).json({ success: false, message: '이름이 가입 정보와 일치하지 않습니다.' });
             if (payload.phone !== cleanPhone)
                 return res.status(400).json({ success: false, message: '휴대폰 번호가 일치하지 않습니다.' });
         }
 
         const contracts = await fetchContractsFromDb(trimName, cleanPhone);
-
-        if (contracts === null) {
-            return res.status(200).json({
-                success: true, message: '조회 완료',
-                contracts: null,
-            });
-        }
+        if (contracts === null)
+            return res.status(200).json({ success: true, message: '조회 완료', contracts: null });
 
         return res.status(200).json({
             success: true,
@@ -426,10 +399,7 @@ module.exports = async (req, res) => {
         let requestId = null;
         try {
             requestId = await saveDroneChangeRequest(name, phone, contract_id, changes);
-            console.log('[DB] 드론변경 요청 저장 완료: request_id=' + requestId);
-        } catch (err) {
-            console.error('[DB] 드론변경 요청 저장 실패:', err.message);
-        }
+        } catch (err) { console.error('[DB] 드론변경 저장 실패:', err.message); }
 
         const detail = Array.isArray(changes)
             ? changes.map(function(c, i) { return '드론' + (i+1) + ': ' + c.model + ' / ' + c.serial + ' / ' + c.type + ' / ' + c.weight + 'kg / ' + c.max_weight + 'kg'; }).join('\n')
@@ -440,11 +410,7 @@ module.exports = async (req, res) => {
             '고객명: ' + name + '\n번호: ' + phone + '\n계약번호: ' + contract_id + '\n요청번호: ' + (requestId || 'DB저장실패') + '\n\n변경내용:\n' + detail + '\n\n요청시각: ' + new Date().toLocaleString('ko-KR')
         );
 
-        return res.status(200).json({
-            success: true,
-            message: '드론 정보 변경 요청이 접수되었습니다. 담당자가 1~2 영업일 내 처리해드립니다.',
-            request_id: requestId,
-        });
+        return res.status(200).json({ success: true, message: '드론 정보 변경 요청이 접수되었습니다. 담당자가 1~2 영업일 내 처리해드립니다.', request_id: requestId });
     }
 
     // ── cancel_contract ──
@@ -455,21 +421,14 @@ module.exports = async (req, res) => {
         let requestId = null;
         try {
             requestId = await saveCancelRequest(name, phone, contract_id, reason);
-            console.log('[DB] 계약취소 요청 저장 완료: request_id=' + requestId);
-        } catch (err) {
-            console.error('[DB] 계약취소 요청 저장 실패:', err.message);
-        }
+        } catch (err) { console.error('[DB] 계약취소 저장 실패:', err.message); }
 
         await sendAdminEmail(
             '[계약취소] ' + name + ' / ' + contract_id + (requestId ? ' (요청#' + requestId + ')' : ''),
             '고객명: ' + name + '\n번호: ' + phone + '\n계약번호: ' + contract_id + '\n요청번호: ' + (requestId || 'DB저장실패') + '\n취소사유: ' + (reason || '미입력') + '\n\n요청시각: ' + new Date().toLocaleString('ko-KR') + '\n\n⚠️ 환불 처리 필요 (3~5 영업일)'
         );
 
-        return res.status(200).json({
-            success: true,
-            message: '계약이 취소되었습니다. 환불은 결제 수단으로 3~5 영업일 내 처리됩니다.',
-            request_id: requestId,
-        });
+        return res.status(200).json({ success: true, message: '계약이 취소되었습니다. 환불은 결제 수단으로 3~5 영업일 내 처리됩니다.', request_id: requestId });
     }
 
     // ── terminate_contract ──
@@ -480,21 +439,14 @@ module.exports = async (req, res) => {
         let requestId = null;
         try {
             requestId = await saveTerminateRequest(name, phone, contract_id, reason, refund_account);
-            console.log('[DB] 계약해지 요청 저장 완료: request_id=' + requestId);
-        } catch (err) {
-            console.error('[DB] 계약해지 요청 저장 실패:', err.message);
-        }
+        } catch (err) { console.error('[DB] 계약해지 저장 실패:', err.message); }
 
         await sendAdminEmail(
             '[계약해지] ' + name + ' / ' + contract_id + (requestId ? ' (요청#' + requestId + ')' : ''),
             '고객명: ' + name + '\n번호: ' + phone + '\n계약번호: ' + contract_id + '\n요청번호: ' + (requestId || 'DB저장실패') + '\n해지사유: ' + (reason || '미입력') + '\n환불계좌: ' + (refund_account || '원결제수단') + '\n\n요청시각: ' + new Date().toLocaleString('ko-KR') + '\n\n⚠️ 미경과보험료 환불 처리 필요'
         );
 
-        return res.status(200).json({
-            success: true,
-            message: '계약 해지 신청이 완료되었습니다. 미경과 보험료는 보험사 처리 후 5~7 영업일 내 환불됩니다.',
-            request_id: requestId,
-        });
+        return res.status(200).json({ success: true, message: '계약 해지 신청이 완료되었습니다. 미경과 보험료는 보험사 처리 후 5~7 영업일 내 환불됩니다.', request_id: requestId });
     }
 
     return res.status(400).json({ success: false, message: '알 수 없는 action: ' + action });

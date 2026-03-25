@@ -323,6 +323,10 @@
     });
 
     document.getElementById('btnNext').addEventListener('click', function() {
+        var q1Val = document.querySelector('input[name="q1"]:checked');
+        var q2Val = document.querySelector('input[name="q2"]:checked');
+        if (q1Val) sessionStorage.setItem('personal_q1', q1Val.value);
+        if (q2Val) sessionStorage.setItem('personal_q2', q2Val.value);
         window.location.href = '/personal-drone-insurance-form';
     });
 
@@ -336,25 +340,38 @@
     }
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeInfoNotice(); });
 
-    // bfcache(뒤로 캐시)로 복원될 때 폼 초기화
+    // bfcache(뒤로 캐시)로 복원될 때 이전 선택 복원
     window.addEventListener('pageshow', function(event) {
         if (event.persisted) {
-            // 라디오 버튼 초기화
-            document.querySelectorAll('input[type="radio"]').forEach(function(radio) {
-                radio.checked = false;
-            });
-            // 스타일 초기화
-            ['q1', 'q2'].forEach(function(q) {
-                var num = q.replace('q', '');
-                document.getElementById(q + '_yes').classList.remove('selected-ok', 'selected-wrong');
-                document.getElementById(q + '_no').classList.remove('selected-ok', 'selected-wrong');
-                document.getElementById('card' + num).classList.remove('correct', 'wrong');
-            });
-            // 박스 초기화
-            document.getElementById('businessRedirect').classList.remove('show');
-            document.getElementById('errorBox').classList.remove('show');
-            document.getElementById('successBox').classList.remove('show');
-            document.getElementById('btnNext').disabled = true;
+            var savedQ1 = sessionStorage.getItem('personal_q1');
+            var savedQ2 = sessionStorage.getItem('personal_q2');
+
+            if (savedQ1 || savedQ2) {
+                // 저장된 선택 복원
+                if (savedQ1) {
+                    var r1 = document.querySelector('input[name="q1"][value="' + savedQ1 + '"]');
+                    if (r1) { r1.checked = true; applyStyle('q1', savedQ1); }
+                    if (savedQ1 === 'no') document.getElementById('businessRedirect').classList.add('show');
+                }
+                if (savedQ2) {
+                    var r2 = document.querySelector('input[name="q2"][value="' + savedQ2 + '"]');
+                    if (r2) { r2.checked = true; applyStyle('q2', savedQ2); }
+                }
+                checkAnswers();
+            } else {
+                // 저장값 없으면 초기화
+                document.querySelectorAll('input[type="radio"]').forEach(function(r) { r.checked = false; });
+                ['q1','q2'].forEach(function(q) {
+                    var num = q.replace('q','');
+                    document.getElementById(q+'_yes').classList.remove('selected-ok','selected-wrong');
+                    document.getElementById(q+'_no').classList.remove('selected-ok','selected-wrong');
+                    document.getElementById('card'+num).classList.remove('correct','wrong');
+                });
+                document.getElementById('businessRedirect').classList.remove('show');
+                document.getElementById('errorBox').classList.remove('show');
+                document.getElementById('successBox').classList.remove('show');
+                document.getElementById('btnNext').disabled = true;
+            }
         }
     });
     </script>

@@ -12,22 +12,8 @@
 
 const crypto     = require('crypto');
 const nodemailer = require('nodemailer');
-const { Pool }   = require('pg');
 const { SolapiMessageService } = require('solapi');
-
-// ═══════════════════════════════════════════════════
-//  DB Pool
-// ═══════════════════════════════════════════════════
-let _pool = null;
-function getPool() {
-    if (_pool) return _pool;
-    _pool = new Pool({
-        connectionString: process.env.liab_db_POSTGRES_URL,
-        ssl: { rejectUnauthorized: false },
-        max: 5,
-    });
-    return _pool;
-}
+const { getPool } = require('./_db');
 
 // ═══════════════════════════════════════════════════
 //  솔라피 SDK

@@ -589,7 +589,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label>연락처 *</label>
-                        <input type="tel" name="phone" placeholder="000-0000-0000" required maxlength="11" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,11)">
+                        <input type="tel" name="phone" placeholder="000-0000-0000" required maxlength="13" oninput="var v=this.value.replace(/[^0-9]/g,'').slice(0,11);this.value=v.length<=3?v:v.length<=7?v.slice(0,3)+'-'+v.slice(3):v.slice(0,3)+'-'+v.slice(3,7)+'-'+v.slice(7)">
                     </div>
                     <div class="form-group">
                         <label>이메일</label>

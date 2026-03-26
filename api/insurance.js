@@ -1,22 +1,12 @@
 // api/insurance.js
 // POST /api/insurance
-// personal-drone-insurance-form.html 에서 호출
+// personal-drone-insurance-form.html (약관 동의 후) 에서 호출
 // drone_applications (customer_type='individual') + drone_details 저장
 
-const { Pool } = require('pg');
+'use strict';
+const { getPool } = require('./_db');
 let ssnCrypto;
 try { ssnCrypto = require('./ssn-crypto'); } catch(e) { ssnCrypto = null; }
-
-let pool;
-function getPool() {
-  if (!pool && process.env.liab_db_POSTGRES_URL) {
-    pool = new Pool({
-      connectionString: process.env.liab_db_POSTGRES_URL,
-      ssl: { rejectUnauthorized: false }
-    });
-  }
-  return pool;
-}
 
 // "2026-03-20T09:00" → { date: "2026-03-20", time: "09:00" }
 function splitDateTime(dtStr) {
@@ -35,13 +25,15 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ message: 'Method Not Allowed' });
 
-  const db = getPool();
-  if (!db) {
-    console.warn('[save-personal] DB 연결 없음 — 저장 스킵');
-    return res.status(200).json({ message: 'DB 미연결 — 저장 스킵', saved: false });
+  let client;
+  try {
+    const pool = getPool();
+    client = await pool.connect();
+  } catch (err) {
+    console.error('[insurance] DB 연결 실패:', err.message);
+    return res.status(500).json({ saved: false, message: 'DB 연결에 실패했습니다: ' + err.message });
   }
 
-  const client = await db.connect();
   try {
     const d = req.body;
 
@@ -55,6 +47,8 @@ module.exports = async function handler(req, res) {
     } else {
       totalPremium = (d.drone_plans || []).reduce((s, p) => s + (parseInt(p.price) || 0), 0);
     }
+    // fallback
+    if (!totalPremium && d.plan_total_price) totalPremium = parseInt(d.plan_total_price) || 0;
 
     // ssn_back 암호화
     let ssnEncrypted = null;
@@ -62,7 +56,7 @@ module.exports = async function handler(req, res) {
       try {
         const plain = ssnCrypto.decryptFromFront(d.ssn_back);
         ssnEncrypted = ssnCrypto.encryptForDB(plain);
-      } catch(e) { console.warn('[save-personal] ssn 암호화 실패:', e.message); }
+      } catch(e) { console.warn('[insurance] ssn 암호화 실패:', e.message); }
     }
 
     const start = splitDateTime(d.insurance_start);
@@ -77,12 +71,14 @@ module.exports = async function handler(req, res) {
         name, birth_date, ssn_back, phone, email,
         coverage_start_date, coverage_start_time,
         coverage_end_date,   coverage_end_time,
-        plan_mode, drone_count, total_premium
+        plan_mode, drone_count, total_premium,
+        terms_agreed, agreed_at
       ) VALUES (
         'pending', 'personal-drone-insurance-form', 'individual',
         $1, $2, $3, $4, $5,
         $6, $7, $8, $9,
-        $10, $11, $12
+        $10, $11, $12,
+        true, $13
       ) RETURNING app_id`,
       [
         d.name       || null,
@@ -94,7 +90,8 @@ module.exports = async function handler(req, res) {
         end.date,   end.time,
         planMode,
         droneCount,
-        totalPremium
+        totalPremium,
+        d.agreed_at || new Date().toISOString()
       ]
     );
 
@@ -134,7 +131,7 @@ module.exports = async function handler(req, res) {
     }
 
     await client.query('COMMIT');
-    console.log('[save-personal] 저장 완료: app_id=' + applicationId);
+    console.log('[insurance] 저장 완료: app_id=' + applicationId);
 
     return res.status(200).json({
       saved: true,
@@ -144,9 +141,9 @@ module.exports = async function handler(req, res) {
     });
 
   } catch (err) {
-    await client.query('ROLLBACK');
-    console.error('[save-personal] DB 저장 실패:', err.message);
-    return res.status(200).json({ saved: false, message: err.message });
+    await client.query('ROLLBACK').catch(() => {});
+    console.error('[insurance] DB 저장 실패:', err.message);
+    return res.status(500).json({ saved: false, message: 'DB 저장에 실패했습니다: ' + err.message });
   } finally {
     client.release();
   }

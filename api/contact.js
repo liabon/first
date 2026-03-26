@@ -26,10 +26,10 @@ async function saveToDb(tableName, data) {
     const placeholders = keys.map((_, i) => `$${i + 1}`).join(', ');
     const columns      = keys.join(', ');
     const result = await db.query(
-      `INSERT INTO ${tableName} (${columns}) VALUES (${placeholders}) RETURNING per_id`,
+      `INSERT INTO ${tableName} (${columns}) VALUES (${placeholders})`,
       values
     );
-    return result.rows[0].id;
+    return null;
   } catch (err) {
     console.error(`DB 저장 실패 (${tableName}):`, err.message);
     return null;
@@ -234,18 +234,19 @@ module.exports = async (req, res) => {
         }
 
         const appResult = await db.query(
-          `INSERT INTO personal_drone_applications
-            (name, birth_date, ssn_back, gender, phone, email,
+          `INSERT INTO drone_applications
+            (customer_type, name, birth_date, ssn_back, phone, email,
              coverage_start_date, coverage_start_time,
              coverage_end_date,   coverage_end_time,
-             coverage_location, drone_count, plan_mode,
+             drone_count, plan_mode,
              total_premium, terms_agreed, agreed_at,
              source_page, status)
-           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18)
-           RETURNING per_id`,
+           VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
+           RETURNING app_id`,
           [
-            name || '', birth_date || '', ssnEncrypted, gender || '', phone || '', email || '',
-            start.date, start.time, end.date, end.time, null,
+            'individual',
+            name || null, birth_date || null, ssnEncrypted, phone || null, email || null,
+            start.date, start.time, end.date, end.time,
             parseInt(drone_count) || 1,
             plan_selection_type || 'unified',
             parseInt(plan_total_price) || 0,
@@ -253,7 +254,7 @@ module.exports = async (req, res) => {
             'personal-drone-insurance-form', 'pending'
           ]
         );
-        const applicationId = appResult.rows[0].per_id;
+        const applicationId = appResult.rows[0].app_id;
 
         const dronesArr = Array.isArray(drones)      ? drones      : [];
         const plansArr  = Array.isArray(drone_plans)  ? drone_plans : [];
@@ -262,18 +263,19 @@ module.exports = async (req, res) => {
           const p = plansArr[i]  || {};
           await db.query(
             `INSERT INTO drone_details
-              (per_id, drone_index,
+              (app_id, drone_index,
                model, serial_number, registration_number, weight, max_weight,
                drone_type, drone_type_name, plan, plan_name, price)
              VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`,
             [
-              applicationId, i + 1,  // drone_index 1부터 시작 (PER-{n}-1, PER-{n}-2 ...)
-              d.model || '', d.serial || '', d.registration || '',
-              d.weight || '', d.max_weight || '',
-              p.drone_type || d.type || '',
-              p.drone_type_name || '',
-              p.plan || plan || '',
-              p.plan_name || plan_name || '',
+              applicationId, i + 1,
+              d.model || null, d.serial || null, d.registration || null,
+              d.weight != null ? String(d.weight) : null,
+              d.max_weight != null ? String(d.max_weight) : null,
+              p.drone_type || d.type || null,
+              p.drone_type_name || null,
+              p.plan || plan || null,
+              p.plan_name || plan_name || null,
               parseInt(p.price || d.price || 0)
             ]
           );

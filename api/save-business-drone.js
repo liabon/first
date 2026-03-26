@@ -3,7 +3,8 @@
 // business-drone-insurance-terms.html 에서 호출
 // drone_applications (customer_type='individual'|'corporate') + business_drone_details 저장
 
-const { Pool } = require('pg');
+'use strict';
+const { getPool } = require('./_db');
 let ssnCrypto;
 try { ssnCrypto = require('./ssn-crypto'); } catch(e) { ssnCrypto = null; }
 
@@ -12,17 +13,6 @@ const WEIGHT_LABELS = {
   '25_100kg':   '25kg 이상 100kg 미만 (의무/업무/영리)',
   'over_100kg': '100kg 이상'
 };
-
-let pool;
-function getPool() {
-  if (!pool && process.env.liab_db_POSTGRES_URL) {
-    pool = new Pool({
-      connectionString: process.env.liab_db_POSTGRES_URL,
-      ssl: { rejectUnauthorized: false }
-    });
-  }
-  return pool;
-}
 
 // "2026-03-20T09:00" → { date: "2026-03-20", time: "09:00" }
 function splitDateTime(dtStr) {
@@ -41,13 +31,15 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ message: 'Method Not Allowed' });
 
-  const db = getPool();
-  if (!db) {
-    console.warn('[save-business-drone] DB 연결 없음 — 저장 스킵');
-    return res.status(200).json({ message: 'DB 미연결 — 저장 스킵', saved: false });
+  let client;
+  try {
+    const pool = getPool();
+    client = await pool.connect();
+  } catch (err) {
+    console.error('[save-business-drone] DB 연결 실패:', err.message);
+    return res.status(500).json({ saved: false, message: 'DB 연결에 실패했습니다: ' + err.message });
   }
 
-  const client = await db.connect();
   try {
     const d = req.body;
 
@@ -168,9 +160,9 @@ module.exports = async function handler(req, res) {
     });
 
   } catch (err) {
-    await client.query('ROLLBACK');
+    await client.query('ROLLBACK').catch(() => {});
     console.error('[save-business-drone] DB 저장 실패:', err.message);
-    return res.status(200).json({ saved: false, message: err.message });
+    return res.status(500).json({ saved: false, message: 'DB 저장에 실패했습니다: ' + err.message });
   } finally {
     client.release();
   }
